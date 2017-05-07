@@ -1,6 +1,6 @@
 <%-- 
-    Document   : cliente_cadastrado
-    Created on : 18/11/2016, 01:10:34
+    Document   : cadastrar_produto
+    Created on : 07/05/2017, 09:33:56
     Author     : rezen
 --%>
 
@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Cadastrar Cliente</title>
+        <title>JSP Page</title>
     </head>
     <body>
         <h1>Hello World!</h1>

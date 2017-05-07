@@ -60,7 +60,7 @@
                                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Gerais <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
-                                            <li><a href="Controle?action=Listar&listar=funcionario">Funcionarios</a></li>
+                                            <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -79,22 +79,29 @@
                             <div class="navbar-header">
                                 <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                 </button>
-                                <a class="navbar-brand" href="./"><%=user%>, ICarWash</a>
+                                <a class="navbar-brand" href="painel_admin.jsp"><%=user%>, ICarWash</a>
                             </div>
                             <div class="collapse navbar-collapse">
                                 <ul class="nav navbar-nav">
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Gerais <b class="caret"></b></a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Pessoais<b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
-                                            <li><a href="Controle?action=Listar&listar=funcionario">Funcionarios</a></li>
+                                            <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
                                         </ul>
-                                        <!--                                    <li class="dropdown">
-                                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Gerais <b class="caret"></b></a>
-                                                                                <ul class="dropdown-menu">
-                                                                                    <li><a href="#">Fazer Pedido</a></li>
-                                                                                </ul>
-                                                                            </li>-->
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Gerais<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="Controle?action=Listar&listar=produto">Produtos</a></li>
+                                            <li><a href="Controle?action=Listar&listar=servico">Serviços</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitações<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Contratar Serviço</a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

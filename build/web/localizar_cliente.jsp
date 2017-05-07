@@ -21,10 +21,11 @@
                 <div class="form-group">
                     <input type="hidden" name="quem" value="cliente"/>
                     <input type="hidden" name="txtId" value="<%= cliente.getId()%>"/>
+                    <label>Email:</label> <input class="form-control" type="text" name="txtEmail" value="<%=cliente.getEmail()%>"><br>
                     <label>Nome:</label> <input class="form-control" type="text" name="txtNome" value="<%= cliente.getNome()%>"><br>
                     <label>Telefone:</label> <input class="form-control" type="text" name="txtTelefone" value="<%= cliente.getTelefone()%>"><br>
                     <label>Data de Nascimento:</label> <input class="form-control" type="text" name="txtDataNascimento" value="<%= f.format(cliente.getDataNascimento().getTime())%>"><br>
-                    <label>CPF:</label> <input class="form-control" type="text" name="txtCPF" value="<%= cliente.getCPF()%>"><br>
+<!--                    <label>CPF:</label> <input class="form-control" type="text" name="txtCPF" value="<= cliente.getCPF()%>"><br>-->
                     <label>CEP:</label> <input class="form-control" type="text" name="txtCEP" value="<%= cliente.getEndereco().getCEP()%>"><br>
                     <label>Estado</label> <input class="form-control" type="text" name="txtEstado" value="<%= cliente.getEndereco().getEstado()%>"><br>
                     <label>Cidade:</label> <input class="form-control" type="text" name="txtCidade" value="<%= cliente.getEndereco().getCidade()%>"><br>

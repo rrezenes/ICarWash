@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.icarwash.control;
+package br.icarwash.model;
 
 /**
  *
  * @author rezen
  */
 public class Avaliacao {
+
     private int ID;
     private int nota_pontualidade;
     private int nota_servico;
@@ -34,9 +35,7 @@ public class Avaliacao {
         this.nota_agilidade = nota_agilidade;
         this.nota_media = nota_media;
     }
-    
-    
-    
+
     public int getID() {
         return ID;
     }
@@ -84,6 +83,5 @@ public class Avaliacao {
     public void setNota_media(int nota_media) {
         this.nota_media = nota_media;
     }
-    
-    
+
 }

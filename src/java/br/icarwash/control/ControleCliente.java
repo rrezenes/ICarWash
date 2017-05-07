@@ -24,15 +24,10 @@ public class ControleCliente extends HttpServlet {
         try {
             //recupera a ação o usuário7
             String action = "br.icarwash.control." + request.getParameter("action");
-            System.out.println("0");
             Class classeAction = Class.forName(action);
-            System.out.println("1");
             ICommand commandAction = (ICommand) classeAction.newInstance();
-            System.out.println("2");
             String pageDispatcher = commandAction.executar(request, response);
-            System.out.println("3");
             RequestDispatcher rd = request.getRequestDispatcher(pageDispatcher);
-            System.out.println("4");
             rd.forward(request, response);
 
         } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException | ServletException erro) {

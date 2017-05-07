@@ -79,9 +79,13 @@
                                         <input type="password" name="senha" placeholder="Senha..." class="form-password form-control" id="form-password">
                                     </div>
                                     <button type="submit" class="btn">Entrar!</button>
+                                   
                                 </form>
+                                
                             </div>
-                            
+                            <div>
+                                    <a href="cadastro.jsp" align="right">Cadastre-se</a>
+                                </div>
                         </div>
                     </div>
                 </div>

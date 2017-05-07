@@ -16,6 +16,11 @@ public class Lavador extends Pessoa {
     private int id;
     private Calendar dataContrato = Calendar.getInstance();
 
+    public Lavador(int id, String email, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
+        super(email, nome, telefone, dtNascimento, endereco);
+        this.id = id;
+    }
+
     public Lavador(int id, Calendar dtContrato, String email, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
         super(email, nome, telefone, dtNascimento, CPF, endereco);
         this.id = id;

@@ -6,13 +6,13 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<%@include file="rodape.jsp"%>
+<%@include file="cabecalho.jsp"%>
         <script>
             setTimeout(function () {
-                document.location = "Controle?action=Listar&listar=funcionario";
+                document.location = "Controle?action=Listar&listar=lavador";
             }, 1200); // <-- delay
         </script>
         <div class="bg-success center-block alert-success">
-            <h1>Funcionario cadastrado com sucesso!</h1>
+            <h1>Lavador cadastrado com sucesso!</h1>
         </div>
 <%@include file="rodape.jsp"%>

@@ -16,6 +16,7 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th>Email</th>
             <th>Nome</th>
             <th>Telefone</th>
             <th>Data Nascimento</th>
@@ -34,6 +35,7 @@
             ArrayList<Cliente> listaCliente = (ArrayList<Cliente>) request.getAttribute("lista");
             for (Cliente cliente : listaCliente) {%>  
         <tr>
+            <td><%= cliente.getEmail()%></td>
             <td><%= cliente.getNome()%></td>
             <td><%= cliente.getTelefone()%></td>
             <td><%= f.format(cliente.getDataNascimento().getTime())%></td>
@@ -43,8 +45,8 @@
             <td><%= cliente.getEndereco().getCidade()%></td>
             <td><%= cliente.getEndereco().getBairro()%></td>
             <td><%= cliente.getEndereco().getEndereco() + " " + cliente.getEndereco().getNumero()%></td>
-            <td><a type="button" class="glyphicon glyphicon-search text-info" href="Controle?action=LocalizarPorId&q=cli&id=<%=cliente.getId()%>"></a></td>
-            <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cli&id=<%=cliente.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-search text-info" href="Controle?action=LocalizarPorId&q=cliente&id=<%=cliente.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=<%=cliente.getId()%>"></a></td>
         </tr>
         <%}%> 
     </tbody>
@@ -70,6 +72,10 @@
                             <div class="col-md-8"><label>Email:</label> <input class="form-control" type="text" name="txtEmail" id="txtEmail"><br></div>
                         </div>    
                         <div class="row">
+                            <div class="col-md-6"><label>Login:</label> <input class="form-control" type="text" name="login"><br></div>
+                            <div class="col-md-6"><label>Senha:</label> <input class="form-control" type="password" name="senha"><br></div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6"><label>Nome:</label> <input class="form-control" type="text" name="nome"><br></div>
                             <div class="col-md-6"><label>Telefone:</label> <input class="form-control" type="text" name="telefone" id="telefone"><br></div>
                         </div>
@@ -88,18 +94,19 @@
                         <div class="row">
                             <div class="col-md-8"><label>Endereço:</label> <input class="form-control" type="text" name="endereco" id="endereco"><br></div>
                             <div class="col-md-4"><label>Numero:</label> <input class="form-control" type="text" name="numero" id="numero"><br></div>
-                        </div>    
-                </form
+                        </div>   
+
+
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar"><br>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar"><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
             </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
         </div>
     </div>
-</div>
 </div>
 <%@include file="rodape.jsp"%>

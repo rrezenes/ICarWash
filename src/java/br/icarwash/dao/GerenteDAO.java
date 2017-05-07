@@ -34,7 +34,7 @@ public class GerenteDAO implements BasicoDAO{
     }
 
     @Override
-    public void exluir(int id) {
+    public void excluir(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

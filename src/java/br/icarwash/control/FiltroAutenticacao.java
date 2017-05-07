@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author rezen
  */
-@WebFilter(filterName = "FiltroAutenticacao", urlPatterns = "/*")
+//@WebFilter(filterName = "FiltroAutenticacao", urlPatterns = "/*")
 public class FiltroAutenticacao implements Filter {
 
     private ServletContext context;

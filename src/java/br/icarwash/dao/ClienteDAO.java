@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Usuario;
 
 /**
  *
@@ -25,9 +26,9 @@ public class ClienteDAO implements BasicoDAO {
 
     private Connection conexao;
     private static final String INSERT = "insert into cliente(email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "select id, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente";
-    private static final String UPDATE = "update cliente set email = ?, nome = ?, telefone = ?, dt_nascimento = ?, cpf = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
-    private static final String DELETE_BY_ID = "delete from cliente WHERE id = ?";
+    private static final String SELECT_ALL = "select c.id, c.email, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.usuario, u.ativo from Cliente c, usuario u, cliente_usuario cu where c.id = cu.id_CLIENTE and u.id = cu.id_usuario and u.ativo = 1";
+    private static final String UPDATE = "update cliente set email = ?, nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
+    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM cliente_usuario where id_cliente = ?);";
     private static final String SELECT_BY_ID = "select id, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
     private static final String SELECT_ID_BY_EMAIL = "select id from cliente where email = ?";
 
@@ -48,10 +49,11 @@ public class ClienteDAO implements BasicoDAO {
             pstmt.setString(9, cliente.getEndereco().getBairro());
             pstmt.setString(10, cliente.getEndereco().getEndereco());
             pstmt.setInt(11, cliente.getEndereco().getNumero());
-
+           
             pstmt.execute();
+            
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("ERRROO: " + e);
         } finally {
             try {
                 conexao.close();
@@ -62,9 +64,9 @@ public class ClienteDAO implements BasicoDAO {
     }
 
     @Override
-    public ArrayList<Cliente> listar() {
+    public ArrayList<Object> listar() {
 
-        ArrayList<Cliente> clientes = new ArrayList();
+        ArrayList<Object> clientes = new ArrayList();
 
         try {
             conexao = Conexao.getConexao();
@@ -75,7 +77,8 @@ public class ClienteDAO implements BasicoDAO {
                 Timestamp timestamp;
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                Cliente cli = new Cliente(rs.getInt("id"),rs.getString("email"),  rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                Cliente cli = new Cliente(rs.getInt("id"),rs.getString("email"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                
                 clientes.add(cli);
             }
         } catch (SQLException e) {
@@ -127,14 +130,13 @@ public class ClienteDAO implements BasicoDAO {
             pstmt.setString(2, cliente.getNome());
             pstmt.setString(3, cliente.getTelefone());
             pstmt.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
-            pstmt.setString(5, cliente.getCPF());
-            pstmt.setString(6, cliente.getEndereco().getCEP());
-            pstmt.setString(7, cliente.getEndereco().getEstado());
-            pstmt.setString(8, cliente.getEndereco().getCidade());
-            pstmt.setString(9, cliente.getEndereco().getBairro());
-            pstmt.setString(10, cliente.getEndereco().getEndereco());
-            pstmt.setInt(11, cliente.getEndereco().getNumero());
-            pstmt.setInt(12, cliente.getId());
+            pstmt.setString(5, cliente.getEndereco().getCEP());
+            pstmt.setString(6, cliente.getEndereco().getEstado());
+            pstmt.setString(7, cliente.getEndereco().getCidade());
+            pstmt.setString(8, cliente.getEndereco().getBairro());
+            pstmt.setString(9, cliente.getEndereco().getEndereco());
+            pstmt.setInt(10, cliente.getEndereco().getNumero());
+            pstmt.setInt(11, cliente.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -148,10 +150,10 @@ public class ClienteDAO implements BasicoDAO {
     }
 
     @Override
-    public void exluir(int id) {
+    public void excluir(int id) {
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement(DELETE_BY_ID);
+            PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {

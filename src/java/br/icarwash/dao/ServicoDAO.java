@@ -5,7 +5,6 @@
  */
 package br.icarwash.dao;
 
-import br.icarwash.control.Avaliacao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,15 +15,17 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Servico;
 import br.icarwash.util.Conexao;
+import java.util.ArrayList;
 
 /**
  *
  * @author rezen
  */
-public class ServicoDAO {
+public class ServicoDAO implements BasicoDAO {
 
     private Connection conexao;
-
+    
+    //UTILIZAR METODOS DA INTERFACE
     public int cadastraServico(double valor, String descricao) {
         int id = 0;
         try {
@@ -73,6 +74,31 @@ public class ServicoDAO {
             }
         }
         return servico;
+    }
+
+    @Override
+    public void cadastrar(Object obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList listar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object localizarPorId(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void atualizar(Object obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void excluir(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

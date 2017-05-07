@@ -20,6 +20,14 @@ public class Pessoa {
     private String CPF;
     private Endereco endereco;
 
+    public Pessoa(String email, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
+        this.email = email;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.dtNascimento = dtNascimento;
+        this.endereco = endereco;
+    }
+    
     public Pessoa(String email, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
         this.email = email;
         this.nome = nome;

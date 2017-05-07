@@ -22,7 +22,10 @@ create table cliente(
     bairro varchar(255) NOT NULL,
     endereco varchar(255) NOT NULL,
     numero int NOT NULL,
+    UNIQUE (CPF),
+    UNIQUE (email),
     PRIMARY KEY (id)
+    
 );
 
 create table lavador(
@@ -39,6 +42,8 @@ create table lavador(
     bairro varchar(255) NOT NULL,
     endereco varchar(255) NOT NULL,
     numero int NOT NULL,
+    UNIQUE (CPF),
+    UNIQUE (email),
     PRIMARY KEY (id)
 );
 
@@ -70,6 +75,7 @@ create table produto(
     ID int NOT NULL AUTO_INCREMENT,
     nome varchar(255) NOT NULL,
     descricao varchar(255),
+    ativo bool NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -143,6 +149,7 @@ CREATE TABLE usuario(
 INSERT INTO `usuario` VALUES (NULL, 'ricardo',SHA1('admin'),3,1, NOW());
 INSERT INTO `usuario` VALUES (NULL, 'rodrigo',SHA1('admin'),3,1, NOW());
 INSERT INTO `usuario` VALUES (NULL, 'renan',SHA1('admin'),3,1, NOW());
+INSERT INTO `usuario` VALUES (NULL, 'cliente',SHA1('123'),1,1, NOW());
 
 create table cliente_usuario(
     id_CLIENTE int not null,
@@ -196,7 +203,7 @@ insert into cliente(email, nome, telefone, dt_nascimento, cpf, cep, estado, cida
 values('teste2@teste.com.br','Fulano2','222222', '1991-01-12', '12334565672', '08745312', 'sp', 'mogi das cruzes', 'vila bela flor', 'rua 2', 122);
 insert into lavador(dt_contrato, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values('2015-11-11', 'teste@teste.com.br','Fulano','111111', '1991-01-16', '12334565671', '08745310', 'sp', 'mogi das cruzes', 'vila bela flor', 'rua 1', 123); 
 insert into lavador(dt_contrato, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values('2015-11-11', 'teste2@teste.com.br','Fulano2','222222', '1991-01-12', '12334565672', '08745312', 'sp', 'mogi das cruzes', 'vila bela flor', 'rua 2', 122);
-insert into produto(nome, descricao) values('Pano', 'Pano De Microfibra 50x60cm');
-insert into produto(nome, descricao) values('Cristalizador De Vidros', 'Cristalizador De Vidros 500ml');
-insert into produto(nome, descricao) values('Spray ICarWash', 'Spray ICarWash 1000ml');
+insert into produto(nome, descricao, ativo) values('Pano', 'Pano De Microfibra 50x60cm',1);
+insert into produto(nome, descricao, ativo) values('Cristalizador De Vidros', 'Cristalizador De Vidros 500ml',1);
+insert into produto(nome, descricao, ativo) values('Spray ICarWash', 'Spray ICarWash 1000ml',1);
 

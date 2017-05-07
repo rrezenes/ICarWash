@@ -10,14 +10,33 @@ package br.icarwash.model;
  * @author rezen
  */
 public class Produto {
+
     private int id;
     private String nome;
     private String descricao;
+    private boolean ativo;
+
+    public Produto(String nome, String descricao, boolean ativo) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.ativo = ativo;
+    }
 
     public Produto(int id, String nome, String descricao) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+    }
+
+    public Produto(int id, String nome, String descricao, boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.ativo = ativo;
+    }
+
+    public Produto(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -43,5 +62,13 @@ public class Produto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
 }

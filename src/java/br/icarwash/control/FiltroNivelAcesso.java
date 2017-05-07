@@ -17,15 +17,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author rezen
  */
-@WebFilter(filterName = "FiltroNivelAcesso", urlPatterns = "/*")
-public class FiltroRequisicao implements Filter {
+//@WebFilter(filterName = "FiltroNivelAcesso", urlPatterns = "/*")
+public class FiltroNivelAcesso implements Filter {
 
     private ServletContext context;
 

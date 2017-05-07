@@ -5,6 +5,7 @@
  */
 package br.icarwash.control;
 
+import br.icarwash.model.Avaliacao;
 import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.ServicoDAO;

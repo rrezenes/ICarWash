@@ -7,6 +7,7 @@ package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
+import br.icarwash.dao.ProdutoDAO;
 import br.icarwash.model.Cliente;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Produto;
 
 /**
  *
@@ -25,16 +27,24 @@ public class Listar implements ICommand {
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quemListar = request.getParameter("listar");
 
-        if ("cliente".equals(quemListar)) {
-            ClienteDAO dao = new ClienteDAO();
-            ArrayList<Cliente> clientes = dao.listar();
-            request.setAttribute("lista", clientes);
-            return "listar_cliente.jsp";
-        } else {
-            LavadorDAO dao = new LavadorDAO();
-            ArrayList<Lavador> funcionarios = dao.listar();
-            request.setAttribute("lista", funcionarios);
-            return "listar_funcionario.jsp";
+        switch (quemListar) {
+            case "cliente":
+                ClienteDAO clienteDAO = new ClienteDAO();
+                ArrayList<Object> clientes = clienteDAO.listar();
+                request.setAttribute("lista", clientes);
+                return "listar_cliente.jsp";
+            case "lavador":
+                LavadorDAO lavadorDAO = new LavadorDAO();
+                ArrayList<Lavador> lavadores = lavadorDAO.listar();
+                request.setAttribute("lista", lavadores);
+                return "listar_lavador.jsp";
+            case "produto":
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+                ArrayList<Produto> produtos = produtoDAO.listar();
+                request.setAttribute("lista", produtos);
+                return "listar_produto.jsp";
+            default:
+                return "painel_admin.jsp";
         }
     }
 }

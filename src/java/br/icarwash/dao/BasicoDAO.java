@@ -20,5 +20,5 @@ interface BasicoDAO {
 
     public abstract  void atualizar(Object obj);
 
-    public abstract  void exluir(int id);
+    public abstract  void excluir(int id);
 }
