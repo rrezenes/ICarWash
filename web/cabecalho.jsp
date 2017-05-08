@@ -99,7 +99,8 @@
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitações<b class="caret"></b></a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">Contratar Serviço</a></li>
+                                            <li><a href="solicitar_servico.jsp">Solicitar Serviço</a></li>
+                                            <li><a href="minha_solicitacao.jsp">Minhas Solicitações</a></li>
                                         </ul>
                                     </li>
                                 </ul>

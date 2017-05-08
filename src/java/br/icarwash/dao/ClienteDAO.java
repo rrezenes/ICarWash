@@ -49,9 +49,9 @@ public class ClienteDAO implements BasicoDAO {
             pstmt.setString(9, cliente.getEndereco().getBairro());
             pstmt.setString(10, cliente.getEndereco().getEndereco());
             pstmt.setInt(11, cliente.getEndereco().getNumero());
-           
+
             pstmt.execute();
-            
+
         } catch (SQLException e) {
             throw new RuntimeException("ERRROO: " + e);
         } finally {
@@ -64,9 +64,9 @@ public class ClienteDAO implements BasicoDAO {
     }
 
     @Override
-    public ArrayList<Object> listar() {
+    public ArrayList<Cliente> listar() {
 
-        ArrayList<Object> clientes = new ArrayList();
+        ArrayList<Cliente> clientes = new ArrayList();
 
         try {
             conexao = Conexao.getConexao();
@@ -77,8 +77,8 @@ public class ClienteDAO implements BasicoDAO {
                 Timestamp timestamp;
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                Cliente cli = new Cliente(rs.getInt("id"),rs.getString("email"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
-                
+                Cliente cli = new Cliente(rs.getInt("id"), rs.getString("email"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+
                 clientes.add(cli);
             }
         } catch (SQLException e) {
@@ -106,7 +106,7 @@ public class ClienteDAO implements BasicoDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cli = new Cliente(rs.getInt("id"),rs.getString("email"),  rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                cli = new Cliente(rs.getInt("id"), rs.getString("email"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -166,7 +166,7 @@ public class ClienteDAO implements BasicoDAO {
             }
         }
     }
-    
+
     public int localizarIdPorEmail(String email) {
         int IDCliente = 0;
         try {

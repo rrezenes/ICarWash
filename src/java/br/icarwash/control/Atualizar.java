@@ -8,6 +8,7 @@ package br.icarwash.control;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
+import br.icarwash.dao.ServicoDAO;
 import java.io.IOException;
 import java.util.Calendar;
 import javax.servlet.ServletException;
@@ -17,6 +18,8 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Produto;
+import br.icarwash.model.Servico;
+import java.math.BigDecimal;
 
 /**
  *
@@ -59,6 +62,12 @@ public class Atualizar implements ICommand {
                 produtoDAO.atualizar(produto);
 
                 return "Controle?action=Listar&listar=produto";
+            }
+            case "servico": {
+                ServicoDAO servicoDAO = new ServicoDAO();
+                Servico servico = new Servico(Integer.parseInt(request.getParameter("txtId")), request.getParameter("txtNome"), request.getParameter("txtDescricao"), new BigDecimal(request.getParameter("txtValor")));
+                servicoDAO.atualizar(servico);
+                return "Controle?action=Listar&listar=servico";
             }
             default:
                 return "painel_admin.jsp";

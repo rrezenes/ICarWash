@@ -18,16 +18,14 @@ public class SolicitacaoDAO {
 
     private Connection conexao;
 
-    public void cadastraSolicitacao(int idCliente, int idServico, int idLavador, int idAvaliacao) {
+    public void cadastraSolicitacao(int idCliente, String porte) {
         try {
             conexao = Conexao.getConexao();
             
-            PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao(id_cliente, id_servico, id_lavador, id_avaliacao) values (?,?,?,?)");
+            PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao(id_cliente, porte) values (?,?)");
             
             pstmt.setInt(1, idCliente);
-            pstmt.setInt(2, idServico);
-            pstmt.setInt(3, idLavador);
-            pstmt.setInt(4, idAvaliacao);
+            pstmt.setString(2, porte);
             pstmt.execute();
             
         } catch (SQLException e) {

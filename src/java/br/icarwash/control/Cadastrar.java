@@ -10,6 +10,8 @@ import br.icarwash.dao.ClienteUsuarioDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.LavadorUsuarioDAO;
 import br.icarwash.dao.ProdutoDAO;
+import br.icarwash.dao.ServicoDAO;
+import br.icarwash.dao.ServicoProdutoDAO;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.ClienteUsuario;
@@ -24,7 +26,10 @@ import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.LavadorUsuario;
 import br.icarwash.model.Produto;
+import br.icarwash.model.Servico;
 import br.icarwash.model.Usuario;
+import java.math.BigDecimal;
+import java.util.Enumeration;
 
 /**
  *
@@ -92,6 +97,26 @@ public class Cadastrar implements ICommand {
 
                 request.setAttribute("objProduto", produto);
                 return "sucesso_produto.jsp";
+            }
+            case "servico": {
+                
+                Enumeration<String> nomes =  request.getParameterNames();
+                
+                nomes.nextElement();
+                nomes.nextElement();
+                nomes.nextElement();
+                
+                System.out.println(nomes.hashCode());
+                
+                Servico servico = new Servico(request.getParameter("nome"), request.getParameter("descricao"),new BigDecimal(request.getParameter("valor")), true);
+                ServicoDAO servicoDAO = new ServicoDAO();
+                servicoDAO.cadastrar(servico);
+
+                ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO();
+                
+                
+                request.setAttribute("objProduto", servico);
+                return "sucesso_servico.jsp";
             }
             default:
                 return "painel_admin.jsp";

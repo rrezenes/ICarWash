@@ -81,16 +81,30 @@ create table produto(
 
 create table servico(
     ID int NOT NULL AUTO_INCREMENT,
-    valor DECIMAL(10,2),
-    descricao varchar(255),
+    nome varchar(255) not null,
+    descricao varchar(255),    
+    valor DECIMAL(10,2) not null,
+    ativo bool NOT NULL,
     PRIMARY KEY (id)
 );
 
-insert into servico(valor, descricao) values (20, 'Aspirar');
-insert into servico(valor, descricao) values (30, 'Lavagem');
-insert into servico(valor, descricao) values (110, 'Cristalizar');
-insert into servico(valor, descricao) values (30, 'Higienização');
-insert into servico(valor, descricao) values (50, 'Lavagem do Motor');
+insert into servico(nome, descricao, valor, ativo) values ( 'Aspirar', 'Aspirar', 20, 1);
+insert into servico(nome, descricao, valor, ativo) values ( 'Lavagem', 'Lavagem', 30, 1);
+insert into servico(nome, descricao, valor, ativo) values ('Cristalizar', 'Cristalizar', 110, 1);
+insert into servico(nome, descricao, valor, ativo) values ('Higienização', 'Higienização',30, 1);
+insert into servico(nome, descricao, valor, ativo) values ('Lavagem do Motor', 'Lavagem do Motor', 50, 1);
+
+insert into servico_produtos(id_servico, id_produto, quantidade) values (6,1,4);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (6,2,4);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (7,3,1);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (7,6,4);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (8,4,2);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (8,6,4);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (9,5,1);
+insert into servico_produtos(id_servico, id_produto, quantidade) values (9,6,2);
+
+select s.nome, p.nome, sp.quantidade, s.valor from produto p, servico s, servico_produtos sp 
+    where p.id = sp.id_produto and s.id = sp.id_servico;
 
 create table avaliacao(
     ID int NOT NULL AUTO_INCREMENT,
@@ -107,12 +121,10 @@ insert into avaliacao(nota_pontualidade,nota_servico,nota_atendimento,nota_agili
 create table solicitacao(
     ID int NOT NULL AUTO_INCREMENT,
     id_cliente int not null,
-    id_servico int not null,
-    id_lavador int not null,
-    id_avaliacao int not null, 
+    id_lavador int,
+    id_avaliacao int, 
     PRIMARY KEY (id),
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
-    FOREIGN KEY (id_servico) REFERENCES servico(id),
     FOREIGN KEY (id_lavador) REFERENCES lavador(id),
     FOREIGN KEY (id_avaliacao) REFERENCES avaliacao(id)
 );

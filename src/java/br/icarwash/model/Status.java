@@ -9,13 +9,6 @@ package br.icarwash.model;
  *
  * @author rezen
  */
-public class Solicitacao {
-    private int id;
-    private Status status;
-    private Cliente cliente;
-    private Servico servico;
-    private Lavador lavador;
-    private int avaliacao;
- 
+public enum Status {
     
 }

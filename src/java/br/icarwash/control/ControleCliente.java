@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Wolley
+ * @author Renan
  */
 @WebServlet(name = "ControleCliente", urlPatterns = "/Controle")
 public class ControleCliente extends HttpServlet {

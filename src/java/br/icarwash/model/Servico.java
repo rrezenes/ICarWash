@@ -5,6 +5,7 @@
  */
 package br.icarwash.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,15 +13,40 @@ import java.util.List;
  * @author rezen
  */
 public class Servico {
-    private int id;
-    private double custoTotal;
-    private String descricao;
 
-    public Servico(int id, double custoTotal, String descricao) {
+    private int id;
+    private String nome;
+    private String descricao;
+    private BigDecimal valor;
+    private boolean ativo;
+
+    public Servico(int id) {
         this.id = id;
-        this.custoTotal = custoTotal;
-        this.descricao = descricao;
     }
+
+    public Servico(String nome, String descricao, BigDecimal valor, boolean ativo) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.ativo = ativo;
+    }
+
+    public Servico(int id, String nome, String descricao, BigDecimal valor, boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.ativo = ativo;
+    }
+
+    public Servico(int id, String nome, String descricao, BigDecimal valor) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valor = valor;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -30,12 +56,12 @@ public class Servico {
         this.id = id;
     }
 
-    public double getCustoTotal() {
-        return custoTotal;
+    public String getNome() {
+        return nome;
     }
 
-    public void setCustoTotal(double custoTotal) {
-        this.custoTotal = custoTotal;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {
@@ -45,6 +71,21 @@ public class Servico {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
 }

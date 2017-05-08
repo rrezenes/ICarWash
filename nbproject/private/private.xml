@@ -3,48 +3,33 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/BasicoDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Cliente.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Servico.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Status.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/ServicoDAO.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/web/listar_cliente.jsp</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Cadastrar.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/LoginController.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Lavador.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/LocalizarPorId.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Usuario.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/LoginController.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/LocalizarPorId.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Excluir.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Admin.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorUsuarioDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Produto.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ICommand.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/cadastro.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/ClienteUsuario.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/LavadorUsuario.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/sucesso_produto.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/localizar_produto.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleCliente.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleSolicitarServico.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/index.jsp</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/ClienteDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/painel_admin.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/ClienteUsuarioDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/sucesso_lavador.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleCliente.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/SolicitacaoDAO.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Solicitacao.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/web/listar_produto.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/SolicitacaoServicoDAO.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Ativar.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Pessoa.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorDAO.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Atualizar.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/web/cabecalho.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/localizar_lavador.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/localizar_servico.jsp</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/util/icarwash.sql</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/cliente/index.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/listar_lavador.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/cadastrar_produto.jsp</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/localizar_cliente.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/solicitar_servico.jsp</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/ProdutoDAO.java</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Listar.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/GerenteDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/UsuarioDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/web/sucesso.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/listar_servico.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -8,6 +8,7 @@ package br.icarwash.control;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
+import br.icarwash.dao.ServicoDAO;
 import br.icarwash.model.Cliente;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Produto;
+import br.icarwash.model.Servico;
 
 /**
  *
@@ -30,7 +32,7 @@ public class Listar implements ICommand {
         switch (quemListar) {
             case "cliente":
                 ClienteDAO clienteDAO = new ClienteDAO();
-                ArrayList<Object> clientes = clienteDAO.listar();
+                ArrayList<Cliente> clientes = clienteDAO.listar();
                 request.setAttribute("lista", clientes);
                 return "listar_cliente.jsp";
             case "lavador":
@@ -43,6 +45,11 @@ public class Listar implements ICommand {
                 ArrayList<Produto> produtos = produtoDAO.listar();
                 request.setAttribute("lista", produtos);
                 return "listar_produto.jsp";
+            case "servico":
+                ServicoDAO servicoDAO = new ServicoDAO();
+                ArrayList<Servico> servicos = servicoDAO.listar();
+                request.setAttribute("lista", servicos);
+                return "listar_servico.jsp";
             default:
                 return "painel_admin.jsp";
         }

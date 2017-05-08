@@ -40,7 +40,7 @@ public class PedidoController extends HttpServlet {
         int[] quantidades = this.processa();
         
         ServicoDAO servDAO = new ServicoDAO();
-        Servico serv = servDAO.selecionar(request.getParameter("servico"));
+        Servico serv = servDAO.localizarPorId(1/**request.getParameter("servico")**/);
         
         ClienteDAO cliDAO = new ClienteDAO();
         Cliente cli = new Cliente(cliDAO.localizarIdPorEmail(email));
