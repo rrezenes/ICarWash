@@ -9,12 +9,8 @@ package br.icarwash.model;
  *
  * @author rezen
  */
-public enum Status {
-    EM_ANALISE,
-    AGENDADO,
-    EM_PROCESSO,
-    FINALIZADO,
-    AVALIADO,
-    CONCLUIDO,
-    CANCELADO
+public enum Porte {
+    PEQUENO,
+    MEDIO,
+    GRANDE
 }
