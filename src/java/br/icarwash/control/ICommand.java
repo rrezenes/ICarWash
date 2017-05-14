@@ -15,5 +15,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author rezen
  */
 public interface ICommand {
+
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

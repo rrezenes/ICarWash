@@ -15,9 +15,10 @@ import br.icarwash.util.Conexao;
  * @author rezen
  */
 public class ServicoProdutoDAO {
-        private Connection conexao;
 
-    public void cadastraServicoProduto(int idServico, int idProduto,int quantidade) {
+    private Connection conexao;
+
+    public void cadastraServicoProduto(int idServico, int idProduto, int quantidade) {
         try {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement("insert into servico_produtos(id_servico, id_produto, quantidade) values (?,?,?)");
@@ -25,7 +26,7 @@ public class ServicoProdutoDAO {
             pstmt.setInt(2, idProduto);
             pstmt.setInt(3, quantidade);
             pstmt.execute();
-            
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

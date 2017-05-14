@@ -35,7 +35,7 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
             pstmt.setString(2, usuario.getSenha());
             pstmt.setInt(3, usuario.getNivel());
             pstmt.setBoolean(4, usuario.isAtivo());
-            
+
             pstmt.execute();
 
         } catch (SQLException e) {

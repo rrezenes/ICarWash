@@ -10,5 +10,5 @@ package br.icarwash.model;
  * @author rezen
  */
 public class Gerente {
-    
+
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author rezen
  */
-public class GerenteDAO implements BasicoDAO{
+public class GerenteDAO implements BasicoDAO {
 
     @Override
     public void cadastrar(Object obj) {
@@ -37,5 +37,5 @@ public class GerenteDAO implements BasicoDAO{
     public void excluir(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

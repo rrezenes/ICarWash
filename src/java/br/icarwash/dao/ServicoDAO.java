@@ -30,7 +30,7 @@ public class ServicoDAO implements BasicoDAO {
     //UTILIZAR METODOS DA INTERFACE
     @Override
     public void cadastrar(Object obj) {
-            Servico servico = (Servico) obj;
+        Servico servico = (Servico) obj;
         try {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
@@ -59,7 +59,7 @@ public class ServicoDAO implements BasicoDAO {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Servico servico = new Servico(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"),rs.getBigDecimal("valor"), rs.getBoolean("ativo"));
+                Servico servico = new Servico(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"), rs.getBigDecimal("valor"), rs.getBoolean("ativo"));
                 servicos.add(servico);
             }
         } catch (SQLException e) {

@@ -10,6 +10,7 @@ package br.icarwash.model;
  * @author rezen
  */
 public class ClienteUsuario {
+
     private int idCliente;
     private int idUsuario;
 
@@ -33,5 +34,5 @@ public class ClienteUsuario {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
+
 }

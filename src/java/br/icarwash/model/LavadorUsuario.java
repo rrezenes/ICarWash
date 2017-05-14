@@ -34,7 +34,5 @@ public class LavadorUsuario {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
-    
-    
+
 }

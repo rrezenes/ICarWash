@@ -99,22 +99,21 @@ public class Cadastrar implements ICommand {
                 return "sucesso_produto.jsp";
             }
             case "servico": {
-                
-                Enumeration<String> nomes =  request.getParameterNames();
-                
+
+                Enumeration<String> nomes = request.getParameterNames();
+
                 nomes.nextElement();
                 nomes.nextElement();
                 nomes.nextElement();
-                
+
                 System.out.println(nomes.hashCode());
-                
-                Servico servico = new Servico(request.getParameter("nome"), request.getParameter("descricao"),new BigDecimal(request.getParameter("valor")), true);
+
+                Servico servico = new Servico(request.getParameter("nome"), request.getParameter("descricao"), new BigDecimal(request.getParameter("valor")), true);
                 ServicoDAO servicoDAO = new ServicoDAO();
                 servicoDAO.cadastrar(servico);
 
                 ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO();
-                
-                
+
                 request.setAttribute("objProduto", servico);
                 return "sucesso_servico.jsp";
             }

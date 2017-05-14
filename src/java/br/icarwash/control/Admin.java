@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rezen
  */
-public class Admin implements ICommand{
+public class Admin implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         return "painel_admin.jsp";
     }
-    
+
 }

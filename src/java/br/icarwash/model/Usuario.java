@@ -12,6 +12,7 @@ import java.util.Calendar;
  * @author rezen
  */
 public class Usuario {
+
     private int id;
     private String usuario;
     private String senha;
@@ -22,7 +23,7 @@ public class Usuario {
     public Usuario(int id) {
         this.id = id;
     }
-    
+
     public Usuario(String usuario, String senha, int nivel, boolean ativo) {
         this.usuario = usuario;
         this.senha = senha;
@@ -73,7 +74,5 @@ public class Usuario {
     public Calendar getCadastro() {
         return cadastro;
     }
-    
-    
-    
+
 }

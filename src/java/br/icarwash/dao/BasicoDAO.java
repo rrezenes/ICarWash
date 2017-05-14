@@ -12,13 +12,14 @@ import java.util.ArrayList;
  * @author rezen
  */
 interface BasicoDAO {
+
     public abstract void cadastrar(Object obj);
 
     public abstract ArrayList listar();
 
-    public abstract  Object localizarPorId(int id);
+    public abstract Object localizarPorId(int id);
 
-    public abstract  void atualizar(Object obj);
+    public abstract void atualizar(Object obj);
 
-    public abstract  void excluir(int id);
+    public abstract void excluir(int id);
 }

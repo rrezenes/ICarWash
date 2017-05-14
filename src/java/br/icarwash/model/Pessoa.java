@@ -12,7 +12,7 @@ import java.util.Calendar;
  * @author rezen
  */
 public class Pessoa {
-    
+
     private String email;
     private String nome;
     private String telefone;
@@ -27,7 +27,7 @@ public class Pessoa {
         this.dtNascimento = dtNascimento;
         this.endereco = endereco;
     }
-    
+
     public Pessoa(String email, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
         this.email = email;
         this.nome = nome;

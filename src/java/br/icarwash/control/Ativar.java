@@ -18,12 +18,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rezen
  */
-public class Ativar implements ICommand{
+public class Ativar implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ativar = request.getParameter("q");
-        
+
         switch (ativar) {
 //            $$$$$$$$$$$$$$$$---FALTA IMPLEMENTAR---$$$$$$$$$$$$$$$$$$
 //            case "cliente": {
@@ -49,7 +49,7 @@ public class Ativar implements ICommand{
             default:
                 return "painel_admin.jsp";
         }
-        
+
     }
-    
+
 }

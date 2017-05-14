@@ -74,6 +74,5 @@ public class Endereco {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
-    
-    
+
 }
