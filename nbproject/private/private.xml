@@ -3,18 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/ServicoDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/ClienteDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/SolicitacaoDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Solicitacao.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/solicitar_servico.jsp</file>
             <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/Cadastrar.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/state/SolicitacaoState.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Lavador.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/state/Concluido.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/SolicitacaoServicoDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleSolicitarServico.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/state/EmAnalise.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorDAO.java</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/listar_produto.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/web/listar_servico.jsp</file>
+            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleSolicitacao.java</file>
         </group>
     </open-files>
 </project-private>

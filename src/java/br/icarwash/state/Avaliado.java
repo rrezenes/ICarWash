@@ -52,4 +52,8 @@ public class Avaliado implements SolicitacaoState {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Avaliado";
+    }
 }

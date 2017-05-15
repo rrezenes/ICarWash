@@ -18,7 +18,7 @@
     <h1>Solicitar Serviço</h1>
 </div>
 <div class="container" style="max-width: 1000.0px;">
-    <form action="ControleSolicitarServico" method="post">
+    <form action="ControleSolicitacao" method="post">
         <div class="form-group">
             <input type="hidden" value="cliente">
             <fieldset>
@@ -33,7 +33,7 @@
             </fieldset> 
             <legend>Serviços</legend>
             <div>
-                <%                ServicoDAO servicoDAO = new ServicoDAO();
+                <%  ServicoDAO servicoDAO = new ServicoDAO();
                     ArrayList<Servico> servicos = servicoDAO.listar();
                     for (Servico servico : servicos) {
                         if (servico.isAtivo()) {%>

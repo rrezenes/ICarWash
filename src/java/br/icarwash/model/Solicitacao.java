@@ -37,15 +37,14 @@ public class Solicitacao {
         this.estado = new EmAnalise();
     }
 
-    public Solicitacao(int id, Cliente cliente, Lavador lavador, int avaliacao, SolicitacaoState estado, String porte, Date data_solicitacao, BigDecimal valorTotal) {
+    public Solicitacao(int id, Cliente cliente, Lavador lavador, int avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;
         this.lavador = lavador;
         this.avaliacao = avaliacao;
         this.estado = estado;
         this.porte = porte;
-        this.estado = new EmAnalise();
-        this.dataSolicitacao = Calendar.getInstance();
+        this.dataSolicitacao = data_solicitacao;
         this.valorTotal = valorTotal;
     }
 
@@ -149,6 +148,6 @@ public class Solicitacao {
     }
 
     public void cancelarSolicitacao() {
-        this.estado = new Cancelado();
+        this.estado = this.estado.cancelarSolicitacao(this);
     }
 }

@@ -10,16 +10,15 @@ import br.icarwash.dao.ServicoDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.dao.SolicitacaoServicoDAO;
 import br.icarwash.model.Cliente;
-import br.icarwash.model.Porte;
 import br.icarwash.model.Servico;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Status;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -32,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rezen
  */
-@WebServlet(name = "ControleSolicitarServico", urlPatterns = "/ControleSolicitarServico")
-public class ControleSolicitarServico extends HttpServlet {
+@WebServlet(name = "ControleSolicitacao", urlPatterns = "/ControleSolicitacao")
+public class ControleSolicitacao extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -50,13 +49,14 @@ public class ControleSolicitarServico extends HttpServlet {
         String porte = request.getParameter("porte");
         String[] servicos = request.getParameterValues("servico");
         Date data_solicitacao;
-        Calendar data = null;
+        Calendar data = GregorianCalendar.getInstance();
         try {
-            data_solicitacao = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(request.getParameter("data_solicitacao"));
-            data = Calendar.getInstance();
+            data_solicitacao = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(request.getParameter("data_solicitacao"));            
             data.setTime(data_solicitacao);
+            
+            
         } catch (ParseException ex) {
-            Logger.getLogger(ControleSolicitarServico.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         double valor = 0;

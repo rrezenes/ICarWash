@@ -26,4 +26,5 @@ public interface SolicitacaoState {
     SolicitacaoState concluirSolicitacao(Solicitacao solicitacao);
 
     SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao);
+
 }

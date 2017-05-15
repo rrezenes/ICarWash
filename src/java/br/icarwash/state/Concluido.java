@@ -48,4 +48,9 @@ public class Concluido implements SolicitacaoState {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Concluido";
+    }
+
 }

@@ -52,4 +52,9 @@ public class EmProcesso implements SolicitacaoState {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Em Processo";
+    }
+
 }

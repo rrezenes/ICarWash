@@ -5,6 +5,7 @@
  */
 package br.icarwash.state;
 
+import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
 
 /**
@@ -48,4 +49,8 @@ public class Cancelado implements SolicitacaoState {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Cancelado";
+    }
 }

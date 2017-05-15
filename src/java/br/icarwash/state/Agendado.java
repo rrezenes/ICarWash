@@ -27,7 +27,7 @@ public class Agendado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState processarSolicitacao(Solicitacao solicitacao) {
-                SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         solicitacaoDAO.alterarStatus(Status.EM_PROCESSO);
         return new EmProcesso();
     }
@@ -49,7 +49,14 @@ public class Agendado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        solicitacaoDAO.cancelarSolicitacaoPorId(solicitacao.getId());
         return new Cancelado();
+    }
+
+    @Override
+    public String toString() {
+        return "Agendado";
     }
 
 }

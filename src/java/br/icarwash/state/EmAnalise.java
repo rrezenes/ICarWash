@@ -15,7 +15,7 @@ import br.icarwash.model.Status;
  * @author rezen
  */
 public class EmAnalise implements SolicitacaoState {
-    
+
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
@@ -50,7 +50,13 @@ public class EmAnalise implements SolicitacaoState {
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        solicitacaoDAO.cancelarSolicitacaoPorId(solicitacao.getId());
         return new Cancelado();
     }
 
+    @Override
+    public String toString() {
+        return "Em Analise";
+    }
 }

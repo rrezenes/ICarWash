@@ -63,32 +63,35 @@
                             <div class="col-md-12"><label>Nome:</label> <input class="form-control" type="text" name="nome"><br></div>
                             <div class="col-md-12"><label>Descrição:</label> <input class="form-control" type="text" name="descricao" id="descricao"><br></div>
                             <div class="col-md-12"><label>Valor:</label> <input class="form-control" type="text" name="valor" id="valor"><br></div>
-<!--                                <
+                                <%
                                     ProdutoDAO produtoDAO = new ProdutoDAO();
-                                    ArrayList<Produto> listaProduto = produtoDAO.listar();
-                                    for (Produto produto : listaProduto) {%>
-                                            < if (produto.isAtivo()) {%>-->
-<!--                                        <div>
-                                            <div class="checkbox col-md-5">
-                                                <label><input type="checkbox" value="<= produto.getNome()%>" name="<= produto.getId()%>"><= produto.getNome()%></label>
+                                    ArrayList<Produto> listaProduto = produtoDAO.listar();%>
+                                    <div class="col-md-7" style="padding-bottom: 2px"><b>Selecione os Produtos:</b></div>
+                                    <div class="col-md-5" style="padding-bottom: 2px"><b>Selecione a quantidade:</b></div>
+                                    <legend></legend>
+                                    <%for (Produto produto : listaProduto) {
+                                             if (produto.isAtivo()) {%>
+
+                                        <div class="form-inline">
+                                            <div class="checkbox col-md-7">
+                                                <label style="padding-left: 10px"><input type="checkbox" value="<%=produto.getId()%>" name="produtos" onclick="document.getElementById('<%=produto.getId()%>').disabled = !this.checked;"><%= produto.getNome()%></label>
                                             </div>
 
-                                            <div class="col-md-7">
-                                                <label></label>
-                                                <select class="form-control" id="<= produto.getId()%>">
-                                                    <option>0</option>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
+                                            <div class="col-md-5" style="padding: 0 0 2px 25px">
+                                                <select class="form-control" name="combo<%=produto.getId()%>" id="<%=produto.getId()%>" disabled="disabled">
+                                                    <option value="1"></option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
                                                 </select>
                                                 
                                             </div>
 
-                                        </div>    -->
-<!--                                        < }
-                                            }%>-->
+                                        </div>    
+                                        <% }
+                                            }%>
                         </div>
                     </div>
                     <div class="form-group">

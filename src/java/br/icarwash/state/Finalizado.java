@@ -52,4 +52,9 @@ public class Finalizado implements SolicitacaoState {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Finalize";
+    }
+
 }
