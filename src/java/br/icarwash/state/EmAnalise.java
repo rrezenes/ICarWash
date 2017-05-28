@@ -6,9 +6,7 @@
 package br.icarwash.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
-import br.icarwash.model.Cliente;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Status;
 
 /**
  *
@@ -19,13 +17,14 @@ public class EmAnalise implements SolicitacaoState {
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.alterarStatus(Status.AGENDADO);
-        return this;
+        solicitacaoDAO.agendarSolicitacao(solicitacao);
+        solicitacao.atribuirLavador();
+        return new Agendado();
     }
 
     @Override
     public SolicitacaoState agendarSolicitacao(Solicitacao solicitacao) {
-        return new Agendado();
+        return this;
     }
 
     @Override

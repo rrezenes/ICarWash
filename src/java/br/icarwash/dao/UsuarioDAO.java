@@ -21,7 +21,7 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
 
     private Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(usuario, senha, nivel, ativo,cadastro) VALUES (?,SHA1(?),?,?, NOW());";
-    private static final String SELECT_USUARIO = "select nivel from usuario where usuario = ? and senha = SHA1(?)";
+    private static final String SELECT_USUARIO = "select * from usuario where usuario = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where usuario = ?";
 
     @Override
@@ -50,19 +50,20 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
         }
     }
 
-    public int usuarioLogin(String login, String senha) {//terminar de implementar
-        int nivel = 0; //terminar de implementar
+    public Usuario usuarioLogin(Usuario usuarioLogin) {//terminar de implementar
+        Usuario usuario = null;
         try {
-            System.out.println(login + " " + senha);
+            //System.out.println(login + " " + senha);
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_USUARIO);
-            pstmt.setString(1, login);
-            pstmt.setString(2, senha);
+            pstmt.setString(1, usuarioLogin.getUsuario());
+            pstmt.setString(2, usuarioLogin.getSenha());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                nivel = rs.getInt(1);
+                usuario = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));                
             } else {
-                nivel = 0;
+                usuario = new Usuario();
+                usuario.setNivel(0);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -73,7 +74,7 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
                 throw new RuntimeException(e);
             }
         }
-        return nivel;
+        return usuario;
     }
 
     @Override

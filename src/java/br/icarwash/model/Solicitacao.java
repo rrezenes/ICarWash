@@ -124,30 +124,34 @@ public class Solicitacao {
     }
 
     public void analisarSolicitacao() {
-        this.estado = new EmAnalise();
+        this.estado = this.estado.analisarSolicitacao(this);
     }
 
     public void agendarSolicitacao() {
-        this.estado = new Agendado();
+        this.estado = this.estado.agendarSolicitacao(this);
     }
 
     public void processarSolicitacao() {
-        this.estado = new EmProcesso();
+        this.estado = this.estado.processarSolicitacao(this);
     }
 
     public void finalizarSolicitacao() {
-        this.estado = new Finalizado();
+        this.estado = this.estado.finalizarSolicitacao(this);
     }
 
     public void avaliarSolicitacao() {
-        this.estado = new Avaliado();
+        this.estado = this.estado.avaliarSolicitacao(this);
     }
 
     public void concluirSolicitacao() {
-        this.estado = new Concluido();
+        this.estado = this.estado.concluirSolicitacao(this);
     }
 
     public void cancelarSolicitacao() {
         this.estado = this.estado.cancelarSolicitacao(this);
+    }
+
+    public void atribuirLavador() {
+        
     }
 }

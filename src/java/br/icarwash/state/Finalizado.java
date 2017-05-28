@@ -7,7 +7,6 @@ package br.icarwash.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Status;
 
 /**
  *
@@ -38,7 +37,7 @@ public class Finalizado implements SolicitacaoState {
     @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao) {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.alterarStatus(Status.AVALIADO);
+        solicitacaoDAO.avaliarSolicitacao(solicitacao);
         return new Avaliado();
     }
 

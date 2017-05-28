@@ -27,6 +27,14 @@ public class ServicoDAO implements BasicoDAO {
     private static final String ACTIVE_BY_ID = "UPDATE servico SET ativo=1 where id=?";
     private static final String SELECT_BY_ID = "select id, nome, descricao, valor, ativo from servico where id = ?";
 
+    public ServicoDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
+    public ServicoDAO() {
+        this.conexao = Conexao.getConexao();
+    }
+
     //UTILIZAR METODOS DA INTERFACE
     @Override
     public void cadastrar(Object obj) {
@@ -152,6 +160,30 @@ public class ServicoDAO implements BasicoDAO {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public Servico localizarIdUltimoInsert() {
+        Servico servico = new Servico();
+        try {
+            conexao = Conexao.getConexao();
+
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT id FROM servico WHERE id = (SELECT MAX(id) FROM servico)");
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                servico.setId(rs.getInt("id"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return servico;
     }
 
 }

@@ -31,12 +31,21 @@ public class Usuario {
         this.ativo = ativo;
     }
 
+    public Usuario(String usuario, String senha) {
+        this.usuario = usuario;
+        this.senha = senha;
+    }
+
     public Usuario(int id, String usuario, String senha, int nivel, boolean ativo) {
         this.id = id;
         this.usuario = usuario;
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
+    }
+
+    public Usuario() {
+
     }
 
     public int getId() {
@@ -73,6 +82,10 @@ public class Usuario {
 
     public Calendar getCadastro() {
         return cadastro;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
     }
 
 }

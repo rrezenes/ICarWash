@@ -33,7 +33,7 @@ public class EmProcesso implements SolicitacaoState {
     @Override
     public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.alterarStatus(Status.AGENDADO);
+        solicitacaoDAO.finalizarSolicitacao(solicitacao);
         return new Finalizado();
     }
 

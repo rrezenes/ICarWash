@@ -22,6 +22,7 @@ import br.icarwash.model.Endereco;
  */
 public class ClienteDAO implements BasicoDAO {
 
+    private boolean fechaConexao;
     private Connection conexao;
     private static final String INSERT = "insert into cliente(email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select c.id, c.email, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.usuario, u.ativo from Cliente c, usuario u, cliente_usuario cu where c.id = cu.id_CLIENTE and u.id = cu.id_usuario and u.ativo = 1";
@@ -29,12 +30,23 @@ public class ClienteDAO implements BasicoDAO {
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM cliente_usuario where id_cliente = ?);";
     private static final String SELECT_BY_ID = "select id, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
     private static final String SELECT_ID_BY_EMAIL = "select id from cliente where email = ?";
+    private static final String SELECT_ID_BY_ID_USUARIO = "SELECT c.id FROM cliente c, usuario u, cliente_usuario cu where u.id = cu.id_usuario and cu.id_CLIENTE = c.id and u.id = ?;";
+
+    public ClienteDAO(Connection conexao) {
+        this.conexao = conexao;
+
+        fechaConexao = false;
+    }
+
+    public ClienteDAO() {
+        this.conexao = Conexao.getConexao();
+        fechaConexao = true;
+    }
 
     @Override
     public void cadastrar(Object obj) {
         Cliente cliente = (Cliente) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setString(1, cliente.getEmail());
             pstmt.setString(2, cliente.getNome());
@@ -108,7 +120,8 @@ public class ClienteDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
+        }
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {
@@ -171,6 +184,28 @@ public class ClienteDAO implements BasicoDAO {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_EMAIL);
             pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                IDCliente = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return IDCliente;
+    }
+
+    public int localizarIdPorIdUsuario(int idUsuario) {
+        int IDCliente = 0;
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_ID_USUARIO);
+            pstmt.setInt(1, idUsuario);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 IDCliente = rs.getInt("id");

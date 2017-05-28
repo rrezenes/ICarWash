@@ -43,7 +43,7 @@ public class Avaliado implements SolicitacaoState {
     @Override
     public SolicitacaoState concluirSolicitacao(Solicitacao solicitacao) {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.alterarStatus(Status.CONCLUIDO);
+        solicitacaoDAO.concluirSolicitacao(solicitacao);
         return new Concluido();
     }
 

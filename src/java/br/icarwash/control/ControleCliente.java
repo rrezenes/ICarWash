@@ -4,6 +4,7 @@
  */
 package br.icarwash.control;
 
+import br.icarwash.control.command.ICommand;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,7 +24,7 @@ public class ControleCliente extends HttpServlet {
             throws ServletException, IOException {
         try {
             //recupera a ação o usuário7
-            String action = "br.icarwash.control." + request.getParameter("action");
+            String action = "br.icarwash.control.command." + request.getParameter("action");
             Class classeAction = Class.forName(action);
             ICommand commandAction = (ICommand) classeAction.newInstance();
             String pageDispatcher = commandAction.executar(request, response);

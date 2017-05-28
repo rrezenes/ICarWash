@@ -11,22 +11,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
-
-
-
-
-<!--        < %
-            if (session != null) {
-//                if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {
-                    String name = (String) session.getAttribute("user");
-        %>-->
 <div class="jumbotron">
     <h1>Minhas Solicitações</h1>
-    <!--    < % //      }else{
-    //                  response.sendRedirect("index.jsp");   
-    //                } 
-            }
-        %>-->
 </div>
 
 <table class="table table-hover">
@@ -45,7 +31,7 @@
     <tbody>
         <%  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(1);
+            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario.getId()));
             for(Solicitacao solicitacao: solicitacoes){%>  
         <tr>
             <td><%=solicitacao.getId()%></td>

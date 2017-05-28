@@ -21,12 +21,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  *
@@ -36,9 +34,18 @@ public class SolicitacaoDAO implements BasicoDAO {
 
     private Connection conexao;
 
+    public SolicitacaoDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
+    public SolicitacaoDAO() {
+        this.conexao = Conexao.getConexao();
+    }
+
     @Override
     public void cadastrar(Object object) {
         Solicitacao solicitacao = (Solicitacao) object;
+        Timestamp timestamp = new Timestamp(solicitacao.getDataSolicitacao().getTimeInMillis());
         try {
             conexao = Conexao.getConexao();
 
@@ -46,7 +53,7 @@ public class SolicitacaoDAO implements BasicoDAO {
 
             pstmt.setInt(1, solicitacao.getCliente().getId());
             pstmt.setString(2, solicitacao.getPorte());
-            pstmt.setDate(3, new java.sql.Date(solicitacao.getDataSolicitacao().getTimeInMillis()));
+            pstmt.setTimestamp(3, timestamp);
             pstmt.setBigDecimal(4, solicitacao.getValorTotal());
             pstmt.execute();
 
@@ -69,7 +76,8 @@ public class SolicitacaoDAO implements BasicoDAO {
         SolicitacaoState solicitacaoState;
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao and cliente.ID = 1 group by solicitacao.ID");
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao and cliente.ID = ? group by solicitacao.ID");
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
@@ -103,7 +111,7 @@ public class SolicitacaoDAO implements BasicoDAO {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao and solicitacao.ID = ? group by solicitacao.ID");
             pstmt.setInt(1, id);
-            
+
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
@@ -158,7 +166,35 @@ public class SolicitacaoDAO implements BasicoDAO {
 
     @Override
     public ArrayList listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao;
+        Cliente cliente;
+        Lavador lavador;
+        SolicitacaoState solicitacaoState;
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao AND solicitacao.status = 'Em Analise' group by solicitacao.ID");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
+                lavador = new Lavador(rs.getInt("id_lavador"));
+                solicitacaoState = validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return solicitacoes;
     }
 
     @Override
@@ -169,10 +205,6 @@ public class SolicitacaoDAO implements BasicoDAO {
     @Override
     public void excluir(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void alterarStatus(Status status) {
-
     }
 
     public Solicitacao selecionaUltimoIdSolicitacao() {
@@ -204,6 +236,96 @@ public class SolicitacaoDAO implements BasicoDAO {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Cancelado' WHERE ID = ?");
             pstmt.setInt(1, id);
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void agendarSolicitacao(Solicitacao solicitacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Agendado' WHERE ID = ?");
+            pstmt.setInt(1, solicitacao.getId());
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void finalizarSolicitacao(Solicitacao solicitacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Finalizado' WHERE ID = ?");
+            pstmt.setInt(1, solicitacao.getId());
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void avaliarSolicitacao(Solicitacao solicitacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Avaliado' WHERE ID = ?");
+            pstmt.setInt(1, solicitacao.getId());
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void concluirSolicitacao(Solicitacao solicitacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Concluido' WHERE ID = ?");
+            pstmt.setInt(1, solicitacao.getId());
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void processarSolicitacao(Solicitacao solicitacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Em Processo' WHERE ID = ?");
+            pstmt.setInt(1, solicitacao.getId());
             pstmt.execute();
 
         } catch (SQLException e) {

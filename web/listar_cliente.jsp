@@ -95,8 +95,6 @@
                             <div class="col-md-8"><label>Endereço:</label> <input class="form-control" type="text" name="endereco" id="endereco"><br></div>
                             <div class="col-md-4"><label>Numero:</label> <input class="form-control" type="text" name="numero" id="numero"><br></div>
                         </div>   
-
-
                     </div>
                     <div class="form-group">
                         <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar"><br>

@@ -9,11 +9,6 @@
 <%@page import="br.icarwash.dao.ServicoDAO"%>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
-<!--        < %
-            if (session != null) {
-//                if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {
-                    String name = (String) session.getAttribute("user");
-        %>-->
 <div class="jumbotron">
     <h1>Solicitar Serviço</h1>
 </div>
@@ -24,8 +19,8 @@
             <fieldset>
                 <legend>Data da Solicitação</legend>
                 <div>
-                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                        <input class="form-control" size="16" type="text" value="" readonly>
+                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p">
+                        <input class="form-control" size="16" type="text" readonly>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>
                     <input type="hidden" id="dtp_input1" name="data_solicitacao" value="" /><br/>
@@ -38,7 +33,9 @@
                     for (Servico servico : servicos) {
                         if (servico.isAtivo()) {%>
                 <div class="checkbox">
-                    <label style="padding-left: 35px;"><input type="checkbox" name="servico" value="<%=servico.getId()%>"><%=servico.getNome() + " R$" + servico.getValor()%></label>
+                    <label style="padding-left: 35px;">
+                        <input type="checkbox" name="servico" value="<%=servico.getId()%>"><%=servico.getNome() + " R$" + servico.getValor()%>
+                    </label>
                 </div>
                 <%}
                     }
@@ -68,9 +65,5 @@
         </div>
     </form>
 </div>
-<!--    < % //      }else{
-//                  response.sendRedirect("index.jsp");   
-//                } 
-        }
-    %>-->
+
 <%@include file="rodape.jsp"%>

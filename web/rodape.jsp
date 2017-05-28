@@ -9,18 +9,23 @@
 </div>
 </body>
 <footer>
-    <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
+
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="js/locales/bootstrap-datetimepicker.pt-BR.js"></script>
     <script type="text/javascript">
-        $('.form_datetime').datetimepicker({
-            language: 'pt-BR',
-            weekStart: 1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            forceParse: 0,
-            showMeridian: 1
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                language: 'pt-BR',
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                showMeridian: 1,
+                daysOfWeekDisabled: [0],
+                disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 19, 20, 21, 22, 23, 24]
+            });
         });
+
 
     </script>
 
