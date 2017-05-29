@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  *
@@ -160,16 +161,21 @@ public class Solicitacao {
         ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
         boolean disponivel;
         boolean encontrou = false;
-        
+
         for (Lavador lavador : lavadores) {
             disponivel = lavadorDAO.isLavadorDisponivel(lavador, this.getDataSolicitacao());
             if (disponivel) {
                 lavadoresDisponiveis.add(lavador);
                 encontrou = true;
-            }else{
+            } else {
                 encontrou = false;
             }
         }
-
+        if (encontrou) {
+            Random random = new Random();
+            this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));
+        }else{
+            
+        }
     }
 }

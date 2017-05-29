@@ -3,16 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleAprovarSolicitacao.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/state/Agendado.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorSolicitacaoDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/Solicitacao.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/state/SolicitacaoState.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/control/ControleSolicitacao.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/state/EmAnalise.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/model/LavadorSolicitacao.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorDAO.java</file>
-            <file>file:/C:/Users/rezen/Github/icarwash/src/java/br/icarwash/dao/LavadorUsuarioDAO.java</file>
+            <file>file:/C:/Users/Fábio/GitHub/ICarWash/nbproject/build-impl.xml</file>
         </group>
     </open-files>
 </project-private>

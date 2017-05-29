@@ -192,7 +192,7 @@ public class LavadorDAO implements BasicoDAO {
     public boolean isLavadorDisponivel(Lavador lavador, Calendar dataSolicitacao) {
         
         boolean disponivel = false;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
         String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
         
         try {
