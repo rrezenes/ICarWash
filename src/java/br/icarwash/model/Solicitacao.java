@@ -6,6 +6,7 @@
 package br.icarwash.model;
 
 import br.icarwash.dao.LavadorDAO;
+import br.icarwash.dao.LavadorSolicitacaoDAO;
 import br.icarwash.state.SolicitacaoState;
 import br.icarwash.state.Agendado;
 import br.icarwash.state.Avaliado;
@@ -174,6 +175,9 @@ public class Solicitacao {
         if (encontrou) {
             Random random = new Random();
             this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));
+            LavadorSolicitacaoDAO lavadorSolicitacaoDAO = new LavadorSolicitacaoDAO();
+            LavadorSolicitacao lavadorSolicitacao = new LavadorSolicitacao(this.lavador.getId(), this.getId(), this.getDataSolicitacao());
+            lavadorSolicitacaoDAO.cadastrar(lavadorSolicitacao);
         }else{
             
         }
