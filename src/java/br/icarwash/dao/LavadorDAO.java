@@ -16,6 +16,8 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.util.Conexao;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -30,6 +32,7 @@ public class LavadorDAO implements BasicoDAO {
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM lavador_usuario where id_lavador = ?);";
     private static final String SELECT_BY_ID = "select id, dt_contrato, email, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id = ?";
     private static final String SELECT_ID_BY_EMAIL = "select id from lavador where email = ?";
+    private static final String CHECK_DISPONIVEL = "SELECT `lavador_solicitacao`.`id_lavador` FROM `icarwash`.`lavador_solicitacao` WHERE `lavador_solicitacao`.`id_lavador` = ? and `lavador_solicitacao`.`dataAgendamento` = ?";
 
     @Override
     public void cadastrar(Object obj) {
@@ -184,6 +187,34 @@ public class LavadorDAO implements BasicoDAO {
             }
         }
         return IDLavador;
+    }
+
+    public boolean isLavadorDisponivel(Lavador lavador, Calendar dataSolicitacao) {
+        
+        boolean disponivel = false;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
+        
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement(CHECK_DISPONIVEL);
+            pstmt.setInt(1, lavador.getId());
+            pstmt.setString(2, dataSolicitacaoFormatada);
+            ResultSet rs = pstmt.executeQuery();
+            
+            disponivel = !rs.next();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return disponivel;
     }
 
 }

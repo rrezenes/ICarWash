@@ -5,6 +5,7 @@
  */
 package br.icarwash.model;
 
+import br.icarwash.dao.LavadorDAO;
 import br.icarwash.state.SolicitacaoState;
 import br.icarwash.state.Agendado;
 import br.icarwash.state.Avaliado;
@@ -14,6 +15,7 @@ import br.icarwash.state.Finalizado;
 import br.icarwash.state.EmAnalise;
 import br.icarwash.state.Cancelado;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -152,6 +154,22 @@ public class Solicitacao {
     }
 
     public void atribuirLavador() {
+        LavadorDAO lavadorDAO = new LavadorDAO();
+        //        ArrayList<Lavador> = lavadorDAO.selecionarLavadoresDisponiveis(Calendar calendar);
+        ArrayList<Lavador> lavadores = lavadorDAO.listar();
+        ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
+        boolean disponivel;
+        boolean encontrou = false;
         
+        for (Lavador lavador : lavadores) {
+            disponivel = lavadorDAO.isLavadorDisponivel(lavador, this.getDataSolicitacao());
+            if (disponivel) {
+                lavadoresDisponiveis.add(lavador);
+                encontrou = true;
+            }else{
+                encontrou = false;
+            }
+        }
+
     }
 }
