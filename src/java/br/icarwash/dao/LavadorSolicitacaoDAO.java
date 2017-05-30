@@ -10,6 +10,7 @@ import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -24,12 +25,13 @@ public class LavadorSolicitacaoDAO implements BasicoDAO {
     @Override
     public void cadastrar(Object obj) {
         LavadorSolicitacao lavadorSolicitacao = (LavadorSolicitacao) obj;
-
+        Timestamp timestampDataSolicitacao = new Timestamp(lavadorSolicitacao.getDataSolicitacao().getTimeInMillis());
         try {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT_LAVADOR_SOLICITACAO);
             pstmt.setInt(1, lavadorSolicitacao.getIdLavador());
             pstmt.setInt(2, lavadorSolicitacao.getIdSolicitacao());
+            pstmt.setTimestamp(3, timestampDataSolicitacao);
             pstmt.execute();
 
         } catch (SQLException e) {

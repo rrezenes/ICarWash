@@ -169,6 +169,7 @@ public class Solicitacao {
                 lavadoresDisponiveis.add(lavador);
                 encontrou = true;
             } else {
+                //arrumar essa porra
                 encontrou = false;
             }
         }

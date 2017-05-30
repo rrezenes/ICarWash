@@ -43,7 +43,7 @@
             <td><%=solicitacao.getEstado()%></td>
             <% if(solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")){  %>
                 <td>
-                    <form action="ControleCancelarSolicitacao" method="post">
+                    <form action="CancelarSolicitacao" method="post">
                         <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
                         <input type="submit" value="Cancelar">
                     </form>
