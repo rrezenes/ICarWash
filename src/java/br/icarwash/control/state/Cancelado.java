@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.icarwash.state;
+package br.icarwash.control.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Status;
 
 /**
  *
  * @author rezen
  */
-public class EmProcesso implements SolicitacaoState {
+public class Cancelado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
@@ -32,9 +31,7 @@ public class EmProcesso implements SolicitacaoState {
 
     @Override
     public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.finalizarSolicitacao(solicitacao);
-        return new Finalizado();
+        return this;
     }
 
     @Override
@@ -54,7 +51,6 @@ public class EmProcesso implements SolicitacaoState {
 
     @Override
     public String toString() {
-        return "Em Processo";
+        return "Cancelado";
     }
-
 }

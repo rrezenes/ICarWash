@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.icarwash.state;
+package br.icarwash.control.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
@@ -12,7 +12,7 @@ import br.icarwash.model.Solicitacao;
  *
  * @author rezen
  */
-public class Cancelado implements SolicitacaoState {
+public class Finalizado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
@@ -36,7 +36,9 @@ public class Cancelado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao) {
-        return this;
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        solicitacaoDAO.avaliarSolicitacao(solicitacao);
+        return new Avaliado();
     }
 
     @Override
@@ -51,6 +53,7 @@ public class Cancelado implements SolicitacaoState {
 
     @Override
     public String toString() {
-        return "Cancelado";
+        return "Finalize";
     }
+
 }

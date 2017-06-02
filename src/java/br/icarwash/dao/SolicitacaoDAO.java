@@ -8,15 +8,14 @@ package br.icarwash.dao;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Status;
-import br.icarwash.state.Agendado;
-import br.icarwash.state.Avaliado;
-import br.icarwash.state.Cancelado;
-import br.icarwash.state.Concluido;
-import br.icarwash.state.EmAnalise;
-import br.icarwash.state.EmProcesso;
-import br.icarwash.state.Finalizado;
-import br.icarwash.state.SolicitacaoState;
+import br.icarwash.control.state.Agendado;
+import br.icarwash.control.state.Avaliado;
+import br.icarwash.control.state.Cancelado;
+import br.icarwash.control.state.Concluido;
+import br.icarwash.control.state.EmAnalise;
+import br.icarwash.control.state.EmProcesso;
+import br.icarwash.control.state.Finalizado;
+import br.icarwash.control.state.SolicitacaoState;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -69,6 +68,39 @@ public class SolicitacaoDAO implements BasicoDAO {
     }
 
     public ArrayList<Solicitacao> listarSolicitacaoPorIDCliente(int id) {
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao;
+        Cliente cliente;
+        Lavador lavador;
+        SolicitacaoState solicitacaoState;
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao and cliente.ID = ? group by solicitacao.ID");
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
+                lavador = new Lavador(rs.getInt("id_lavador"));
+                solicitacaoState = validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return solicitacoes;
+    }
+    
+        public ArrayList<Solicitacao> listarSolicitacaoDoLavador(int id) {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
         Solicitacao solicitacao;
         Cliente cliente;

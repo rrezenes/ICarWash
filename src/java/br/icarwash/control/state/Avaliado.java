@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.icarwash.state;
+package br.icarwash.control.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
