@@ -16,6 +16,7 @@ import br.icarwash.model.Usuario;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -51,7 +52,7 @@ public class ControleSolicitacao extends HttpServlet {
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
 
-            ClienteDAO clienteDAO = new ClienteDAO(conexao);
+            ClienteDAO clienteDAO = new ClienteDAO();
             Cliente cliente = new Cliente(clienteDAO.localizarIdPorIdUsuario(usuario.getId()));
             cliente = clienteDAO.localizarPorId(cliente.getId());
 
@@ -64,10 +65,10 @@ public class ControleSolicitacao extends HttpServlet {
 //            double valorTotalSolicitacao = 0;
 
             Servico servico;
-            ServicoDAO servicoDAO = new ServicoDAO(conexao);
+            ServicoDAO servicoDAO = new ServicoDAO();
 
             Solicitacao solicitacao = new Solicitacao(cliente, porteVeiculo, dataHoraSolicitacao, somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO));
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
+            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
             solicitacaoDAO.cadastrar(solicitacao);
             solicitacao = solicitacaoDAO.selecionaUltimoIdSolicitacao();
 
@@ -98,13 +99,13 @@ public class ControleSolicitacao extends HttpServlet {
 
     private BigDecimal somaValorTotalSolicitacao(String[] IdServicosSolicitados, ServicoDAO servicoDAO) {
         Servico servico;
-        BigDecimal valorTotal = BigDecimal.ZERO;
+        double valor = 0;
         
         for (String idServico : IdServicosSolicitados) {
             servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
-            valorTotal.add(servico.getValor());
+            valor += servico.getValor().doubleValue();
         }
-        
+        BigDecimal valorTotal = new BigDecimal(valor);
         return valorTotal;
 
     }

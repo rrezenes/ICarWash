@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rezen
  */
-@WebServlet(name = "ControleAprovarSolicitacao", urlPatterns = {"/AprovarSolicitacao", "/CancelarSolicitacao"})
+@WebServlet(name = "ControleAprovarSolicitacao", urlPatterns = {"/AprovarSolicitacao", "/CancelarSolicitacao", "/ProcessarSolicitacao"})
 public class ControleAprovarSolicitacao extends HttpServlet {
 
     @Override
@@ -32,11 +32,13 @@ public class ControleAprovarSolicitacao extends HttpServlet {
 
         if (URI.endsWith("/AprovarSolicitacao")) {
             solicitacao.analisarSolicitacao();
-        } else {
+        } else if(URI.endsWith("/CancelarSolicitacao")){
             solicitacao.cancelarSolicitacao();
+        } else{
+            solicitacao.processarSolicitacao();
         }
 
-        request.getRequestDispatcher("/minha_solicitacao.jsp").forward(request, response);
+        request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
 
     }
 }

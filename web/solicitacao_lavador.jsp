@@ -19,35 +19,41 @@
     <thead>
         <tr>
             <th>ID Solicitação</th>
-            <th>Nome</th>
-            <th>Lavador</th>
-            <th>Porte do Veiculo</th>
+            <th>Nome Cliente</th>
+            <th>Cidade</th>
+            <th>Bairro</th>
+            <th>Porte do Veículo</th>
             <th>Data Solicitação</th>
             <th>Valor Total</th>
-            <th>Status</th>
             <th colspan=2>Action</th>
         </tr>
     </thead>
     <tbody>
         <%  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario.getId()));
-            for(Solicitacao solicitacao: solicitacoes){%>  
+            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoDoLavador(usuario.getId());
+            for (Solicitacao solicitacao : solicitacoes) {%>  
         <tr>
             <td><%=solicitacao.getId()%></td>
             <td><%=solicitacao.getCliente().getNome()%></td>
-            <td><%=solicitacao.getLavador().getId()%></td>
-            <td><%=solicitacao.getPorte()%></td>
+            <td><%=solicitacao.getCliente().getEndereco().getCidade()%></td>
+            <td><%=solicitacao.getCliente().getEndereco().getBairro()%></td>
+            <td><%=solicitacao.getPorte()%></td>            
             <td><%=dateFormat.format(solicitacao.getDataSolicitacao().getTime())%></td>
             <td><%=solicitacao.getValorTotal().doubleValue()%></td>
             <td><%=solicitacao.getEstado()%></td>
-            <% if(solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")){  %>
+            <% if (solicitacao.getEstado().toString().equals("Agendado")) {%>
                 <td>
                     <form action="CancelarSolicitacao" method="post">
                         <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
-                        <input type="submit" value="Cancelar">
+                        <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>
                     </form>
-                    
+                </td>
+                <td>
+                    <form action="ProcessarSolicitacao" method="post">
+                        <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/>
+                        <button type="submit" class="btn btn-success">Processar</button>
+                    </form>
                 </td>
             <%}%> 
         </tr>

@@ -13,7 +13,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ICarWash Admin!</title>
+        <title>ICarWash</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
@@ -49,6 +49,16 @@
                         <div class="col-sm-8 col-sm-offset-2 text">
                             <h1><strong>ICarWash</strong> Login</h1>
                             <div class="description">
+                                <%  if (request.getParameter("c") != null) {
+                                        if (request.getParameter("c").equals("ok")) {%>
+                                            <p>Cadastrado com Sucesso!</p>
+                                            <p>Acesse abaixo com seu usuario e senha.</p>
+
+                                <%
+                                        }
+                                    }
+
+                                %>
                                 <!--<p>
                                         This is a free responsive login form made with Bootstrap. 
                                         Download it on <a href="http://azmind.com"><strong>AZMIND</strong></a>, customize and use it as you like!
@@ -60,14 +70,14 @@
                         <div class="col-sm-6 col-sm-offset-3 form-box">
                             <div class="form-top">
                                 <div class="form-top-left">
-                                    <h3>Entre no Painel Admin!</h3>
+                                    <h3>Acesse o ICarWash!</h3>
                                     <p>Insira seu nome de usuario e senha para acessar:</p>
                                 </div>
                                 <div class="form-top-right">
                                     <i class="glyphicon glyphicon-lock"></i>
                                 </div>
                             </div>
-                            
+
                             <div class="form-bottom">
                                 <form role="form" action="Login" method="post" class="login-form">
                                     <div class="form-group">
@@ -79,13 +89,13 @@
                                         <input type="password" name="senha" placeholder="Senha..." class="form-password form-control" id="form-password">
                                     </div>
                                     <button type="submit" class="btn">Entrar!</button>
-                                   
+
                                 </form>
-                                
+
                             </div>
                             <div>
-                                    <a href="cadastro.jsp" align="right">Cadastre-se</a>
-                                </div>
+                                <a href="cadastro.jsp" align="right">Cadastre-se</a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -19,6 +19,11 @@ public class Cliente extends Pessoa {
         this.id = id;
     }
 
+    public Cliente(int id, String nome, Endereco endereco) {
+        super(nome, endereco);
+        this.id = id;
+    }
+
     public Cliente(int id, String email, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
         super(email, nome, telefone, dtNascimento, endereco);
         this.id = id;
@@ -34,7 +39,7 @@ public class Cliente extends Pessoa {
     }
 
     public Cliente() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     public Cliente(int id, String nome) {

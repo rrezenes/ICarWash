@@ -50,6 +50,12 @@
                                             <li><a href="minha_solicitacao.jsp">Minhas Solicitações</a></li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="logout">Sair</a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -77,6 +83,12 @@
                                                         <li><a href="solicitacao_lavador.jsp">Minhas Solicitações</a></li>
                                                     </ul>
                                                 </li>
+                                                <li class="dropdown">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="logout">Sair</a></li>
+                                                    </ul>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -84,7 +96,7 @@
                             </div>
                             <div class="col-sm-9 col-lg-10 exibelista">
                                 <%
-                    } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
+                                } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-sm-3 col-lg-2">
@@ -115,6 +127,12 @@
                                                                 <ul class="dropdown-menu">
                                                                     <li><a href="solicitar_servico.jsp">Solicitar Serviço</a></li>
                                                                     <li><a href="solicitacoes.jsp">Aprovar Solicitações</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="logout">Sair</a></li>
                                                                 </ul>
                                                             </li>
                                                         </ul>

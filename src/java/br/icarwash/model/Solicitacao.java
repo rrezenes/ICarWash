@@ -8,17 +8,10 @@ package br.icarwash.model;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.LavadorSolicitacaoDAO;
 import br.icarwash.control.state.SolicitacaoState;
-import br.icarwash.control.state.Agendado;
-import br.icarwash.control.state.Avaliado;
-import br.icarwash.control.state.Concluido;
-import br.icarwash.control.state.EmProcesso;
-import br.icarwash.control.state.Finalizado;
 import br.icarwash.control.state.EmAnalise;
-import br.icarwash.control.state.Cancelado;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 
 /**
@@ -45,6 +38,16 @@ public class Solicitacao {
         this.id = id;
         this.cliente = cliente;
         this.lavador = lavador;
+        this.avaliacao = avaliacao;
+        this.estado = estado;
+        this.porte = porte;
+        this.dataSolicitacao = data_solicitacao;
+        this.valorTotal = valorTotal;
+    }
+
+    public Solicitacao(int id, Cliente cliente, int avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
+        this.id = id;
+        this.cliente = cliente;
         this.avaliacao = avaliacao;
         this.estado = estado;
         this.porte = porte;
@@ -179,8 +182,8 @@ public class Solicitacao {
             LavadorSolicitacaoDAO lavadorSolicitacaoDAO = new LavadorSolicitacaoDAO();
             LavadorSolicitacao lavadorSolicitacao = new LavadorSolicitacao(this.lavador.getId(), this.getId(), this.getDataSolicitacao());
             lavadorSolicitacaoDAO.cadastrar(lavadorSolicitacao);
-        }else{
-            
+        } else {
+
         }
     }
 }

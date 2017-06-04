@@ -40,6 +40,11 @@ public class Pessoa {
     public Pessoa() {
     }
 
+    public Pessoa(String nome, Endereco endereco) {
+        this.nome = nome;
+        this.endereco = endereco;
+    }
+
     public Pessoa(String nome) {
         this.nome = nome;
     }

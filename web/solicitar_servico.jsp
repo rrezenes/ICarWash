@@ -19,7 +19,7 @@
             <fieldset>
                 <legend>Data da Solicitação</legend>
                 <div>
-                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p">
+                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
                         <input class="form-control" size="16" type="text" readonly>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>
