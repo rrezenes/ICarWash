@@ -16,9 +16,7 @@ import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.ClienteUsuario;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,7 +49,7 @@ public class Cadastrar implements ICommand {
                 Usuario usuario = new Usuario(request.getParameter("login"), request.getParameter("senha"), 1, true);
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
                 usuarioDAO.cadastrar(usuario);
-                Usuario usuarioID = new Usuario(usuarioDAO.localizarIdPorUsuario(usuario.getUsuario()));
+                usuario = usuarioDAO.localizarIdPorUsuario(usuario);
                 //VERIFICAR REPETIÇÃO
 
                 Cliente cliente = new Cliente(request.getParameter("txtEmail"), request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
@@ -59,7 +57,7 @@ public class Cadastrar implements ICommand {
                 clienteDAO.cadastrar(cliente);
                 Cliente clienteID = new Cliente(clienteDAO.localizarIdPorEmail(cliente.getEmail()));
 
-                ClienteUsuario clienteUsuario = new ClienteUsuario(clienteID, usuarioID);
+                ClienteUsuario clienteUsuario = new ClienteUsuario(clienteID, usuario);
                 ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO();
                 clienteUsuarioDAO.cadastrar(clienteUsuario);
 
@@ -74,7 +72,7 @@ public class Cadastrar implements ICommand {
                 Usuario usuario = new Usuario(request.getParameter("login"), request.getParameter("senha"), 2, true);
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
                 usuarioDAO.cadastrar(usuario);
-                Usuario usuarioID = new Usuario(usuarioDAO.localizarIdPorUsuario(usuario.getUsuario()));
+                usuario = usuarioDAO.localizarIdPorUsuario(usuario);
                 //VERIFICAR REPETIÇÃO
 
                 Lavador lavador = new Lavador(cal2, request.getParameter("email"), request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
@@ -82,7 +80,7 @@ public class Cadastrar implements ICommand {
                 lavadorDAO.cadastrar(lavador);
                 Lavador lavadorID = new Lavador(lavadorDAO.localizarIdPorEmail(lavador.getEmail()));
 
-                LavadorUsuario lavadorUsuario = new LavadorUsuario(lavadorID, usuarioID);
+                LavadorUsuario lavadorUsuario = new LavadorUsuario(lavadorID, usuario);
                 LavadorUsuarioDAO lavadorUsuarioDAO = new LavadorUsuarioDAO();
                 lavadorUsuarioDAO.cadastrar(lavadorUsuario);
 
@@ -95,7 +93,7 @@ public class Cadastrar implements ICommand {
                 produtoDAO.cadastrar(produto);
 
                 request.setAttribute("objProduto", produto);
-                return "sucesso_produto.jsp";
+                return "Controle?action=Listar&listar=produto";
             }
             case "servico": {
 

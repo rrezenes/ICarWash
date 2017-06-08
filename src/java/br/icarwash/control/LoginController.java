@@ -42,53 +42,30 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
 
-        PrintWriter out = response.getWriter();
-
         Usuario usuario = new Usuario(request.getParameter("usuario"), request.getParameter("senha"));
 
-        UsuarioDAO user = new UsuarioDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        usuario = user.usuarioLogin(usuario);
+        usuario = usuarioDAO.usuarioLogin(usuario);
 
-        //System.out.println(nivelAcesso);
-        switch (usuario.getNivel()) {
-            case 1: {
-                out.print("Bem vindo, " + usuario);
-                HttpSession session = request.getSession(true);
-                // session if exist
-                // or create one
-                session.setAttribute("user", usuario);
-                session.setAttribute("acesso", usuario.getNivel());
-                session.setMaxInactiveInterval(600);
-                response.sendRedirect("painel_admin.jsp");
-                break;
-            }
-            case 2: {
-                out.print("Bem vindo, " + usuario);
-                HttpSession session = request.getSession(true);
-                // session if exist
-                // or create one
-                session.setAttribute("user", usuario);
-                session.setAttribute("acesso", usuario.getNivel());
-                session.setMaxInactiveInterval(600);
-                response.sendRedirect("painel_admin.jsp");
-                break;
-            }
-            case 3: {
-                HttpSession session = request.getSession(true);
-                // session if exist
-                // or create one
-                session.setAttribute("user", usuario);
-                session.setAttribute("acesso", usuario.getNivel());
-                session.setMaxInactiveInterval(600);
-                response.sendRedirect("painel_admin.jsp");
-                break;
-            }
-            default:
-                RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-                out.println("<font color=red>Usuario e ou senha errado</font>");
-                rd.include(request, response);
-                break;
+        this.validaLogin(request, response, usuario);
+
+    }
+
+    private void validaLogin(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws IOException, ServletException {
+
+        if (!usuario.isAtivo() || usuario == null) {
+            PrintWriter out = response.getWriter();
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+            out.println("<font color=red>Usuario e ou senha errado</font>");
+            rd.include(request, response);
+        } else {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("user", usuario);
+            session.setAttribute("acesso", usuario.getNivel());
+            session.setMaxInactiveInterval(600);
+            response.sendRedirect("painel_admin.jsp");
         }
+
     }
 }

@@ -9,7 +9,7 @@
 <%@include file="cabecalho.jsp"%>
         <script>
             setTimeout(function () {
-                document.location = "index.jsp";
+                document.location = "Controle?action=Listar&listar=cliente";
             }, 1200); // <-- delay
         </script>
         <div class="bg-success center-block alert-success">

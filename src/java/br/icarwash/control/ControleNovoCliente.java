@@ -5,15 +5,9 @@
  */
 package br.icarwash.control;
 
-import br.icarwash.dao.ClienteDAO;
-import br.icarwash.dao.ClienteUsuarioDAO;
-import br.icarwash.dao.UsuarioDAO;
-import br.icarwash.model.Cliente;
-import br.icarwash.model.ClienteUsuario;
-import br.icarwash.model.Endereco;
-import br.icarwash.model.Usuario;
+import br.icarwash.dao.*;
+import br.icarwash.model.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,33 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ControleNovoCliente", urlPatterns = {"/NovoCliente"})
 public class ControleNovoCliente extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
         String[] nascimento = request.getParameter("nascimento").split("/");
         cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
@@ -63,7 +34,7 @@ public class ControleNovoCliente extends HttpServlet {
         Usuario usuario = new Usuario(request.getParameter("login"), request.getParameter("senha"), 1, true);
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         usuarioDAO.cadastrar(usuario);
-        Usuario usuarioID = new Usuario(usuarioDAO.localizarIdPorUsuario(usuario.getUsuario()));
+        usuario = usuarioDAO.localizarIdPorUsuario(usuario);
         //VERIFICAR REPETIÇÃO
 
         Cliente cliente = new Cliente(request.getParameter("txtEmail"), request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
@@ -71,7 +42,7 @@ public class ControleNovoCliente extends HttpServlet {
         clienteDAO.cadastrar(cliente);
         Cliente clienteID = new Cliente(clienteDAO.localizarIdPorEmail(cliente.getEmail()));
 
-        ClienteUsuario clienteUsuario = new ClienteUsuario(clienteID, usuarioID);
+        ClienteUsuario clienteUsuario = new ClienteUsuario(clienteID, usuario);
         ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO();
         clienteUsuarioDAO.cadastrar(clienteUsuario);
 
@@ -79,15 +50,5 @@ public class ControleNovoCliente extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("index.jsp?c=ok");
         rd.forward(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

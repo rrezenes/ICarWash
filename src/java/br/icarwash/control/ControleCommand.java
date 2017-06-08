@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Renan
  */
-@WebServlet(name = "ControleCliente", urlPatterns = "/Controle")
-public class ControleCliente extends HttpServlet {
+@WebServlet(name = "ControleCommand", urlPatterns = "/Controle")
+public class ControleCommand extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,8 +26,10 @@ public class ControleCliente extends HttpServlet {
             //recupera a ação o usuário7
             String action = "br.icarwash.control.command." + request.getParameter("action");
             Class classeAction = Class.forName(action);
+            
             ICommand commandAction = (ICommand) classeAction.newInstance();
             String pageDispatcher = commandAction.executar(request, response);
+            
             RequestDispatcher rd = request.getRequestDispatcher(pageDispatcher);
             rd.forward(request, response);
 

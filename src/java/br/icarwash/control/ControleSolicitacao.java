@@ -5,33 +5,21 @@
  */
 package br.icarwash.control;
 
-import br.icarwash.dao.ClienteDAO;
-import br.icarwash.dao.ServicoDAO;
-import br.icarwash.dao.SolicitacaoDAO;
-import br.icarwash.dao.SolicitacaoServicoDAO;
-import br.icarwash.model.Cliente;
-import br.icarwash.model.Servico;
-import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Usuario;
+import br.icarwash.dao.*;
+import br.icarwash.model.*;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 /**
  *
@@ -53,7 +41,7 @@ public class ControleSolicitacao extends HttpServlet {
             Usuario usuario = (Usuario) session.getAttribute("user");
 
             ClienteDAO clienteDAO = new ClienteDAO();
-            Cliente cliente = new Cliente(clienteDAO.localizarIdPorIdUsuario(usuario.getId()));
+            Cliente cliente = clienteDAO.localizarIdPorIdUsuario(usuario);
             cliente = clienteDAO.localizarPorId(cliente.getId());
 
             /*PEGA OS PARAMETROS DA VIEW*/
@@ -61,8 +49,6 @@ public class ControleSolicitacao extends HttpServlet {
             String[] IdServicosSolicitados = request.getParameterValues("servico");
             Calendar dataHoraSolicitacao = Calendar.getInstance();
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(request.getParameter("data_solicitacao")));
-
-//            double valorTotalSolicitacao = 0;
 
             Servico servico;
             ServicoDAO servicoDAO = new ServicoDAO();

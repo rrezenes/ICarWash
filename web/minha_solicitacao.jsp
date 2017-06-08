@@ -31,7 +31,7 @@
     <tbody>
         <%  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario.getId()));
+            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario).getId());
             for(Solicitacao solicitacao: solicitacoes){%>  
         <tr>
             <td><%=solicitacao.getId()%></td>

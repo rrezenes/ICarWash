@@ -97,15 +97,15 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int localizarIdPorUsuario(String usuario) {
-        int IDCliente = 0;
+    public Usuario localizarIdPorUsuario(Usuario usuario) {
+        Usuario user = null;
         try {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_USUARIO);
-            pstmt.setString(1, usuario);
+            pstmt.setString(1, usuario.getUsuario());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                IDCliente = rs.getInt("id");
+                user = new Usuario(rs.getInt("id"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -116,7 +116,7 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
                 throw new RuntimeException(e);
             }
         }
-        return IDCliente;
+        return user;
     }
 
 }

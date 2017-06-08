@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Usuario;
 
 /**
  *
@@ -200,15 +201,15 @@ public class ClienteDAO implements BasicoDAO {
         return IDCliente;
     }
 
-    public int localizarIdPorIdUsuario(int idUsuario) {
-        int IDCliente = 0;
+    public Cliente localizarIdPorIdUsuario(Usuario usuario) {
+        Cliente cliente = null;
         try {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_ID_USUARIO);
-            pstmt.setInt(1, idUsuario);
+            pstmt.setInt(1, usuario.getId());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                IDCliente = rs.getInt("id");
+                cliente = new Cliente(rs.getInt("id"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -219,7 +220,7 @@ public class ClienteDAO implements BasicoDAO {
                 throw new RuntimeException(e);
             }
         }
-        return IDCliente;
+        return cliente;
     }
 
 }

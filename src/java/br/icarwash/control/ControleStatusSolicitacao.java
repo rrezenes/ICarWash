@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rezen
  */
-@WebServlet(name = "ControleAprovarSolicitacao", urlPatterns = {"/AprovarSolicitacao", "/CancelarSolicitacao", "/ProcessarSolicitacao"})
-public class ControleAprovarSolicitacao extends HttpServlet {
+@WebServlet(name = "ControleStatusSolicitacao", urlPatterns = {"/AprovarSolicitacao", "/CancelarSolicitacao", "/ProcessarSolicitacao"})
+public class ControleStatusSolicitacao extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

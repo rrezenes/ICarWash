@@ -44,7 +44,7 @@ public class Listar implements ICommand {
                 ProdutoDAO produtoDAO = new ProdutoDAO();
                 ArrayList<Produto> produtos = produtoDAO.listar();
                 request.setAttribute("lista", produtos);
-                return "listar_produto.jsp";
+                return "Controle?action=Listar&listar=produto";
             case "servico":
                 ServicoDAO servicoDAO = new ServicoDAO();
                 ArrayList<Servico> servicos = servicoDAO.listar();
