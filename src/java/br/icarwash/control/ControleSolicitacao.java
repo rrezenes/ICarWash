@@ -33,60 +33,65 @@ public class ControleSolicitacao extends HttpServlet {
             throws ServletException, IOException {
         Connection conexao = null;
 
-        try {
-            conexao = Conexao.getConexao();
-            conexao.setAutoCommit(false);
-
-            HttpSession session = ((HttpServletRequest) request).getSession(true);
-            Usuario usuario = (Usuario) session.getAttribute("user");
-
-            ClienteDAO clienteDAO = new ClienteDAO();
-            Cliente cliente = clienteDAO.localizarIdPorIdUsuario(usuario);
-            cliente = clienteDAO.localizarPorId(cliente.getId());
-
-            /*PEGA OS PARAMETROS DA VIEW*/
-            String porteVeiculo = request.getParameter("porte");
-            String[] IdServicosSolicitados = request.getParameterValues("servico");
-            Calendar dataHoraSolicitacao = Calendar.getInstance();
-            dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(request.getParameter("data_solicitacao")));
-
-            Servico servico;
-            ServicoDAO servicoDAO = new ServicoDAO();
-
-            Solicitacao solicitacao = new Solicitacao(cliente, porteVeiculo, dataHoraSolicitacao, somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO));
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            solicitacaoDAO.cadastrar(solicitacao);
-            solicitacao = solicitacaoDAO.selecionaUltimoIdSolicitacao();
-
-            SolicitacaoServicoDAO solicitacaoServicoDAO = new SolicitacaoServicoDAO();
-
-            for (String idServico : IdServicosSolicitados) {
-                servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
-                solicitacaoServicoDAO.cadastraSolicitacaoServico(solicitacao, servico);
-            }
-
-            conexao.commit();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("ERRROO: " + e);
-        } catch (ParseException ex) {
-            Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        if (request.getParameter("porte") != null) {
             try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
+                conexao = Conexao.getConexao();
+                conexao.setAutoCommit(false);
 
-        request.getRequestDispatcher("/minha_solicitacao.jsp").forward(request, response);
+                HttpSession session = ((HttpServletRequest) request).getSession(true);
+                Usuario usuario = (Usuario) session.getAttribute("user");
+
+                ClienteDAO clienteDAO = new ClienteDAO();
+                Cliente cliente = clienteDAO.localizarIdPorIdUsuario(usuario);
+                cliente = clienteDAO.localizarPorId(cliente.getId());
+
+                /*PEGA OS PARAMETROS DA VIEW*/
+                String porteVeiculo = request.getParameter("porte");
+                String[] IdServicosSolicitados = request.getParameterValues("servico");
+                Calendar dataHoraSolicitacao = Calendar.getInstance();
+                dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(request.getParameter("data_solicitacao")));
+
+                Servico servico;
+                ServicoDAO servicoDAO = new ServicoDAO();
+
+                Solicitacao solicitacao = new Solicitacao(cliente, porteVeiculo, dataHoraSolicitacao, somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO));
+                SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+                solicitacaoDAO.cadastrar(solicitacao);
+                solicitacao = solicitacaoDAO.selecionaUltimoIdSolicitacao();
+
+                SolicitacaoServicoDAO solicitacaoServicoDAO = new SolicitacaoServicoDAO();
+
+                for (String idServico : IdServicosSolicitados) {
+                    servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
+                    solicitacaoServicoDAO.cadastraSolicitacaoServico(solicitacao, servico);
+                }
+
+                conexao.commit();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("ERRROO: " + e);
+            } catch (ParseException ex) {
+                Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            request.getRequestDispatcher("/minha_solicitacao.jsp").forward(request, response);
+
+        } else {
+            request.getRequestDispatcher("/solicitar_servico.jsp?erro=data").forward(request, response);
+        }
 
     }
 
     private BigDecimal somaValorTotalSolicitacao(String[] IdServicosSolicitados, ServicoDAO servicoDAO) {
         Servico servico;
         double valor = 0;
-        
+
         for (String idServico : IdServicosSolicitados) {
             servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
             valor += servico.getValor().doubleValue();

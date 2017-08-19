@@ -5,14 +5,7 @@
  */
 package br.icarwash.control.command;
 
-import br.icarwash.dao.ClienteDAO;
-import br.icarwash.dao.ClienteUsuarioDAO;
-import br.icarwash.dao.LavadorDAO;
-import br.icarwash.dao.LavadorUsuarioDAO;
-import br.icarwash.dao.ProdutoDAO;
-import br.icarwash.dao.ServicoDAO;
-import br.icarwash.dao.ServicoProdutoDAO;
-import br.icarwash.dao.UsuarioDAO;
+import br.icarwash.dao.*;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.ClienteUsuario;
 import java.io.IOException;
@@ -20,12 +13,7 @@ import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import br.icarwash.model.Endereco;
-import br.icarwash.model.Lavador;
-import br.icarwash.model.LavadorUsuario;
-import br.icarwash.model.Produto;
-import br.icarwash.model.Servico;
-import br.icarwash.model.Usuario;
+import br.icarwash.model.*;
 import java.math.BigDecimal;
 
 /**

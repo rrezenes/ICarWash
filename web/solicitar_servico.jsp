@@ -12,6 +12,9 @@
 <div class="jumbotron">
     <h1>Solicitar Serviço</h1>
 </div>
+<% if(request.getParameter("erro")=="data"){
+    %><p>Marque o campo de porte do veiculo</p><%
+}%>
 <div class="container" style="max-width: 1000.0px;">
     <form action="ControleSolicitacao" method="post">
         <div class="form-group">
