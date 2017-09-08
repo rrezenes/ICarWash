@@ -1,6 +1,6 @@
 <%-- 
-    Document   : solicitacoes
-    Created on : 28/05/2017, 11:22:14
+    Document   : listar_solicitacoes
+    Created on : 07/09/2017, 11:22:14
     Author     : rezen
 --%>
 <%@page import="br.icarwash.model.Solicitacao"%>
@@ -30,7 +30,7 @@
     <tbody>
         <%  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarEmAnalise();
+            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listar();
             for (Solicitacao solicitacao : solicitacoes) {%>  
         <tr>
             <td><%=solicitacao.getId()%></td>
@@ -45,12 +45,6 @@
                 <form action="CancelarSolicitacao" method="post">
                     <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
                     <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>
-                </form>
-            </td>
-            <td>
-                <form action="AprovarSolicitacao" method="post">
-                    <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/>
-                    <button type="submit" class="btn btn-success">Aprovar</button>
                 </form>
             </td>
             <%}%> 
