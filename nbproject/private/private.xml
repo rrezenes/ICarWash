@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/ICarWash/web/cadastrar_produto.jsp</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/state/Agendado.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/ControleNovoCliente.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/FiltroAcessoCadastros.java</file>
@@ -11,11 +12,13 @@
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/Ativar.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/Listar.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/ICommand.java</file>
+            <file>file:/C:/ICarWash/web/index.jsp</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/Cadastrar.java</file>
             <file>file:/C:/ICarWash/web/META-INF/context.xml</file>
             <file>file:/C:/ICarWash/web/listar_solicitacao.jsp</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/state/EmAnalise.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/Logout.java</file>
+            <file>file:/C:/ICarWash/.git/config</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/util/Conexao.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/LoginController.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/dao/LavadorDAO.java</file>
@@ -23,6 +26,7 @@
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/ControleStatusSolicitacao.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/model/Solicitacao.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/state/SolicitacaoState.java</file>
+            <file>file:/C:/ICarWash/web/cadastro.jsp</file>
             <file>file:/C:/ICarWash/nbproject/build-impl.xml</file>
             <file>file:/C:/ICarWash/web/erro.jsp</file>
             <file>file:/C:/ICarWash/web/cabecalho.jsp</file>
