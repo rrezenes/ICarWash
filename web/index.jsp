@@ -13,7 +13,8 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ICarWash</title>
+        <title>ICarWash</title>        
+        <link rel="shortcut icon" href="img/favicon.ico" />
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
