@@ -23,7 +23,7 @@
         <title>ICarWash</title>
     </head>
     <body>
-
+        <%--Menu de Cliente--%>
         <%
             //allow access only if session exists
             Usuario usuario = (Usuario) session.getAttribute("user");
@@ -62,6 +62,7 @@
                         </div>
                     </nav>
                 </div>
+        <%--Menu de Lavador--%>
                 <div class="col-sm-9 col-lg-10 exibelista">
                     <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 2) {
                         //String name = (String) session.getAttribute("user");
@@ -85,6 +86,12 @@
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Relatórios<b class="caret"></b></a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="listar_produtos_hoje.jsp">Produtos para hoje</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown">
                                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="logout">Sair</a></li>
@@ -95,6 +102,7 @@
                                     </div>
                                 </nav>
                             </div>
+        <%--Menu de Gerente--%>
                             <div class="col-sm-9 col-lg-10 exibelista">
                                 <%
                                 } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
