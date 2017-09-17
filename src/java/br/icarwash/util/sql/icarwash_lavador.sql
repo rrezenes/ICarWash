@@ -48,7 +48,18 @@ CREATE TABLE `lavador` (
 
 LOCK TABLES `lavador` WRITE;
 /*!40000 ALTER TABLE `lavador` DISABLE KEYS */;
-INSERT INTO `lavador` VALUES (2,'2017-05-07','teste@teste.com.br','adadasdasd','(11)11111-1111','1111-11-11','111.111.111-11','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',123),(3,'2017-05-07','teste2@teste.com.br','adadasdasd','(22)22222-2222','1516-10-22','111.111.111-13','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',366),(4,'2017-05-07','teste4@teste.com','teste4','(12)12121-2121','1999-12-12','124.578.451-22','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',123),(6,'2017-05-07','teste13254654321','teste13254654','(54)65465-4654','1971-01-01','354.654.654-65','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',123),(7,'2017-05-17','aisudhauisdhui@sajdgaysu.asdas123','adadasdasdqw123','(11)23321-3213','2000-12-12','123.123.213-21','08745-112','SP','Mogi das Cruzes123','Vila Bela Flor123','Avenida Santo Antônio123',1232),(8,'2017-05-17','aisudhauisdhui@s123','asassassasa123','(21)68154-8154','1980-01-01','123.123.123-12','12312-300','SP','Jacareí123','Cidade Salvador123','Rua Mabito Shoji123',123123313),(9,'2017-05-28','emaillavador@email.com','Lavadir Silva','(11)90909-0909','1989-07-16','123.435.382-76','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',12345);
+INSERT INTO `lavador` VALUES 
+(1,'2017-05-07','lavadorjoao@icarwash.com','lavador joao','(11)11111-1111','1111-11-11','111.111.111-11','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',123),
+(2,'2017-05-07','lavadoramaria@icarwash.com','lavadora maria','(22)22222-2222','1516-10-22','111.111.111-13','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',366),
+(3,'2017-05-07','lavadorpedro@icarwash.com','lavador pedro','(12)12121-2121','1999-12-12','124.578.451-22','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',123),
+(4,'2017-05-07','lavadorjose@icarwash.com','lavador jose','(54)65465-4654','1971-01-01','354.654.654-65','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',123),
+(5,'2017-05-17','lavadorantonio@icarwash.com','lavador antonio','(11)23321-3213','2000-12-12','123.123.213-21','08745-112','SP','Mogi das Cruzes123','Vila Bela Flor123','Avenida Santo Antônio123',1232),
+(6,'2017-05-17','lavadortiago@icarwash.com','lavador tiago','(21)68154-8154','1980-01-01','123.123.123-12','12312-300','SP','Jacareí123','Cidade Salvador123','Rua Mabito Shoji123',12312),
+(7,'2017-05-28','lavadordavi@icarwash.com','lavador davi','(11)90909-0909','1989-07-16','123.435.382-76','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',12345),
+(8,'2017-05-28','lavadoraana@icarwash.com','lavadora ana','(11)90909-0909','1989-07-16','123.435.382-77','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',23456),
+(9,'2017-05-28','lavadorcristiane@icarwash.com','lavadora cristiane','(11)90909-0909','1989-07-16','123.435.382-78','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',34567),
+(10,'2017-05-28','lavadorjulia@icarwash.com','lavadora julia','(11)90909-0909','1989-07-16','123.435.382-79','08745-310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antônio',45678);
+
 /*!40000 ALTER TABLE `lavador` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
