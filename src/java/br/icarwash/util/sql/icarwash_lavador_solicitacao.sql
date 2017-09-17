@@ -39,7 +39,7 @@ CREATE TABLE `lavador_solicitacao` (
 
 LOCK TABLES `lavador_solicitacao` WRITE;
 /*!40000 ALTER TABLE `lavador_solicitacao` DISABLE KEYS */;
-INSERT INTO `lavador_solicitacao` VALUES (3,61,'2017-05-10 00:00:00'),(9,63,'2017-05-03 09:45:55');
+/*INSERT INTO `lavador_solicitacao` VALUES (3,61,'2017-05-10 00:00:00'),(9,63,'2017-05-03 09:45:55');
 /*!40000 ALTER TABLE `lavador_solicitacao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
