@@ -25,8 +25,8 @@
             <th>Estado</th>
             <th>Cidade</th>
             <th>Bairro</th>
-            <th>Endereco</th>
-            <th colspan=2>Action</th>
+            <th>Endereço</th>
+            <th colspan=2></th>
         </tr>
     </thead>
     <tbody>
@@ -45,7 +45,7 @@
             <td><%= cliente.getEndereco().getCidade()%></td>
             <td><%= cliente.getEndereco().getBairro()%></td>
             <td><%= cliente.getEndereco().getEndereco() + " " + cliente.getEndereco().getNumero()%></td>
-            <td><a type="button" class="glyphicon glyphicon-search text-info" href="Controle?action=LocalizarPorId&q=cliente&id=<%=cliente.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=cliente&id=<%=cliente.getId()%>"></a></td>
             <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=<%=cliente.getId()%>"></a></td>
         </tr>
         <%}%> 

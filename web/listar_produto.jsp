@@ -16,9 +16,10 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th></th>
             <th>Nome</th>
-            <th>Descricao</th>
-            <th colspan=2>Action</th>
+            <th>Descrição</th>
+            <th colspan="2"></th>
         </tr>
     </thead>
     <tbody>
@@ -26,13 +27,18 @@
             ArrayList<Produto> listaProduto = (ArrayList<Produto>) request.getAttribute("lista");
             for (Produto produto : listaProduto) {%>  
         <tr>
+            <% if(produto.isAtivo()){%>          	
+            	<td><div type="button" class="glyphicon glyphicon-ok text-success"></div></td>
+            <%}else{%> 
+            	<td><div type="button" class="glyphicon glyphicon glyphicon-remove text-danger"></div></td>
+            <%}%>
             <td><%= produto.getNome()%></td>
             <td><%= produto.getDescricao()%></td>
-            <td><a type="button" class="glyphicon glyphicon-search text-info" href="Controle?action=LocalizarPorId&q=produto&id=<%=produto.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=<%=produto.getId()%>"></a></td>
             <% if(produto.isAtivo()){%>          	
-            	<td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=produto&id=<%=produto.getId()%>"></a></td>
+            	<td><a type="button" href="Controle?action=Excluir&q=produto&id=<%=produto.getId()%>">Inativar</a></td>
             <%}else{%> 
-            	<td><a type="button" class="glyphicon glyphicon glyphicon-ok text-success"  href="Controle?action=Ativar&q=produto&id=<%=produto.getId()%>"></a></td>
+            	<td><a type="button" href="Controle?action=Ativar&q=produto&id=<%=produto.getId()%>">Ativar</a></td>
             <%}%>
         </tr>
         <%}%> 
