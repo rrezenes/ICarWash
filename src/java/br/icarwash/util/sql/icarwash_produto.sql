@@ -37,7 +37,18 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Aspirador','Aspirador de pó',0),(2,'Cristalizador De Vidros','Cristalizador De Vidros 500ml',0),(3,'Spray ICarWash','Spray ICarWash 1000ml',0),(4,'Spray ICarWash','Spray ICarWash 1000ml',0),(5,'Cristalizador De Vidros','Cristalizador De Vidros 500ml',0),(6,'Pano','Pano De Microfibra 50x60cm',0),(7,'teste3','teste21',0),(8,'teste21','teste2',0),(9,'PRODUTO123','PRODUTO CRIADO PARA TESTE 123123123123123123123123123123123',1),(10,'teste123','descricao123',1);
+INSERT INTO `produto` VALUES 
+(1,'Limpa Estofados A Seco 5 Litros - Vonixx','Limpa, tira manchas e deixa um agradável aroma',1),
+(2,'Cristalizador De Vidros','500ml - Braclean',1),
+(3,'Kit Lavagem','A Seco 500ml + Toalha Microfibra - Braclean',1),
+(4,'Shampoo Detergente','Automotivo Lave Seco 500ml - Mills',1),
+(5,'Cristalizador De Vidros','Cristalizador De Vidros 500ml - Mills',1),
+(6,'Pano','Microfibra 50x60cm - Alcance',1),
+(7,'Bio W Lavagem','A Seco Concentrado 1 Litro Até 1:50 - Alcance',1),
+(8,'Auto Lava Seco',' 5 Litros - 3M',1),
+(9,'Limpeza De Rodas E Motores','Bio W - Alcance',1),
+(10,'Lavagem A Seco 5 Litros','Ecoflex Ultra - Vonixx',1);
+
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

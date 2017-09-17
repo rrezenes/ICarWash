@@ -38,7 +38,18 @@ CREATE TABLE `servico` (
 
 LOCK TABLES `servico` WRITE;
 /*!40000 ALTER TABLE `servico` DISABLE KEYS */;
-INSERT INTO `servico` VALUES (6,'Aspirar','Aspirar',20.00,1),(7,'Lavagem','Lavagem',30.00,1),(8,'Cristalizar','Cristalizar',110.00,1),(9,'Higienização','Higienização',30.00,1),(10,'Lavagem de Motor','Lavagem de Motor',50.01,1),(11,'teste','teste',10.00,0),(12,'teste','teste',10.00,0),(13,'teste','teste',10.00,0),(14,'teste','teste',10.00,0),(15,'teste','teste',10.00,0),(16,'teste','teste',10.00,0),(17,'Lavagem Simples','Lavagem Simples',30.00,0),(18,'Lavagem Simples','Lavagem Simples',30.00,1),(19,'Eita','Porra',123.00,1),(20,'PRODUTO123','ESSE PRODUTO FOI CRIADO PARA TESTE 123 FAVOR NÃO UTILIZAR',123.00,0),(21,'123444','1234444',123.00,0),(22,'SERVICO PARA TESTE','SERVICO PARA TESTE',999.00,1),(23,'SERVICO PARA TESTE','SERVICO PARA TESTE',999.00,1),(24,'SERVICO PARA TESTE123','SERVICO PARA TESTE123',123.00,0);
+INSERT INTO `servico` VALUES 
+(1,'Aspiração completa','Aspiração completa do veículo.',20.00,1),
+(2,'Lavagem a Seco Externa simples','Limpeza externa simples do veículo.',30.00,1),
+(3,'Lavagem a Seco Interna simples','Limpeza interior simples do veículo.',20.00,1),
+(4,'Lavagem a Seco Externa completa','Limpeza externa completa do veículo.',50.00,1),
+(5,'Lavagem a Seco Interna completa','Limpeza interior completa do veículo.',35.00,1),
+(6,'Cristalização','Cristalização externa do veículo.',110.00,1),
+(7,'Higienização','Higienização interior do veículo.',30.00,1),
+(8,'Lavagem de Motor','Lavagem de Motor',49.99,1),
+(9,'Enceramento','Camada de proteção e brilho por mais tempo.',99.99,1),
+(10,'Polimento ','Some com as manchas, riscos e imperfeições na pintura.',259.99,1);
+
 /*!40000 ALTER TABLE `servico` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

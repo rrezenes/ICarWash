@@ -38,7 +38,8 @@ CREATE TABLE `gerente_usuario` (
 
 LOCK TABLES `gerente_usuario` WRITE;
 /*!40000 ALTER TABLE `gerente_usuario` DISABLE KEYS */;
-INSERT INTO `gerente_usuario` VALUES (1,1),(2,2),(3,3);
+INSERT INTO `gerente_usuario` VALUES 
+(1,1),(2,2),(3,3);
 /*!40000 ALTER TABLE `gerente_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

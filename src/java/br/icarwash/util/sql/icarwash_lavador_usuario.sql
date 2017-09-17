@@ -38,7 +38,9 @@ CREATE TABLE `lavador_usuario` (
 
 LOCK TABLES `lavador_usuario` WRITE;
 /*!40000 ALTER TABLE `lavador_usuario` DISABLE KEYS */;
-INSERT INTO `lavador_usuario` VALUES (3,12),(4,13),(6,22),(7,27),(8,29),(9,30);
+INSERT INTO `lavador_usuario` VALUES 
+(1,14),(2,15),(3,16),(4,17),(5,18),(6,19),(7,20),(8,21),(9,22),(10,23);
+
 /*!40000 ALTER TABLE `lavador_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

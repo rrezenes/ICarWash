@@ -38,7 +38,9 @@ CREATE TABLE `cliente_usuario` (
 
 LOCK TABLES `cliente_usuario` WRITE;
 /*!40000 ALTER TABLE `cliente_usuario` DISABLE KEYS */;
-INSERT INTO `cliente_usuario` VALUES (1,4),(10,8),(12,11),(13,16),(15,19),(17,25),(18,26),(19,28);
+INSERT INTO `cliente_usuario` VALUES 
+(1,4),(2,5),(3,6),(4,7),(5,8),(6,9),(7,10),(8,11),(9,12),(10,13);
+
 /*!40000 ALTER TABLE `cliente_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

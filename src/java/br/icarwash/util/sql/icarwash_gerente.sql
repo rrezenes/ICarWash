@@ -45,7 +45,10 @@ CREATE TABLE `gerente` (
 
 LOCK TABLES `gerente` WRITE;
 /*!40000 ALTER TABLE `gerente` DISABLE KEYS */;
-INSERT INTO `gerente` VALUES (1,'ricardo@icarwash.com.br','Ricardo Carvalho','11987647197','1993-06-29','40524153884','0890000','SP','Mogi das Cruzes','Biritiba Ussu','Rua Tucano',90),(2,'rodrigo@icarwash.com.br','Rodrigo Rios','11970942165','1995-01-21','40564980838','07171120','SP','Guarulhos','Jardim Presidente Dutra','Rua Ichu',517),(3,'renan@icarwash.com.br','Renan Rezenes','11999032358','1991-01-16','40674829816','08745310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antonio',366);
+INSERT INTO `gerente` VALUES 
+(1,'ricardo@icarwash.com.br','Ricardo Carvalho','11987647197','1993-06-29','40524153884','0890000','SP','Mogi das Cruzes','Biritiba Ussu','Rua Tucano',90),
+(2,'rodrigo@icarwash.com.br','Rodrigo Rios','11970942165','1995-01-21','40564980838','07171120','SP','Guarulhos','Jardim Presidente Dutra','Rua Ichu',517),
+(3,'renan@icarwash.com.br','Renan Rezenes','11999032358','1991-01-16','40674829816','08745310','SP','Mogi das Cruzes','Vila Bela Flor','Avenida Santo Antonio',366);
 /*!40000 ALTER TABLE `gerente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
