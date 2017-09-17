@@ -39,7 +39,7 @@ CREATE TABLE `servico_produtos` (
 
 LOCK TABLES `servico_produtos` WRITE;
 /*!40000 ALTER TABLE `servico_produtos` DISABLE KEYS */;
-INSERT INTO `servico_produtos` VALUES (6,1,4),(6,2,4),(7,3,1),(7,6,4),(8,4,2),(8,6,4),(9,5,1),(9,6,2),(18,3,1),(18,6,5),(19,1,4),(19,3,3),(19,5,2),(23,1,1),(24,9,1),(24,10,4);
+/*INSERT INTO `servico_produtos` VALUES (6,1,4),(6,2,4),(7,3,1),(7,6,4),(8,4,2),(8,6,4),(9,5,1),(9,6,2),(18,3,1),(18,6,5),(19,1,4),(19,3,3),(19,5,2),(23,1,1),(24,9,1),(24,10,4);
 /*!40000 ALTER TABLE `servico_produtos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
