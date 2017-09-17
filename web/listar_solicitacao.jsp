@@ -20,7 +20,7 @@
             <th>ID Solicitação</th>
             <th>Nome</th>
             <th>Lavador</th>
-            <th>Porte do Veiculo</th>
+            <th>Porte do Veículo</th>
             <th>Data Solicitação</th>
             <th>Valor Total</th>
             <th>Status</th>

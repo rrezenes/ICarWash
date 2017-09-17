@@ -25,9 +25,9 @@
             <th>Estado</th>
             <th>Cidade</th>
             <th>Bairro</th>
-            <th>Endereco</th>
+            <th>Endereço</th>
             <th>Admissão</th>
-            <th colspan=2>Action</th>
+            <th colspan="2"></th>
         </tr>
     </thead>
     <tbody>
@@ -46,14 +46,14 @@
             <td><%= lavador.getEndereco().getBairro()%></td>
             <td><%= lavador.getEndereco().getEndereco() + " " + lavador.getEndereco().getNumero()%></td>
             <td><%= f.format(lavador.getDataContrato().getTime())%></td>
-            <td><a type="button" class="glyphicon glyphicon-search text-info" href="Controle?action=LocalizarPorId&q=lavador&id=<%=lavador.getId()%>"></a></td>
-            <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=lavador&id=<%=lavador.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=lavador&id=<%=lavador.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=<%=lavador.getId()%>"></a></td>
         </tr>
         <%}%> 
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Lavador</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
 
 <div class="container">
 </div>

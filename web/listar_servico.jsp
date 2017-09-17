@@ -13,15 +13,15 @@
 <%@page import="br.icarwash.dao.ServicoDAO"%>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
-    <h2>Controle de Servicos</h2>
+    <h2>Controle de Serviços</h2>
 </div>
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Nome</th>
-            <th>Descricao</th>
+            <th>Descrição</th>
             <th>Valor</th>
-            <th colspan=2>Action</th>
+            <th colspan="2"></th>
         </tr>
     </thead>
     <tbody>
@@ -32,18 +32,18 @@
             <td><%= servico.getNome()%></td>
             <td><%= servico.getDescricao()%></td>
             <td><%= servico.getValor()%></td>
-            <td><a type="button" class="glyphicon glyphicon-search text-info" href="Controle?action=LocalizarPorId&q=servico&id=<%=servico.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=servico&id=<%=servico.getId()%>"></a></td>
                 <% if (servico.isAtivo()) {%>          	
-            <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=servico&id=<%=servico.getId()%>"></a></td>
+            <td><a type="button" href="Controle?action=Excluir&q=servico&id=<%=servico.getId()%>">Inativar</a></td>
                 <%} else {%> 
-            <td><a type="button" class="glyphicon glyphicon glyphicon-ok text-success"  href="Controle?action=Ativar&q=servico&id=<%=servico.getId()%>"></a></td>
+            <td><a type="button" href="Controle?action=Ativar&q=servico&id=<%=servico.getId()%>">Ativar</a></td>
                 <%}%>
         </tr>
         <%}%> 
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Servico</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Serviço</button>
 
 <div class="container">
 </div>
@@ -53,7 +53,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Cadastrar Servico</h4>
+                <h4 class="modal-title">Cadastrar Serviço</h4>
             </div>
             <div class="modal-body">
                 <form action="Controle" method="post">
