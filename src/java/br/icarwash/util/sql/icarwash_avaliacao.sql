@@ -24,13 +24,14 @@ DROP TABLE IF EXISTS `avaliacao`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avaliacao` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `nota_pontualidade` int(11) NOT NULL,
-  `nota_servico` int(11) NOT NULL,
-  `nota_atendimento` int(11) NOT NULL,
-  `nota_agilidade` int(11) NOT NULL,
-  `nota_media` int(11) NOT NULL,
+  `nota_pontualidade` decimal(3,2) DEFAULT NULL,
+  `nota_servico` decimal(3,2) DEFAULT NULL,
+  `nota_atendimento` decimal(3,2) DEFAULT NULL,
+  `nota_agilidade` decimal(3,2) DEFAULT NULL,
+  `nota_media` decimal(3,2) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
