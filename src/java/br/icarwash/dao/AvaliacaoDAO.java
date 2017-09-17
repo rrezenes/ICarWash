@@ -5,6 +5,7 @@
  */
 package br.icarwash.dao;
 
+import br.icarwash.model.Avaliacao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,17 +20,21 @@ public class AvaliacaoDAO {
 
     private Connection conexao;
 
-    public int create() {
-        int id = 0;
+    public Avaliacao atribuirNotas(Avaliacao avaliacao) {
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement("insert into avaliacao(nota_pontualidade,nota_servico,nota_atendimento,nota_agilidade,nota_media) values (0,0,0,0,0)");
+            PreparedStatement pstmt = conexao.prepareStatement("INSERT INTO `icarwash`.`avaliacao`(`nota_pontualidade`,`nota_servico`,`nota_atendimento`,`nota_agilidade`,`nota_media`) VALUES (?,?,?,?,?);");
+            pstmt.setBigDecimal(1, avaliacao.getNotaPontualidade());
+            pstmt.setBigDecimal(2, avaliacao.getNotaServico());
+            pstmt.setBigDecimal(3, avaliacao.getNotaAtendimento());
+            pstmt.setBigDecimal(4, avaliacao.getNotaAgilidade());
+            pstmt.setBigDecimal(5, avaliacao.getNotaMedia());
             pstmt.execute();
-
-            PreparedStatement pstmtID = conexao.prepareStatement("SELECT MAX(id) FROM servico");
+            
+            PreparedStatement pstmtID = conexao.prepareStatement("SELECT MAX(id) FROM avaliacao");
             ResultSet rs = pstmtID.executeQuery();
             if (rs.next()) {
-                id = rs.getInt(1);
+                avaliacao.setID(rs.getInt(1));
             }
 
         } catch (SQLException e) {
@@ -41,7 +46,7 @@ public class AvaliacaoDAO {
                 throw new RuntimeException(e);
             }
         }
-        return id;
+        return avaliacao;
     }
 
 }

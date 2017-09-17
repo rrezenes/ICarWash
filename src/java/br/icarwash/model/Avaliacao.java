@@ -5,6 +5,8 @@
  */
 package br.icarwash.model;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author rezen
@@ -12,28 +14,17 @@ package br.icarwash.model;
 public class Avaliacao {
 
     private int ID;
-    private int nota_pontualidade;
-    private int nota_servico;
-    private int nota_atendimento;
-    private int nota_agilidade;
-    private int nota_media;
+    private BigDecimal notaPontualidade;
+    private BigDecimal notaServico;
+    private BigDecimal notaAtendimento;
+    private BigDecimal notaAgilidade;
+    private BigDecimal notaMedia;
 
-    public Avaliacao(int ID) {
-        this.ID = ID;
-        this.nota_pontualidade = 0;
-        this.nota_servico = 0;
-        this.nota_atendimento = 0;
-        this.nota_agilidade = 0;
-        this.nota_media = 0;
-    }
-
-    public Avaliacao(int ID, int nota_pontualidade, int nota_servico, int nota_atendimento, int nota_agilidade, int nota_media) {
-        this.ID = ID;
-        this.nota_pontualidade = nota_pontualidade;
-        this.nota_servico = nota_servico;
-        this.nota_atendimento = nota_atendimento;
-        this.nota_agilidade = nota_agilidade;
-        this.nota_media = nota_media;
+    public Avaliacao(BigDecimal notaPontualidade, BigDecimal notaServico, BigDecimal notaAtendimento, BigDecimal notaAgilidade) {
+        this.notaPontualidade = notaPontualidade;
+        this.notaServico = notaServico;
+        this.notaAtendimento = notaAtendimento;
+        this.notaAgilidade = notaAgilidade;
     }
 
     public int getID() {
@@ -44,44 +35,49 @@ public class Avaliacao {
         this.ID = ID;
     }
 
-    public int getNota_pontualidade() {
-        return nota_pontualidade;
+    public BigDecimal getNotaPontualidade() {
+        return notaPontualidade;
     }
 
-    public void setNota_pontualidade(int nota_pontualidade) {
-        this.nota_pontualidade = nota_pontualidade;
+    public void setNotaPontualidade(BigDecimal notaPontualidade) {
+        this.notaPontualidade = notaPontualidade;
     }
 
-    public int getNota_servico() {
-        return nota_servico;
+    public BigDecimal getNotaServico() {
+        return notaServico;
     }
 
-    public void setNota_servico(int nota_servico) {
-        this.nota_servico = nota_servico;
+    public void setNotaServico(BigDecimal notaServico) {
+        this.notaServico = notaServico;
     }
 
-    public int getNota_atendimento() {
-        return nota_atendimento;
+    public BigDecimal getNotaAtendimento() {
+        return notaAtendimento;
     }
 
-    public void setNota_atendimento(int nota_atendimento) {
-        this.nota_atendimento = nota_atendimento;
+    public void setNotaAtendimento(BigDecimal notaAtendimento) {
+        this.notaAtendimento = notaAtendimento;
     }
 
-    public int getNota_agilidade() {
-        return nota_agilidade;
+    public BigDecimal getNotaAgilidade() {
+        return notaAgilidade;
     }
 
-    public void setNota_agilidade(int nota_agilidade) {
-        this.nota_agilidade = nota_agilidade;
+    public void setNotaAgilidade(BigDecimal notaAgilidade) {
+        this.notaAgilidade = notaAgilidade;
     }
 
-    public int getNota_media() {
-        return nota_media;
+    public BigDecimal getNotaMedia() {
+        return notaMedia;
     }
 
-    public void setNota_media(int nota_media) {
-        this.nota_media = nota_media;
+    public void setNotaMedia(BigDecimal notaMedia) {
+        this.notaMedia = notaMedia;
     }
 
+    public BigDecimal calcularMedia(){
+        notaMedia = notaPontualidade.add(notaServico.add(notaAtendimento.add(notaAgilidade)));
+        return this.notaMedia = this.notaMedia.divide(BigDecimal.valueOf(4));
+    }
+    
 }
