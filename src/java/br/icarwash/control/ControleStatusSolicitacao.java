@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rezen
  */
-@WebServlet(name = "ControleStatusSolicitacao", urlPatterns = {"/AprovarSolicitacao", "/CancelarSolicitacao", "/ProcessarSolicitacao"})
+@WebServlet(name = "ControleStatusSolicitacao", urlPatterns = {"/AprovarSolicitacao", "/CancelarSolicitacao", "/ProcessarSolicitacao", "/FinalizarSolicitacao", "/AvaliarSolicitacao"})
 public class ControleStatusSolicitacao extends HttpServlet {
 
     @Override
@@ -34,8 +34,16 @@ public class ControleStatusSolicitacao extends HttpServlet {
             solicitacao.analisarSolicitacao();
         } else if(URI.endsWith("/CancelarSolicitacao")){
             solicitacao.cancelarSolicitacao();
-        } else{
+        } else if(URI.endsWith("/ProcessarSolicitacao")){
             solicitacao.processarSolicitacao();
+        } else if(URI.endsWith("/FinalizarSolicitacao")){
+            solicitacao.finalizarSolicitacao();
+        } else if(URI.endsWith("/AvaliarSolicitacao")){
+            System.out.println(request.getParameter("pontualidade"));
+            System.out.println(request.getParameter("servico"));
+            System.out.println(request.getParameter("atendimento"));
+            System.out.println(request.getParameter("agilidade"));
+            solicitacao.avaliarSolicitacao();
         }
 
         request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);

@@ -25,6 +25,7 @@
             <th>Porte do Veículo</th>
             <th>Data Solicitação</th>
             <th>Valor Total</th>
+            <th>Status</th>
             <th colspan=2>Action</th>
         </tr>
     </thead>
@@ -53,6 +54,13 @@
                     <form action="ProcessarSolicitacao" method="post">
                         <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/>
                         <button type="submit" class="btn btn-success">Processar</button>
+                    </form>
+                </td>
+            <%}else if(solicitacao.getEstado().toString().equals("Em Processo")) {%> 
+                <td>
+                    <form action="FinalizarSolicitacao" method="post">
+                        <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/>
+                        <button type="submit" class="btn btn-success">Finalizar</button>
                     </form>
                 </td>
             <%}%> 

@@ -5,6 +5,7 @@
  */
 package br.icarwash.control.state;
 
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 
 /**
@@ -34,7 +35,7 @@ public class Concluido implements SolicitacaoState {
     }
 
     @Override
-    public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao) {
+    public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
         return this;
     }
 

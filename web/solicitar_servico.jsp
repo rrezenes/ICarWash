@@ -22,7 +22,7 @@
             <fieldset>
                 <legend>Data da Solicitação</legend>
                 <div>
-                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:00 p" data-link-field="dtp_input1" data-date-end-date="0d">
                         <input class="form-control" size="16" type="text" readonly>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>
@@ -58,8 +58,7 @@
                         <input type="radio" name="porte" value="grande">Grande
                     </label>
                 </div>     
-            </fieldset> 
-
+            </fieldset>
         </div>
 
 
@@ -69,4 +68,25 @@
     </form>
 </div>
 
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/moment.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $(function () {
+        var date = new Date();
+        date.setHours(date.getHours() + 1);
+        $('.form_datetime').datetimepicker({
+            language: 'pt-BR',
+            autoclose: 1,
+            startDate: date,
+            todayHighlight: 0,
+            startView: 2,
+            showMeridian: 1,
+            daysOfWeekDisabled: [0, 6],            
+            hoursDisabled: '0,1,2,3,4,5,6,7,18,19,20,21,22,23',
+            minView: 1
+        });
+    });
+</script>
+                
 <%@include file="rodape.jsp"%>

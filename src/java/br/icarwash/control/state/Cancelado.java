@@ -6,6 +6,7 @@
 package br.icarwash.control.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 
 /**
@@ -35,7 +36,7 @@ public class Cancelado implements SolicitacaoState {
     }
 
     @Override
-    public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao) {
+    public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
         return this;
     }
 

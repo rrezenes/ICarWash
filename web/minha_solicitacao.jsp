@@ -11,6 +11,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
+<link rel="stylesheet" href="css/star-rating.css">
 <div class="jumbotron">
     <h1>Minhas Solicitações</h1>
 </div>
@@ -41,18 +42,67 @@
             <td><%=dateFormat.format(solicitacao.getDataSolicitacao().getTime())%></td>
             <td><%=solicitacao.getValorTotal().doubleValue()%></td>
             <td><%=solicitacao.getEstado()%></td>
-            <% if(solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")){  %>
+            <% if(solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")){%>
                 <td>
                     <form action="CancelarSolicitacao" method="post">
                         <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
-                        <input type="submit" value="Cancelar">
-                    </form>
-                    
+                        <input type="submit" value="Cancelar" class="btn btn-danger">
+                    </form>                    
                 </td>
+            <%} else if(solicitacao.getEstado().toString().equals("Finalizado")){%>
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Avaliar</button> 
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Avaliar Solicitação</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="AvaliarSolicitacao" method="post">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
+                                                <label for="pontualidade" class="control-label">Pontualidade</label>
+                                                <input id="pontualidade" name="pontualidade" value="0" class="rating-loading"><br>
+                                                <label for="servico" class="control-label">Serviço</label>
+                                                <input id="servico" name="servico" value="0" class="rating-loading"><br>
+                                                <label for="atendimento" class="control-label">Atendimento</label>
+                                                <input id="atendimento" name="atendimento" value="0" class="rating-loading"><br>
+                                                <label for="agilidade" class="control-label">Agilidade</label>
+                                                <input id="agilidade" name="agilidade" value="0" class="rating-loading"><br>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control btn btn-primary" type="submit" name="action" value="Avaliar"><br>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="js/star-rating.js"></script>
+                    <script src="js/star-rating_locale_pt-BR.js"></script>
+                    <script>
+                            $('#pontualidade').rating({});
+                            $('#servico').rating({});
+                            $('#atendimento').rating({});
+                            $('#agilidade').rating({});
+
+                    </script>
+                </td>
+
             <%}%> 
         </tr>
         <%}%> 
     </tbody>
 </table>
+    
+
 
 <%@include file="rodape.jsp"%>

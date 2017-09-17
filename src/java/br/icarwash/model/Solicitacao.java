@@ -9,6 +9,7 @@ import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.LavadorSolicitacaoDAO;
 import br.icarwash.control.state.SolicitacaoState;
 import br.icarwash.control.state.EmAnalise;
+import br.icarwash.dao.SolicitacaoDAO;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +24,7 @@ public class Solicitacao {
     private int id;
     private Cliente cliente;
     private Lavador lavador;
-    private int avaliacao;
+    private Avaliacao avaliacao;
     protected SolicitacaoState estado;
     private String porte;
     private Calendar dataSolicitacao;
@@ -34,7 +35,7 @@ public class Solicitacao {
         this.estado = new EmAnalise();
     }
 
-    public Solicitacao(int id, Cliente cliente, Lavador lavador, int avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
+    public Solicitacao(int id, Cliente cliente, Lavador lavador, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;
         this.lavador = lavador;
@@ -45,7 +46,7 @@ public class Solicitacao {
         this.valorTotal = valorTotal;
     }
 
-    public Solicitacao(int id, Cliente cliente, int avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
+    public Solicitacao(int id, Cliente cliente, Avaliacao avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;
         this.avaliacao = avaliacao;
@@ -88,13 +89,14 @@ public class Solicitacao {
 
     public void setLavador(Lavador lavador) {
         this.lavador = lavador;
+        
     }
 
-    public int getAvaliacao() {
+    public Avaliacao getAvaliacao() {
         return avaliacao;
     }
 
-    public void setAvaliacao(int avaliacao) {
+    public void setAvaliacao(Avaliacao avaliacao) {
         this.avaliacao = avaliacao;
     }
 
@@ -147,7 +149,7 @@ public class Solicitacao {
     }
 
     public void avaliarSolicitacao() {
-        this.estado = this.estado.avaliarSolicitacao(this);
+        this.estado = this.estado.avaliarSolicitacao(this, this.avaliacao);
     }
 
     public void concluirSolicitacao() {
@@ -171,19 +173,19 @@ public class Solicitacao {
             if (disponivel) {
                 lavadoresDisponiveis.add(lavador);
                 encontrou = true;
-            } else {
+            }// else {
                 //arrumar essa porra
-                encontrou = false;
-            }
+//                encontrou = false;
+//            }
         }
         if (encontrou) {
+            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
             Random random = new Random();
-            this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));
-            LavadorSolicitacaoDAO lavadorSolicitacaoDAO = new LavadorSolicitacaoDAO();
-            LavadorSolicitacao lavadorSolicitacao = new LavadorSolicitacao(this.lavador.getId(), this.getId(), this.getDataSolicitacao());
-            lavadorSolicitacaoDAO.cadastrar(lavadorSolicitacao);
+            
+            this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));            
+            solicitacaoDAO.atribuirLavador(this.lavador, this);
         } else {
-
+            
         }
     }
 }

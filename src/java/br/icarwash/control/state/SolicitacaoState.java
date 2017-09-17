@@ -5,6 +5,7 @@
  */
 package br.icarwash.control.state;
 
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 
 /**
@@ -21,7 +22,7 @@ public interface SolicitacaoState {
 
     SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao);
 
-    SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao);
+    SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao);
 
     SolicitacaoState concluirSolicitacao(Solicitacao solicitacao);
 

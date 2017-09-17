@@ -86,7 +86,7 @@ public class SolicitacaoDAO implements BasicoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -109,19 +109,19 @@ public class SolicitacaoDAO implements BasicoDAO {
         SolicitacaoState solicitacaoState;
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao,c.id as ID_Cliente, c.nome as nome_cliente, c.bairro as bairro, c.cidade as cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, lavador_solicitacao ls, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and s.ID = ls.id_solicitacao and l.id = ls.id_lavador and u.id = ?;");
+            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and l.id = s.id_lavador and u.id = ?;");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 endereco = new Endereco(rs.getString("cidade"), rs.getString("bairro"));
                 cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"), endereco);
 
-//                lavador = new Lavador(rs.getInt("id_lavador"));
+                Lavador lavador = new Lavador(rs.getInt("id_lavador"));
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -155,7 +155,7 @@ public class SolicitacaoDAO implements BasicoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -208,8 +208,12 @@ public class SolicitacaoDAO implements BasicoDAO {
         SolicitacaoState solicitacaoState;
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao group by solicitacao.ID");
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao, cliente.ID as ID_Cliente, cliente.nome as nome_cliente,"
+                    + "                                         solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status "
+                    + "                                             FROM icarwash.cliente, icarwash.solicitacao, icarwash.solicitacao_servico, icarwash.servico "
+                    + "                                                 where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao group by solicitacao.ID");
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
                 lavador = new Lavador(rs.getInt("id_lavador"));
@@ -217,9 +221,10 @@ public class SolicitacaoDAO implements BasicoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -249,7 +254,7 @@ public class SolicitacaoDAO implements BasicoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, 0, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -393,6 +398,25 @@ public class SolicitacaoDAO implements BasicoDAO {
             conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Em Processo' WHERE ID = ?");
             pstmt.setInt(1, solicitacao.getId());
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void atribuirLavador(Lavador lavador, Solicitacao solicitacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET id_lavador = ? WHERE ID = ?");
+            pstmt.setInt(1, lavador.getId());
+            pstmt.setInt(2, solicitacao.getId());
             pstmt.execute();
 
         } catch (SQLException e) {
