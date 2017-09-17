@@ -20,6 +20,10 @@ public class Avaliacao {
     private BigDecimal notaAgilidade;
     private BigDecimal notaMedia;
 
+    public Avaliacao(int ID) {
+        this.ID = ID;
+    }
+    
     public Avaliacao(BigDecimal notaPontualidade, BigDecimal notaServico, BigDecimal notaAtendimento, BigDecimal notaAgilidade) {
         this.notaPontualidade = notaPontualidade;
         this.notaServico = notaServico;
@@ -27,6 +31,15 @@ public class Avaliacao {
         this.notaAgilidade = notaAgilidade;
     }
 
+    public Avaliacao(int ID, BigDecimal notaPontualidade, BigDecimal notaServico, BigDecimal notaAtendimento, BigDecimal notaAgilidade, BigDecimal notaMedia) {
+        this.ID = ID;
+        this.notaPontualidade = notaPontualidade;
+        this.notaServico = notaServico;
+        this.notaAtendimento = notaAtendimento;
+        this.notaAgilidade = notaAgilidade;
+        this.notaMedia = notaMedia;
+    }
+    
     public int getID() {
         return ID;
     }

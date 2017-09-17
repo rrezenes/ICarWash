@@ -22,6 +22,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public class SolicitacaoDAO implements BasicoDAO {
         Solicitacao solicitacao;
         Cliente cliente;
         Lavador lavador;
+        Avaliacao avaliacao;
         SolicitacaoState solicitacaoState;
         try {
             conexao = Conexao.getConexao();
@@ -86,8 +88,12 @@ public class SolicitacaoDAO implements BasicoDAO {
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
-
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                if(rs.getBoolean("id_avaliacao")){
+                    avaliacao = new Avaliacao(rs.getInt("id_avaliacao"));
+                }else{
+                    avaliacao = new Avaliacao(0);
+                }
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, avaliacao, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
