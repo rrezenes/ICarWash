@@ -35,6 +35,17 @@ public class Solicitacao {
         this.estado = new EmAnalise();
     }
 
+    public Solicitacao(int id, Cliente cliente, Lavador lavador, Avaliacao avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
+        this.id = id;
+        this.cliente = cliente;
+        this.lavador = lavador;
+        this.avaliacao = avaliacao;
+        this.estado = estado;
+        this.porte = porte;
+        this.dataSolicitacao = data_solicitacao;
+        this.valorTotal = valorTotal;
+    }
+    
     public Solicitacao(int id, Cliente cliente, Lavador lavador, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;

@@ -48,5 +48,26 @@ public class AvaliacaoDAO {
         }
         return avaliacao;
     }
+    
+        public Avaliacao localizarAvaliacaoPorId(Avaliacao avaliacao) {
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT * FROM avaliacao where id = ?");
+            pstmt.setString(1, Integer.toString(avaliacao.getID()));
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                avaliacao = new Avaliacao(rs.getInt("id"), rs.getBigDecimal("nota_pontualidade"), rs.getBigDecimal("nota_servico"), rs.getBigDecimal("nota_atendimento"), rs.getBigDecimal("nota_agilidade"), rs.getBigDecimal("nota_media"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return avaliacao;
+    }
 
 }
