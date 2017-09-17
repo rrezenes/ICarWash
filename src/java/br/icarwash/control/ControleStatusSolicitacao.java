@@ -6,8 +6,10 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 import java.io.IOException;
+import java.math.BigDecimal;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,10 +41,8 @@ public class ControleStatusSolicitacao extends HttpServlet {
         } else if(URI.endsWith("/FinalizarSolicitacao")){
             solicitacao.finalizarSolicitacao();
         } else if(URI.endsWith("/AvaliarSolicitacao")){
-            System.out.println(request.getParameter("pontualidade"));
-            System.out.println(request.getParameter("servico"));
-            System.out.println(request.getParameter("atendimento"));
-            System.out.println(request.getParameter("agilidade"));
+            Avaliacao avaliacao = new Avaliacao(BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))));
+            solicitacao.setAvaliacao(avaliacao);
             solicitacao.avaliarSolicitacao();
         }
 

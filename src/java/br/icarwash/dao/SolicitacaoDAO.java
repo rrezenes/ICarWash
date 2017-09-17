@@ -16,6 +16,7 @@ import br.icarwash.control.state.EmAnalise;
 import br.icarwash.control.state.EmProcesso;
 import br.icarwash.control.state.Finalizado;
 import br.icarwash.control.state.SolicitacaoState;
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Endereco;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -116,12 +117,12 @@ public class SolicitacaoDAO implements BasicoDAO {
                 endereco = new Endereco(rs.getString("cidade"), rs.getString("bairro"));
                 cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"), endereco);
 
-                Lavador lavador = new Lavador(rs.getInt("id_lavador"));
+                //lavador = new Lavador(rs.getInt("id_lavador"));
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -357,11 +358,12 @@ public class SolicitacaoDAO implements BasicoDAO {
         }
     }
 
-    public void avaliarSolicitacao(Solicitacao solicitacao) {
+    public void avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Avaliado' WHERE ID = ?");
-            pstmt.setInt(1, solicitacao.getId());
+            PreparedStatement pstmt = conexao.prepareStatement("UPDATE solicitacao SET status = 'Avaliado', id_avaliacao = ? WHERE ID = ?");
+            pstmt.setInt(1, avaliacao.getID());
+            pstmt.setInt(2, solicitacao.getId());
             pstmt.execute();
 
         } catch (SQLException e) {

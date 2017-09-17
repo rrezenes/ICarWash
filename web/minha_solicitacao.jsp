@@ -86,8 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    <script src="js/star-rating.js"></script>
-                    <script src="js/star-rating_locale_pt-BR.js"></script>
+
                     <script>
                             $('#pontualidade').rating({});
                             $('#servico').rating({});
@@ -97,12 +96,19 @@
                     </script>
                 </td>
 
-            <%}%> 
+            <%} else if(solicitacao.getEstado().toString().equals("Avaliado")){%>
+                <td>
+                    <input id="input-3" name="input-<%=solicitacao.getId()%>" value="4" class="rating-loading"  data-size="xs">
+
+                    <script>$('#input-<%=solicitacao.getId()%>').rating({displayOnly: true, step: 0.5}); </script>
+                </td>
+            <%}%>
         </tr>
         <%}%> 
     </tbody>
 </table>
     
-
+                    <script src="js/star-rating.js"></script>
+                    <script src="js/star-rating_locale_pt-BR.js"></script>
 
 <%@include file="rodape.jsp"%>
