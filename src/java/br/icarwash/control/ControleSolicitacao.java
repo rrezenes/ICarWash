@@ -80,7 +80,8 @@ public class ControleSolicitacao extends HttpServlet {
                 }
             }
 
-            request.getRequestDispatcher("/minha_solicitacao.jsp").forward(request, response);
+//            request.getRequestDispatcher("/minha_solicitacao.jsp").forward(request, response);
+            response.sendRedirect("/ICarWash/ListarSolicitacaoCliente");
 
         } else {
             request.getRequestDispatcher("/solicitar_servico.jsp?erro=data").forward(request, response);
