@@ -45,8 +45,8 @@ public class Pessoa {
         this.endereco = endereco;
     }
 
-    public Pessoa(String nome) {
-        this.nome = nome;
+    public Pessoa(String email) {
+        this.email = email;
     }
 
     public String getEmail() {

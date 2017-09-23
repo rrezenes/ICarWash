@@ -14,11 +14,30 @@ import java.util.Calendar;
 public class Usuario {
 
     private int id;
+    private String email;
     private String usuario;
     private String senha;
     private int nivel;
     private boolean ativo;
     private Calendar cadastro = Calendar.getInstance();
+
+    public Usuario(String email, String usuario, String senha, int nivel, boolean ativo) {
+       
+        this.email = email;
+        this.usuario = usuario;
+        this.senha = senha;
+        this.nivel = nivel;
+        this.ativo = ativo;
+    }
+
+    public Usuario(int id, String email, String usuario, String senha, int nivel, boolean ativo) {
+        this.id = id;
+        this.email = email;
+        this.usuario = usuario;
+        this.senha = senha;
+        this.nivel = nivel;
+        this.ativo = ativo;
+    }
 
     public Usuario(int id) {
         this.id = id;
@@ -50,6 +69,14 @@ public class Usuario {
 
     public int getId() {
         return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsuario() {

@@ -43,7 +43,7 @@
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-tar="#myModal">Add Cliente</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Cliente</button>
 
 <div class="container">
 </div>
