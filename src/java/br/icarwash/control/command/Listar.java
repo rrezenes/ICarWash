@@ -35,27 +35,27 @@ public class Listar implements ICommand {
             case "cliente":
                 ClienteDAO clienteDAO = new ClienteDAO();
                 ArrayList<Cliente> clientes = clienteDAO.listar();
-                request.setAttribute("lista", clientes);
+                request.setAttribute("clientes", clientes);
                 return "listar_cliente.jsp";
             case "lavador":
                 LavadorDAO lavadorDAO = new LavadorDAO();
                 ArrayList<Lavador> lavadores = lavadorDAO.listar();
-                request.setAttribute("lista", lavadores);
+                request.setAttribute("lavadores", lavadores);
                 return "listar_lavador.jsp";
             case "produto":
                 ProdutoDAO produtoDAO = new ProdutoDAO();
                 ArrayList<Produto> produtos = produtoDAO.listar();
-                request.setAttribute("lista", produtos);
+                request.setAttribute("produtos", produtos);
                 return "listar_produto.jsp";
             case "servico":
                 ServicoDAO servicoDAO = new ServicoDAO();
                 ArrayList<Servico> servicos = servicoDAO.listar();
-                request.setAttribute("lista", servicos);
+                request.setAttribute("servicos", servicos);
                 return "listar_servico.jsp";
             case "solicitacao":
                 SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
                 ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listar();
-                request.setAttribute("lista", solicitacoes);
+                request.setAttribute("solicitacoes", solicitacoes);
                 return "listar_solicitacao.jsp";
             default:
                 return "painel_admin.jsp";

@@ -1,17 +1,10 @@
-<%-- 
-    Document   : listar_solicitacoes
-    Created on : 07/09/2017, 11:22:14
-    Author     : rezen
---%>
-<%@page import="br.icarwash.model.Solicitacao"%>
-<%@page import="br.icarwash.dao.SolicitacaoDAO"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.ArrayList"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
-    <h2>Solicitações Pendentes</h2>
+    <h2>Solicitações</h2>
 </div>
 
 <table class="table table-hover">
@@ -28,28 +21,30 @@
         </tr>
     </thead>
     <tbody>
-        <%  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        <!--        <  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
             ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listar();
-            for (Solicitacao solicitacao : solicitacoes) {%>  
-        <tr>
-            <td><%=solicitacao.getId()%></td>
-            <td><%=solicitacao.getCliente().getNome()%></td>
-            <td><%=solicitacao.getLavador().getId()%></td>
-            <td><%=solicitacao.getPorte()%></td>
-            <td><%=dateFormat.format(solicitacao.getDataSolicitacao().getTime())%></td>
-            <td><%=solicitacao.getValorTotal().doubleValue()%></td>
-            <td><%=solicitacao.getEstado()%></td>
-            <% if (solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")) {%>
-            <td>
-                <form action="CancelarSolicitacao" method="post">
-                    <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
-                    <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>
-                </form>
-            </td>
-            <%}%> 
-        </tr>
-        <%}%> 
+            for (Solicitacao solicitacao : solicitacoes) {%>  -->
+        <c:forEach var="solicitacao" items="${solicitacoes}">
+            <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy hh:mm"/>
+            <tr>
+                <td>${solicitacao.id}</td>
+                <td>${solicitacao.cliente.nome}</td>
+                <td>${solicitacao.lavador.id}</td>
+                <td>${solicitacao.porte}</td>
+                <td>${dataSolicitacao}</td>
+                <td>${solicitacao.valorTotal.doubleValue()}</td>
+                <td>${solicitacao.estado}</td>
+                <c:if test = "${(solicitacao.estado == 'Em Analise') || (solicitacao.estado == 'Agendado')}">
+                    <td>
+                        <form action="CancelarSolicitacao" method="post">
+                            <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
+                            <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>
+                        </form>
+                    </td>
+                </c:if>
+            </tr>
+        </c:forEach>
     </tbody>
 </table>
 <%@include file="rodape.jsp"%>

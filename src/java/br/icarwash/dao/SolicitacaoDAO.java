@@ -22,7 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.Calendar;
  *
  * @author rezen
  */
-public class SolicitacaoDAO implements BasicoDAO {
+public class SolicitacaoDAO {
 
     private Connection conexao;
 
@@ -44,7 +43,6 @@ public class SolicitacaoDAO implements BasicoDAO {
         this.conexao = Conexao.getConexao();
     }
 
-    @Override
     public void cadastrar(Object object) {
         Solicitacao solicitacao = (Solicitacao) object;
         Timestamp timestamp = new Timestamp(solicitacao.getDataSolicitacao().getTimeInMillis());
@@ -143,7 +141,6 @@ public class SolicitacaoDAO implements BasicoDAO {
         return solicitacoes;
     }
 
-    @Override
     public Solicitacao localizarPorId(int id) {
         Solicitacao solicitacao = null;
         Cliente cliente;
@@ -206,7 +203,6 @@ public class SolicitacaoDAO implements BasicoDAO {
         return solicitacaoState;
     }
 
-    @Override
     public ArrayList listar() {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
         Solicitacao solicitacao;
@@ -274,16 +270,6 @@ public class SolicitacaoDAO implements BasicoDAO {
             }
         }
         return solicitacoes;
-    }
-
-    @Override
-    public void atualizar(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void excluir(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Solicitacao selecionaUltimoIdSolicitacao() {

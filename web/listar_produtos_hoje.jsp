@@ -5,9 +5,6 @@
 
     Fazer essa página recuperar a lista dos produtos de acordo com os serviços 
     do Lavador que tenha para a data de hoje.
-          
-
-
 --%>
 
 <%@page import="java.text.DateFormat"%>

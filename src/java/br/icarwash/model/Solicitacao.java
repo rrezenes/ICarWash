@@ -6,7 +6,6 @@
 package br.icarwash.model;
 
 import br.icarwash.dao.LavadorDAO;
-import br.icarwash.dao.LavadorSolicitacaoDAO;
 import br.icarwash.control.state.SolicitacaoState;
 import br.icarwash.control.state.EmAnalise;
 import br.icarwash.dao.SolicitacaoDAO;
@@ -192,10 +191,7 @@ public class Solicitacao {
             if (disponivel) {
                 lavadoresDisponiveis.add(lavador);
                 encontrou = true;
-            }// else {
-                //arrumar essa porra
-//                encontrou = false;
-//            }
+            }
         }
         if (encontrou) {
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
@@ -203,8 +199,6 @@ public class Solicitacao {
             
             this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));            
             solicitacaoDAO.atribuirLavador(this.lavador, this);
-        } else {
-            
-        }
+        }// F A L T A  I M P L E M E N T A R  O  E L S E
     }
 }

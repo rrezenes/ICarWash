@@ -1,14 +1,6 @@
-<%-- 
-    Document   : listaCliente
-    Created on : 17/11/2016, 22:13:43
-    Author     : rezen
---%>
 
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="br.icarwash.model.Lavador"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="br.icarwash.dao.LavadorDAO"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
     <h2>Controle de Lavadores</h2>
@@ -31,29 +23,29 @@
         </tr>
     </thead>
     <tbody>
-        <%  DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-            ArrayList<Lavador> listaLavadores = (ArrayList<Lavador>) request.getAttribute("lista"); //recupera a lista do request
-            for (Lavador lavador : listaLavadores) {%>  
-        <tr>
-            <td><%= lavador.getEmail()%></td>
-            <td><%= lavador.getNome()%></td>
-            <td><%= lavador.getTelefone()%></td>
-            <td><%= f.format(lavador.getDataNascimento().getTime())%></td>
-            <td><%= lavador.getCPF()%></td>
-            <td><%= lavador.getEndereco().getCEP()%></td>
-            <td><%= lavador.getEndereco().getEstado()%></td>
-            <td><%= lavador.getEndereco().getCidade()%></td>
-            <td><%= lavador.getEndereco().getBairro()%></td>
-            <td><%= lavador.getEndereco().getEndereco() + " " + lavador.getEndereco().getNumero()%></td>
-            <td><%= f.format(lavador.getDataContrato().getTime())%></td>
-            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=lavador&id=<%=lavador.getId()%>"></a></td>
-            <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=<%=lavador.getId()%>"></a></td>
-        </tr>
-        <%}%> 
+       <c:forEach var="lavador" items="${lavadores}">
+            <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
+            <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
+            <tr>
+                <td>${lavador.email}</td>
+                <td>${lavador.nome}</td>
+                <td>${lavador.telefone}</td>
+                <td>${dataNascimento}</td>
+                <td>${lavador.CPF}</td>
+                <td>${lavador.endereco.CEP}</td>
+                <td>${lavador.endereco.estado}</td>
+                <td>${lavador.endereco.cidade}</td>
+                <td>${lavador.endereco.bairro}</td>
+                <td>${lavador.endereco.endereco} nº${lavador.endereco.numero}</td>
+                <td>${dataContrato}</td>
+                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"></a></td>
+                <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=${lavador.id}"></a></td>
+            </tr>
+        </c:forEach>        
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-tar="#myModal">Adicionar Lavador</button>
 
 <div class="container">
 </div>

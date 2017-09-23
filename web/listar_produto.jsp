@@ -1,14 +1,5 @@
-<%-- 
-    Document   : listaProduto
-    Created on : 17/11/2016, 22:13:43
-    Author     : rezen
---%>
 
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="br.icarwash.model.Produto"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="br.icarwash.dao.ProdutoDAO"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
     <h2>Controle de Produtos</h2>
@@ -23,25 +14,33 @@
         </tr>
     </thead>
     <tbody>
-        <%//recupera a lista do request
-            ArrayList<Produto> listaProduto = (ArrayList<Produto>) request.getAttribute("lista");
-            for (Produto produto : listaProduto) {%>  
-        <tr>
-            <% if(produto.isAtivo()){%>          	
-            	<td><div type="button" class="glyphicon glyphicon-ok text-success"></div></td>
-            <%}else{%> 
-            	<td><div type="button" class="glyphicon glyphicon glyphicon-remove text-danger"></div></td>
-            <%}%>
-            <td><%= produto.getNome()%></td>
-            <td><%= produto.getDescricao()%></td>
-            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=<%=produto.getId()%>"></a></td>
-            <% if(produto.isAtivo()){%>          	
-            	<td><a type="button" href="Controle?action=Excluir&q=produto&id=<%=produto.getId()%>">Inativar</a></td>
-            <%}else{%> 
-            	<td><a type="button" href="Controle?action=Ativar&q=produto&id=<%=produto.getId()%>">Ativar</a></td>
-            <%}%>
-        </tr>
-        <%}%> 
+        <c:forEach var="produto" items="${produtos}">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${produto.ativo}">
+                            <div type="button" class="glyphicon glyphicon-ok text-success"></div>
+                        </c:when> 
+                        <c:otherwise>
+                            <div type="button" class="glyphicon glyphicon glyphicon-remove text-danger"></div>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td>${produto.nome}</td>
+                <td>${produto.descricao}</td>
+                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=${produto.id}"></a></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${produto.ativo}">          	
+                            <a type="button" href="Controle?action=Excluir&q=produto&id=${produto.id}">Inativar</a>
+                        </c:when> 
+                        <c:otherwise>
+                            <a type="button" href="Controle?action=Ativar&q=produto&id=${produto.id}">Ativar</a>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </c:forEach>
     </tbody>
 </table>
 
