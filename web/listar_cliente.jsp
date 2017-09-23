@@ -1,18 +1,11 @@
-<%-- 
-    Document   : listaCliente
-    Created on : 17/11/2016, 22:13:43
-    Author     : rezen
---%>
 
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="br.icarwash.model.Cliente"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="br.icarwash.dao.ClienteDAO"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
     <h2>Controle de Clientes</h2>
 </div>
+    
 <table class="table table-hover">
     <thead>
         <tr>
@@ -30,29 +23,27 @@
         </tr>
     </thead>
     <tbody>
-        <%//recupera a lista do request
-            DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-            ArrayList<Cliente> listaCliente = (ArrayList<Cliente>) request.getAttribute("lista");
-            for (Cliente cliente : listaCliente) {%>  
-        <tr>
-            <td><%= cliente.getEmail()%></td>
-            <td><%= cliente.getNome()%></td>
-            <td><%= cliente.getTelefone()%></td>
-            <td><%= f.format(cliente.getDataNascimento().getTime())%></td>
-            <td><%= cliente.getCPF()%></td>
-            <td><%= cliente.getEndereco().getCEP()%></td>
-            <td><%= cliente.getEndereco().getEstado()%></td>
-            <td><%= cliente.getEndereco().getCidade()%></td>
-            <td><%= cliente.getEndereco().getBairro()%></td>
-            <td><%= cliente.getEndereco().getEndereco() + " " + cliente.getEndereco().getNumero()%></td>
-            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=cliente&id=<%=cliente.getId()%>"></a></td>
-            <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=<%=cliente.getId()%>"></a></td>
-        </tr>
-        <%}%> 
+        <c:forEach var="cliente" items="${clientes}">
+            <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
+            <tr>
+                <td>${cliente.email}</td>
+                <td>${cliente.nome}</td>
+                <td>${cliente.telefone}</td>
+                <td>${dataNascimento}</td>
+                <td>${cliente.CPF}</td>
+                <td>${cliente.endereco.CEP}</td>
+                <td>${cliente.endereco.estado}</td>
+                <td>${cliente.endereco.cidade}</td>
+                <td>${cliente.endereco.bairro}</td>
+                <td>${cliente.endereco.endereco} nº${cliente.endereco.numero}</td>
+                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"></a></td>
+                <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=${cliente.id}"></a></td>
+            </tr>
+        </c:forEach>
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Cliente</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-tar="#myModal">Add Cliente</button>
 
 <div class="container">
 </div>
