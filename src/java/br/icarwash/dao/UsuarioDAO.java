@@ -17,14 +17,13 @@ import java.util.ArrayList;
  *
  * @author rezen
  */
-public class UsuarioDAO implements BasicoDAO {//terminar de implementar
+public class UsuarioDAO {//terminar de implementar
 
     private Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(usuario, senha, nivel, ativo,cadastro) VALUES (?,SHA1(?),?,?, NOW());";
     private static final String SELECT_USUARIO = "select * from usuario where usuario = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where usuario = ?";
 
-    @Override
     public void cadastrar(Object obj) {
         Usuario usuario = (Usuario) obj;
 
@@ -75,26 +74,6 @@ public class UsuarioDAO implements BasicoDAO {//terminar de implementar
             }
         }
         return usuario;
-    }
-
-    @Override
-    public ArrayList listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object localizarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void atualizar(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void excluir(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Usuario localizarIdPorUsuario(Usuario usuario) {

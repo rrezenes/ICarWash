@@ -17,12 +17,12 @@ import java.util.ArrayList;
  *
  * @author rezen
  */
-public class LavadorSolicitacaoDAO implements BasicoDAO {
+public class LavadorSolicitacaoDAO {
 
     private Connection conexao;
     private static final String INSERT_LAVADOR_SOLICITACAO = "INSERT INTO `icarwash`.`lavador_solicitacao`(`id_lavador`,`id_solicitacao`,`dataAgendamento`)VALUES(?,?,?);";
 
-    @Override
+
     public void cadastrar(Object obj) {
         LavadorSolicitacao lavadorSolicitacao = (LavadorSolicitacao) obj;
         Timestamp timestampDataSolicitacao = new Timestamp(lavadorSolicitacao.getDataSolicitacao().getTimeInMillis());
@@ -44,25 +44,4 @@ public class LavadorSolicitacaoDAO implements BasicoDAO {
             }
         }
     }
-
-    @Override
-    public ArrayList listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object localizarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void atualizar(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void excluir(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

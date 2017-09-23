@@ -25,8 +25,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Mirian
  */
-@WebServlet(name = "ListarSolicitacaoCliente", urlPatterns = {"/ListarSolicitacaoCliente","/solicitacoes-cliente"})
-public class ListarSolicitacaoCliente extends HttpServlet {
+@WebServlet(name = "ListarSolicitacaoCliente", urlPatterns = "/ListarSolicitacaoCliente")
+public class ListarSolicitacaoLavador extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

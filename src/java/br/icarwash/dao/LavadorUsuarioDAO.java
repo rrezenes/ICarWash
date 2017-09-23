@@ -16,12 +16,11 @@ import java.util.ArrayList;
  *
  * @author rezen
  */
-public class LavadorUsuarioDAO implements BasicoDAO {
+public class LavadorUsuarioDAO {
 
     private Connection conexao;
     private static final String INSERT_LAVADOR_USUARIO = "INSERT INTO `lavador_usuario` VALUES (?,?)";
 
-    @Override
     public void cadastrar(Object obj) {
 
         LavadorUsuario lavadorUsuario = (LavadorUsuario) obj;
@@ -45,25 +44,4 @@ public class LavadorUsuarioDAO implements BasicoDAO {
         }
 
     }
-
-    @Override
-    public ArrayList listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object localizarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void atualizar(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void excluir(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

@@ -4,17 +4,15 @@
     Author     : rezen
 --%>
 
-<%@page import="br.icarwash.model.Servico"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="br.icarwash.dao.ServicoDAO"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
     <h1>Solicitar Serviço</h1>
 </div>
-<% if(request.getParameter("erro")=="data"){
-    %><p>Marque o campo de porte do veiculo</p><%
-}%>
+<% if (request.getParameter("erro") == "data") {
+%><p>Marque o campo de porte do veiculo</p><%
+    }%>
 <div class="container" style="max-width: 1000.0px;">
     <form action="ControleSolicitacao" method="post">
         <div class="form-group">
@@ -31,19 +29,15 @@
             </fieldset> 
             <legend>Serviços</legend>
             <div>
-                <%  ServicoDAO servicoDAO = new ServicoDAO();
-                    ArrayList<Servico> servicos = servicoDAO.listar();
-                    for (Servico servico : servicos) {
-                        if (servico.isAtivo()) {%>
-                <div class="checkbox">
-                    <label style="padding-left: 35px;">
-                        <input type="checkbox" name="servico" value="<%=servico.getId()%>"><%=servico.getNome() + " R$" + servico.getValor()%>
-                    </label>
-                </div>
-                <%}
-                    }
-
-                %>
+                <c:forEach var="servico" items="${servicos}">
+                    <c:if test = "${servico.ativo}">
+                        <div class="checkbox">
+                            <label style="padding-left: 35px;">
+                                <input type="checkbox" name="servico" value="${servico.id}">${servico.nome} R$${servico.valor}
+                            </label>
+                        </div>   
+                    </c:if>
+                </c:forEach> 
             </div>
             <fieldset>
                 <div>
@@ -82,11 +76,11 @@
             todayHighlight: 0,
             startView: 2,
             showMeridian: 1,
-            daysOfWeekDisabled: [0, 6],            
+            daysOfWeekDisabled: [0, 6],
             hoursDisabled: '0,1,2,3,4,5,6,7,18,19,20,21,22,23',
             minView: 1
         });
     });
 </script>
-                
+
 <%@include file="rodape.jsp"%>

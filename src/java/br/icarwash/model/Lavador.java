@@ -52,7 +52,4 @@ public class Lavador extends Pessoa {
         this.dataContrato = dataContrato;
     }
 
-    public void finalizarSolicitacao() {
-
-    }
 }

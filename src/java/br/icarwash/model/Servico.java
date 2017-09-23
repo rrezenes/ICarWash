@@ -6,7 +6,6 @@
 package br.icarwash.model;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  *
