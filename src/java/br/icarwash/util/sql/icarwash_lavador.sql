@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `lavador`;
 CREATE TABLE `lavador` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `dt_contrato` date NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255),
   `nome` varchar(255) NOT NULL,
   `telefone` varchar(255) NOT NULL,
   `dt_nascimento` date NOT NULL,
@@ -37,8 +37,7 @@ CREATE TABLE `lavador` (
   `endereco` varchar(255) NOT NULL,
   `numero` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `CPF` (`CPF`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `CPF` (`CPF`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

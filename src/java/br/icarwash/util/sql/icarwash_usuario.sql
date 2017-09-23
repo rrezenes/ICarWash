@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `usuario`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usuario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL UNIQUE,
   `usuario` varchar(25) NOT NULL,
   `senha` varchar(40) NOT NULL,
   `nivel` int(1) unsigned NOT NULL DEFAULT '1',
@@ -42,31 +43,31 @@ CREATE TABLE `usuario` (
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT INTO `usuario` VALUES 
-(1,'ricardo','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42'),
-(2,'rodrigo','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42'),
-(3,'renan','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:43'),
+(1,'ricardo@icarwash.com','ricardo','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42'),
+(2,'rodrigo@icarwash.com','rodrigo','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42'),
+(3,'renan@icarwash.com','renan','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:43'),
 
-(4,'c1','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 17:21:10'),
-(5,'c2','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 19:40:38'),
-(6,'c3','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 20:26:04'),
-(7,'c4','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:06:07'),
-(8,'c5','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:16:32'),
-(9,'c6','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:49:31'),
-(10,'c7','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:50:02'),
-(11,'c8','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:05'),
-(12,'c9','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:28'),
-(13,'c10','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:52:38'),
+(4,'joao@gmail.com', 'c1','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 17:21:10'),
+(5,'pedro@yahoo.com','c2','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 19:40:38'),
+(6,'maria@gmail.com','c3','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 20:26:04'),
+(7,'jose@yahoo.com','c4','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:06:07'),
+(8,'antonio@gmail.com','c5','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:16:32'),
+(9,'tiago@gmail.com','c6','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:49:31'),
+(10,'davi@hotmail.com','c7','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:50:02'),
+(11,'ana@yahoo.com','c8','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:05'),
+(12,'cristiane@yahoo.com','c9','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:28'),
+(13,'julia@gmail.com','c10','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:52:38'),
 
-(14,'l1','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-07 08:53:05'),
-(15,'l2','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:08'),
-(16,'l3','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:59'),
-(17,'l4','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 20:34:45'),
-(18,'l5','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:08:43'),
-(19,'l6','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:35:20'),
-(20,'l7','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:37:54'),
-(21,'l8','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-28 14:43:00'),
-(22,'l9','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:37:54'),
-(23,'l10','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:37:54');
+(14,'lavadorjoao@icarwash.com','l1','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-07 08:53:05'),
+(15,'lavadoramaria@icarwash.com','l2','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:08'),
+(16,'lavadorpedro@icarwash.com','l3','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:59'),
+(17,'lavadorjose@icarwash.com','l4','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 20:34:45'),
+(18,'lavadorantonio@icarwash.com','l5','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:08:43'),
+(19,'lavadortiago@icarwash.com','l6','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:35:20'),
+(20,'lavadordavi@icarwash.com','l7','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:37:54'),
+(21,'lavadoraana@icarwash.com','l8','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-28 14:43:00'),
+(22,'lavadorcristiane@icarwash.com','l9','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:37:54'),
+(23,'lavadorjulia@icarwash.com','l10','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 21:37:54');
 
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
