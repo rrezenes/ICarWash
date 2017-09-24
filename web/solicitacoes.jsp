@@ -46,7 +46,7 @@
                 </td>
                 <td>
                     <form action="AprovarSolicitacao" method="post">
-                        <input type="hidden" name="id_solicitacao" value="${solicitacao.id}>"/>
+                        <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/>
                         <button type="submit" class="btn btn-success">Aprovar</button>
                     </form>
                 </td>
