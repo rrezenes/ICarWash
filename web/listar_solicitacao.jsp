@@ -21,10 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        <!--        <  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listar();
-            for (Solicitacao solicitacao : solicitacoes) {%>  -->
+        
         <c:forEach var="solicitacao" items="${solicitacoes}">
             <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy hh:mm"/>
             <tr>

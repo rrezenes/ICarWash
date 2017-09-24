@@ -3,59 +3,55 @@
     Created on : 28/05/2017, 11:22:14
     Author     : rezen
 --%>
-<%@page import="br.icarwash.model.Solicitacao"%>
-<%@page import="br.icarwash.dao.SolicitacaoDAO"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.ArrayList"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
+
 <div class="jumbotron">
-    <h2>Solicitações Pendentes</h2>
+    <h2>Solicitações pendentes</h2>
 </div>
 
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>ID Solicitação</th>
-            <th>Nome</th>
+            <th>ID solicitação</th>
+            <th>Cliente</th>
             <th>Lavador</th>
-            <th>Porte do Veiculo</th>
-            <th>Data Solicitação</th>
-            <th>Valor Total</th>
+            <th>Porte do veículo</th>
+            <th>Data da solicitação</th>
+            <th>Valor total</th>
             <th>Status</th>
             <th colspan=2></th>
         </tr>
     </thead>
     <tbody>
-        <%  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarEmAnalise();
-            for (Solicitacao solicitacao : solicitacoes) {%>  
-        <tr>
-            <td><%=solicitacao.getId()%></td>
-            <td><%=solicitacao.getCliente().getNome()%></td>
-            <td><%=solicitacao.getLavador().getId()%></td>
-            <td><%=solicitacao.getPorte()%></td>
-            <td><%=dateFormat.format(solicitacao.getDataSolicitacao().getTime())%></td>
-            <td><%=solicitacao.getValorTotal().doubleValue()%></td>
-            <td><%=solicitacao.getEstado()%></td>
-            <% if (solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")) {%>
-            <td>
-                <form action="CancelarSolicitacao" method="post">
-                    <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
-                    <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>
-                </form>
-            </td>
-            <td>
-                <form action="AprovarSolicitacao" method="post">
-                    <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/>
-                    <button type="submit" class="btn btn-success">Aprovar</button>
-                </form>
-            </td>
-            <%}%> 
-        </tr>
-        <%}%> 
+
+        <c:forEach var="solicitacao" items="${solicitacoes}">
+            <tr>
+                <td>${solicitacao.id}</td>
+                <td>${solicitacao.cliente.nome}</td>
+                <td>${solicitacao.lavador.id}</td>
+                <td>${solicitacao.porte}</td>
+                <%--Formatar a data antes de exibir na tela--%>
+                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy" />
+                <td>${dataSolicitacao}</td>
+                <td>${solicitacao.valorTotal}</td>
+                <td>${solicitacao.estado}</td>
+                <td>
+                    <form action="CancelarSolicitacao" method="post">
+                        <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
+                        <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>                
+                    </form>                    
+                </td>
+                <td>
+                    <form action="AprovarSolicitacao" method="post">
+                        <input type="hidden" name="id_solicitacao" value="${solicitacao.id}>"/>
+                        <button type="submit" class="btn btn-success">Aprovar</button>
+                    </form>
+                </td>
+            </tr>
+        </c:forEach> 
     </tbody>
 </table>
 <%@include file="rodape.jsp"%>
