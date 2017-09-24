@@ -4,60 +4,49 @@
     Author     : rezen
 --%>
 
-<%@page import="br.icarwash.model.Avaliacao"%>
-<%@page import="br.icarwash.dao.AvaliacaoDAO"%>
-<%@page import="br.icarwash.model.Solicitacao"%>
-<%@page import="br.icarwash.dao.SolicitacaoDAO"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.ArrayList"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
 <link rel="stylesheet" href="css/star-rating.css">
 <div class="jumbotron">
-    <h1>Minhas Solicitações</h1>
+    <h1>Minhas solicitações de lavagem</h1>
 </div>
-
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>ID Solicitação</th>
-            <th>Nome</th>
-            <th>Lavador</th>
-            <th>Porte do Veiculo</th>
-            <th>Data Solicitação</th>
-            <th>Valor Total</th>
+            <th>ID solicitação</th>
+            <th>ID lavador</th>
+            <th>Porte do veículo</th>
+            <th>Data solicitação</th>
+            <th>Valor total</th>
             <th>Status</th>
-            <th colspan=2>Action</th>
+            <th colspan=2>Ação</th>
         </tr>
     </thead>
     <script src="js/star-rating.js"></script>
     <script src="js/star-rating_locale_pt-BR.js"></script>
-    <tbody>
-        <%  //DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            //SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            //ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario).getId());
-            ArrayList<Solicitacao> solicitacoes = (ArrayList<Solicitacao>) request.getAttribute("lista");
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            for(Solicitacao solicitacao: solicitacoes){
-                
-            %>  
+    <tbody>  
+        <c:forEach var="solicitacao" items="${solicitacoes}">
             <tr>
-                <td><%=solicitacao.getId()%></td>
-                <td><%=solicitacao.getCliente().getNome()%></td>
-                <td><%=solicitacao.getLavador().getId()%></td>
-                <td><%=solicitacao.getPorte()%></td>
-                <td><%=dateFormat.format(solicitacao.getDataSolicitacao().getTime())%></td>
-                <td><%=solicitacao.getValorTotal().doubleValue()%></td>
-                <td><%=solicitacao.getEstado()%></td>
-                <% if(solicitacao.getEstado().toString().equals("Em Analise") || solicitacao.getEstado().toString().equals("Agendado")){%>
+                <td>${solicitacao.id}</td>
+                <td>${solicitacao.lavador.id}</td>
+                <td>${solicitacao.porte}</td>
+                <%--Formatar a data antes de exibir na tela--%>
+                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy" />
+                <td>${dataSolicitacao}</td>
+                <td>${solicitacao.valorTotal}</td>
+                <td>${solicitacao.estado}</td>
+                
+                <c:if test="(${solicitacao.estado == 'Em Analise'} || (${solicitacao.estado == 'Agendado'})">
                     <td>
                         <form action="CancelarSolicitacao" method="post">
-                            <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
+                            <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
                             <input type="submit" value="Cancelar" class="btn btn-danger">
                         </form>                    
                     </td>
-                <%} else if(solicitacao.getEstado().toString().equals("Finalizado")){%>
+                </c:if>
+                <c:if test="(${solicitacao.estado == 'Finalizado'}">
                     <td>
                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Avaliar</button> 
                         <div id="myModal" class="modal fade" role="dialog">
@@ -72,7 +61,7 @@
                                         <form action="AvaliarSolicitacao" method="post">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <input type="hidden" name="id_solicitacao" value="<%=solicitacao.getId()%>"/> 
+                                                    <input type="hidden" name="id_solicitacao" value="${solicitacao.Id}"/> 
                                                     <label for="pontualidade" class="control-label">Pontualidade</label>
                                                     <input id="pontualidade" name="pontualidade" value="0" class="rating-loading"><br>
                                                     <label for="servico" class="control-label">Serviço</label>
@@ -101,18 +90,14 @@
                             $('#agilidade').rating({});
                         </script>
                     </td>
-
-                <%} else if(solicitacao.getEstado().toString().equals("Avaliado")){
-                    AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
-                    Avaliacao avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao());
-                %>
+                </c:if>
+                <c:if test="(${solicitacao.estado == 'Avaliado'}">   
                     <td>
-                        <input id="input-<%=solicitacao.getId()%>" name="input-<%=solicitacao.getId()%>" value="<%=avaliacao.getNotaMedia()%>" class="rating-loading"  data-size="xs">
-                        <script>$("#input-<%=solicitacao.getId()%>").rating({displayOnly: true, step: 0.5}) </script>
-                    </td>
-                <%}%>
+                        <input id="input-'${solicitacao.id}'" name="input-'${solicitacao.id}'" value="${solicitacao.notaMedia}" class="rating-loading" data-size="xs">
+                        <script>$("#input-'${solicitacao.id}'").rating({displayOnly: true, step: 0.5}) </script>                    </td>
+                </c:if>
             </tr>
-            <%}%> 
+        </c:forEach>
     </tbody>
 </table>
     

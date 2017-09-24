@@ -135,7 +135,7 @@
                                                                 <a href="Controle?action=Listar&listar=solicitacao" class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitações<b class="caret"></b></a>
                                                                 <ul class="dropdown-menu">
                                                                     <li><a href="SolicitarServico">Solicitar Serviço</a></li>
-                                                                    <li><a href="solicitacoes.jsp">Aprovar Solicitações</a></li>
+                                                                    <li><a href="ListarSolicitacaoEmAnalise">Aprovar Solicitações</a></li>
                                                                     <li><a href="Controle?action=Listar&listar=solicitacao">Solicitações</a></li>
                                                                 </ul>
                                                             </li>

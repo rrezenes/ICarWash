@@ -44,7 +44,7 @@
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Produto</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
 
 <div class="container">
 </div>

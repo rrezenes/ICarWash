@@ -4,25 +4,18 @@
     Author     : rezen
 --%>
 
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="br.icarwash.model.Produto"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="br.icarwash.dao.ProdutoDAO"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
         <div class="container">
-            <div class="jumbotron">
-                <%//recupera a lista do request
-                    DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-                    Produto produto = (Produto) request.getAttribute("produto");%>
+            <div class="jumbotron">                
                 <h1>Alterar Produto</h1>
             </div>
             <form action="Controle" method="post">
                 <div class="form-group">
                     <input type="hidden" name="quem" value="produto"/>
-                    <input type="hidden" name="txtId" value="<%= produto.getId()%>"/>
-                    <label>Nome:</label> <input class="form-control" type="text" name="txtNome" value="<%= produto.getNome()%>"><br>
-                    <label>Descricao:</label> <input class="form-control" type="text" name="txtDescricao" value="<%= produto.getDescricao()%>"><br>
+                    <input type="hidden" name="txtId" value="${produto.id}"/>
+                    <label>Nome:</label> <input class="form-control" type="text" name="txtNome" value="${produto.nome}"><br>
+                    <label>Descrição:</label> <input class="form-control" type="text" name="txtDescricao" value="${produto.descricao}"><br>
                     <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar"><br>
                 </div>
             </form>

@@ -251,7 +251,8 @@ public class SolicitacaoDAO {
             PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao AND solicitacao.status = 'Em Analise' group by solicitacao.ID");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
+                cliente = new Cliente(rs.getInt("ID_Cliente"));
+                cliente.setNome(rs.getString("nome_cliente"));                
                 lavador = new Lavador(rs.getInt("id_lavador"));
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
