@@ -14,46 +14,46 @@
 %><p>Marque o campo de porte do veiculo</p><%
     }%>
 <div class="container" style="max-width: 1000.0px;">
-    <form action="ControleSolicitacao" method="post">
+    <form id="solicitarServico" action="ControleSolicitacao" method="post">
         <div class="form-group">
             <input type="hidden" value="cliente">
             <fieldset>
-                <legend>Data da Solicitação</legend>
+                <legend class="erro-data">Data da Solicitação</legend>
                 <div>
-                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:00 p" data-link-field="dtp_input1" data-date-end-date="0d">
-                        <input class="form-control" size="16" type="text" readonly>
+                    <div class="input-group date form_datetime col-md-5"  data-date-format="dd MM yyyy - HH:00 p" data-link-field="dtp_input1" data-date-end-date="0d">
+                        <input class="form-control" size="16" type="text" readonly name="data">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>
-                    <input type="hidden" id="dtp_input1" name="data_solicitacao" value="" /><br/>
+                    <input type="hidden" id="dtp_input1" name="data_solicitacao" /><br/>
                 </div>
-            </fieldset> 
-            <legend>Serviços</legend>
-            <div>
-                <c:forEach var="servico" items="${servicos}">
-                    <c:if test = "${servico.ativo}">
-                        <div class="checkbox">
-                            <label style="padding-left: 35px;">
-                                <input type="checkbox" name="servico" value="${servico.id}">${servico.nome} R$${servico.valor}
-                            </label>
-                        </div>   
-                    </c:if>
-                </c:forEach> 
-            </div>
-            <fieldset>
-                <div>
-                    <legend>Tamanho do Veículo</legend>
-                    <label class="radio-inline" style="padding-left: 35px;">
-                        <input type="radio" name="porte" value="pequeno">Pequeno
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="porte" value="medio">Médio
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="porte" value="grande">Grande
-                    </label>
-                </div>     
-            </fieldset>
+            </fieldset>         
         </div>
+        <legend class="erro-servico">Serviços</legend>
+        <div class="form-group">
+            <c:forEach var="servico" items="${servicos}">
+                <c:if test = "${servico.ativo}">
+                    <div class="checkbox">
+                        <label style="padding-left: 35px;">
+                            <input class="check" type="checkbox" name="servico" value="${servico.id}">${servico.nome} R$${servico.valor}
+                        </label>
+                    </div>   
+                </c:if>
+            </c:forEach> 
+        </div>
+        <fieldset>
+            <div class="form-group">
+                <legend class="erro-tamanho">Tamanho do veículo</legend>
+                <label class="radio-inline" style="padding-left: 35px;">
+                    <input type="radio" name="porte" value="pequeno">Pequeno
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="porte" value="medio">Médio
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="porte" value="grande">Grande
+                </label>
+            </div>     
+        </fieldset>
 
 
         <div class="form-group">
@@ -62,6 +62,8 @@
     </form>
 </div>
 
+<script type="text/javascript" src="./js/jquery-3.1.1.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/jquery.validate.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/moment.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
@@ -69,6 +71,7 @@
     $(function () {
         var date = new Date();
         date.setHours(date.getHours() + 1);
+        date.setMinutes(0);
         $('.form_datetime').datetimepicker({
             language: 'pt-BR',
             autoclose: 1,
@@ -82,5 +85,46 @@
         });
     });
 </script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#solicitarServico").validate({
+            rules: {
+                data: {
+                    required: true
+                },
+                servico: {
+                    required: true
+                },
+                porte: {
+                    required: true
+                }
+            },
+            messages: {
+                data: {
+                    required: "Por favor, selecione uma data."
+                },
+                servico: {
+                    required: "Por favor, selecione um serviço."
+                },
+                porte: {
+                    required: "Por favor, selecione um porte de veículo."
+                }
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
 
+                if (element.prop("type") === "checkbox") {
+                    error.insertAfter(".erro-servico");
+                } else if (element.prop("type") === "radio") {
+                    error.insertAfter(".erro-tamanho");
+                } else {
+                    error.insertAfter(".erro-data");
+                }
+
+            }
+        });
+    });
+</script>
 <%@include file="rodape.jsp"%>

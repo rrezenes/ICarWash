@@ -49,6 +49,7 @@ img { max-width: 100%; }
     color: #fff;
     -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
 }
+
 .btn-link-1:hover, .btn-link-1:focus, .btn-link-1:active { outline: 0; opacity: 0.6; color: #fff; }
 
 .btn-link-1.btn-link-1-facebook { background: #4862a3; }
@@ -187,3 +188,6 @@ img { max-width: 100%; }
 
 }
 
+#servico-error{
+    color: #a94442;
+}
