@@ -58,8 +58,8 @@
                                 <div class="col-sm-9 col-sm-offset-4">
                                     <button type="submit" class="btn btn-primary" name="signup1" value="Cadastrar">Cadastrar</button>
                                     <button type="button" class="btn btn-primary" name="back" value="Back" onclick="window.history.back()">Voltar</button>
-                                    
-                                    
+
+
                                 </div>
                             </div>
                         </form>
@@ -69,12 +69,13 @@
         </div>
         <script type="text/javascript">
             $(document).ready(function () {
- 
+
                 $("#formCliente").validate({
                     rules: {
                         firstname1: "required",
                         lastname1: "required",
-                        usuario: {
+                        usuario: {                            
+                            remote: 'CheckUsuarioLogin',
                             required: true,
                             minlength: 2
                         },
@@ -88,6 +89,7 @@
                             equalTo: "#senha"
                         },
                         email: {
+                            remote: 'CheckUsuarioEmail',
                             required: true,
                             email: true
                         },
@@ -96,7 +98,8 @@
                     messages: {
                         usuario: {
                             required: "Por favor, coloque seu usuário.",
-                            minlength: "Seu usuário deve conter no mínimo 2 caracteres."
+                            minlength: "Seu usuário deve conter no mínimo 2 caracteres.",
+                            remote: "Usuário já está em uso."
                         },
                         senha: {
                             required: "Por favor, coloque sua senha.",
@@ -107,23 +110,26 @@
                             minlength: "Sua senha deve conter no mínimo 5 caracteres",
                             equalTo: "Sua senha deve ser a mesma a cima."
                         },
-                        email: "Por favor, coloque um e-mail válido."
+                        email: {
+                            email: "Por favor, coloque um e-mail válido.",
+                            remote: "E-mail já está em uso."
+                        }
                     },
                     errorElement: "em",
                     errorPlacement: function (error, element) {
                         // Add the `help-block` class to the error element
                         error.addClass("help-block");
- 
+
                         // Add `has-feedback` class to the parent div.form-group
                         // in order to add icons to inputs
                         element.parents(".col-sm-5").addClass("has-feedback");
- 
+
                         if (element.prop("type") === "checkbox") {
                             error.insertAfter(element.parent("label"));
                         } else {
                             error.insertAfter(element);
                         }
- 
+
                         // Add the span element, if doesn't exists, and apply the icon classes to it.
                         if (!element.next("span")[ 0 ]) {
                             $("<span class='glyphicon glyphicon-remove form-control-feedback'></span>").insertAfter(element);
@@ -146,4 +152,4 @@
                 });
             });
         </script>
-<%@include file="rodape.jsp"%>
+        <%@include file="rodape.jsp"%>
