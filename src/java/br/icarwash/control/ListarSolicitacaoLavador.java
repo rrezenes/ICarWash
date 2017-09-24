@@ -6,6 +6,7 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Mirian
  */
-@WebServlet(name = "ListarSolicitacaoCliente", urlPatterns = "/ListarSolicitacaoCliente")
+@WebServlet(name = "ListarSolicitacaoLavador", urlPatterns = "/ListarSolicitacaoLavador")
 public class ListarSolicitacaoLavador extends HttpServlet {
 
     @Override
@@ -35,13 +36,12 @@ public class ListarSolicitacaoLavador extends HttpServlet {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
-        ClienteDAO clienteDAO = new ClienteDAO();
 
-        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario).getId());
+        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoDoLavador(usuario.getId());
 
-        request.setAttribute("lista", solicitacoes);
+        request.setAttribute("solicitacoes", solicitacoes);
 
-        RequestDispatcher rd = request.getRequestDispatcher("/minha_solicitacao.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/solicitacao_lavador.jsp");
         rd.forward(request, response);
 
     }

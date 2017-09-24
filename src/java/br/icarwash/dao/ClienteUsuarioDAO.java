@@ -6,9 +6,11 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.ClienteUsuario;
+import br.icarwash.model.Usuario;
 import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -20,8 +22,8 @@ public class ClienteUsuarioDAO {
 
     private Connection conexao;
     private static final String INSERT_CLIENTE_USUARIO = "INSERT INTO `cliente_usuario` VALUES (?,?)";
+    private static final String SELECT_BY_ID_USUARIO = "select * from cliente_usuario where id_usuario = ?";
 
-    
     public void cadastrar(Object obj) {
 
         ClienteUsuario clienteUsuario = (ClienteUsuario) obj;
@@ -43,6 +45,29 @@ public class ClienteUsuarioDAO {
                 throw new RuntimeException(e);
             }
         }
+
+    }
+
+    public boolean existeClienteCadastrado(Usuario usuario) {
+        boolean achou = false;
+        try {
+            conexao = Conexao.getConexao();
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
+            pstmt.setString(1, Integer.toString(usuario.getId()));
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                achou = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return achou;
 
     }
 }

@@ -30,8 +30,8 @@
             ClienteDAO clienteDAO = new ClienteDAO();
             if (session != null && request.getRequestedSessionId() != null && session.getAttribute("acesso") != null) {
                 if (Integer.parseInt(session.getAttribute("acesso").toString()) == 1) {
-                    //String name = (String) session.getAttribute("user");
-%>
+            //String name = (String) session.getAttribute("user");
+        %>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-3 col-lg-2">
@@ -40,7 +40,7 @@
                             <div class="navbar-header">
                                 <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                 </button>
-                                <a class="navbar-brand" href="./"><%=usuario.getUsuario()%>, ICarWash</a>
+                                <a class="navbar-brand" href="painel"><%=usuario.getUsuario()%>, ICarWash</a>
                             </div>
                             <div class="collapse navbar-collapse">
                                 <ul class="nav navbar-nav">
@@ -62,11 +62,11 @@
                         </div>
                     </nav>
                 </div>
-        <%--Menu de Lavador--%>
+                <%--Menu de Lavador--%>
                 <div class="col-sm-9 col-lg-10 exibelista">
                     <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 2) {
                         //String name = (String) session.getAttribute("user");
-                    %>
+%>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-3 col-lg-2">
@@ -75,14 +75,14 @@
                                         <div class="navbar-header">
                                             <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                             </button>
-                                            <a class="navbar-brand" href="./"><%=usuario.getUsuario()%>, ICarWash</a>
+                                            <a class="navbar-brand" href="painel"><%=usuario.getUsuario()%>, ICarWash</a>
                                         </div>
                                         <div class="collapse navbar-collapse">
                                             <ul class="nav navbar-nav">
                                                 <li class="dropdown">
                                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitações<b class="caret"></b></a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="solicitacao_lavador.jsp">Minhas Solicitações</a></li>
+                                                        <li><a href="ListarSolicitacaoLavador">Minhas Solicitações</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
@@ -102,7 +102,7 @@
                                     </div>
                                 </nav>
                             </div>
-        <%--Menu de Gerente--%>
+                            <%--Menu de Gerente--%>
                             <div class="col-sm-9 col-lg-10 exibelista">
                                 <%
                                 } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
@@ -114,7 +114,7 @@
                                                     <div class="navbar-header">
                                                         <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                                         </button>
-                                                        <a class="navbar-brand" href="painel_admin.jsp"><%=usuario.getUsuario()%>, ICarWash</a>
+                                                        <a class="navbar-brand" href="painel"><%=usuario.getUsuario()%>, ICarWash</a>
                                                     </div>
                                                     <div class="collapse navbar-collapse">
                                                         <ul class="nav navbar-nav">

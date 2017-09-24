@@ -5,6 +5,7 @@
  */
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteUsuarioDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -23,36 +24,24 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author rezen
+ * @author Renan
  */
-@WebFilter(filterName = "FiltroAcessoCadastros", urlPatterns = {"/Controle", "/solicitacoes.jsp"})
-public class FiltroAcessoCadastros implements Filter {
+@WebFilter(filterName = "FiltroSolicitarServico", urlPatterns = {"/SolicitarServico"})
+public class FiltroSolicitarServico implements Filter {
 
     private static final boolean debug = true;
 
+    // The filter configuration object we are associated with.  If
+    // this value is null, this filter instance is not currently
+    // configured. 
     private FilterConfig filterConfig = null;
-    private boolean aprovado;
 
-    public FiltroAcessoCadastros() {
+    public FiltroSolicitarServico() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        String url = ((HttpServletRequest) request).getRequestURL().toString();
-        
-        String queryString = ((HttpServletRequest) request).getQueryString();        
-        HttpSession session = ((HttpServletRequest) request).getSession(true);
-        Usuario usuario = (Usuario) session.getAttribute("user");
-        
-        if (usuario != null) {
-            if (debug) {
-                log("Usuario: " + usuario.getUsuario() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
-            }
-        } else {
-            log("usuario sem login tentando acessar " + request.getRemoteAddr());
-            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-            rd.forward(request, response);
-        }
+
     }
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
@@ -60,6 +49,15 @@ public class FiltroAcessoCadastros implements Filter {
 
     }
 
+    /**
+     *
+     * @param request The servlet request we are processing
+     * @param response The servlet response we are creating
+     * @param chain The filter chain we are processing
+     *
+     * @exception IOException if an input/output error occurs
+     * @exception ServletException if a servlet error occurs
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
@@ -67,25 +65,35 @@ public class FiltroAcessoCadastros implements Filter {
 
         doBeforeProcessing(request, response);
 
+        Throwable problem = null;
+
         HttpSession session = ((HttpServletRequest) request).getSession(true);
 
         Usuario usuario = (Usuario) session.getAttribute("user");
+        ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO();
 
-        Throwable problem = null;
-        if (usuario != null) {
-            if (usuario.getNivel() == 3) {
+        switch (usuario.getNivel()) {
+            case 1:
                 try {
-                    chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
+                    if (!clienteUsuarioDAO.existeClienteCadastrado(usuario)) {
+                        RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
+                        rd.forward(request, response);
+                    } else {
+                        chain.doFilter(request, response);
+                    }
+                } catch (Throwable t) {
                     problem = t;
+                    t.printStackTrace();
                 }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuario: " + usuario.getUsuario() + " negado. Usuario derrubado do sistema");
-
-                session.invalidate();
+                break;
+            case 2:
+                log("lavador tentando acessar /SolicitarServico IP:" + request.getRemoteAddr());
+                RequestDispatcher rd = request.getRequestDispatcher("painel_admin.jsp");
+                rd.forward(request, response);
+                break;
+            default:
                 chain.doFilter(request, response);
-            }
+                break;
         }
         doAfterProcessing(request, response);
 
@@ -100,21 +108,36 @@ public class FiltroAcessoCadastros implements Filter {
         }
     }
 
-    @Override
+    /**
+     * Return the filter configuration object for this filter.
+     */
+    public FilterConfig getFilterConfig() {
+        return (this.filterConfig);
+    }
+
+    /**
+     * Set the filter configuration object for this filter.
+     *
+     * @param filterConfig The filter configuration object
+     */
+    public void setFilterConfig(FilterConfig filterConfig) {
+        this.filterConfig = filterConfig;
+    }
+
+    /**
+     * Destroy method for this filter
+     */
     public void destroy() {
     }
 
     /**
      * Init method for this filter
-     *
-     * @param filterConfig
      */
-    @Override
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("FiltroAcessoCadastros:Initializing filter");
+                log("FiltroNovoCliente:Initializing filter");
             }
         }
     }
@@ -125,9 +148,9 @@ public class FiltroAcessoCadastros implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("FiltroAcessoCadastros()");
+            return ("FiltroNovoCliente()");
         }
-        StringBuffer sb = new StringBuffer("FiltroAcessoCadastros(");
+        StringBuffer sb = new StringBuffer("FiltroNovoCliente(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -150,7 +173,7 @@ public class FiltroAcessoCadastros implements Filter {
                 pw.close();
                 ps.close();
                 response.getOutputStream().close();
-            } catch (IOException ex) {
+            } catch (Exception ex) {
             }
         } else {
             try {
@@ -158,7 +181,7 @@ public class FiltroAcessoCadastros implements Filter {
                 t.printStackTrace(ps);
                 ps.close();
                 response.getOutputStream().close();
-            } catch (IOException ex) {
+            } catch (Exception ex) {
             }
         }
     }
@@ -172,7 +195,7 @@ public class FiltroAcessoCadastros implements Filter {
             pw.close();
             sw.close();
             stackTrace = sw.getBuffer().toString();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
         }
         return stackTrace;
     }

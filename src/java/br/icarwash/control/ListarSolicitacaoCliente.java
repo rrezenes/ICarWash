@@ -10,8 +10,6 @@ import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
