@@ -30,7 +30,6 @@
                     </div>
                     <div class="panel-body">
                         <form id="formCliente" method="post" class="form-horizontal" action="NovoCliente">
-                            <input type="hidden" name="quem" value="cliente">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label" for="usuario" name="login">Usuário</label>
                                 <div class="col-sm-5">
@@ -58,7 +57,9 @@
                             <div class="form-group">
                                 <div class="col-sm-9 col-sm-offset-4">
                                     <button type="submit" class="btn btn-primary" name="signup1" value="Cadastrar">Cadastrar</button>
-                                    <%--<input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar"<br>--%>
+                                    <button type="button" class="btn btn-primary" name="back" value="Back" onclick="window.history.back()">Voltar</button>
+                                    
+                                    
                                 </div>
                             </div>
                         </form>
