@@ -45,7 +45,7 @@
     </tbody>
 </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-tar="#myModal">Adicionar Lavador</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
 
 <div class="container">
 </div>

@@ -35,7 +35,6 @@ public class ClienteDAO implements BasicoDAO {
 
     public ClienteDAO(Connection conexao) {
         this.conexao = conexao;
-
         fechaConexao = false;
     }
 
