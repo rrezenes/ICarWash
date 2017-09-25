@@ -38,7 +38,7 @@
                 <td>${solicitacao.valorTotal}</td>
                 <td>${solicitacao.estado}</td>
                 
-                <c:if test="(${solicitacao.estado == 'Em Analise'} || (${solicitacao.estado == 'Agendado'})">
+                <c:if test="${(solicitacao.estado == 'Em Analise') || (solicitacao.estado == 'Agendado')}">
                     <td>
                         <form action="CancelarSolicitacao" method="post">
                             <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
@@ -46,7 +46,7 @@
                         </form>                    
                     </td>
                 </c:if>
-                <c:if test="(${solicitacao.estado == 'Finalizado'}">
+                <c:if test="${solicitacao.estado == 'Finalizado'}">
                     <td>
                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Avaliar</button> 
                         <div id="myModal" class="modal fade" role="dialog">
@@ -61,7 +61,7 @@
                                         <form action="AvaliarSolicitacao" method="post">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <input type="hidden" name="id_solicitacao" value="${solicitacao.Id}"/> 
+                                                    <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
                                                     <label for="pontualidade" class="control-label">Pontualidade</label>
                                                     <input id="pontualidade" name="pontualidade" value="0" class="rating-loading"><br>
                                                     <label for="servico" class="control-label">Serviço</label>
@@ -91,16 +91,17 @@
                         </script>
                     </td>
                 </c:if>
-                <c:if test="(${solicitacao.estado == 'Avaliado'}">   
+                <c:if test="${(solicitacao.estado == 'Avaliado')}">   
                     <td>
-                        <input id="input-'${solicitacao.id}'" name="input-'${solicitacao.id}'" value="${solicitacao.notaMedia}" class="rating-loading" data-size="xs">
-                        <script>$("#input-'${solicitacao.id}'").rating({displayOnly: true, step: 0.5}) </script>                    </td>
+                        <input id="input-${solicitacao.id}" name="input-${solicitacao.id}" value="${solicitacao.avaliacao.notaMedia}" class="rating-loading" data-size="xs">
+                        <script>$("#input-${solicitacao.id}").rating({displayOnly: true, step: 0.5}) </script>   
+                    </td>
                 </c:if>
             </tr>
         </c:forEach>
     </tbody>
 </table>
-    
 
-
+<script src="js/star-rating.js"></script>
+<script src="js/star-rating_locale_pt-BR.js"></script>
 <%@include file="rodape.jsp"%>
