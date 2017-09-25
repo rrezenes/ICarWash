@@ -74,10 +74,21 @@ public class SolicitacaoDAO {
         Cliente cliente;
         Lavador lavador;
         Avaliacao avaliacao;
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
         SolicitacaoState solicitacaoState;
         try {
             conexao = Conexao.getConexao();
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao and cliente.ID = ? group by solicitacao.ID");
+            PreparedStatement pstmt = conexao.prepareStatement(
+                    "SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, "
+                    + "cliente.nome as nome_cliente,solicitacao.id_lavador, "
+                    + "solicitacao.id_avaliacao, solicitacao.porte, "
+                    + "solicitacao.data_solicitacao, solicitacao.valor_total, "
+                    + "solicitacao.status "
+                    + "FROM icarwash.cliente,icarwash.solicitacao, "
+                    + "icarwash.solicitacao_servico,icarwash.servico "
+                    + "where cliente.ID = solicitacao.id_cliente "
+                    + "and solicitacao.ID = solicitacao_servico.id_solicitacao "
+                    + "and cliente.ID = ? group by solicitacao.ID");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -86,9 +97,10 @@ public class SolicitacaoDAO {
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
-                if(rs.getBoolean("id_avaliacao")){
+                if (rs.getBoolean("id_avaliacao")) {
                     avaliacao = new Avaliacao(rs.getInt("id_avaliacao"));
-                }else{
+                    avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(avaliacao);
+                } else {
                     avaliacao = new Avaliacao(0);
                 }
                 solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, avaliacao, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
@@ -252,7 +264,7 @@ public class SolicitacaoDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 cliente = new Cliente(rs.getInt("ID_Cliente"));
-                cliente.setNome(rs.getString("nome_cliente"));                
+                cliente.setNome(rs.getString("nome_cliente"));
                 lavador = new Lavador(rs.getInt("id_lavador"));
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
