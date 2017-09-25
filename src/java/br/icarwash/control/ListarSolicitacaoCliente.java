@@ -5,8 +5,10 @@
  */
 package br.icarwash.control;
 
+import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
