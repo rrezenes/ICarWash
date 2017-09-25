@@ -72,6 +72,7 @@
         var date = new Date();
         date.setHours(date.getHours() + 1);
         date.setMinutes(0);
+        date.setSeconds(0);
         $('.form_datetime').datetimepicker({
             language: 'pt-BR',
             autoclose: 1,

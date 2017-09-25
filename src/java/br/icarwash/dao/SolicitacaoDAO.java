@@ -437,4 +437,10 @@ public class SolicitacaoDAO {
         }
     }
 
+    public void checkHorarioDisponivel(Solicitacao solicitacao) {
+        
+        
+        
+    }
+
 }
