@@ -48,7 +48,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2 text">
-                            <h1><strong>ICarWash</strong> Login</h1>
+                            <h1><strong>TESTE ICarWash</strong> Login</h1>
                             <div class="description">
                                 <%  if (request.getParameter("c") != null) {
                                         if (request.getParameter("c").equals("ok")) {%>
