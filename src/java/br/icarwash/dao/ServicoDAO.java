@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 public class ServicoDAO implements BasicoDAO {
 
+    private boolean fechaConexao = false;
     private Connection conexao;
     private static final String INSERT = "insert into servico(nome, descricao, valor, ativo) values(?, ?, ?, ?)";
     private static final String SELECT_ALL = "select * from servico";
@@ -33,6 +34,7 @@ public class ServicoDAO implements BasicoDAO {
 
     public ServicoDAO() {
         this.conexao = Conexao.getConexao();
+        fechaConexao = true;
     }
 
     //UTILIZAR METODOS DA INTERFACE
@@ -40,7 +42,6 @@ public class ServicoDAO implements BasicoDAO {
     public void cadastrar(Object obj) {
         Servico servico = (Servico) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setString(1, servico.getNome());
             pstmt.setString(2, servico.getDescricao());
@@ -50,20 +51,14 @@ public class ServicoDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public ArrayList listar() {
         ArrayList<Servico> servicos = new ArrayList();
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -72,13 +67,8 @@ public class ServicoDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return servicos;
     }
 
@@ -86,7 +76,6 @@ public class ServicoDAO implements BasicoDAO {
     public Servico localizarPorId(int id) {
         Servico servico = null;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
@@ -95,13 +84,8 @@ public class ServicoDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return servico;
     }
 
@@ -109,7 +93,6 @@ public class ServicoDAO implements BasicoDAO {
     public void atualizar(Object obj) {
         Servico servico = (Servico) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, servico.getNome());
             pstmt.setString(2, servico.getDescricao());
@@ -118,55 +101,36 @@ public class ServicoDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public void excluir(int id) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     public void ativar(int id) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(ACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     public Servico localizarIdUltimoInsert() {
         Servico servico = new Servico();
         try {
-            conexao = Conexao.getConexao();
-
             PreparedStatement pstmt = conexao.prepareStatement("SELECT id FROM servico WHERE id = (SELECT MAX(id) FROM servico)");
 
             ResultSet rs = pstmt.executeQuery();
@@ -176,14 +140,18 @@ public class ServicoDAO implements BasicoDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
+        }
+        this.fechaConexao();
+        return servico;
+    }
+
+    private void fechaConexao() throws RuntimeException {
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return servico;
     }
-
 }

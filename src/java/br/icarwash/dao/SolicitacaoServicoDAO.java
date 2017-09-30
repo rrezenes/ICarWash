@@ -10,7 +10,6 @@ import br.icarwash.model.Solicitacao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import br.icarwash.util.Conexao;
 
 /**
  *
@@ -20,9 +19,12 @@ public class SolicitacaoServicoDAO {
 
     private Connection conexao;
 
+    public SolicitacaoServicoDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
     public void cadastraSolicitacaoServico(Solicitacao solicitacao, Servico servico) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao_servico(id_solicitacao, id_servico) values (?,?)");
             pstmt.setInt(1, solicitacao.getId());
             pstmt.setInt(2, servico.getId());
@@ -30,13 +32,6 @@ public class SolicitacaoServicoDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
-    
 }

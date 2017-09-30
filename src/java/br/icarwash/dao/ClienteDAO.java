@@ -23,7 +23,7 @@ import br.icarwash.model.Usuario;
  */
 public class ClienteDAO implements BasicoDAO {
 
-    private boolean fechaConexao;
+    private boolean fechaConexao = false;
     private Connection conexao;
     private static final String INSERT = "insert into cliente(email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select c.id, c.email, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.usuario, u.ativo from Cliente c, usuario u, cliente_usuario cu where c.id = cu.id_CLIENTE and u.id = cu.id_usuario and u.ativo = 1";
@@ -33,9 +33,9 @@ public class ClienteDAO implements BasicoDAO {
     private static final String SELECT_ID_BY_EMAIL = "select id from cliente where email = ?";
     private static final String SELECT_ID_BY_ID_USUARIO = "SELECT c.id FROM cliente c, usuario u, cliente_usuario cu where u.id = cu.id_usuario and cu.id_CLIENTE = c.id and u.id = ?;";
 
+
     public ClienteDAO(Connection conexao) {
         this.conexao = conexao;
-        fechaConexao = false;
     }
 
     public ClienteDAO() {
@@ -63,14 +63,9 @@ public class ClienteDAO implements BasicoDAO {
             pstmt.execute();
 
         } catch (SQLException e) {
-            throw new RuntimeException("ERRROO: " + e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            throw new RuntimeException(e);
         }
+        this.fechaConexao();
     }
 
     @Override
@@ -79,7 +74,6 @@ public class ClienteDAO implements BasicoDAO {
         ArrayList<Cliente> clientes = new ArrayList();
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -93,13 +87,8 @@ public class ClienteDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return clientes;
     }
 
@@ -109,7 +98,6 @@ public class ClienteDAO implements BasicoDAO {
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
@@ -121,13 +109,7 @@ public class ClienteDAO implements BasicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        this.fechaConexao();
         return cli;
     }
 
@@ -135,7 +117,6 @@ public class ClienteDAO implements BasicoDAO {
     public void atualizar(Object obj) {
         Cliente cliente = (Cliente) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, cliente.getEmail());
             pstmt.setString(2, cliente.getNome());
@@ -151,37 +132,25 @@ public class ClienteDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public void excluir(int id) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     public int localizarIdPorEmail(String email) {
         int IDCliente = 0;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_EMAIL);
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
@@ -190,20 +159,14 @@ public class ClienteDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return IDCliente;
     }
 
     public Cliente localizarIdPorIdUsuario(Usuario usuario) {
         Cliente cliente = null;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_ID_USUARIO);
             pstmt.setInt(1, usuario.getId());
             ResultSet rs = pstmt.executeQuery();
@@ -212,14 +175,19 @@ public class ClienteDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
+        }
+        this.fechaConexao();
+        return cliente;
+    }
+
+    private void fechaConexao() throws RuntimeException {
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return cliente;
     }
 
 }
