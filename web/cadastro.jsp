@@ -15,7 +15,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/jquery-3.1.1.js"></script>
-        <script src="js/jquery.validate.js"></script>
         <script src="js/jquery.maskedinput.min.js"></script>
         <title>ICarWash</title>
     </head>
@@ -31,8 +30,8 @@
                     <div class="panel-body">
                         <form id="formCliente" method="post" class="form-horizontal" action="NovoCliente">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label" for="usuario" name="login">Usuário</label>
                                 <div class="col-sm-5">
+                                    <label class="col-sm-4 control-label" for="usuario" name="login">Usuário</label>
                                     <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Digite aqui o nome de seu usuário" />
                                 </div>
                             </div>
@@ -67,6 +66,7 @@
                 </div>
             </div>
         </div>
+        <script src="js/jquery.validate.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
 
@@ -93,7 +93,6 @@
                             required: true,
                             email: true
                         },
-                        agree1: "required"
                     },
                     messages: {
                         usuario: {
