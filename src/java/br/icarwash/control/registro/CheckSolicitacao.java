@@ -39,6 +39,8 @@ public class CheckSolicitacao extends HttpServlet {
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(request.getParameter("data")));
 
             solicitacao.setDataSolicitacao(dataHoraSolicitacao);
+            
+            solicitacaoDAO.checkHorarioDisponivel(solicitacao);
 
         } catch (ParseException ex) {
             Logger.getLogger(CheckSolicitacao.class.getName()).log(Level.SEVERE, null, ex);

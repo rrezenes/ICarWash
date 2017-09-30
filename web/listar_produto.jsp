@@ -2,50 +2,51 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
-    <h2>Controle de Produtos</h2>
+    <h1>Controle de Produtos</h1>
 </div>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="produto" items="${produtos}">
+<div class="container">
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>
-                    <c:choose>
-                        <c:when test="${produto.ativo}">
-                            <div type="button" class="glyphicon glyphicon-ok text-success"></div>
-                        </c:when> 
-                        <c:otherwise>
-                            <div type="button" class="glyphicon glyphicon glyphicon-remove text-danger"></div>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-                <td>${produto.nome}</td>
-                <td>${produto.descricao}</td>
-                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=${produto.id}"></a></td>
-                <td>
-                    <c:choose>
-                        <c:when test="${produto.ativo}">          	
-                            <a type="button" href="Controle?action=Excluir&q=produto&id=${produto.id}">Inativar</a>
-                        </c:when> 
-                        <c:otherwise>
-                            <a type="button" href="Controle?action=Ativar&q=produto&id=${produto.id}">Ativar</a>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
+                <th></th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th colspan="2"></th>
             </tr>
-        </c:forEach>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <c:forEach var="produto" items="${produtos}">
+                <tr>
+                    <td>
+                        <c:choose>
+                            <c:when test="${produto.ativo}">
+                                <div type="button" class="glyphicon glyphicon-ok text-success"></div>
+                            </c:when> 
+                            <c:otherwise>
+                                <div type="button" class="glyphicon glyphicon glyphicon-remove text-danger"></div>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>${produto.nome}</td>
+                    <td>${produto.descricao}</td>
+                    <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=${produto.id}"></a></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${produto.ativo}">          	
+                                <a type="button" href="Controle?action=Excluir&q=produto&id=${produto.id}">Inativar</a>
+                            </c:when> 
+                            <c:otherwise>
+                                <a type="button" href="Controle?action=Ativar&q=produto&id=${produto.id}">Ativar</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
-
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
+</div>
 <div class="container">
 </div>
 <div id="myModal" class="modal fade" role="dialog">

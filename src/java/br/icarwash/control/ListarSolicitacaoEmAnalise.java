@@ -36,7 +36,11 @@ public class ListarSolicitacaoEmAnalise extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("/solicitacoes.jsp");
         rd.forward(request, response);
 
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -10,7 +10,6 @@ import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  *
@@ -21,12 +20,14 @@ public class LavadorUsuarioDAO {
     private Connection conexao;
     private static final String INSERT_LAVADOR_USUARIO = "INSERT INTO `lavador_usuario` VALUES (?,?)";
 
+    public LavadorUsuarioDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+   
     public void cadastrar(Object obj) {
-
         LavadorUsuario lavadorUsuario = (LavadorUsuario) obj;
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT_LAVADOR_USUARIO);
             pstmt.setInt(1, lavadorUsuario.getIdLavador());
             pstmt.setInt(2, lavadorUsuario.getIdUsuario());
@@ -35,12 +36,6 @@ public class LavadorUsuarioDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
 
     }

@@ -18,17 +18,26 @@ import java.sql.SQLException;
  */
 public class UsuarioDAO {//terminar de implementar
 
+    private boolean fechaConexao = false;
     private Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(email, usuario, senha, nivel, ativo,cadastro) VALUES (?,?,SHA1(?),?,?, NOW());";
     private static final String SELECT_USUARIO = "select * from usuario where usuario = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where usuario = ?";
     private static final String SELECT_ID_BY_EMAIL = "select id from usuario where email = ?";
 
+    public UsuarioDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
+    public UsuarioDAO() {
+        this.conexao = Conexao.getConexao();
+        fechaConexao = true;
+    }
+
     public void cadastrar(Object obj) {
         Usuario usuario = (Usuario) obj;
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(CREATE_USUARIO);
             pstmt.setString(1, usuario.getEmail());
             pstmt.setString(2, usuario.getUsuario());
@@ -40,21 +49,13 @@ public class UsuarioDAO {//terminar de implementar
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     public Usuario usuarioLogin(Usuario usuarioLogin) {//terminar de implementar
         Usuario usuario = null;
         try {
-            //System.out.println(login + " " + senha);
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_USUARIO);
             pstmt.setString(1, usuarioLogin.getUsuario());
             pstmt.setString(2, usuarioLogin.getSenha());
@@ -67,20 +68,14 @@ public class UsuarioDAO {//terminar de implementar
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return usuario;
     }
 
     public Usuario localizarIdPorUsuario(Usuario usuario) {
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_USUARIO);
             pstmt.setString(1, usuario.getUsuario());
             ResultSet rs = pstmt.executeQuery();
@@ -89,20 +84,14 @@ public class UsuarioDAO {//terminar de implementar
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return usuario;
     }
 
     public boolean checkUsuarioDisponivel(Usuario usuario) {
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_USUARIO);
             pstmt.setString(1, usuario.getUsuario());
             ResultSet rs = pstmt.executeQuery();
@@ -110,18 +99,13 @@ public class UsuarioDAO {//terminar de implementar
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            this.fechaConexao();
         }
     }
 
     public boolean checkEmailDisponivel(Usuario usuario) {
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_EMAIL);
             pstmt.setString(1, usuario.getEmail());
             ResultSet rs = pstmt.executeQuery();
@@ -129,6 +113,12 @@ public class UsuarioDAO {//terminar de implementar
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
+            this.fechaConexao();
+        }
+    }
+
+    private void fechaConexao() throws RuntimeException {
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {
@@ -136,5 +126,4 @@ public class UsuarioDAO {//terminar de implementar
             }
         }
     }
-
 }

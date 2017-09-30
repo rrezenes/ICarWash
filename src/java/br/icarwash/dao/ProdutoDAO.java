@@ -18,7 +18,8 @@ import java.util.ArrayList;
  * @author rezen
  */
 public class ProdutoDAO implements BasicoDAO {
-
+    
+    private boolean fechaConexao = false;
     private Connection conexao;
     private static final String INSERT = "insert into produto(nome, descricao, ativo) values(?, ?, ?)";
     private static final String SELECT_ALL = "select * from produto";
@@ -27,11 +28,20 @@ public class ProdutoDAO implements BasicoDAO {
     private static final String ACTIVE_BY_ID = "UPDATE produto SET ativo=1 where id=?";
     private static final String SELECT_BY_ID = "select id, nome, descricao, ativo from produto where id = ?";
 
+
+    public ProdutoDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
+    public ProdutoDAO() {
+        this.conexao = Conexao.getConexao();        
+        fechaConexao = true;
+    }
+
     @Override
     public void cadastrar(Object obj) {
         Produto produto = (Produto) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setString(1, produto.getNome());
             pstmt.setString(2, produto.getDescricao());
@@ -40,20 +50,14 @@ public class ProdutoDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public ArrayList listar() {
         ArrayList<Produto> produtos = new ArrayList();
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -62,13 +66,8 @@ public class ProdutoDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return produtos;
     }
 
@@ -76,7 +75,6 @@ public class ProdutoDAO implements BasicoDAO {
     public Produto localizarPorId(int id) {
         Produto produto = null;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
@@ -85,13 +83,8 @@ public class ProdutoDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return produto;
     }
 
@@ -99,7 +92,6 @@ public class ProdutoDAO implements BasicoDAO {
     public void atualizar(Object obj) {
         Produto produto = (Produto) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, produto.getNome());
             pstmt.setString(2, produto.getDescricao());
@@ -107,42 +99,35 @@ public class ProdutoDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public void excluir(int id) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     public void ativar(int id) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(ACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
+        }
+        this.fechaConexao();
+    }
+
+    private void fechaConexao() throws RuntimeException {
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {

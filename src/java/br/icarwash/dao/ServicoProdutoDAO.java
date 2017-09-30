@@ -18,9 +18,12 @@ public class ServicoProdutoDAO {
 
     private Connection conexao;
 
+    public ServicoProdutoDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+    
     public void cadastraServicoProduto(int idServico, int idProduto, int quantidade) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement("insert into servico_produtos(id_servico, id_produto, quantidade) values (?,?,?)");
             pstmt.setInt(1, idServico);
             pstmt.setInt(2, idProduto);
@@ -29,12 +32,6 @@ public class ServicoProdutoDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 }

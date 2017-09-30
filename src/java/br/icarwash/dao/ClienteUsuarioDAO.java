@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  *
@@ -20,16 +19,25 @@ import java.util.ArrayList;
  */
 public class ClienteUsuarioDAO {
 
+    private boolean fechaConexao = false;
     private Connection conexao;
     private static final String INSERT_CLIENTE_USUARIO = "INSERT INTO `cliente_usuario` VALUES (?,?)";
     private static final String SELECT_BY_ID_USUARIO = "select * from cliente_usuario where id_usuario = ?";
+
+    public ClienteUsuarioDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
+    public ClienteUsuarioDAO() {
+        this.conexao = Conexao.getConexao();
+        fechaConexao = true;
+    }
 
     public void cadastrar(Object obj) {
 
         ClienteUsuario clienteUsuario = (ClienteUsuario) obj;
 
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT_CLIENTE_USUARIO);
             pstmt.setInt(1, clienteUsuario.getIdCliente());
             pstmt.setInt(2, clienteUsuario.getIdUsuario());
@@ -38,20 +46,13 @@ public class ClienteUsuarioDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
-
+        this.fechaConexao();
     }
 
     public boolean existeClienteCadastrado(Usuario usuario) {
         boolean achou = false;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
             pstmt.setString(1, Integer.toString(usuario.getId()));
             ResultSet rs = pstmt.executeQuery();
@@ -60,14 +61,18 @@ public class ClienteUsuarioDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
+        }
+        this.fechaConexao();
+        return achou;
+    }
+
+    private void fechaConexao() throws RuntimeException {
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return achou;
-
     }
 }

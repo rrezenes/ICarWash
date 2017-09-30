@@ -8,6 +8,7 @@ package br.icarwash.control;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,21 +34,38 @@ public class ControleStatusSolicitacao extends HttpServlet {
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         Solicitacao solicitacao = solicitacaoDAO.localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
 
+        String URIRetorno = "painel_admin.jsp";
+
         if (URI.endsWith("/AprovarSolicitacao")) {
             solicitacao.analisarSolicitacao();
-        } else if(URI.endsWith("/CancelarSolicitacao")){
+            URIRetorno = "ListarSolicitacaoEmAnalise";
+
+        } else if (URI.endsWith("/CancelarSolicitacao")) {
             solicitacao.cancelarSolicitacao();
-        } else if(URI.endsWith("/ProcessarSolicitacao")){
+
+            String queryString = ((HttpServletRequest) request).getQueryString();
+            HttpSession session = ((HttpServletRequest) request).getSession(true);
+            Usuario usuario = (Usuario) session.getAttribute("user");
+            if(usuario.getNivel() == 1){
+            URIRetorno = "ListarSolicitacaoCliente";                
+            }
+        } else if (URI.endsWith("/ProcessarSolicitacao")) {
             solicitacao.processarSolicitacao();
-        } else if(URI.endsWith("/FinalizarSolicitacao")){
+            URIRetorno = "ListarSolicitacaoLavador";
+
+        } else if (URI.endsWith("/FinalizarSolicitacao")) {
             solicitacao.finalizarSolicitacao();
-        } else if(URI.endsWith("/AvaliarSolicitacao")){
+            URIRetorno = "ListarSolicitacaoLavador";
+
+        } else if (URI.endsWith("/AvaliarSolicitacao")) {
             Avaliacao avaliacao = new Avaliacao(BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))));
             solicitacao.setAvaliacao(avaliacao);
             solicitacao.avaliarSolicitacao();
+            URIRetorno = "ListarSolicitacaoCliente";
         }
 
-        request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
+//        request.getRequestDispatcher("/ListarSolicitacaoEmAnalise").forward(request, response);
+        response.sendRedirect(URIRetorno);
 
     }
 }

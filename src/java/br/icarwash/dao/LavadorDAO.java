@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
  */
 public class LavadorDAO implements BasicoDAO {
 
+    private boolean fechaConexao = false;
     private Connection conexao;
     private static final String INSERT = "insert into lavador(dt_contrato,email, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select l.dt_contrato, l.id, l.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, l.cep, l.estado, l.cidade, l.bairro, l.endereco, l.numero, u.usuario, u.ativo from Lavador l, usuario u, lavador_usuario lu where l.id = lu.id_lavador and u.id = lu.id_usuario and u.ativo = 1";
@@ -34,11 +35,19 @@ public class LavadorDAO implements BasicoDAO {
     private static final String SELECT_ID_BY_EMAIL = "select id from lavador where email = ?";
     private static final String CHECK_DISPONIVEL = "SELECT `lavador_solicitacao`.`id_lavador` FROM `icarwash`.`lavador_solicitacao` WHERE `lavador_solicitacao`.`id_lavador` = ? and `lavador_solicitacao`.`dataAgendamento` = ?";
 
+    public LavadorDAO(Connection conexao) {
+        this.conexao = conexao;
+    }
+
+    public LavadorDAO() {
+        this.conexao = Conexao.getConexao();
+        fechaConexao = true;
+    }
+
     @Override
     public void cadastrar(Object obj) {
         Lavador lavador = (Lavador) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setDate(1, new java.sql.Date(lavador.getDataContrato().getTimeInMillis()));
             pstmt.setString(2, lavador.getEmail());
@@ -56,20 +65,14 @@ public class LavadorDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public ArrayList<Lavador> listar() {
         ArrayList<Lavador> lavador = new ArrayList();
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -84,13 +87,8 @@ public class LavadorDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return lavador;
     }
 
@@ -99,7 +97,6 @@ public class LavadorDAO implements BasicoDAO {
         Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
         Lavador lavador = null;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
@@ -110,13 +107,8 @@ public class LavadorDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return lavador;
     }
 
@@ -124,7 +116,6 @@ public class LavadorDAO implements BasicoDAO {
     public void atualizar(Object obj) {
         Lavador lavador = (Lavador) obj;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, lavador.getEmail());
             pstmt.setString(2, lavador.getNome());
@@ -140,37 +131,24 @@ public class LavadorDAO implements BasicoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
     }
 
     @Override
     public void excluir(int id) {
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     public int localizarIdPorEmail(String email) {
         int IDLavador = 0;
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_EMAIL);
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
@@ -179,42 +157,39 @@ public class LavadorDAO implements BasicoDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+        this.fechaConexao();
         return IDLavador;
     }
 
     public boolean isLavadorDisponivel(Lavador lavador, Calendar dataSolicitacao) {
-        
+
         boolean disponivel = false;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
         String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
-        
+
         try {
-            conexao = Conexao.getConexao();
             PreparedStatement pstmt = conexao.prepareStatement(CHECK_DISPONIVEL);
             pstmt.setInt(1, lavador.getId());
             pstmt.setString(2, dataSolicitacaoFormatada);
             ResultSet rs = pstmt.executeQuery();
-            
+
             disponivel = !rs.next();
-            
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
+        }
+        this.fechaConexao();
+        return disponivel;
+    }
+
+    private void fechaConexao() throws RuntimeException {
+        if (fechaConexao) {
             try {
                 conexao.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-
-        return disponivel;
     }
-
 }

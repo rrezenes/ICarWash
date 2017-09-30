@@ -2,41 +2,42 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 <div class="jumbotron">
-    <h2>Controle de Serviços</h2>
+    <h1>Controle de Serviços</h1>
 </div>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="servico" items="${servicos}">
+<div class="container">
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>${servico.nome}</td>
-                <td>${servico.descricao}</td>
-                <td>${servico.valor}</td>
-                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=servico&id=${servico.id}"></a></td>
-                <td>
-                    <c:choose>
-                        <c:when test="${servico.ativo}">
-                            <a type="button" href="Controle?action=Excluir&q=servico&id=${servico.id}">Inativar</a>
-                        </c:when>
-                        <c:otherwise>
-                            <a type="button" href="Controle?action=Ativar&q=servico&id=${servico.id}">Ativar</a>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th colspan="2"></th>
             </tr>
-        </c:forEach>   
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <c:forEach var="servico" items="${servicos}">
+                <tr>
+                    <td>${servico.nome}</td>
+                    <td>${servico.descricao}</td>
+                    <td>${servico.valor}</td>
+                    <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=servico&id=${servico.id}"></a></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${servico.ativo}">
+                                <a type="button" href="Controle?action=Excluir&q=servico&id=${servico.id}">Inativar</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a type="button" href="Controle?action=Ativar&q=servico&id=${servico.id}">Ativar</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </c:forEach>   
+        </tbody>
+    </table>
 
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Serviço</button>
-
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Serviço</button>
+</div>
 <div class="container">
 </div>
 <div id="myModal" class="modal fade" role="dialog">
@@ -55,7 +56,7 @@
                             <div class="col-md-12"><label>Nome:</label> <input class="form-control" type="text" name="nome"><br></div>
                             <div class="col-md-12"><label>Descrição:</label> <input class="form-control" type="text" name="descricao" id="descricao"><br></div>
                             <div class="col-md-12"><label>Valor:</label> <input class="form-control" type="text" name="valor" id="valor"><br></div>
-                            <jsp:useBean id="produtoDao" class="br.icarwash.dao.ProdutoDAO"/>
+                                <jsp:useBean id="produtoDao" class="br.icarwash.dao.ProdutoDAO"/>
                             <div class="col-md-7" style="padding-bottom: 2px"><b>Selecione os Produtos:</b></div>
                             <div class="col-md-5" style="padding-bottom: 2px"><b>Selecione a quantidade:</b></div>
                             <legend></legend>

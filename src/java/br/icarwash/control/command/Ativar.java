@@ -25,17 +25,6 @@ public class Ativar implements ICommand {
         String ativar = request.getParameter("q");
 
         switch (ativar) {
-//            $$$$$$$$$$$$$$$$---FALTA IMPLEMENTAR---$$$$$$$$$$$$$$$$$$
-//            case "cliente": {
-//                ClienteDAO clienteDAO = new ClienteDAO();
-//                clienteDAO.ativar(Integer.parseInt(request.getParameter("id")));
-//                return "/Controle?action=Listar&listar=cliente";
-//            }
-//            case "lavador": {
-//                LavadorDAO lavadorDAO = new LavadorDAO();
-//                lavadorDAO.ativar(Integer.parseInt(request.getParameter("id")));
-//                return "/Controle?action=Listar&listar=lavador";
-//            }
             case "produto": {
                 ProdutoDAO produtoDAO = new ProdutoDAO();
                 produtoDAO.ativar(Integer.parseInt(request.getParameter("id")));

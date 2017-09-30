@@ -5,14 +5,20 @@
  */
 package br.icarwash.model;
 
+import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.control.state.SolicitacaoState;
 import br.icarwash.control.state.EmAnalise;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,7 +50,7 @@ public class Solicitacao {
         this.dataSolicitacao = data_solicitacao;
         this.valorTotal = valorTotal;
     }
-    
+
     public Solicitacao(int id, Cliente cliente, Lavador lavador, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;
@@ -54,7 +60,7 @@ public class Solicitacao {
         this.dataSolicitacao = data_solicitacao;
         this.valorTotal = valorTotal;
     }
-    
+
     public Solicitacao(int id, Cliente cliente, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;
@@ -107,7 +113,7 @@ public class Solicitacao {
 
     public void setLavador(Lavador lavador) {
         this.lavador = lavador;
-        
+
     }
 
     public Avaliacao getAvaliacao() {
@@ -179,26 +185,47 @@ public class Solicitacao {
     }
 
     public void atribuirLavador() {
-        LavadorDAO lavadorDAO = new LavadorDAO();
-        //        ArrayList<Lavador> = lavadorDAO.selecionarLavadoresDisponiveis(Calendar calendar);
-        ArrayList<Lavador> lavadores = lavadorDAO.listar();
-        ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
-        boolean disponivel;
-        boolean encontrou = false;
+        Connection conexao = Conexao.getConexao();
 
-        for (Lavador lavador : lavadores) {
-            disponivel = lavadorDAO.isLavadorDisponivel(lavador, this.getDataSolicitacao());
-            if (disponivel) {
-                lavadoresDisponiveis.add(lavador);
-                encontrou = true;
+        try {
+            conexao.setAutoCommit(false);
+            LavadorDAO lavadorDAO = new LavadorDAO(conexao);
+            //        ArrayList<Lavador> = lavadorDAO.selecionarLavadoresDisponiveis(Calendar calendar);
+            ArrayList<Lavador> lavadores = lavadorDAO.listar();
+            ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
+            boolean disponivel;
+            boolean encontrou = false;
+
+            for (Lavador lavador : lavadores) {
+                disponivel = lavadorDAO.isLavadorDisponivel(lavador, this.getDataSolicitacao());
+                if (disponivel) {
+                    lavadoresDisponiveis.add(lavador);
+                    encontrou = true;
+                }
+            }
+            if (encontrou) {
+                SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
+                Random random = new Random();
+
+                this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));
+                solicitacaoDAO.atribuirLavador(this.lavador, this);
+            }// F A L T A  I M P L E M E N T A R  O  E L S E
+
+            conexao.commit();
+        } catch (SQLException e) {
+            try {
+                conexao.rollback();
+                throw new RuntimeException(e);
+            } catch (SQLException ex) {                
+                throw new RuntimeException(ex);
+            }
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
-        if (encontrou) {
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            Random random = new Random();
-            
-            this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));            
-            solicitacaoDAO.atribuirLavador(this.lavador, this);
-        }// F A L T A  I M P L E M E N T A R  O  E L S E
+
     }
 }

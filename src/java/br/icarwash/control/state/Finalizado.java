@@ -38,11 +38,12 @@ public class Finalizado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
         
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();        
         avaliacao.calcularMedia();
         avaliacao = avaliacaoDAO.atribuirNotas(avaliacao);
+        
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         solicitacaoDAO.avaliarSolicitacao(solicitacao, avaliacao);        
         
         return new Avaliado();
