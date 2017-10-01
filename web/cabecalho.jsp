@@ -147,10 +147,8 @@
                                         </div>
                                         <div class="col-sm-9 col-lg-10 exibelista">
                                             <%  } else {
-                                                        response.sendRedirect("index.jsp");
 
                                                     }
                                                 } else {
-                                                    response.sendRedirect("index.jsp");
                                                 }
                                             %>
