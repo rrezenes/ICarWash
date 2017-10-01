@@ -1,8 +1,3 @@
-<%-- 
-    Document   : cabecalho
-    Created on : 21/11/2016, 08:26:50
-    Author     : rezen
---%>
 
 <%@page import="br.icarwash.dao.ClienteDAO"%>
 <%@page import="br.icarwash.model.Usuario"%>

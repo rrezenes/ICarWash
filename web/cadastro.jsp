@@ -30,8 +30,8 @@
                     <div class="panel-body">
                         <form id="formCliente" method="post" class="form-horizontal" action="NovoCliente">
                             <div class="form-group">
+                                <label class="col-sm-4 control-label" for="usuario" name="login">Usuário</label>                                    
                                 <div class="col-sm-5">
-                                    <label class="col-sm-4 control-label" for="usuario" name="login">Usuário</label>
                                     <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Digite aqui o nome de seu usuário" />
                                 </div>
                             </div>

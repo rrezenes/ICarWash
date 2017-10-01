@@ -63,7 +63,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", usuario);
             session.setAttribute("acesso", usuario.getNivel());
             session.setMaxInactiveInterval(600);
-            response.sendRedirect("painel_admin.jsp");
+            response.sendRedirect("painel");
         }
 
     }
