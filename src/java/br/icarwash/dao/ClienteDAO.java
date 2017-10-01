@@ -27,7 +27,7 @@ public class ClienteDAO implements BasicoDAO {
     private Connection conexao;
     private static final String INSERT = "insert into cliente(email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select c.id, c.email, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.usuario, u.ativo from Cliente c, usuario u, cliente_usuario cu where c.id = cu.id_CLIENTE and u.id = cu.id_usuario and u.ativo = 1";
-    private static final String UPDATE = "update cliente set email = ?, nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
+    private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM cliente_usuario where id_cliente = ?);";
     private static final String SELECT_BY_ID = "select id, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
     private static final String SELECT_ID_BY_EMAIL = "select id from cliente where email = ?";
@@ -118,17 +118,17 @@ public class ClienteDAO implements BasicoDAO {
         Cliente cliente = (Cliente) obj;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
-            pstmt.setString(1, cliente.getEmail());
-            pstmt.setString(2, cliente.getNome());
-            pstmt.setString(3, cliente.getTelefone());
-            pstmt.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
-            pstmt.setString(5, cliente.getEndereco().getCEP());
-            pstmt.setString(6, cliente.getEndereco().getEstado());
-            pstmt.setString(7, cliente.getEndereco().getCidade());
-            pstmt.setString(8, cliente.getEndereco().getBairro());
-            pstmt.setString(9, cliente.getEndereco().getEndereco());
-            pstmt.setInt(10, cliente.getEndereco().getNumero());
-            pstmt.setInt(11, cliente.getId());
+            //pstmt.setString(1, cliente.getEmail());
+            pstmt.setString(1, cliente.getNome());
+            pstmt.setString(2, cliente.getTelefone());
+            pstmt.setDate(3, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
+            pstmt.setString(4, cliente.getEndereco().getCEP());
+            pstmt.setString(5, cliente.getEndereco().getEstado());
+            pstmt.setString(6, cliente.getEndereco().getCidade());
+            pstmt.setString(7, cliente.getEndereco().getBairro());
+            pstmt.setString(8, cliente.getEndereco().getEndereco());
+            pstmt.setInt(9, cliente.getEndereco().getNumero());
+            pstmt.setInt(10, cliente.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -72,8 +72,6 @@
 
                 $("#formCliente").validate({
                     rules: {
-                        firstname1: "required",
-                        lastname1: "required",
                         usuario: {                            
                             remote: 'CheckUsuarioLogin',
                             required: true,

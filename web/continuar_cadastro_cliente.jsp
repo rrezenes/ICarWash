@@ -132,7 +132,7 @@
                 cpf: {
                     cpf: true,
                     required: true
-                },
+                }
                 
             },
             messages: {
