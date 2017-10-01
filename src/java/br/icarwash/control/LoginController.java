@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.icarwash.control;
 
-/**
- *
- * @author rezen
- */
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
@@ -22,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class Session
- */
 @WebServlet(name = "LoginController", urlPatterns = "/Login")
 public class LoginController extends HttpServlet {
 
@@ -62,7 +51,8 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", usuario);
             session.setAttribute("acesso", usuario.getNivel());
-            session.setMaxInactiveInterval(600);
+            //tempo de limite da sesssão em segundos
+            session.setMaxInactiveInterval(10);
             response.sendRedirect("painel");
         }
 

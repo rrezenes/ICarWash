@@ -1,4 +1,3 @@
-
 package br.icarwash.control;
 
 import br.icarwash.model.Usuario;
@@ -17,25 +16,25 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoAdmin", urlPatterns = {"/Controle", "/ListarSolicitacaoEmAnalise"})
-public class FiltroAcessoAdmin implements Filter {
+@WebFilter(filterName = "FiltroAcesso", urlPatterns = {"/Painel", "/painel"})
+public class FiltroAcesso implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
     private boolean aprovado;
 
-    public FiltroAcessoAdmin() {
+    public FiltroAcesso() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         String url = ((HttpServletRequest) request).getRequestURL().toString();
-        
-        String queryString = ((HttpServletRequest) request).getQueryString();        
+
+        String queryString = ((HttpServletRequest) request).getQueryString();
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
-        
+
         if (usuario != null) {
             if (debug) {
                 log("Usuario: " + usuario.getUsuario() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
@@ -49,7 +48,6 @@ public class FiltroAcessoAdmin implements Filter {
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-
     }
 
     @Override
@@ -65,7 +63,7 @@ public class FiltroAcessoAdmin implements Filter {
 
         Throwable problem = null;
         if (usuario != null) {
-            if (usuario.getNivel() == 3) {
+            if (usuario.getNivel() == 3 || usuario.getNivel() == 2 || usuario.getNivel() == 1) {
                 try {
                     chain.doFilter(request, response);
                 } catch (IOException | ServletException t) {
