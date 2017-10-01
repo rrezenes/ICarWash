@@ -25,15 +25,15 @@ import javax.servlet.http.HttpSession;
  *
  * @author rezen
  */
-@WebFilter(filterName = "FiltroAcessoCadastros", urlPatterns = {"/Controle", "/solicitacoes.jsp"})
-public class FiltroAcessoCadastros implements Filter {
+@WebFilter(filterName = "FiltroAcessoAdmin", urlPatterns = {"/Controle", "/ListarSolicitacaoEmAnalise"})
+public class FiltroAcessoAdmin implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
     private boolean aprovado;
 
-    public FiltroAcessoCadastros() {
+    public FiltroAcessoAdmin() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)

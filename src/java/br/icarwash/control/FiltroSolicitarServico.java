@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Renan
  */
-@WebFilter(filterName = "FiltroSolicitarServico", urlPatterns = {"/SolicitarServico"})
+@WebFilter(filterName = "FiltroSolicitarServico", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente"})
 public class FiltroSolicitarServico implements Filter {
 
     private static final boolean debug = true;
@@ -49,15 +49,7 @@ public class FiltroSolicitarServico implements Filter {
 
     }
 
-    /**
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
-     */
+    
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)

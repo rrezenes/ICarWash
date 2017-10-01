@@ -41,8 +41,7 @@ public class ListarSolicitacaoCliente extends HttpServlet {
 
         request.setAttribute("solicitacoes", solicitacoes);
 
-        RequestDispatcher rd = request.getRequestDispatcher("/minha_solicitacao.jsp");
-        rd.forward(request, response);
+        request.getRequestDispatcher("/minha_solicitacao.jsp").forward(request, response);
 
     }
 
