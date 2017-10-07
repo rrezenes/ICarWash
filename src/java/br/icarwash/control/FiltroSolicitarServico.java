@@ -38,7 +38,21 @@ public class FiltroSolicitarServico implements Filter {
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
+        String url = ((HttpServletRequest) request).getRequestURL().toString();
 
+        String queryString = ((HttpServletRequest) request).getQueryString();
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
+        if (usuario != null) {
+            if (debug) {
+                log("Usuario: " + usuario.getUsuario() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
+            }
+        } else {
+            log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+        }
     }
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)

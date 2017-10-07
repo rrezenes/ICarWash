@@ -72,8 +72,6 @@
 
                 $("#formCliente").validate({
                     rules: {
-                        firstname1: "required",
-                        lastname1: "required",
                         usuario: {                            
                             remote: 'CheckUsuarioLogin',
                             required: true,
@@ -92,7 +90,7 @@
                             remote: 'CheckUsuarioEmail',
                             required: true,
                             email: true
-                        },
+                        }
                     },
                     messages: {
                         usuario: {
@@ -110,8 +108,9 @@
                             equalTo: "Sua senha deve ser a mesma a cima."
                         },
                         email: {
-                            email: "Por favor, coloque um e-mail válido.",
-                            remote: "E-mail já está em uso."
+                            remote: "Por favor, coloque um e-mail válido.",
+                            required: "Por favor, coloque um e-mail válido.",
+                            email: "E-mail já está em uso."
                         }
                     },
                     errorElement: "em",
