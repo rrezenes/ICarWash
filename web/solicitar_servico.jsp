@@ -15,12 +15,24 @@
     }%>
 <div class="container" style="max-width: 1000.0px;">
     <form id="solicitarServico" action="ControleSolicitacao" method="post">
-        <div class="form-group">
+        <div class="form-group col-sm-6">
             <input type="hidden" value="cliente">
             <fieldset>
                 <legend class="erro-data">Data da Solicitação</legend>
-                <div class='input-group date' id='datetimepicker2'>
-                    <input type='text' class="form-control" name="data_slicitacao"/>
+                <div class='input-group date' id='datepicker2'>
+                    <input type='text' class="form-control" name="data_solicitacao" id="data_solicitacao"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </fieldset>         
+        </div>
+        <div class="form-group col-sm-6">
+            <input type="hidden" value="cliente">
+            <fieldset>
+                <legend class="erro-data">Hora da Solicitação</legend>
+                <div class='input-group date' id='timepicker2'>
+                    <input type='text' class="form-control" name="hora_solicitacao"/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -68,12 +80,18 @@
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker2').datetimepicker({
+        $('#datepicker2').datetimepicker({
             locale: 'pt-br',
-            //format: 'L',
-            stepping:60,
+            format: 'L',
             daysOfWeekDisabled: [0, 6],
-            minDate: moment(),
+            minDate: moment().add(1, 'days'),
+            maxDate: moment().add(30, 'days')
+        });
+        $('#timepicker2').datetimepicker({
+            locale: 'pt-br',
+            format: 'HH:mm',
+            daysOfWeekDisabled: [0, 6],
+            stepping: 60,
             disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 18, 19, 20, 21, 22, 23, 24]
         });
     });
