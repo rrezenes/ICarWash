@@ -19,12 +19,11 @@
             <input type="hidden" value="cliente">
             <fieldset>
                 <legend class="erro-data">Data da Solicitação</legend>
-                <div>
-                    <div class="input-group date form_datetime col-md-5"  data-date-format="dd MM yyyy - HH:00 p" data-link-field="dtp_input1" data-date-end-date="0d">
-                        <input class="form-control" size="16" type="text" readonly name="data">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-                    <input type="hidden" id="dtp_input1" name="data_solicitacao" /><br/>
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" name="data_slicitacao"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
                 </div>
             </fieldset>         
         </div>
@@ -64,25 +63,18 @@
 
 <script type="text/javascript" src="./js/jquery-3.1.1.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/jquery.validate.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/moment.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/locales/moment.pt-BR.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript">
     $(function () {
-        var date = new Date();
-        date.setHours(date.getHours() + 1);
-        date.setMinutes(0);
-        date.setSeconds(0);
-        $('.form_datetime').datetimepicker({
-            language: 'pt-BR',
-            autoclose: 1,
-            startDate: date,
-            todayHighlight: 0,
-            startView: 2,
-            showMeridian: 1,
+        $('#datetimepicker2').datetimepicker({
+            locale: 'pt-br',
+            //format: 'L',
+            stepping:60,
             daysOfWeekDisabled: [0, 6],
-            hoursDisabled: '0,1,2,3,4,5,6,7,18,19,20,21,22,23',
-            minView: 1
+            minDate: moment(),
+            disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 18, 19, 20, 21, 22, 23, 24]
         });
     });
 </script>
