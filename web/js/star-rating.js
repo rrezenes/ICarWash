@@ -570,16 +570,16 @@
     $.fn.ratingLocales.en = {
         defaultCaption: '{rating} Estrelas',
         starCaptions: {
-            0.5: 'Meia Estrela',
-            1: 'Uma Estrela',
-            1.5: 'Uma Estrela e Meia',
-            2: 'Duas Estrelas',
-            2.5: 'Duas Estrelas e Meia',
-            3: 'Três Estrelas',
-            3.5: 'Três Estrelas e Meia',
-            4: 'Quatro Estrelas',
-            4.5: 'Quatro Estrelas e Meia',
-            5: 'Cinco Estrelas'
+            0.5: 'Insatisfeito',
+            1: 'Horrível',
+            1.5: 'Péssimo',
+            2: 'Muito Ruim',
+            2.5: 'Ruim',
+            3: 'Satisfeito',
+            3.5: 'Bom',
+            4: 'Muito Bom',
+            4.5: 'Ótimo',
+            5: 'Excelente'
         },
         clearButtonTitle: 'Limpar',
         clearCaption: 'Não Avaliado'
