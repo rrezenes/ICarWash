@@ -76,6 +76,9 @@ public class FiltroAcessoCliente implements Filter {
                 session.invalidate();
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
+        } else {
+            
+                request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 

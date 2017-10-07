@@ -30,10 +30,7 @@ import javax.servlet.http.HttpSession;
 public class FiltroSolicitarServico implements Filter {
 
     private static final boolean debug = true;
-
-    // The filter configuration object we are associated with.  If
-    // this value is null, this filter instance is not currently
-    // configured. 
+    
     private FilterConfig filterConfig = null;
 
     public FiltroSolicitarServico() {
@@ -77,28 +74,21 @@ public class FiltroSolicitarServico implements Filter {
         Usuario usuario = (Usuario) session.getAttribute("user");
         ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO();
 
-        switch (usuario.getNivel()) {
-            case 1:
-                try {
-                    if (!clienteUsuarioDAO.existeClienteCadastrado(usuario)) {
-                        RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
-                        rd.forward(request, response);
-                    } else {
-                        chain.doFilter(request, response);
-                    }
-                } catch (Throwable t) {
-                    problem = t;
-                    t.printStackTrace();
+        if (usuario != null && usuario.getNivel() == 1) {
+            try {
+                if (!clienteUsuarioDAO.existeClienteCadastrado(usuario)) {
+                    RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
+                    rd.forward(request, response);
+                } else {
+                    chain.doFilter(request, response);
                 }
-                break;
-            case 2:
-                log("lavador tentando acessar /SolicitarServico IP:" + request.getRemoteAddr());
-                RequestDispatcher rd = request.getRequestDispatcher("painel_admin.jsp");
-                rd.forward(request, response);
-                break;
-            default:
-                chain.doFilter(request, response);
-                break;
+            } catch (Throwable t) {
+                problem = t;
+                t.printStackTrace();
+            }
+
+        } else {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 
