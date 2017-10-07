@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.icarwash.control;
 
 import br.icarwash.dao.*;
@@ -15,10 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author rezen
- */
 @WebServlet(name = "ControleNovoCliente", urlPatterns = {"/NovoCliente"})
 public class ControleNovoCliente extends HttpServlet {
 
@@ -33,5 +25,4 @@ public class ControleNovoCliente extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("index.jsp?c=ok");
         rd.forward(request, response);
     }
-
 }
