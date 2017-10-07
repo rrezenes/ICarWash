@@ -1,9 +1,3 @@
-<%-- 
-    Document   : cadastro
-    Created on : 06/05/2017, 15:41:53
-    Author     : rezen
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
