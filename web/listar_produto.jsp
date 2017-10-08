@@ -4,6 +4,9 @@
 <div class="jumbotron">
     <h1>Controle de Produtos</h1>
 </div>
+
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
+
 <div class="container">
     <table class="table table-hover">
         <thead>
@@ -45,7 +48,6 @@
         </tbody>
     </table>
 
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
 </div>
 <div class="container">
 </div>

@@ -5,6 +5,9 @@
 <div class="jumbotron">
     <h2>Controle de Lavadores</h2>
 </div>
+
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -44,8 +47,6 @@
         </c:forEach>        
     </tbody>
 </table>
-
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
 
 <div class="container">
 </div>

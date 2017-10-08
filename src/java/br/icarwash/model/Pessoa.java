@@ -13,28 +13,32 @@ import java.util.Calendar;
  */
 public class Pessoa {
 
-    private String email;
+   
     private String nome;
     private String telefone;
     private Calendar dtNascimento = Calendar.getInstance();
     private String CPF;
     private Endereco endereco;
 
-    public Pessoa(String email, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
-        this.email = email;
+    public Pessoa(String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
+       
         this.nome = nome;
         this.telefone = telefone;
         this.dtNascimento = dtNascimento;
         this.endereco = endereco;
     }
 
-    public Pessoa(String email, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        this.email = email;
+    public Pessoa(String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
+     
         this.nome = nome;
         this.telefone = telefone;
         this.dtNascimento = dtNascimento;
         this.CPF = CPF;
         this.endereco = endereco;
+    }
+
+    public Pessoa(String nome) {
+        this.nome = nome;
     }
 
     public Pessoa() {
@@ -45,17 +49,6 @@ public class Pessoa {
         this.endereco = endereco;
     }
 
-    public Pessoa(String email) {
-        this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public Calendar getDtNascimento() {
         return dtNascimento;

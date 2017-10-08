@@ -15,25 +15,22 @@ public class Usuario {
 
     private int id;
     private String email;
-    private String usuario;
     private String senha;
     private int nivel;
     private boolean ativo;
     private Calendar cadastro = Calendar.getInstance();
 
-    public Usuario(String email, String usuario, String senha, int nivel, boolean ativo) {
-       
+    public Usuario(String email, String senha, int nivel, boolean ativo) {
+
         this.email = email;
-        this.usuario = usuario;
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
     }
 
-    public Usuario(int id, String email, String usuario, String senha, int nivel, boolean ativo) {
+    public Usuario(int id, String email, String senha, int nivel, boolean ativo) {
         this.id = id;
         this.email = email;
-        this.usuario = usuario;
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
@@ -43,21 +40,18 @@ public class Usuario {
         this.id = id;
     }
 
-    public Usuario(String usuario, String senha, int nivel, boolean ativo) {
-        this.usuario = usuario;
+    public Usuario(String senha, int nivel, boolean ativo) {
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
     }
 
-    public Usuario(String usuario, String senha) {
-        this.usuario = usuario;
+    public Usuario(String senha) {
         this.senha = senha;
     }
 
-    public Usuario(int id, String usuario, String senha, int nivel, boolean ativo) {
+    public Usuario(int id, String senha, int nivel, boolean ativo) {
         this.id = id;
-        this.usuario = usuario;
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
@@ -74,21 +68,13 @@ public class Usuario {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
     }
 
     public String getSenha() {
