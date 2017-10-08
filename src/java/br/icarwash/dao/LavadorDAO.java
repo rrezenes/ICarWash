@@ -33,7 +33,8 @@ public class LavadorDAO implements BasicoDAO {
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM lavador_usuario where id_lavador = ?);";
     private static final String SELECT_BY_ID = "select id, dt_contrato, email, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id = ?";
     private static final String SELECT_ID_BY_EMAIL = "select id from lavador where email = ?";
-    private static final String CHECK_DISPONIVEL = "SELECT `lavador_solicitacao`.`id_lavador` FROM `icarwash`.`lavador_solicitacao` WHERE `lavador_solicitacao`.`id_lavador` = ? and `lavador_solicitacao`.`dataAgendamento` = ?";
+    private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ?";
+    private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u, lavador_usuario lu where l.id = lu.id_lavador and u.id = lu.id_usuario and u.ativo = 1";
 
     public LavadorDAO(Connection conexao) {
         this.conexao = conexao;
@@ -165,7 +166,7 @@ public class LavadorDAO implements BasicoDAO {
     public boolean isLavadorDisponivel(Lavador lavador, Calendar dataSolicitacao) {
 
         boolean disponivel = false;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
 
         try {
@@ -174,13 +175,32 @@ public class LavadorDAO implements BasicoDAO {
             pstmt.setString(2, dataSolicitacaoFormatada);
             ResultSet rs = pstmt.executeQuery();
 
-            disponivel = !rs.next();
+            disponivel = rs.next();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
         return disponivel;
+    }
+
+    public int quantidadeLavadores() {
+        int numeroLavadores = 0;
+
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_QTD_LAVADORES);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                numeroLavadores = rs.getInt("quantidade_lavadores");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+
+        return numeroLavadores;
     }
 
     private void fechaConexao() throws RuntimeException {

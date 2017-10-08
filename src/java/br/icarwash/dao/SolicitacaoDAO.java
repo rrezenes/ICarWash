@@ -321,8 +321,30 @@ public class SolicitacaoDAO {
         this.fechaConexao();
     }
 
-    public void checkHorarioDisponivel(Solicitacao solicitacao) {
+    public ArrayList consultarHorarioIndisponivel(String dataHoraSolicitacao) {
+        ArrayList<String> horarios = new ArrayList<>();
+        try {
+            LavadorDAO lavadorDAO = new LavadorDAO(conexao);
 
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT * FROM (SELECT date_format(time(data_solicitacao), '%H:%i') as hora FROM solicitacao where status like 'Agendado' or status like 'Em Analise' and data_solicitacao like ? having COUNT(*) < ? UNION SELECT date_format(time(data_solicitacao), '%H:%i') as hora FROM solicitacao where status like 'Cancelado' and data_solicitacao like ? ) solicitacao group by hora order by hora");
+
+            pstmt.setString(1, dataHoraSolicitacao + "%");
+            pstmt.setInt(2, lavadorDAO.quantidadeLavadores());
+            pstmt.setString(3, dataHoraSolicitacao + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String horaIndisponivel[] = rs.getTime("hora").toString().split(":");
+                horarios.add(horaIndisponivel[0] + ":" + horaIndisponivel[1]);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+
+        return horarios;
     }
 
     private void fechaConexao() throws RuntimeException {

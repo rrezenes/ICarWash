@@ -1,0 +1,67 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.icarwash.control.remoto;
+
+import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Solicitacao;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.ProcessBuilder.Redirect.Type;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author Mirian
+ */
+@WebServlet(name = "CheckSolicitacao", urlPatterns = {"/CheckSolicitacaoData"})
+public class CheckSolicitacao extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+
+        String[] data = request.getParameter("data").split("/");
+        String dataSolicitacao = data[2] + "-" + data[1] + "-" + data[0];
+
+        ArrayList<String> horariosDisponiveis = new ArrayList<>();
+
+        for (int i = 8; i < 18; i++) {
+            if (i < 10) {
+                horariosDisponiveis.add("0".concat(Integer.toString(i).concat(":00")));
+            } else {
+                horariosDisponiveis.add(Integer.toString(i).concat(":00"));
+            }
+        }
+
+        ArrayList<Integer> horariosIndisponiveis = solicitacaoDAO.consultarHorarioIndisponivel(dataSolicitacao);
+
+        horariosDisponiveis.removeAll(horariosIndisponiveis);
+
+        Gson gson = new Gson();
+        String disponiveis = gson.toJson(horariosDisponiveis);
+
+        out.println(disponiveis);
+        out.flush();
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+    }
+
+}

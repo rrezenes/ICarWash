@@ -1,9 +1,3 @@
-<%-- 
-    Document   : listaCliente
-    Created on : 17/11/2016, 22:13:43
-    Author     : rezen
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
@@ -31,11 +25,9 @@
             <input type="hidden" value="cliente">
             <fieldset>
                 <legend class="erro-data">Hora da Solicitação</legend>
-                <div class='input-group date' id='timepicker2'>
-                    <input type='text' class="form-control" name="hora_solicitacao"/>
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+                <div class="form-group">
+                    <select class="form-control" id="selectHora" name="selectHora">
+                    </select>
                 </div>
             </fieldset>         
         </div>
@@ -84,17 +76,15 @@
             locale: 'pt-br',
             format: 'L',
             daysOfWeekDisabled: [0, 6],
-            minDate: moment().add(1, 'days'),
+            minDate: moment().add(24, 'hours'),
             maxDate: moment().add(30, 'days')
         });
-        $('#timepicker2').datetimepicker({
-            locale: 'pt-br',
-            format: 'HH:mm',
-            daysOfWeekDisabled: [0, 6],
-            stepping: 60,
-            disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 18, 19, 20, 21, 22, 23, 24]
-        });
     });
+
+    $("#datepicker2").on("dp.change", function () {
+        popularSelect();
+    });
+
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -137,5 +127,16 @@
             }
         });
     });
+
+
+    function popularSelect() {
+        $("#selectHora").empty();
+        var checkData = {data: $('#data_solicitacao').val()};
+        $.getJSON("CheckSolicitacaoData", checkData, function (dataVal) {
+            $.each(dataVal, function (index, item) {
+                $('#selectHora').append($('<option></option>').val(item).html(item));
+            });
+        });
+    }
 </script>
 <%@include file="rodape.jsp"%>
