@@ -114,7 +114,36 @@ public class SolicitacaoDAO {
         Endereco endereco;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and l.id = s.id_lavador and u.id = ?;");
+            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                endereco = new Endereco(rs.getString("cidade"), rs.getString("bairro"));
+                cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"), endereco);
+
+                //lavador = new Lavador(rs.getInt("id_lavador"));
+                solicitacaoState = validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+        return solicitacoes;
+    }
+
+    public ArrayList<Solicitacao> listarSolicitacaoHojeLavador(int id) {
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao;
+        Cliente cliente;
+        Endereco endereco;
+        SolicitacaoState solicitacaoState;
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -323,7 +352,7 @@ public class SolicitacaoDAO {
         try {
 
             PreparedStatement pstmt = conexao.prepareStatement(
-                        "SELECT data_solicitacao as hora, STATUS,count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?"
+                    "SELECT data_solicitacao as hora, STATUS,count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?"
             );
 
             pstmt.setString(1, dataHoraSolicitacao + "%");

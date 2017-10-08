@@ -24,7 +24,7 @@
             ClienteDAO clienteDAO = new ClienteDAO();
             if (session != null && request.getRequestedSessionId() != null && session.getAttribute("acesso") != null) {
                 if (Integer.parseInt(session.getAttribute("acesso").toString()) == 1) {
-            //String name = (String) session.getAttribute("user");
+                    //String name = (String) session.getAttribute("user");
         %>
         <div class="container-fluid">
             <div class="row">
@@ -76,7 +76,8 @@
                                                 <li class="dropdown">
                                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitações<b class="caret"></b></a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="ListarSolicitacaoLavador">Minhas Solicitações</a></li>
+                                                        <li><a href="ListarSolicitacaoLavador">Solicitações</a></li>
+                                                        <li><a href="ListarSolicitacaoHojeLavador">Solicitações Para Hoje</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
