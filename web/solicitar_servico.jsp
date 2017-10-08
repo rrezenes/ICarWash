@@ -72,17 +72,17 @@
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript">
     $(function () {
-        $('#datepicker2').datetimepicker({
-            locale: 'pt-br',
-            format: 'L',
-            daysOfWeekDisabled: [0, 6],
-            minDate: moment().add(24, 'hours'),
-            maxDate: moment().add(30, 'days')
-        });
-    });
 
-    $("#datepicker2").on("dp.change", function () {
-        popularSelect();
+        $("#datepicker2").on("dp.change", function () {
+            popularSelect();
+        });
+        $('#datepicker2').datetimepicker({
+            format: 'L',
+            locale: 'pt-br',
+            daysOfWeekDisabled: [0, 6],
+            minDate: moment(),
+            maxDate: moment().add(90, 'days')
+        });
     });
 
 </script>

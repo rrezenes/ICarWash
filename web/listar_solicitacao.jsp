@@ -23,7 +23,7 @@
     <tbody>
         
         <c:forEach var="solicitacao" items="${solicitacoes}">
-            <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy hh:mm"/>
+            <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy HH:mm"/>
             <tr>
                 <td>${solicitacao.id}</td>
                 <td>${solicitacao.cliente.nome}</td>

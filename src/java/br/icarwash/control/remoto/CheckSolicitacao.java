@@ -5,6 +5,7 @@
  */
 package br.icarwash.control.remoto;
 
+import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
 import com.google.gson.Gson;
@@ -36,17 +37,9 @@ public class CheckSolicitacao extends HttpServlet {
         String[] data = request.getParameter("data").split("/");
         String dataSolicitacao = data[2] + "-" + data[1] + "-" + data[0];
 
-        ArrayList<String> horariosDisponiveis = new ArrayList<>();
+        ArrayList<String> horariosDisponiveis = gerarListaHoras();
 
-        for (int i = 8; i < 18; i++) {
-            if (i < 10) {
-                horariosDisponiveis.add("0".concat(Integer.toString(i).concat(":00")));
-            } else {
-                horariosDisponiveis.add(Integer.toString(i).concat(":00"));
-            }
-        }
-
-        ArrayList<Integer> horariosIndisponiveis = solicitacaoDAO.consultarHorarioIndisponivel(dataSolicitacao);
+        ArrayList<Integer> horariosIndisponiveis = solicitacaoDAO.consultarHorarioIndisponivel(dataSolicitacao, new LavadorDAO().quantidadeLavadores());
 
         horariosDisponiveis.removeAll(horariosIndisponiveis);
 
@@ -56,6 +49,19 @@ public class CheckSolicitacao extends HttpServlet {
         out.println(disponiveis);
         out.flush();
 
+    }
+
+    private ArrayList<String> gerarListaHoras() {
+        ArrayList<String> horariosDisponiveis = new ArrayList<>();
+        
+        for (int hora = 8; hora < 18; hora++) {
+            if (hora < 10) {
+                horariosDisponiveis.add("0".concat(Integer.toString(hora).concat(":00")));
+            } else {
+                horariosDisponiveis.add(Integer.toString(hora).concat(":00"));
+            }
+        }
+        return horariosDisponiveis;
     }
 
     @Override
