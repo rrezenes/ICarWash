@@ -63,7 +63,6 @@
         <script src="js/jquery.validate.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
-
                 $("#formCliente").validate({
                     rules: {
                         usuario: {                            
