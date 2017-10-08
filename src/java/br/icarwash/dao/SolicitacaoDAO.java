@@ -82,7 +82,7 @@ public class SolicitacaoDAO {
                     + "icarwash.solicitacao_servico,icarwash.servico "
                     + "where cliente.ID = solicitacao.id_cliente "
                     + "and solicitacao.ID = solicitacao_servico.id_solicitacao "
-                    + "and cliente.ID = ? group by solicitacao.ID");
+                    + "and cliente.ID = ? group by solicitacao.ID order by solicitacao.data_solicitacao");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -169,10 +169,7 @@ public class SolicitacaoDAO {
         Lavador lavador;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao, cliente.ID as ID_Cliente, cliente.nome as nome_cliente,"
-                    + "                                         solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status "
-                    + "                                             FROM icarwash.cliente, icarwash.solicitacao, icarwash.solicitacao_servico, icarwash.servico "
-                    + "                                                 where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao group by solicitacao.ID");
+            PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao, cliente.ID as ID_Cliente, cliente.nome as nome_cliente, solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente, icarwash.solicitacao, icarwash.solicitacao_servico, icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao group by solicitacao.ID ORDER BY solicitacao.data_solicitacao");
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -321,8 +318,30 @@ public class SolicitacaoDAO {
         this.fechaConexao();
     }
 
-    public void checkHorarioDisponivel(Solicitacao solicitacao) {
+    public ArrayList consultarHorarioIndisponivel(String dataHoraSolicitacao, int quantidadeLavadores) {
+        ArrayList<String> horarios = new ArrayList<>();
+        try {
 
+            PreparedStatement pstmt = conexao.prepareStatement(
+                        "SELECT data_solicitacao as hora, STATUS,count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?"
+            );
+
+            pstmt.setString(1, dataHoraSolicitacao + "%");
+            pstmt.setInt(2, quantidadeLavadores);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String horaIndisponivel[] = rs.getTime("hora").toString().split(":");
+                horarios.add(horaIndisponivel[0] + ":" + horaIndisponivel[1]);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+
+        return horarios;
     }
 
     private void fechaConexao() throws RuntimeException {

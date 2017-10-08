@@ -47,7 +47,11 @@ public class ControleSolicitacao extends HttpServlet {
             String porteVeiculo = request.getParameter("porte");
             String[] IdServicosSolicitados = request.getParameterValues("servico");
             Calendar dataHoraSolicitacao = Calendar.getInstance();
-            dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(request.getParameter("data_solicitacao")));
+
+            String[] data = request.getParameter("data_solicitacao").split("/");
+            String dataSolicitacao = data[2] + "-" + data[1] + "-" + data[0];
+
+            dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dataSolicitacao + " " + request.getParameter("selectHora")));
 
             Servico servico;
             ServicoDAO servicoDAO = new ServicoDAO(conexao);
