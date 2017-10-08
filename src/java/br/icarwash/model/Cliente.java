@@ -24,21 +24,18 @@ public class Cliente extends Pessoa {
         this.id = id;
     }
 
-    public Cliente(String email) {
-        super(email);
-    }
 
-    public Cliente(int id, String email, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
-        super(email, nome, telefone, dtNascimento, endereco);
+    public Cliente(int id, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
+        super(nome, telefone, dtNascimento, endereco);
         this.id = id;
     }
 
-    public Cliente(String email, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(email, nome, telefone, dtNascimento, CPF, endereco);
+    public Cliente(String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
+        super(nome, telefone, dtNascimento, CPF, endereco);
     }
 
-    public Cliente(int id, String email, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(email, nome, telefone, dtNascimento, CPF, endereco);
+    public Cliente(int id, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
+        super(nome, telefone, dtNascimento, CPF, endereco);
         this.id = id;
     }
 
