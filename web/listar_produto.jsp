@@ -1,13 +1,13 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
-<div class="jumbotron">
-    <h1>Controle de Produtos</h1>
-</div>
-
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
-
 <div class="container">
+    <div class="jumbotron">
+        <h1>Controle de Produtos</h1>
+    </div>
+
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Produto</button>
+
     <table class="table table-hover">
         <thead>
             <tr>

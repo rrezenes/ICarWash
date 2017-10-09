@@ -70,7 +70,7 @@ public class Atualizar implements ICommand {
                 return "Controle?action=Listar&listar=servico";
             }
             default:
-                return "painel_admin.jsp";
+                return "painel";
         }
     }
 

@@ -29,11 +29,11 @@ public class LavadorDAO implements BasicoDAO {
     private static final String INSERT = "insert into lavador(id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, l.cep, l.estado, l.cidade, l.bairro, l.endereco, l.numero, u.ativo from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
-    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM lavador_usuario where id_lavador = ?);";
+    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id = ?";
     private static final String SELECT_ID_BY_CPF = "select id from lavador where cpf = ?";
     private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ?";
-    private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u, lavador_usuario lu where l.id = lu.id_lavador and u.id = lu.id_usuario and u.ativo = 1";
+    private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
 
     public LavadorDAO(Connection conexao) {
         this.conexao = conexao;
@@ -173,7 +173,7 @@ public class LavadorDAO implements BasicoDAO {
             pstmt.setString(2, dataSolicitacaoFormatada);
             ResultSet rs = pstmt.executeQuery();
 
-            disponivel = rs.next();
+            disponivel = !rs.next();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

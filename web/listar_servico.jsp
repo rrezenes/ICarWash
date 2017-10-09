@@ -1,16 +1,17 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
-<div class="jumbotron">
-    <h1>Controle de Serviços</h1>
-</div>
-
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Serviço</button>
-
 <div class="container">
+    <div class="jumbotron">
+        <h1>Controle de Serviços</h1>
+    </div>
+
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Serviço</button>
+
     <table class="table table-hover">
         <thead>
             <tr>
+                <th></th>
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Valor</th>
@@ -20,6 +21,16 @@
         <tbody>
             <c:forEach var="servico" items="${servicos}">
                 <tr>
+                    <td>                        
+                        <c:choose>
+                            <c:when test="${servico.ativo}">
+                                <div type="button" class="glyphicon glyphicon-ok text-success"></div>
+                            </c:when> 
+                            <c:otherwise>
+                                <div type="button" class="glyphicon glyphicon glyphicon-remove text-danger"></div>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td>${servico.nome}</td>
                     <td>${servico.descricao}</td>
                     <td>${servico.valor}</td>

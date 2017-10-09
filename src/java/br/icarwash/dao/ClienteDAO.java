@@ -31,7 +31,7 @@ public class ClienteDAO implements BasicoDAO {
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
     private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
-    private static final String SELECT_ID_BY_ID_USUARIO = "SELECT c.id FROM cliente c, usuario u, cliente_usuario cu where u.id = cu.id_usuario and cu.id_CLIENTE = c.id and u.id = ?;";
+    private static final String SELECT_ID_BY_ID_USUARIO = "SELECT c.id FROM cliente c, usuario u where u.id = c.id_usuario and u.id = ?;";
 
     public ClienteDAO(Connection conexao) {
         this.conexao = conexao;
