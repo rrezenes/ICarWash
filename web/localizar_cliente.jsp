@@ -19,10 +19,6 @@
                 <input type="hidden" name="quem" value="cliente"/>
                 <input type="hidden" name="txtId" value="${cliente.id}"/>
                 <div class="col-sm-5">
-                    <label>Email:</label> 
-                    <input class="form-control" type="text" id ="txtEmail" name="txtEmail" disabled value="${cliente.email}"><br>
-                </div>
-                <div class="col-sm-5">
                     <label>Nome:</label> 
                     <input class="form-control erro-nome" type="text" name="txtNome" value="${cliente.nome}"><br>
                 </div>

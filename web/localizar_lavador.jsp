@@ -17,7 +17,6 @@
                     <input type="hidden" name="quem" value="lavador"/>
                     <input type="hidden" name="DtAdmissao" value="${lavador.dataContrato}">
                     <input type="hidden" name="txtId" value="${lavador.id}"/>
-                    <label>Email:</label> <input class="form-control" type="text" name="txtEmail" value="${lavador.email}"><br>
                     <label>Nome:</label> <input class="form-control" type="text" name="txtNome" value="${lavador.nome}"><br>
                     <label>Telefone:</label> <input class="form-control" type="text" name="txtTelefone" value="${lavador.telefone}"><br>
                     <%--Formatar a data antes de exibir na tela--%>

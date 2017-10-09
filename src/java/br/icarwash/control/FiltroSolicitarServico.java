@@ -5,7 +5,7 @@
  */
 package br.icarwash.control;
 
-import br.icarwash.dao.ClienteUsuarioDAO;
+import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -46,7 +46,7 @@ public class FiltroSolicitarServico implements Filter {
 
         if (usuario != null) {
             if (debug) {
-                log("Usuario: " + usuario.getUsuario() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
+                log("Usuario: " + usuario.getEmail() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
             }
         } else {
             log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
@@ -72,11 +72,11 @@ public class FiltroSolicitarServico implements Filter {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
 
         Usuario usuario = (Usuario) session.getAttribute("user");
-        ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         if (usuario != null && usuario.getNivel() == 1) {
             try {
-                if (!clienteUsuarioDAO.existeClienteCadastrado(usuario)) {
+                if (usuarioDAO.isCadastroCompleto(usuario.getId())) {
                     RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
                     rd.forward(request, response);
                 } else {

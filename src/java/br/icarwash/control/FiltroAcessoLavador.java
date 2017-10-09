@@ -37,7 +37,7 @@ public class FiltroAcessoLavador implements Filter {
 
         if (usuario != null) {
             if (debug) {
-                log("Usuário: " + usuario.getUsuario() + " Nível: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
+                log("Usuário: " + usuario.getEmail() + " Nível: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
             }
         } else {
             log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
@@ -71,7 +71,7 @@ public class FiltroAcessoLavador implements Filter {
                 }
             } else {
                 aprovado = false;
-                log("Acesso ao usuário: " + usuario.getUsuario() + " negado. Usuário derrubado do sistema.");
+                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
                 session.invalidate();
                 request.getRequestDispatcher("index.jsp").forward(request, response);
 

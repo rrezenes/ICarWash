@@ -77,8 +77,8 @@
                             <div class="form-bottom">
                                 <form role="form" action="Login" method="post" class="login-form">
                                     <div class="form-group">
-                                        <label class="sr-only" for="form-username">Usuario:</label>
-                                        <input type="text" name="usuario" placeholder="Usuario..." class="form-username form-control" id="form-username">
+                                        <label class="sr-only" for="form-username">Email:</label>
+                                        <input type="text" name="email" placeholder="Email..." class="form-username form-control" id="form-username">
                                     </div>
                                     <div class="form-group">
                                         <label class="sr-only" for="form-password">Senha:</label>
@@ -90,7 +90,7 @@
 
                             </div>
                             <div>
-                                <a href="cadastro.jsp" align="right">Cadastre-se</a>
+                                <a href="novo-cliente" align="right">Cadastre-se</a>
                             </div>
                         </div>
                     </div>

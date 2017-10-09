@@ -26,10 +26,10 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach var="cliente" items="${clientes}">
+        <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
             <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
             <tr>
-                <td>${cliente.email}</td>
+                <td>${usuarios.get(posicao.index).email}</td>
                 <td>${cliente.nome}</td>
                 <td>${cliente.telefone}</td>
                 <td>${dataNascimento}</td>
@@ -40,7 +40,7 @@
                 <td>${cliente.endereco.bairro}</td>
                 <td>${cliente.endereco.endereco} nº${cliente.endereco.numero}</td>
                 <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"></a></td>
-                <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=${cliente.id}"></a></td>
+                <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"></a></td>
             </tr>
         </c:forEach>
     </tbody>

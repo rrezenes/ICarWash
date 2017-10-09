@@ -34,7 +34,7 @@
                             <div class="navbar-header">
                                 <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                 </button>
-                                <a class="navbar-brand" href="painel"><%=usuario.getUsuario()%>, ICarWash</a>
+                                <a class="navbar-brand" href="painel"><%=usuario.getEmail()%>, ICarWash</a>
                             </div>
                             <div class="collapse navbar-collapse">
                                 <ul class="nav navbar-nav">
@@ -69,7 +69,7 @@
                                         <div class="navbar-header">
                                             <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                             </button>
-                                            <a class="navbar-brand" href="painel"><%=usuario.getUsuario()%>, ICarWash</a>
+                                            <a class="navbar-brand" href="painel"><%=usuario.getEmail()%>, ICarWash</a>
                                         </div>
                                         <div class="collapse navbar-collapse">
                                             <ul class="nav navbar-nav">
@@ -109,7 +109,7 @@
                                                     <div class="navbar-header">
                                                         <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                                                         </button>
-                                                        <a class="navbar-brand" href="painel"><%=usuario.getUsuario()%>, ICarWash</a>
+                                                        <a class="navbar-brand" href="painel"><%=usuario.getEmail()%>, ICarWash</a>
                                                     </div>
                                                     <div class="collapse navbar-collapse">
                                                         <ul class="nav navbar-nav">

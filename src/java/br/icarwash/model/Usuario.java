@@ -18,14 +18,25 @@ public class Usuario {
     private String senha;
     private int nivel;
     private boolean ativo;
-    private Calendar cadastro = Calendar.getInstance();
+    private Calendar cadastro;
+    private boolean cadastroCompleto;
 
     public Usuario(String email, String senha, int nivel, boolean ativo) {
-
         this.email = email;
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
+    }
+
+    
+    
+    public Usuario(int id, String email, int nivel, boolean ativo, Calendar cadastro, boolean cadastroCompleto) {
+        this.id = id;
+        this.email = email;
+        this.nivel = nivel;
+        this.ativo = ativo;
+        this.cadastro = cadastro;
+        this.cadastroCompleto = cadastroCompleto;
     }
 
     public Usuario(int id, String email, String senha, int nivel, boolean ativo) {
@@ -46,7 +57,8 @@ public class Usuario {
         this.ativo = ativo;
     }
 
-    public Usuario(String senha) {
+    public Usuario(String email, String senha) {
+        this.email = email;
         this.senha = senha;
     }
 
@@ -101,8 +113,20 @@ public class Usuario {
         return cadastro;
     }
 
+    public void setCadastro(Calendar cadastro) {
+        this.cadastro = cadastro;
+    }
+
     public void setNivel(int nivel) {
         this.nivel = nivel;
+    }
+
+    public boolean isCadastroCompleto() {
+        return cadastroCompleto;
+    }
+
+    public void setCadastroCompleto(boolean cadastroCompleto) {
+        this.cadastroCompleto = cadastroCompleto;
     }
 
 }

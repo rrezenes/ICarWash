@@ -26,11 +26,11 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach var="lavador" items="${lavadores}">
+        <c:forEach var="lavador" items="${lavadores}" varStatus="posicao">
             <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
             <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
             <tr>
-                <td>${lavador.email}</td>
+                <td>${usuarios.get(posicao.index).email}</td>
                 <td>${lavador.nome}</td>
                 <td>${lavador.telefone}</td>
                 <td>${dataNascimento}</td>
@@ -42,7 +42,7 @@
                 <td>${lavador.endereco.endereco} nº${lavador.endereco.numero}</td>
                 <td>${dataContrato}</td>
                 <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"></a></td>
-                <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=${lavador.id}"></a></td>
+                <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=${lavador.idUsuario}"></a></td>
             </tr>
         </c:forEach>        
     </tbody>

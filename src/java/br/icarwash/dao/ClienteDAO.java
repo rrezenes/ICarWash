@@ -25,14 +25,13 @@ public class ClienteDAO implements BasicoDAO {
 
     private boolean fechaConexao = false;
     private Connection conexao;
-    private static final String INSERT = "insert into cliente(email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "select c.id, c.email, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.usuario, u.ativo from Cliente c, usuario u, cliente_usuario cu where c.id = cu.id_CLIENTE and u.id = cu.id_usuario and u.ativo = 1";
+    private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.ativo from Cliente c, usuario u where c.id_usuario = u.id and u.ativo = 1";
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
-    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id=(SELECT id_usuario FROM cliente_usuario where id_cliente = ?);";
-    private static final String SELECT_BY_ID = "select id, email, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
-    private static final String SELECT_ID_BY_EMAIL = "select id from cliente where email = ?";
+    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
+    private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
+    private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
     private static final String SELECT_ID_BY_ID_USUARIO = "SELECT c.id FROM cliente c, usuario u, cliente_usuario cu where u.id = cu.id_usuario and cu.id_CLIENTE = c.id and u.id = ?;";
-
 
     public ClienteDAO(Connection conexao) {
         this.conexao = conexao;
@@ -48,7 +47,7 @@ public class ClienteDAO implements BasicoDAO {
         Cliente cliente = (Cliente) obj;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
-            pstmt.setString(1, cliente.getEmail());
+            pstmt.setInt(1, cliente.getIdUsuario());
             pstmt.setString(2, cliente.getNome());
             pstmt.setString(3, cliente.getTelefone());
             pstmt.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
@@ -81,7 +80,7 @@ public class ClienteDAO implements BasicoDAO {
                 Timestamp timestamp;
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                Cliente cli = new Cliente(rs.getInt("id"), rs.getString("email"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                Cliente cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
 
                 clientes.add(cli);
             }
@@ -104,7 +103,7 @@ public class ClienteDAO implements BasicoDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cli = new Cliente(rs.getInt("id"), rs.getString("email"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -148,11 +147,11 @@ public class ClienteDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    public int localizarIdPorEmail(String email) {
+    public int localizarIdPorCpf(String cpf) {
         int IDCliente = 0;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_EMAIL);
-            pstmt.setString(1, email);
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_CPF);
+            pstmt.setString(1, cpf);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 IDCliente = rs.getInt("id");
