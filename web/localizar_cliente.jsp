@@ -1,9 +1,3 @@
-<%-- 
-    Document   : localizar
-    Created on : 18/11/2016, 09:40:30
-    Author     : rezen
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
@@ -13,7 +7,6 @@
         <div class="jumbotron">
             <h1>Alterar Cliente</h1>
         </div>
-
         <form id="formCliente" action="Controle" method="post">
             <div class="form-group">
                 <input type="hidden" name="quem" value="cliente"/>
@@ -132,7 +125,7 @@
     }, "Por favor, utilize apenas letras");
     
     $.validator.addMethod("letterAndNumbersOnly", function(value, element) {
-        return this.optional(element) || /^[A-Za-z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/i.test(value);
+        return this.optional(element) || /^[-A-Za-z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/i.test(value);
     }, "Por favor, utilize apenas letras e números");
 
     $(document).ready(function () {
@@ -140,6 +133,7 @@
         $("#formCliente").validate({
             rules: {
                 txtNome: {
+                    maxlength: 50,
                     required: true,
                     minlength: 3,
                     lettersonly: true
@@ -170,12 +164,13 @@
                 },
                 txtNumero: {
                     required: true,
-                    letterAndNumbersOnly: true
+                    number: true
                 }
 
             },
             messages: {
                 txtNome: {
+                    maxlength: "Por favor, entre com seu nome apenas",
                     required: "Por favor, digite seu nome aqui",
                     minlength: "Por favor, digite um nome de no mínimo 3 dígitos"
                 },
@@ -200,7 +195,8 @@
                     required: "Por favor, digite seu endereço"
                 },
                 txtNumero: {
-                    required: "Por favor, digite seu número"
+                    required: "Por favor, digite seu número",
+                    number: "Por favor, digite seu número apenas"
                     
                 }
 
