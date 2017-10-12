@@ -2,53 +2,53 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
-<div class="jumbotron">
-    <h2>Controle de Lavadores</h2>
-</div>
-
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Nome</th>
-            <th>Telefone</th>
-            <th>Data Nascimento</th>
-            <th>CPF</th>
-            <th>CEP</th>
-            <th>Estado</th>
-            <th>Cidade</th>
-            <th>Bairro</th>
-            <th>Endereço</th>
-            <th>Admissão</th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="lavador" items="${lavadores}">
-            <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
-            <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
-            <tr>
-                <td>${lavador.email}</td>
-                <td>${lavador.nome}</td>
-                <td>${lavador.telefone}</td>
-                <td>${dataNascimento}</td>
-                <td>${lavador.CPF}</td>
-                <td>${lavador.endereco.CEP}</td>
-                <td>${lavador.endereco.estado}</td>
-                <td>${lavador.endereco.cidade}</td>
-                <td>${lavador.endereco.bairro}</td>
-                <td>${lavador.endereco.endereco} nº${lavador.endereco.numero}</td>
-                <td>${dataContrato}</td>
-                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"></a></td>
-                <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=${lavador.id}"></a></td>
-            </tr>
-        </c:forEach>        
-    </tbody>
-</table>
 
 <div class="container">
+    <div class="jumbotron">
+        <h2>Controle de Lavadores</h2>
+    </div>
+
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Lavador</button>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data Nascimento</th>
+                <th>CPF</th>
+                <th>CEP</th>
+                <th>Estado</th>
+                <th>Cidade</th>
+                <th>Bairro</th>
+                <th>Endereço</th>
+                <th>Admissão</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="lavador" items="${lavadores}" varStatus="posicao">
+                <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
+                <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
+                <tr>
+                    <td>${usuarios.get(posicao.index).email}</td>
+                    <td>${lavador.nome}</td>
+                    <td>${lavador.telefone}</td>
+                    <td>${dataNascimento}</td>
+                    <td>${lavador.CPF}</td>
+                    <td>${lavador.endereco.CEP}</td>
+                    <td>${lavador.endereco.estado}</td>
+                    <td>${lavador.endereco.cidade}</td>
+                    <td>${lavador.endereco.bairro}</td>
+                    <td>${lavador.endereco.endereco} nº${lavador.endereco.numero}</td>
+                    <td>${dataContrato}</td>
+                    <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"></a></td>
+                    <td><a type="button" class="glyphicon glyphicon-remove text-danger" href="Controle?action=Excluir&q=lavador&id=${lavador.idUsuario}"></a></td>
+                </tr>
+            </c:forEach>        
+        </tbody>
+    </table>
 </div>
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">

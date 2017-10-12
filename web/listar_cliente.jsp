@@ -3,51 +3,52 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 
-<div class="jumbotron">
-    <h2>Controle de Clientes</h2>
-</div>
-
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Cliente</button>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Nome</th>
-            <th>Telefone</th>
-            <th>Data Nascimento</th>
-            <th>CPF</th>
-            <th>CEP</th>
-            <th>Estado</th>
-            <th>Cidade</th>
-            <th>Bairro</th>
-            <th>Endereço</th>
-            <th colspan=2></th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="cliente" items="${clientes}">
-            <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
-            <tr>
-                <td>${cliente.email}</td>
-                <td>${cliente.nome}</td>
-                <td>${cliente.telefone}</td>
-                <td>${dataNascimento}</td>
-                <td>${cliente.CPF}</td>
-                <td>${cliente.endereco.CEP}</td>
-                <td>${cliente.endereco.estado}</td>
-                <td>${cliente.endereco.cidade}</td>
-                <td>${cliente.endereco.bairro}</td>
-                <td>${cliente.endereco.endereco} nº${cliente.endereco.numero}</td>
-                <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"></a></td>
-                <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=${cliente.id}"></a></td>
-            </tr>
-        </c:forEach>
-    </tbody>
-</table>
 
 <div class="container">
+    <div class="jumbotron">
+        <h2>Controle de Clientes</h2>
+    </div>
+
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Adicionar Cliente</button>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data Nascimento</th>
+                <th>CPF</th>
+                <th>CEP</th>
+                <th>Estado</th>
+                <th>Cidade</th>
+                <th>Bairro</th>
+                <th>Endereço</th>
+                <th colspan=2></th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
+                <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
+                <tr>
+                    <td>${usuarios.get(posicao.index).email}</td>
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.telefone}</td>
+                    <td>${dataNascimento}</td>
+                    <td>${cliente.CPF}</td>
+                    <td>${cliente.endereco.CEP}</td>
+                    <td>${cliente.endereco.estado}</td>
+                    <td>${cliente.endereco.cidade}</td>
+                    <td>${cliente.endereco.bairro}</td>
+                    <td>${cliente.endereco.endereco} nº${cliente.endereco.numero}</td>
+                    <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"></a></td>
+                    <td><a type="button" class="glyphicon glyphicon-remove text-danger"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"></a></td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 </div>
+
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->

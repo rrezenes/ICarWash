@@ -24,12 +24,6 @@
                     <div class="panel-body">
                         <form id="formCliente" method="post" class="form-horizontal" action="NovoCliente">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label" for="usuario" name="login">Usuário</label>                                    
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Digite aqui o nome de seu usuário" />
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-sm-4 control-label" for="email" name="txtEmail">Email</label>
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
@@ -65,11 +59,6 @@
             $(document).ready(function () {
                 $("#formCliente").validate({
                     rules: {
-                        usuario: {                            
-                            remote: 'CheckUsuarioLogin',
-                            required: true,
-                            minlength: 2
-                        },
                         senha: {
                             required: true,
                             minlength: 5
@@ -86,11 +75,6 @@
                         }
                     },
                     messages: {
-                        usuario: {
-                            required: "Por favor, coloque seu usuário.",
-                            minlength: "Seu usuário deve conter no mínimo 2 caracteres.",
-                            remote: "Usuário já está em uso."
-                        },
                         senha: {
                             required: "Por favor, coloque sua senha.",
                             minlength: "Sua senha deve conter no mínimo 5 caracteres."
@@ -101,9 +85,9 @@
                             equalTo: "Sua senha deve ser a mesma a cima."
                         },
                         email: {
-                            remote: "Por favor, coloque um e-mail válido.",
+                            remote: "E-mail já está em uso.",
                             required: "Por favor, coloque um e-mail válido.",
-                            email: "E-mail já está em uso."
+                            email: "Por favor, coloque um e-mail válido."
                         }
                     },
                     errorElement: "em",

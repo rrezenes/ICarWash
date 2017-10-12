@@ -7,14 +7,10 @@ package br.icarwash.control.remoto;
 
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
-import br.icarwash.model.Solicitacao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.ProcessBuilder.Redirect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

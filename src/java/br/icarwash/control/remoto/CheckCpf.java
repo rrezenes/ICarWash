@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.control.remoto;
 
 import org.json.JSONObject;
@@ -18,14 +13,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONException;
 
-/**
- *
- * @author Mirian
- */
-@WebServlet(name = "CheckUsuario", urlPatterns = "/CheckUsuarioEmail")
-public class CheckUsuario extends HttpServlet {
+
+@WebServlet(name = "CheckCpf", urlPatterns = "/CheckCpf")
+public class CheckCpf extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

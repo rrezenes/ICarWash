@@ -4,7 +4,6 @@ package br.icarwash.control.command;
 import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.*;
 import br.icarwash.model.Cliente;
-import br.icarwash.model.ClienteUsuario;
 import java.io.IOException;
 import java.util.Calendar;
 import javax.servlet.ServletException;
@@ -33,25 +32,16 @@ public class Cadastrar implements ICommand {
             case "cliente": {
                 String[] nascimento = request.getParameter("nascimento").split("/");
                 cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
-                Cliente cliente = new Cliente(request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
+                
+                Cliente cliente = new Cliente(request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));    
                 
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
-                    //VERIFICAR REPETIÇÃO
-                    Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("login"), request.getParameter("senha"), 1, true);
-                    UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-                    usuarioDAO.cadastrar(usuario);
-                    usuario = usuarioDAO.localizarIdPorUsuario(usuario);
-                    //VERIFICAR REPETIÇÃO
-
+                            
+                    cliente.setIdUsuario(criaUsuario(request, conexao, 1));                    
                     ClienteDAO clienteDAO = new ClienteDAO(conexao);
                     clienteDAO.cadastrar(cliente);
-                    Cliente clienteID = new Cliente(clienteDAO.localizarIdPorEmail(cliente.getEmail()));
-
-                    ClienteUsuario clienteUsuario = new ClienteUsuario(clienteID, usuario);
-                    ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO(conexao);
-                    clienteUsuarioDAO.cadastrar(clienteUsuario);
 
                     conexao.commit();
                 } catch (SQLException e) {
@@ -81,21 +71,21 @@ public class Cadastrar implements ICommand {
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
-                    //VERIFICAR REPETIÇÃO
-                    Usuario usuario = new Usuario(request.getParameter("login"), request.getParameter("senha"), 2, true);
-                    UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-                    usuarioDAO.cadastrar(usuario);
-                    usuario = usuarioDAO.localizarIdPorUsuario(usuario);
-                    //VERIFICAR REPETIÇÃO
-
+                    
+                    lavador.setIdUsuario(criaUsuario(request, conexao, 2));                    
                     LavadorDAO lavadorDAO = new LavadorDAO(conexao);
                     lavadorDAO.cadastrar(lavador);
-                    Lavador lavadorID = new Lavador(lavadorDAO.localizarIdPorEmail(lavador.getEmail()));
 
-                    LavadorUsuario lavadorUsuario = new LavadorUsuario(lavadorID, usuario);
-                    LavadorUsuarioDAO lavadorUsuarioDAO = new LavadorUsuarioDAO(conexao);
-                    lavadorUsuarioDAO.cadastrar(lavadorUsuario);
                     conexao.commit();
+
+//                    LavadorDAO lavadorDAO = new LavadorDAO(conexao);
+//                    lavadorDAO.cadastrar(lavador);
+//                    Lavador lavadorID = new Lavador(lavadorDAO.localizarIdPorCpf(lavador.getCPF()));
+//
+//                    LavadorUsuario lavadorUsuario = new LavadorUsuario(lavadorID, usuario);
+//                    LavadorUsuarioDAO lavadorUsuarioDAO = new LavadorUsuarioDAO(conexao);
+//                    lavadorUsuarioDAO.cadastrar(lavadorUsuario);
+//                    conexao.commit();
                 } catch (SQLException e) {
                     try {
                         conexao.rollback();
@@ -162,5 +152,12 @@ public class Cadastrar implements ICommand {
                 return "painel_admin.jsp";
         }
 
+    }
+
+    private int criaUsuario(HttpServletRequest request, Connection conexao, int nivelDeAcesso) {
+        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), nivelDeAcesso, true);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+        usuarioDAO.cadastrar(usuario);
+        return usuarioDAO.localizarIdPorEmailUsuario(usuario.getEmail());        
     }
 }

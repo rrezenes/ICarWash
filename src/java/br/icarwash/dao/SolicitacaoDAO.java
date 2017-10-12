@@ -114,7 +114,7 @@ public class SolicitacaoDAO {
         Endereco endereco;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
+            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, solicitacao s, cliente c where c.id = s.id_cliente and u.id = l.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -143,7 +143,7 @@ public class SolicitacaoDAO {
         Endereco endereco;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, lavador_usuario lu, solicitacao s, cliente c where c.id = s.id_cliente and l.id = lu.id_lavador and u.id = lu.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
+            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, solicitacao s, cliente c where c.id = s.id_cliente and u.id = l.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {

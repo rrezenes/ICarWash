@@ -30,7 +30,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
 
-        Usuario usuario = new Usuario(request.getParameter("usuario"), request.getParameter("senha"));
+        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"));
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
         } else {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", usuario);
-            session.setAttribute("acesso", usuario.getNivel());
+            session.setAttribute("acesso", usuario.getNivel()); // A R R U M A R
             //tempo de limite da sesssão em segundos
             session.setMaxInactiveInterval(600);
             response.sendRedirect("painel");

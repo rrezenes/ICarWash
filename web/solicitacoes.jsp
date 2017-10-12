@@ -7,11 +7,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
-
-<div class="jumbotron">
-    <h2>Solicitações pendentes</h2>
-</div>
 <div class="container">
+
+    <div class="jumbotron">
+        <h2>Solicitações pendentes</h2>
+    </div>
     <table class="table table-hover">
         <thead>
             <tr>

@@ -24,12 +24,8 @@
         </div>
         <div class="row">
             <div class="col-md-5">
-                <label>Data de Nascimento:</label>
-                <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-date-end-date="0d">
-                    <input class="form-control erro.nascimento" size="16" type="text" readonly name="data" id="data">
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                </div>
-                <input class="form-control" type="hidden" id="dtp_input1" name="nascimento" id="nascimento"><br>
+                <label>Data de Nascimento:</label>                
+                <input class="form-control erro-cpf" type="text" name="nascimento" id="nascimento"><br>
 
             </div>
             <div class="col-md-5">
@@ -233,20 +229,16 @@
         });
     });
 </script>
-<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/moment.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/locales/moment.pt-BR.js" charset="UTF-8"></script>
 
 <script type="text/javascript">
     $(function () {
         var date = new Date(1900, 1, 1);
 
-        $('.form_datetime').datetimepicker({
-            language: 'pt-BR',
-            autoclose: 1,
-            format: "dd MM yyyy",
-            startDate: date,
-            viewMode: 'years'
+        $('#datepicker2').datetimepicker({
+            format: "L"
         });
     });
 </script>
