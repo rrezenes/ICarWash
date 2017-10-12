@@ -22,7 +22,7 @@ public class UsuarioDAO {//terminar de implementar
 
     private boolean fechaConexao = false;
     private Connection conexao;
-    private static final String CREATE_USUARIO = "INSERT INTO usuario(email, senha, nivel, ativo,cadastro) VALUES (?,SHA1(?),?,?, NOW());";
+    private static final String CREATE_USUARIO = "INSERT INTO usuario(email, senha, nivel, ativo, cadastro, cadastro_completo) VALUES (?, SHA1(?), ?, ?, NOW(), ?);";
     private static final String SELECT_USUARIO = "select * from usuario where email = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where email = ?";
     private static final String SELECT_NEXT_USUARIO = "select count(*)+1 as qtd from usuario";
@@ -38,8 +38,7 @@ public class UsuarioDAO {//terminar de implementar
         fechaConexao = true;
     }
 
-    public void cadastrar(Object obj) {
-        Usuario usuario = (Usuario) obj;
+    public void cadastrar(Usuario usuario) {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(CREATE_USUARIO);
@@ -47,6 +46,7 @@ public class UsuarioDAO {//terminar de implementar
             pstmt.setString(2, usuario.getSenha());
             pstmt.setInt(3, usuario.getNivel());
             pstmt.setBoolean(4, usuario.isAtivo());
+            pstmt.setBoolean(5, usuario.isCadastroCompleto());
 
             pstmt.execute();
 
@@ -64,7 +64,7 @@ public class UsuarioDAO {//terminar de implementar
             pstmt.setString(2, usuarioLogin.getSenha());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                usuario = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
+                usuario = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getInt("nivel"), rs.getBoolean("ativo"), rs.getBoolean("cadastro_completo"));
             } else {
                 usuario = new Usuario();
                 usuario.setNivel(0);
@@ -150,7 +150,7 @@ public class UsuarioDAO {//terminar de implementar
             PreparedStatement pstmt = conexao.prepareStatement("SELECT cadastro_completo FROM usuario where id = ?");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 cadastro = rs.getBoolean("cadastro_completo");
             }
         } catch (SQLException e) {
@@ -159,6 +159,17 @@ public class UsuarioDAO {//terminar de implementar
             this.fechaConexao();
         }
         return cadastro;
+    }
+
+    public void concluirCadastro(int idUusuario) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement("update usuario set cadastro_completo = true WHERE id = ?");
+            pstmt.setInt(1, idUusuario);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
     }
 
     private void fechaConexao() throws RuntimeException {
