@@ -87,12 +87,12 @@
                                     <div class="form-inline">
                                         <div class="checkbox col-md-7">
                                             <label style="padding-left: 10px">
-                                                <input type="checkbox" value="${produto.id}" name="produtos" onclick="document.ElementById('${produto.id}').disabled = !this.checked;">${produto.nome}
+                                                <input type="checkbox" value="${produto.id}" name="produtos" onclick="if($(this).is(':checked')){$('#combo${produto.id}').prop('disabled',false);} else {$('#combo${produto.id}').prop('disabled',true);$('#combo${produto.id}').val(null)}">${produto.nome}
                                             </label>
                                         </div>
                                         <div class="col-md-5" style="padding: 0 0 2px 25px">
-                                            <select class="form-control" name="combo${produto.id}" id="${produto.id}" disabled="disabled">
-                                                <option value="1"></option>
+                                            <select class="form-control" name="combo${produto.id}" id="combo${produto.id}" disabled="disabled">
+                                                <option></option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -119,83 +119,83 @@
 
 <script src="js/jquery.validate.js"></script>
 <script type="text/javascript">
-                                                $(document).ready(function () {
-                                                    $("#formServico").validate({
-                                                        rules: {
-                                                            nome: {
-                                                                maxlength: 50,
-                                                                required: true,
-                                                                minlength: 3
-                                                            },
-                                                            descricao: {
-                                                                maxlength: 50,
-                                                                required: true,
-                                                                minlength: 3
-                                                            },
-                                                            valor: {
-                                                                maxlength: 6,
-                                                                required: true,
-                                                                number: true
-                                                            }
+$(document).ready(function () {
+    $("#formServico").validate({
+        rules: {
+            nome: {
+                maxlength: 50,
+                required: true,
+                minlength: 3
+            },
+            descricao: {
+                maxlength: 50,
+                required: true,
+                minlength: 3
+            },
+            valor: {
+                maxlength: 6,
+                required: true,
+                number: true
+            }
 
-                                                        },
-                                                        messages: {
-                                                            nome: {
-                                                                maxlength: "Utilize no máximo 50 caracteres",
-                                                                required: "Campo obrigarório preencher",
-                                                                minlength: "Utilize no mínimo 3 caracteres"
-                                                            },
-                                                            descricao: {
-                                                                maxlength: "Utilize no máximo 50 caracteres",
-                                                                required: "Campo obrigarório preencher",
-                                                                minlength: "Utilize no mínimo 3 caracteres"
-                                                            },
-                                                            valor: {
-                                                                maxlength: "Utilize no máximo 6 caracteres",
-                                                                required: "Campo obrigarório preencher",
-                                                                number: "Apenas valores reais"
-                                                            }
-                                                        },
-                                                        errorElement: "em",
-                                                        errorPlacement: function (error, element) {
-                                                            // Add the `help-block` class to the error element
-                                                            //error.addClass("help-block");
+        },
+        messages: {
+            nome: {
+                maxlength: "Utilize no máximo 50 caracteres",
+                required: "Campo obrigarório preencher",
+                minlength: "Utilize no mínimo 3 caracteres"
+            },
+            descricao: {
+                maxlength: "Utilize no máximo 50 caracteres",
+                required: "Campo obrigarório preencher",
+                minlength: "Utilize no mínimo 3 caracteres"
+            },
+            valor: {
+                maxlength: "Utilize no máximo 6 caracteres",
+                required: "Campo obrigarório preencher",
+                number: "Apenas valores reais"
+            }
+        },
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+            // Add the `help-block` class to the error element
+            //error.addClass("help-block");
 
-                                                            // Add `has-feedback` class to the parent div.form-group
-                                                            // in order to add icons to inputs
-                                                            element.parents(".col-sm-5").addClass("has-feedback");
+            // Add `has-feedback` class to the parent div.form-group
+            // in order to add icons to inputs
+            element.parents(".col-sm-5").addClass("has-feedback");
 
-                                                            if (element.prop("nome") === "nome") {
-                                                                error.insertAfter(".erro-nome");
-                                                            } else if (element.prop("descricao") === "descricao") {
-                                                                error.insertAfter(".erro-descricao");
-                                                            } else if (element.prop("valor") === "valor") {
-                                                                error.insertAfter(".erro-valor");
-                                                            } else {
-                                                                error.insertAfter(element);
-                                                            }
+            if (element.prop("nome") === "nome") {
+                error.insertAfter(".erro-nome");
+            } else if (element.prop("descricao") === "descricao") {
+                error.insertAfter(".erro-descricao");
+            } else if (element.prop("valor") === "valor") {
+                error.insertAfter(".erro-valor");
+            } else {
+                error.insertAfter(element);
+            }
 
-                                                            // Add the span element, if doesn't exists, and apply the icon classes to it.
-                                                            if (!element.next("span")[ 0 ]) {
-                                                                $("<span class='glyphicon form-control-feedback'></span>").insertAfter(element);
-                                                            }
-                                                        },
-                                                        success: function (label, element) {
-                                                            // Add the span element, if doesn't exists, and apply the icon classes to it.
-                                                            if (!$(element).next("span")[ 0 ]) {
-                                                                $("<span class='glyphicon form-control-feedback'></span>").insertAfter($(element));
-                                                            }
-                                                        },
-                                                        highlight: function (element, errorClass, validClass) {
-                                                            $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
-                                                            //$(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
-                                                        },
-                                                        unhighlight: function (element, errorClass, validClass) {
-                                                            $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
-                                                            //$(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
-                                                        }
-                                                    });
-                                                });
+            // Add the span element, if doesn't exists, and apply the icon classes to it.
+            if (!element.next("span")[ 0 ]) {
+                $("<span class='glyphicon form-control-feedback'></span>").insertAfter(element);
+            }
+        },
+        success: function (label, element) {
+            // Add the span element, if doesn't exists, and apply the icon classes to it.
+            if (!$(element).next("span")[ 0 ]) {
+                $("<span class='glyphicon form-control-feedback'></span>").insertAfter($(element));
+            }
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
+            //$(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
+            //$(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
+        }
+    });
+});
 </script>
 
 <%@include file="rodape.jsp"%>
