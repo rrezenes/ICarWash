@@ -60,12 +60,18 @@
                 <h4 class="modal-title">Cadastrar Produto</h4>
             </div>
             <div class="modal-body">
-                <form action="Controle" method="post">
+                <form id="formProduto" action="Controle" method="post">
                     <div class="form-group">
                         <input type="hidden" name="quem" value="produto">
                         <div class="row">
-                            <div class="col-md-6"><label>Nome:</label> <input class="form-control" type="text" name="nome"><br></div>
-                            <div class="col-md-6"><label>Descrição:</label> <input class="form-control" type="text" name="descricao" id="descricao"><br></div>
+                            <div class="col-sm-5">
+                                <label>Nome:</label> 
+                                <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
+                            </div>
+                            <div class="col-sm-5">
+                                <label>Descrição:</label> 
+                                <input class="form-control erro-descricao" type="text" name="descricao" id="descricao"><br>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -79,4 +85,74 @@
         </div>
     </div>
 </div>
+
+<script src="js/jquery.validate.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#formProduto").validate({
+            rules: {
+                nome: {
+                    maxlength: 50,
+                    required: true,
+                    minlength: 3
+                },
+                descricao: {
+                    maxlength: 50,
+                    required: true,
+                    minlength: 3
+                }
+
+            },
+            messages: {
+                nome: {
+                    maxlength: "Utilize no máximo 50 caracteres",
+                    required: "Campo obrigarório preencher",
+                    minlength: "Utilize no mínimo 3 caracteres"
+                },
+                descricao: {
+                    maxlength: "Utilize no máximo 50 caracteres",
+                    required: "Campo obrigarório preencher",
+                    minlength: "Utilize no mínimo 3 caracteres"
+                }
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                //error.addClass("help-block");
+
+                // Add `has-feedback` class to the parent div.form-group
+                // in order to add icons to inputs
+                element.parents(".col-sm-5").addClass("has-feedback");
+
+                if (element.prop("nome") === "nome") {
+                    error.insertAfter(".erro-nome");
+                } else if (element.prop("descricao") === "descricao") {
+                    error.insertAfter(".erro-descricao");
+                } else {
+                    error.insertAfter(element);
+                }
+
+                // Add the span element, if doesn't exists, and apply the icon classes to it.
+                if (!element.next("span")[ 0 ]) {
+                    $("<span class='glyphicon form-control-feedback'></span>").insertAfter(element);
+                }
+            },
+            success: function (label, element) {
+                // Add the span element, if doesn't exists, and apply the icon classes to it.
+                if (!$(element).next("span")[ 0 ]) {
+                    $("<span class='glyphicon form-control-feedback'></span>").insertAfter($(element));
+                }
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
+                //$(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
+                //$(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
+            }
+        });
+    });
+</script>
+
 <%@include file="rodape.jsp"%>

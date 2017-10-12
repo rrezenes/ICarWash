@@ -179,6 +179,20 @@ public class ClienteDAO implements BasicoDAO {
         return cliente;
     }
 
+    public boolean checkCpfDisponivel(String cpf) {
+
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_CPF);
+            pstmt.setString(1, cpf);
+            ResultSet rs = pstmt.executeQuery();
+            return !rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.fechaConexao();
+        }
+    }
+    
     private void fechaConexao() throws RuntimeException {
         if (fechaConexao) {
             try {

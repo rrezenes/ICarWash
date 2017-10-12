@@ -143,7 +143,7 @@ public class UsuarioDAO {//terminar de implementar
             this.fechaConexao();
         }
     }
-
+    
     public boolean isCadastroCompleto(int id) {
         boolean cadastro = false;
         try {

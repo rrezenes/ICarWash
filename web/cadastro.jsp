@@ -59,6 +59,11 @@
             $(document).ready(function () {
                 $("#formCliente").validate({
                     rules: {
+                        email: {
+                            remote: 'CheckUsuarioEmail',
+                            required: true,
+                            email: true
+                        },
                         senha: {
                             required: true,
                             minlength: 5
@@ -67,14 +72,15 @@
                             required: true,
                             minlength: 5,
                             equalTo: "#senha"
-                        },
-                        email: {
-                            remote: 'CheckUsuarioEmail',
-                            required: true,
-                            email: true
                         }
+                        
                     },
                     messages: {
+                        email: {
+                            remote: "E-mail já está em uso.",
+                            required: "Por favor, coloque um e-mail válido.",
+                            email: "Por favor, coloque um e-mail válido."
+                        },
                         senha: {
                             required: "Por favor, coloque sua senha.",
                             minlength: "Sua senha deve conter no mínimo 5 caracteres."
@@ -83,12 +89,8 @@
                             required: "Por favor, coloque sua senha novamente.",
                             minlength: "Sua senha deve conter no mínimo 5 caracteres",
                             equalTo: "Sua senha deve ser a mesma a cima."
-                        },
-                        email: {
-                            remote: "E-mail já está em uso.",
-                            required: "Por favor, coloque um e-mail válido.",
-                            email: "Por favor, coloque um e-mail válido."
                         }
+                        
                     },
                     errorElement: "em",
                     errorPlacement: function (error, element) {

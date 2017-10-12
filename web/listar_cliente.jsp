@@ -232,6 +232,7 @@
                     required: true
                 },
                 cpf: {
+                    remote: 'CheckCpf',
                     cpf: true,
                     required: true
                 },
@@ -258,9 +259,9 @@
             },
             messages: {
                 email: {
-                    remote: "Esse e-mail já está em uso, por favor utilize um e-mail válido e disponível.",
+                    remote: "E-mail já está em uso",
                     required: "Por favor, coloque um e-mail válido.",
-                    email: "E-mail já está em uso."
+                    email: "Por favor, coloque um e-mail válido."
                 },
                 senha: {
                     required: "Por favor, coloque sua senha.",
@@ -282,7 +283,8 @@
                     required: "Por favor, seleciona uma data de nascimento"
                 },
                 cpf: {
-                    cpf: 'CPF inválido',
+                    remote: "Cpf já está em uso",
+                    cpf: "CPF inválido",
                     required: "Por favor, digite seu CPF aqui."
                 },
                 cep: {
