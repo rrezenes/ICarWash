@@ -97,7 +97,7 @@
                     required: true,
                     minlength: 3
                 },
-                txttelefone: {
+                txtTelefone: {
                     required: true
                 },
                 data: {

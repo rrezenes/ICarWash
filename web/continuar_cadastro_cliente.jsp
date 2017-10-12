@@ -1,8 +1,3 @@
-<%-- 
-    Document   : continuar_cadastro_cliente
-    Created on : 23/09/2017, 21:26:25
-    Author     : Mirian
---%>
 
 <%@include file="cabecalho.jsp"%>
 <div class="container">
