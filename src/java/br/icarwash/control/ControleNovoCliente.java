@@ -23,7 +23,7 @@ public class ControleNovoCliente extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), 1, true);
+        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), 1, true, false);
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         usuarioDAO.cadastrar(usuario);
 

@@ -21,11 +21,12 @@ public class Usuario {
     private Calendar cadastro;
     private boolean cadastroCompleto;
 
-    public Usuario(String email, String senha, int nivel, boolean ativo) {
+    public Usuario(String email, String senha, int nivel, boolean ativo, boolean cadastroCompleto) {
         this.email = email;
         this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
+        this.cadastroCompleto = cadastroCompleto;
     }
 
     
@@ -39,12 +40,12 @@ public class Usuario {
         this.cadastroCompleto = cadastroCompleto;
     }
 
-    public Usuario(int id, String email, String senha, int nivel, boolean ativo) {
+    public Usuario(int id, String email, int nivel, boolean ativo, boolean cadastroCompleto) {
         this.id = id;
         this.email = email;
-        this.senha = senha;
         this.nivel = nivel;
         this.ativo = ativo;
+        this.cadastroCompleto = cadastroCompleto;
     }
 
     public Usuario(int id) {

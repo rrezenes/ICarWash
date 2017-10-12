@@ -1,6 +1,7 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Usuario;
@@ -32,15 +33,13 @@ public class ContinuarCadastro extends HttpServlet {
             Calendar cal1 = Calendar.getInstance();
             cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]), Integer.parseInt(nascimento[0]));
 
-            Cliente cliente = new Cliente(request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
+            Cliente cliente = new Cliente(usuario.getId(),request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
             ClienteDAO clienteDAO = new ClienteDAO(conexao);
             clienteDAO.cadastrar(cliente);
-            Cliente clienteID = new Cliente(clienteDAO.localizarIdPorCpf(cliente.getCPF()));
-
-            ClienteUsuario clienteUsuario = new ClienteUsuario(clienteID, usuario);
-            ClienteUsuarioDAO clienteUsuarioDAO = new ClienteUsuarioDAO(conexao);
-            clienteUsuarioDAO.cadastrar(clienteUsuario);
-
+            
+            UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+            usuarioDAO.concluirCadastro(usuario.getId());
+            
             conexao.commit();
         } catch (SQLException e) {
             try {

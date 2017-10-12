@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : 17/11/2016, 22:03:09
-    Author     : rezen
---%>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -27,11 +21,6 @@
 
         <!-- Favicon and touch icons -->
         <link rel="shortcut icon" href="assets/ico/favicon.png">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
-
     </head>
 
     <body>
@@ -55,10 +44,6 @@
                                     }
 
                                 %>
-                                <!--<p>
-                                        This is a free responsive login form made with Bootstrap. 
-                                        Download it on <a href="http://azmind.com"><strong>AZMIND</strong></a>, customize and use it as you like!
-                                    </p>-->
                             </div>
                         </div>
                     </div>
@@ -112,4 +97,3 @@
     </body>
 
 </html>
-<%--<jsp:forward page="Controle?action=Admin" />--%>

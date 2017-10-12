@@ -77,15 +77,6 @@ public class Cadastrar implements ICommand {
                     lavadorDAO.cadastrar(lavador);
 
                     conexao.commit();
-
-//                    LavadorDAO lavadorDAO = new LavadorDAO(conexao);
-//                    lavadorDAO.cadastrar(lavador);
-//                    Lavador lavadorID = new Lavador(lavadorDAO.localizarIdPorCpf(lavador.getCPF()));
-//
-//                    LavadorUsuario lavadorUsuario = new LavadorUsuario(lavadorID, usuario);
-//                    LavadorUsuarioDAO lavadorUsuarioDAO = new LavadorUsuarioDAO(conexao);
-//                    lavadorUsuarioDAO.cadastrar(lavadorUsuario);
-//                    conexao.commit();
                 } catch (SQLException e) {
                     try {
                         conexao.rollback();
@@ -155,7 +146,7 @@ public class Cadastrar implements ICommand {
     }
 
     private int criaUsuario(HttpServletRequest request, Connection conexao, int nivelDeAcesso) {
-        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), nivelDeAcesso, true);
+        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), nivelDeAcesso, true, true);
         UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
         usuarioDAO.cadastrar(usuario);
         return usuarioDAO.localizarIdPorEmailUsuario(usuario.getEmail());        
