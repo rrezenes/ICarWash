@@ -153,7 +153,7 @@ $(document).ready(function () {
             valor: {
                 maxlength: "Utilize no máximo 6 caracteres",
                 required: "Campo obrigarório preencher",
-                number: "Apenas valores reais"
+                number: "Apenas valores reais, utilize ponto para separar reais dos centavos"
             }
         },
         errorElement: "em",

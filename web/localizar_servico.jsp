@@ -35,27 +35,32 @@
                 txtNome: {
                     maxlength: 50,
                     required: true,
-                    minlength: 3,
-                    lettersonly: true
+                    minlength: 3
                 },
                 txtDescricao: {
-                    required: true
+                    maxlength: 50,
+                required: true,
+                minlength: 3
                 },
                 txtValor: {
-                    required: true
+                    maxlength: 6,
+                required: true,
+                number: true
                 }
             },
             messages: {
                 txtNome: {
-                    maxlength: "Por favor, entre com seu nome apenas",
-                    required: "Por favor, digite seu nome aqui",
+                    maxlength: "Por favor, entre com o nome do serviço",
+                    required: "Por favor, entre com o nome do serviço",
                     minlength: "Por favor, digite um nome de no mínimo 3 dígitos"
                 },
                 txtDescricao: {
-                    required: "Por favor, digite seu telefone"
+                    required: "Por favor, entre com uma descrição breve do serviço"
                 },
                 txtValor: {
-                    required: "Por favor, digite seu CEP"
+                    maxlength: "Utilize no máximo 6 caracteres",
+                required: "Campo obrigarório preencher",
+                number: "Apenas valores reais, utilize ponto para separar reais dos centavos"
                 }
 
             },
