@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import java.sql.Connection;
@@ -18,14 +13,10 @@ import br.icarwash.util.Conexao;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-/**
- *
- * @author rezen
- */
 public class LavadorDAO {
 
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
     private static final String INSERT = "insert into lavador(id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, l.cep, l.estado, l.cidade, l.bairro, l.endereco, l.numero, u.ativo from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";

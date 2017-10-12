@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import br.icarwash.model.Avaliacao;
@@ -12,13 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
 
-/**
- *
- * @author rezen
- */
 public class AvaliacaoDAO {
 
-    private Connection conexao;
+    private final Connection conexao;
     private boolean fechaConexao = false;
 
     public AvaliacaoDAO(Connection conexao) {

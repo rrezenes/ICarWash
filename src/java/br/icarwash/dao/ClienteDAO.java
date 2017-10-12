@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import br.icarwash.model.Cliente;
@@ -15,16 +10,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
-import br.icarwash.model.Usuario;
 
-/**
- *
- * @author rezen
- */
 public class ClienteDAO {
 
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
     private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.ativo from Cliente c, usuario u where c.id_usuario = u.id and u.ativo = 1";
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";

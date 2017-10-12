@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import java.sql.Connection;
@@ -13,14 +8,10 @@ import br.icarwash.model.Servico;
 import br.icarwash.util.Conexao;
 import java.util.ArrayList;
 
-/**
- *
- * @author rezen
- */
 public class ServicoDAO {
 
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
     private static final String INSERT = "insert into servico(nome, descricao, valor, ativo) values(?, ?, ?, ?)";
     private static final String SELECT_ALL = "select * from servico";
     private static final String UPDATE = "update servico set nome = ?, descricao = ?, valor = ? WHERE id = ?";

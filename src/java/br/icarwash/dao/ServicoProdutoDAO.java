@@ -1,22 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.icarwash.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import br.icarwash.util.Conexao;
 
-/**
- *
- * @author rezen
- */
 public class ServicoProdutoDAO {
 
-    private Connection conexao;
+    private final Connection conexao;
 
     public ServicoProdutoDAO(Connection conexao) {
         this.conexao = conexao;

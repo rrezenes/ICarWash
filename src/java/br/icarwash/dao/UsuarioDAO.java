@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.icarwash.dao;
 
 import br.icarwash.model.Usuario;
@@ -14,14 +10,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-/**
- *
- * @author rezen
- */
-public class UsuarioDAO {//terminar de implementar
+public class UsuarioDAO {
 
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(email, senha, nivel, ativo, cadastro, cadastro_completo) VALUES (?, SHA1(?), ?, ?, NOW(), ?);";
     private static final String SELECT_USUARIO = "select * from usuario where email = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where email = ?";
