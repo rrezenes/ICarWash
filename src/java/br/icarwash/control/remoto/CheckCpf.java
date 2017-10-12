@@ -1,5 +1,6 @@
 package br.icarwash.control.remoto;
 
+import br.icarwash.dao.ClienteDAO;
 import org.json.JSONObject;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
@@ -24,9 +25,9 @@ public class CheckCpf extends HttpServlet {
         String URI = ((HttpServletRequest) request).getRequestURI();
         PrintWriter out = response.getWriter();
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        ClienteDAO clienteDAO = new ClienteDAO();
 
-        out.print(usuarioDAO.checkEmailDisponivel(request.getParameter("email")));
+        out.print(clienteDAO.checkCpfDisponivel(request.getParameter("cpf")));
         out.flush();
     }
 

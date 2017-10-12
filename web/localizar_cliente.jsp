@@ -152,15 +152,17 @@
                 },
                 txtEstado: {
                     required: true,
+                    minlength:2,
+                    maxlength: 2,
                     lettersonly: true
                 },
                 txtCidade: {
                     required: true,
-                    lettersonly: true
+                    letterAndNumbersOnly: true
                 },
                 txtBairro: {
                     required: true,
-                    lettersonly: true
+                    letterAndNumbersOnly: true
                 },
                 txtEndereco: {
                     required: true,
@@ -184,7 +186,9 @@
                     required: "Por favor, digite seu CEP"
                 },
                 txtEstado: {
-                    required: "Por favor, digite seu estado"
+                    required: "Por favor, digite seu estado",
+                    minlength: "Por favor, digite apenas os dois dígitos do estado",
+                    maxlength: "Por favor, digite apenas os dois dígitos do estado"
                 },
                 txtCidade: {
                     required: "Por favor, digite sua cidade"
