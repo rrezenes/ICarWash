@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import br.icarwash.model.Produto;
@@ -13,14 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author rezen
- */
-public class ProdutoDAO implements BasicoDAO {
+public class ProdutoDAO {
     
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
     private static final String INSERT = "insert into produto(nome, descricao, ativo) values(?, ?, ?)";
     private static final String SELECT_ALL = "select * from produto";
     private static final String UPDATE = "update produto set nome = ?, descricao = ? WHERE id = ?";
@@ -38,9 +29,7 @@ public class ProdutoDAO implements BasicoDAO {
         fechaConexao = true;
     }
 
-    @Override
-    public void cadastrar(Object obj) {
-        Produto produto = (Produto) obj;
+    public void cadastrar(Produto produto) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setString(1, produto.getNome());
@@ -54,7 +43,6 @@ public class ProdutoDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public ArrayList listar() {
         ArrayList<Produto> produtos = new ArrayList();
         try {
@@ -71,7 +59,6 @@ public class ProdutoDAO implements BasicoDAO {
         return produtos;
     }
 
-    @Override
     public Produto localizarPorId(int id) {
         Produto produto = null;
         try {
@@ -88,9 +75,7 @@ public class ProdutoDAO implements BasicoDAO {
         return produto;
     }
 
-    @Override
-    public void atualizar(Object obj) {
-        Produto produto = (Produto) obj;
+    public void atualizar(Produto produto) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, produto.getNome());
@@ -103,7 +88,6 @@ public class ProdutoDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public void excluir(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);

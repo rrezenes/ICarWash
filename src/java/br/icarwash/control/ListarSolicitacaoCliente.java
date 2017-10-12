@@ -5,15 +5,12 @@
  */
 package br.icarwash.control;
 
-import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.SolicitacaoDAO;
-import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +34,7 @@ public class ListarSolicitacaoCliente extends HttpServlet {
         Usuario usuario = (Usuario) session.getAttribute("user");
         ClienteDAO clienteDAO = new ClienteDAO();
 
-        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdPorIdUsuario(usuario).getId());
+        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdClientePorIdUsuario(usuario.getId()).getId());
 
         request.setAttribute("solicitacoes", solicitacoes);
 

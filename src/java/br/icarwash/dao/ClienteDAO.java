@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import br.icarwash.model.Cliente;
@@ -15,16 +10,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
-import br.icarwash.model.Usuario;
 
-/**
- *
- * @author rezen
- */
-public class ClienteDAO implements BasicoDAO {
+public class ClienteDAO {
 
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
     private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.ativo from Cliente c, usuario u where c.id_usuario = u.id and u.ativo = 1";
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
@@ -42,9 +32,8 @@ public class ClienteDAO implements BasicoDAO {
         fechaConexao = true;
     }
 
-    @Override
-    public void cadastrar(Object obj) {
-        Cliente cliente = (Cliente) obj;
+    public void cadastrar(Cliente cliente) {
+        
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setInt(1, cliente.getIdUsuario());
@@ -67,7 +56,6 @@ public class ClienteDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public ArrayList<Cliente> listar() {
 
         ArrayList<Cliente> clientes = new ArrayList();
@@ -91,7 +79,6 @@ public class ClienteDAO implements BasicoDAO {
         return clientes;
     }
 
-    @Override
     public Cliente localizarPorId(int id) {
         Cliente cli = null;
         try {
@@ -112,12 +99,9 @@ public class ClienteDAO implements BasicoDAO {
         return cli;
     }
 
-    @Override
-    public void atualizar(Object obj) {
-        Cliente cliente = (Cliente) obj;
+    public void atualizar(Cliente cliente) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
-            //pstmt.setString(1, cliente.getEmail());
             pstmt.setString(1, cliente.getNome());
             pstmt.setString(2, cliente.getTelefone());
             pstmt.setDate(3, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
@@ -135,7 +119,6 @@ public class ClienteDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public void excluir(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
@@ -163,11 +146,11 @@ public class ClienteDAO implements BasicoDAO {
         return IDCliente;
     }
 
-    public Cliente localizarIdPorIdUsuario(Usuario usuario) {
+    public Cliente localizarIdClientePorIdUsuario(int idUsuario) {
         Cliente cliente = null;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_ID_USUARIO);
-            pstmt.setInt(1, usuario.getId());
+            pstmt.setInt(1, idUsuario);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 cliente = new Cliente(rs.getInt("id"));
@@ -192,7 +175,7 @@ public class ClienteDAO implements BasicoDAO {
             this.fechaConexao();
         }
     }
-    
+
     private void fechaConexao() throws RuntimeException {
         if (fechaConexao) {
             try {

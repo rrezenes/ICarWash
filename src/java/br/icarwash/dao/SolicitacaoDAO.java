@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.dao;
 
 import br.icarwash.model.Cliente;
@@ -27,14 +22,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- *
- * @author rezen
- */
 public class SolicitacaoDAO {
 
     private boolean fechaConexao = false;
-    private Connection conexao;
+    private final Connection conexao;
 
     public SolicitacaoDAO() {
         this.conexao = Conexao.getConexao();
