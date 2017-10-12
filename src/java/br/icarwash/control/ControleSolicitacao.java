@@ -40,7 +40,7 @@ public class ControleSolicitacao extends HttpServlet {
             Usuario usuario = (Usuario) session.getAttribute("user");
 
             ClienteDAO clienteDAO = new ClienteDAO(conexao);
-            Cliente cliente = clienteDAO.localizarIdPorIdUsuario(usuario);
+            Cliente cliente = clienteDAO.localizarIdClientePorIdUsuario(usuario.getId());
             cliente = clienteDAO.localizarPorId(cliente.getId());
 
             /*PEGA OS PARAMETROS DA VIEW*/

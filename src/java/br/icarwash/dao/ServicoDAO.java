@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * @author rezen
  */
-public class ServicoDAO implements BasicoDAO {
+public class ServicoDAO {
 
     private boolean fechaConexao = false;
     private Connection conexao;
@@ -37,10 +37,7 @@ public class ServicoDAO implements BasicoDAO {
         fechaConexao = true;
     }
 
-    //UTILIZAR METODOS DA INTERFACE
-    @Override
-    public void cadastrar(Object obj) {
-        Servico servico = (Servico) obj;
+    public void cadastrar(Servico servico) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setString(1, servico.getNome());
@@ -55,7 +52,6 @@ public class ServicoDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public ArrayList listar() {
         ArrayList<Servico> servicos = new ArrayList();
         try {
@@ -72,7 +68,6 @@ public class ServicoDAO implements BasicoDAO {
         return servicos;
     }
 
-    @Override
     public Servico localizarPorId(int id) {
         Servico servico = null;
         try {
@@ -89,9 +84,7 @@ public class ServicoDAO implements BasicoDAO {
         return servico;
     }
 
-    @Override
-    public void atualizar(Object obj) {
-        Servico servico = (Servico) obj;
+    public void atualizar(Servico servico) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, servico.getNome());
@@ -105,7 +98,6 @@ public class ServicoDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public void excluir(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);

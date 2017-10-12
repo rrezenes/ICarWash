@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * @author rezen
  */
-public class ProdutoDAO implements BasicoDAO {
+public class ProdutoDAO {
     
     private boolean fechaConexao = false;
     private Connection conexao;
@@ -38,9 +38,7 @@ public class ProdutoDAO implements BasicoDAO {
         fechaConexao = true;
     }
 
-    @Override
-    public void cadastrar(Object obj) {
-        Produto produto = (Produto) obj;
+    public void cadastrar(Produto produto) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setString(1, produto.getNome());
@@ -54,7 +52,6 @@ public class ProdutoDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public ArrayList listar() {
         ArrayList<Produto> produtos = new ArrayList();
         try {
@@ -71,7 +68,6 @@ public class ProdutoDAO implements BasicoDAO {
         return produtos;
     }
 
-    @Override
     public Produto localizarPorId(int id) {
         Produto produto = null;
         try {
@@ -88,9 +84,7 @@ public class ProdutoDAO implements BasicoDAO {
         return produto;
     }
 
-    @Override
-    public void atualizar(Object obj) {
-        Produto produto = (Produto) obj;
+    public void atualizar(Produto produto) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, produto.getNome());
@@ -103,7 +97,6 @@ public class ProdutoDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public void excluir(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);

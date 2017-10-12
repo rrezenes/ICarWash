@@ -21,7 +21,7 @@ import br.icarwash.model.Usuario;
  *
  * @author rezen
  */
-public class ClienteDAO implements BasicoDAO {
+public class ClienteDAO {
 
     private boolean fechaConexao = false;
     private Connection conexao;
@@ -42,9 +42,8 @@ public class ClienteDAO implements BasicoDAO {
         fechaConexao = true;
     }
 
-    @Override
-    public void cadastrar(Object obj) {
-        Cliente cliente = (Cliente) obj;
+    public void cadastrar(Cliente cliente) {
+        
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setInt(1, cliente.getIdUsuario());
@@ -67,7 +66,6 @@ public class ClienteDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public ArrayList<Cliente> listar() {
 
         ArrayList<Cliente> clientes = new ArrayList();
@@ -91,7 +89,6 @@ public class ClienteDAO implements BasicoDAO {
         return clientes;
     }
 
-    @Override
     public Cliente localizarPorId(int id) {
         Cliente cli = null;
         try {
@@ -112,12 +109,9 @@ public class ClienteDAO implements BasicoDAO {
         return cli;
     }
 
-    @Override
-    public void atualizar(Object obj) {
-        Cliente cliente = (Cliente) obj;
+    public void atualizar(Cliente cliente) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
-            //pstmt.setString(1, cliente.getEmail());
             pstmt.setString(1, cliente.getNome());
             pstmt.setString(2, cliente.getTelefone());
             pstmt.setDate(3, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
@@ -135,7 +129,6 @@ public class ClienteDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public void excluir(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
@@ -163,11 +156,11 @@ public class ClienteDAO implements BasicoDAO {
         return IDCliente;
     }
 
-    public Cliente localizarIdPorIdUsuario(Usuario usuario) {
+    public Cliente localizarIdClientePorIdUsuario(int idUsuario) {
         Cliente cliente = null;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_ID_USUARIO);
-            pstmt.setInt(1, usuario.getId());
+            pstmt.setInt(1, idUsuario);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 cliente = new Cliente(rs.getInt("id"));
@@ -192,7 +185,7 @@ public class ClienteDAO implements BasicoDAO {
             this.fechaConexao();
         }
     }
-    
+
     private void fechaConexao() throws RuntimeException {
         if (fechaConexao) {
             try {

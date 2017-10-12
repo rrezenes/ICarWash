@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
  *
  * @author rezen
  */
-public class LavadorDAO implements BasicoDAO {
+public class LavadorDAO {
 
     private boolean fechaConexao = false;
     private Connection conexao;
@@ -44,9 +44,7 @@ public class LavadorDAO implements BasicoDAO {
         fechaConexao = true;
     }
 
-    @Override
-    public void cadastrar(Object obj) {
-        Lavador lavador = (Lavador) obj;
+    public void cadastrar(Lavador lavador) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setInt(1, lavador.getIdUsuario());
@@ -69,7 +67,6 @@ public class LavadorDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public ArrayList<Lavador> listar() {
         ArrayList<Lavador> lavadores = new ArrayList();
         try {
@@ -92,7 +89,6 @@ public class LavadorDAO implements BasicoDAO {
         return lavadores;
     }
 
-    @Override
     public Lavador localizarPorId(int id) {
         Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
         Lavador lavador = null;
@@ -112,9 +108,7 @@ public class LavadorDAO implements BasicoDAO {
         return lavador;
     }
 
-    @Override
-    public void atualizar(Object obj) {
-        Lavador lavador = (Lavador) obj;
+    public void atualizar(Lavador lavador) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, lavador.getNome());
@@ -134,7 +128,6 @@ public class LavadorDAO implements BasicoDAO {
         this.fechaConexao();
     }
 
-    @Override
     public void excluir(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
