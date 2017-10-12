@@ -225,6 +225,7 @@
                     required: true
                 },
                 cpf: {
+                    remote: 'CheckCpfLavador',
                     cpf: true,
                     required: true
                 },
@@ -253,7 +254,7 @@
                 email: {
                     remote: "Esse e-mail já está em uso, por favor utilize um e-mail válido e disponível.",
                     required: "Por favor, coloque um e-mail válido.",
-                    email: "E-mail já está em uso."
+                    email: "Por favor, coloque um e-mail válido"
                 },
                 senha: {
                     required: "Por favor, coloque sua senha.",
@@ -275,6 +276,7 @@
                     required: "Por favor, seleciona uma data de nascimento"
                 },
                 cpf: {
+                    remote: "Cpf já está em uso",
                     cpf: 'CPF inválido',
                     required: "Por favor, digite seu CPF aqui."
                 },

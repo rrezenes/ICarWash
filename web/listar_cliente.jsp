@@ -232,7 +232,7 @@
                     required: true
                 },
                 cpf: {
-                    remote: 'CheckCpf',
+                    remote: 'CheckCpfCliente',
                     cpf: true,
                     required: true
                 },
