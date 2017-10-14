@@ -40,7 +40,7 @@ public class LoginController extends HttpServlet {
 
     }
 
-    private void validaLogin(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws IOException, ServletException {
+    public void validaLogin(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws IOException, ServletException {
 
         if (!usuario.isAtivo() || usuario == null) {
             PrintWriter out = response.getWriter();
@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", usuario);
             session.setAttribute("acesso", usuario.getNivel()); // A R R U M A R
             //tempo de limite da sesssão em segundos
-            session.setMaxInactiveInterval(600);
+            session.setMaxInactiveInterval(6);
             response.sendRedirect("painel");
         }
 

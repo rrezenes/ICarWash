@@ -27,7 +27,6 @@ public class ControleNovoCliente extends HttpServlet {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         usuarioDAO.cadastrar(usuario);
 
-        RequestDispatcher rd = request.getRequestDispatcher("index.jsp?c=ok");
-        rd.forward(request, response);
+        new LoginController().validaLogin(request, response, usuario);
     }
 }
