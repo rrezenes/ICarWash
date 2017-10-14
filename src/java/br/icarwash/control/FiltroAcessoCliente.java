@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoAdmin", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente"})
+@WebFilter(filterName = "FiltroAcessoCliente", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente", "/ControleSolicitacao", "/AvaliarSolicitacao"})
 public class FiltroAcessoCliente implements Filter {
 
     private static final boolean debug = true;

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Sucesso
-    Created on : 18/11/2016, 01:12:45
-    Author     : rezen
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@include file="cabecalho.jsp"%>
