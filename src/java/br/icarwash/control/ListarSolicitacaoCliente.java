@@ -34,7 +34,7 @@ public class ListarSolicitacaoCliente extends HttpServlet {
         Usuario usuario = (Usuario) session.getAttribute("user");
         ClienteDAO clienteDAO = new ClienteDAO();
 
-        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarIdClientePorIdUsuario(usuario.getId()).getId());
+        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(clienteDAO.localizarPorIdUsuario(usuario.getId()).getId());
 
         request.setAttribute("solicitacoes", solicitacoes);
 

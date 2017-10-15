@@ -42,12 +42,11 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         } else if (URI.endsWith("/CancelarSolicitacao")) {
             solicitacao.cancelarSolicitacao();
-
-            String queryString = ((HttpServletRequest) request).getQueryString();
+            
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
-            if(usuario.getNivel() == 1){
-            URIRetorno = "ListarSolicitacaoCliente";                
+            if (usuario.getNivel() == 1) {
+                URIRetorno = "ListarSolicitacaoCliente?x";
             }
         } else if (URI.endsWith("/ProcessarSolicitacao")) {
             solicitacao.processarSolicitacao();

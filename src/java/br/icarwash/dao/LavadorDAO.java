@@ -22,6 +22,7 @@ public class LavadorDAO {
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from lavador where cpf = ?";
     private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ?";
     private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
@@ -90,7 +91,26 @@ public class LavadorDAO {
             if (rs.next()) {
                 cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
                 cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
-                lavador = new Lavador(rs.getInt("id"),rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+        return lavador;
+    }
+
+    public Lavador localizarPorIdUsuario(int id) {
+        Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+        Lavador lavador = null;
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
+            pstmt.setString(1, Integer.toString(id));
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
+                cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
+                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -196,7 +216,7 @@ public class LavadorDAO {
     }
 
     public boolean checkCpfDisponivel(String cpf) {
-         try {
+        try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_CPF);
             pstmt.setString(1, cpf);
             ResultSet rs = pstmt.executeQuery();
@@ -207,4 +227,5 @@ public class LavadorDAO {
             this.fechaConexao();
         }
     }
+
 }

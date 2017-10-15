@@ -20,6 +20,7 @@ public class ClienteDAO {
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select id, id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
     private static final String SELECT_ID_BY_ID_USUARIO = "SELECT c.id FROM cliente c, usuario u where u.id = c.id_usuario and u.id = ?;";
 
@@ -33,7 +34,7 @@ public class ClienteDAO {
     }
 
     public void cadastrar(Cliente cliente) {
-        
+
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT);
             pstmt.setInt(1, cliente.getIdUsuario());
@@ -99,6 +100,7 @@ public class ClienteDAO {
         return cli;
     }
 
+
     public void atualizar(Cliente cliente) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
@@ -146,14 +148,18 @@ public class ClienteDAO {
         return IDCliente;
     }
 
-    public Cliente localizarIdClientePorIdUsuario(int idUsuario) {
+    public Cliente localizarPorIdUsuario(int idUsuario) {
         Cliente cliente = null;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_ID_USUARIO);
+            Calendar cal = Calendar.getInstance();
+            Timestamp timestamp;
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
             pstmt.setInt(1, idUsuario);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                cliente = new Cliente(rs.getInt("id"));
+                timestamp = rs.getTimestamp("dt_nascimento");
+                cal.setTimeInMillis(timestamp.getTime());
+                cliente = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

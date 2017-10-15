@@ -1,154 +1,125 @@
-
-<%@page import="br.icarwash.dao.ClienteDAO"%>
 <%@page import="br.icarwash.model.Usuario"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="shortcut icon" href="img/favicon.ico" />
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
-        <link href="css/navbar-fixed-side.css" rel="stylesheet" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery-3.1.1.js"></script>
-        <script src="js/jquery.maskedinput.min.js"></script>
-        <title>ICarWash</title>
-    </head>
-    <body>
-        <%--Menu de Cliente--%>
-        <%
-            //allow access only if session exists
-            Usuario usuario = (Usuario) session.getAttribute("user");
-            ClienteDAO clienteDAO = new ClienteDAO();
-            if (session != null && request.getRequestedSessionId() != null && session.getAttribute("acesso") != null) {
-                if (Integer.parseInt(session.getAttribute("acesso").toString()) == 1) {
-                    //String name = (String) session.getAttribute("user");
-        %>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-3 col-lg-2">
-                    <nav class="navbar navbar-default navbar-fixed-side">
-                        <div class="container">
-                            <div class="navbar-header">
-                                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
-                                </button>
-                                <a class="navbar-brand" href="painel"><%=usuario.getEmail()%>, ICarWash</a>
-                            </div>
-                            <div class="collapse navbar-collapse">
-                                <ul class="nav navbar-nav">
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">SolicitaÃ§Ãµes<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="SolicitarServico">Solicitar ServiÃ§o</a></li>
-                                            <li><a href="ListarSolicitacaoCliente">Minhas SolicitaÃ§Ãµes</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="logout">Sair</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-                <%--Menu de Lavador--%>
-                <div class="col-sm-9 col-lg-10 exibelista">
-                    <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 2) {
-                        //String name = (String) session.getAttribute("user");
-%>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-3 col-lg-2">
-                                <nav class="navbar navbar-default navbar-fixed-side">
-                                    <div class="container">
-                                        <div class="navbar-header">
-                                            <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
-                                            </button>
-                                            <a class="navbar-brand" href="painel"><%=usuario.getEmail()%>, ICarWash</a>
-                                        </div>
-                                        <div class="collapse navbar-collapse">
-                                            <ul class="nav navbar-nav">
-                                                <li class="dropdown">
-                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">SolicitaÃ§Ãµes<b class="caret"></b></a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="ListarSolicitacaoLavador">SolicitaÃ§Ãµes</a></li>
-                                                        <li><a href="ListarSolicitacaoHojeLavador">SolicitaÃ§Ãµes Para Hoje</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown">
-                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">RelatÃ³rios<b class="caret"></b></a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="listar_produtos_hoje.jsp">Produtos para hoje</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown">
-                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="logout">Sair</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                            <%--Menu de Gerente--%>
-                            <div class="col-sm-9 col-lg-10 exibelista">
-                                <%
-                                } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-sm-3 col-lg-2">
-                                            <nav class="navbar navbar-default navbar-fixed-side">
-                                                <div class="container">
-                                                    <div class="navbar-header">
-                                                        <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
-                                                        </button>
-                                                        <a class="navbar-brand" href="painel"><%=usuario.getEmail()%>, ICarWash</a>
-                                                    </div>
-                                                    <div class="collapse navbar-collapse">
-                                                        <ul class="nav navbar-nav">
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Pessoais<b class="caret"></b></a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
-                                                                    <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
-                                                                </ul>
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros Gerais<b class="caret"></b></a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a href="Controle?action=Listar&listar=produto">Produtos</a></li>
-                                                                    <li><a href="Controle?action=Listar&listar=servico">ServiÃ§os</a></li>
-                                                                </ul>
-                                                            </li>
-                                                            <li class="dropdown">
-                                                                <a href="Controle?action=Listar&listar=solicitacao" class="dropdown-toggle" data-toggle="dropdown" href="#">SolicitaÃ§Ãµes<b class="caret"></b></a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a href="SolicitarServico">Solicitar ServiÃ§o</a></li>
-                                                                    <li><a href="ListarSolicitacaoEmAnalise">Aprovar SolicitaÃ§Ãµes</a></li>
-                                                                    <li><a href="Controle?action=Listar&listar=solicitacao">SolicitaÃ§Ãµes</a></li>
-                                                                </ul>
-                                                            </li>
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logout<b class="caret"></b></a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a href="logout">Sair</a></li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </nav>
-                                        </div>
-                                        <div class="col-sm-9 col-lg-10 exibelista">
-                                            <%  } else {
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/estilo.css"/>
 
-                                                    }
-                                                } else {
-                                                }
-                                            %>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <%  if (session != null && request.getRequestedSessionId() != null && session.getAttribute("acesso") != null) {
+            Usuario usuario = (Usuario) session.getAttribute("user");%>
+    <body>
+        <nav>
+            <div class="nav-wrapper light-blue darken-4">
+
+                <a href="#!" class="center brand-logo">ICarWash</a>
+                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                <ul class="side-nav fixed" id="mobile-demo">
+                    <li><div class="user-view">
+                            <div class="background">
+                                <img class="responsive-img" src="https://www.insuremyworld.co.uk/Sites/insuremyworld.co.uk/article-img/car-wash-no-water.jpg">
+                            </div>
+                            <a href="usuario"><img class="circle" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAnsAAAAJDIyZDU0OTNkLWUzNDUtNDg1Yi1iZjBmLTViNmFiOTI2MGM3Mg.jpg"></a>
+                            <a href="#!name"><span class="white-text name"><%= session.getAttribute("nome")%></span></a>
+                            <a href="#!email"><span class="white-text email"><%= usuario.getEmail()%></span></a>
+                        </div></li>
+
+                    <li><a href="painel">Home</a></li>
+                    <li class="no-padding">
+                        <%-- /\ /\ NÃO VARIA /\ /\--%>
+
+                        <%if (Integer.parseInt(session.getAttribute("acesso").toString()) == 1) {%>
+                        <%--Menu do Cliente--%>
+
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="SolicitarServico">Solicitar Serviço</a></li>
+                                        <li><a href="ListarSolicitacaoCliente">Minhas Solicitações</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <%--Menu do Lavador---%>
+
+                        <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 2) {%>
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="ListarSolicitacaoLavador">Solicitar Serviço</a></li>
+                                        <li><a href="ListarSolicitacaoHojeLavador">Solicitações Para Hoje</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-teal">Relatórios<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="ListarProdutosHoje">Produtos para hoje</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <%--Menu do Admin---%>
+                        <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
+
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-teal">Cadastros Pessoais<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
+                                        <li><a href="Controle?action=Listar&listar=lavadores">Lavadores</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-teal">Cadastros Gerais<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="Controle?action=Listar&listar=produto">Produtos</a></li>
+                                        <li><a href="Controle?action=Listar&listar=servico">Serviços</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="SolicitarServico">Solicitar Serviço</a></li>
+                                        <li><a href="ListarSolicitacaoEmAnalise">Aprovar Solicitações</a></li>
+                                        <li><a href="Controle?action=Listar&listar=solicitacao">Solicitações</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <%      }
+                            } else {
+                                response.sendRedirect("index.jsp");
+                            }
+
+                        %>
+                        <%-- \/ NÃO VARIA \/--%>
+                    <li><a href="logout">Sair</a></li>
+                    </li>
+                </ul>
+            </div>
+        </nav>

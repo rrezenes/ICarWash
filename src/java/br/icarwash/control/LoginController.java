@@ -50,9 +50,9 @@ public class LoginController extends HttpServlet {
         } else {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", usuario);
-            session.setAttribute("acesso", usuario.getNivel()); // A R R U M A R
+            session.setAttribute("acesso", usuario.getNivel());
             //tempo de limite da sesssão em segundos
-            session.setMaxInactiveInterval(6);
+            session.setMaxInactiveInterval(600);
             response.sendRedirect("painel");
         }
 
