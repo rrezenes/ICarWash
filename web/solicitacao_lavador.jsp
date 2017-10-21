@@ -1,13 +1,101 @@
-<%-- 
-    Document   : listaCliente
-    Created on : 17/11/2016, 22:13:43
-    Author     : rezen
---%>
-
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
+
+<link rel="stylesheet" href="css/star-rating-svg.css">
+<script src="js/jquery.star-rating-svg.js"></script>
+
+<div class="container">
+    <div class="row">
+        <h4>Minhas solicitações</h4>
+        <div class="divider"></div>
+    </div>
+    <table class="table table-hover bordered responsive-table">
+        <thead>
+            <tr>
+                <th>Solicitação</th>
+                <th>Cliente</th>
+                <th>Cidade</th>
+                <th>Bairro</th>
+                <th>Veículo</th>
+                <th>Data</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th colspan=2></th>
+            </tr>
+        </thead>
+        <tbody>  
+            <c:forEach var="solicitacao" items="${solicitacoes}">
+                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy" />
+                <tr>
+                    <td>#${solicitacao.id}</td>
+                    <td>${solicitacao.cliente.nome}</td>
+                    <td>${solicitacao.cliente.endereco.cidade}</td>
+                    <td>${solicitacao.cliente.endereco.bairro}</td>
+                    <td>${solicitacao.porte}</td>            
+                    <td>${dataSolicitacao}</td>
+                    <td>${solicitacao.valorTotal.doubleValue()}</td>
+                    <td>${solicitacao.estado}</td>
+                    <c:if test="${solicitacao.estado == 'Agendado'}">
+                        <td>
+                            <form action="CancelarSolicitacao" method="post">
+                                <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
+                                <button type="submit" class="btn waves-effect waves-light red lighten-1" value="Cancelar">Cancelar</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="ProcessarSolicitacao" method="post">
+                                <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/>
+                                <button type="submit" class="btn waves-effect waves-light blue lighten-1">Processar</button>
+                            </form>
+                        </td>
+                    </c:if>
+                    <c:if test="${solicitacao.estado == 'Em Processo'}">
+                        <td>
+                            <form action="FinalizarSolicitacao" method="post">
+                                <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/>
+                                <button type="submit" class="btn waves-effect waves-light blue lighten-1">Finalizar</button>
+                            </form>
+                        </td>
+                    </c:if>
+                    <c:if test="${solicitacao.estado == 'Avaliado'}">
+                        <td> 
+                            <center><div class="nota-${solicitacao.id}"></div></center>
+                            
+                            <script>
+                                $(".nota-${solicitacao.id}").starRating({
+                                    readOnly: true,
+                                    starSize: 25,
+                                    initialRating: ${solicitacao.avaliacao.notaMedia},
+                                    strokeWidth: 0
+                                });
+                            </script>
+                        </td>
+                    </c:if>
+                    <c:if test="${solicitacao.estado == 'Finalizado'}">
+                        <td> 
+                            <center>
+                            <div class="nota-${solicitacao.id}"></div>
+                            Aguardando Avaliação</center>
+                            <script>
+                                $(".nota-${solicitacao.id}").starRating({
+                                    readOnly: true,
+                                    starSize: 25,
+                                    initialRating: 0,
+                                    strokeWidth: 0
+                                });
+                            </script>
+                        </td>
+                    </c:if>
+                </tr>        
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
+
+
+<%--
 <div class="container">
     <div class="jumbotron">
         <h2>Minhas Solicitações</h2>
@@ -42,13 +130,13 @@
                         <td>
                             <form action="CancelarSolicitacao" method="post">
                                 <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
-                                <button type="submit" class="btn btn-danger" value="Cancelar">Cancelar</button>
+                                <button type="submit" class="btn waves-effect waves-light red lighten-1" value="Cancelar">Cancelar</button>
                             </form>
                         </td>
                         <td>
                             <form action="ProcessarSolicitacao" method="post">
                                 <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/>
-                                <button type="submit" class="btn btn-success">Processar</button>
+                                <button type="submit" class="btn waves-effect waves-light blue lighten-1">Processar</button>
                             </form>
                         </td>
                     </c:if>
@@ -56,13 +144,17 @@
                         <td>
                             <form action="FinalizarSolicitacao" method="post">
                                 <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/>
-                                <button type="submit" class="btn btn-success">Finalizar</button>
+                                <button type="submit" class="btn waves-effect waves-light blue lighten-1">Finalizar</button>
                             </form>
+                        </td>
+                    </c:if>
+                    <c:if test="${solicitacao.estado == 'Avaliado'}">
+                        <td>
                         </td>
                     </c:if>
                 </tr>        
             </c:forEach>
         </tbody>
     </table>
-</div>
+</div>--%>
 <%@include file="rodape.jsp"%>

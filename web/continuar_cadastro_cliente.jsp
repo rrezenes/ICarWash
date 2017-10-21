@@ -225,6 +225,13 @@
             }
         });
     });
+    jQuery(function ($) {
+        $("#nascimento").mask("99/99/9999");
+        $("#telefone").mask("(99)99999-9999");
+        $("#cpf").mask("999.999.999-99");
+        $("#cep").mask("99999-999");
+
+    });
 </script>
 <script type="text/javascript" src="./js/moment.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>

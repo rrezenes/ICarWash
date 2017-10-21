@@ -1,5 +1,7 @@
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -63,17 +65,26 @@ public class FiltroAcesso implements Filter {
 
         Throwable problem = null;
         if (usuario != null) {
-            if (usuario.getNivel() == 3 || usuario.getNivel() == 2 || usuario.getNivel() == 1) {
-                try {
-                    chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
-                    problem = t;
-                }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                session.invalidate();
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+            switch (usuario.getNivel()) {
+                case 3:
+                    session.setAttribute("nome", "Admin");
+                    request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
+                    break;
+                case 2:
+                    
+                    session.setAttribute("nome", new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getNome());
+                    request.getRequestDispatcher("/ListarSolicitacaoLavador").forward(request, response);
+                    break;
+                case 1:
+                    session.setAttribute("nome", new ClienteDAO().localizarPorIdUsuario(usuario.getId()).getNome());
+                    request.getRequestDispatcher("/ListarSolicitacaoCliente").forward(request, response);
+                    break;
+                default:
+                    aprovado = false;
+                    log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+                    session.invalidate();
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    break;
             }
         }
         doAfterProcessing(request, response);
@@ -99,7 +110,8 @@ public class FiltroAcesso implements Filter {
      * @param filterConfig
      */
     @Override
-    public void init(FilterConfig filterConfig) {
+    public void init(FilterConfig filterConfig
+    ) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {

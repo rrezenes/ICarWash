@@ -4,6 +4,8 @@ import br.icarwash.dao.*;
 import br.icarwash.model.*;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
+import java.io.PrintWriter;
+import static java.lang.System.out;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,7 +33,7 @@ public class ControleSolicitacao extends HttpServlet {
             Usuario usuario = (Usuario) session.getAttribute("user");
 
             ClienteDAO clienteDAO = new ClienteDAO(conexao);
-            Cliente cliente = clienteDAO.localizarIdClientePorIdUsuario(usuario.getId());
+            Cliente cliente = clienteDAO.localizarPorIdUsuario(usuario.getId());
             cliente = clienteDAO.localizarPorId(cliente.getId());
 
             /*PEGA OS PARAMETROS DA VIEW*/
@@ -82,8 +84,11 @@ public class ControleSolicitacao extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
+        //response.sendRedirect("/ICarWash/ListarSolicitacaoCliente");
 
-        response.sendRedirect("/ICarWash/ListarSolicitacaoCliente");
+        PrintWriter out = response.getWriter();
+        out.println("/ICarWash/ListarSolicitacaoCliente?ok");
+        out.flush();
 
     }
 

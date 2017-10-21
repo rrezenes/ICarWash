@@ -62,6 +62,7 @@ public class SolicitacaoDAO {
         Avaliacao avaliacao;
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         SolicitacaoState solicitacaoState;
+
         try {
             PreparedStatement pstmt = conexao.prepareStatement(
                     "SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, "
@@ -77,14 +78,19 @@ public class SolicitacaoDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
+
                 cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
                 lavador = new Lavador(rs.getInt("id_lavador"));
+
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
+
                 if (rs.getBoolean("id_avaliacao")) {
+
                     avaliacao = new Avaliacao(rs.getInt("id_avaliacao"));
                     avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(avaliacao);
+
                 } else {
                     avaliacao = new Avaliacao(0);
                 }
@@ -103,9 +109,11 @@ public class SolicitacaoDAO {
         Solicitacao solicitacao;
         Cliente cliente;
         Endereco endereco;
+        Avaliacao avaliacao;
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, solicitacao s, cliente c where c.id = s.id_cliente and u.id = l.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
+            PreparedStatement pstmt = conexao.prepareStatement("select s.id as ID_Solicitacao, c.id as ID_Cliente, s.id_avaliacao, c.nome as nome_cliente, c.bairro, c.cidade, s.porte, s.data_solicitacao, s.valor_total, s.status from lavador l, usuario u, solicitacao s, cliente c where c.id = s.id_cliente and u.id = l.id_usuario and l.id = s.id_lavador and u.id = ? order by s.data_solicitacao");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -117,7 +125,16 @@ public class SolicitacaoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                if (rs.getBoolean("id_avaliacao")) {
+
+                    avaliacao = new Avaliacao(rs.getInt("id_avaliacao"));
+                    avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(avaliacao);
+
+                } else {
+                    avaliacao = new Avaliacao(0);
+                }
+
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, avaliacao,solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
