@@ -80,47 +80,47 @@
                         <%--Menu do Admin---%>
                         <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
 
-                        <ul class="collapsible collapsible-accordion">
-                            <li>
-                                <a class="collapsible-header waves-effect waves-teal">Cadastros Pessoais<i class="material-icons">arrow_drop_down</i></a>
-                                <div class="collapsible-body">
-                                    <ul>
-                                        <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
-                                        <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                        <ul class="collapsible collapsible-accordion">
-                            <li>
-                                <a class="collapsible-header waves-effect waves-teal">Cadastros Gerais<i class="material-icons">arrow_drop_down</i></a>
-                                <div class="collapsible-body">
-                                    <ul>
-                                        <li><a href="Controle?action=Listar&listar=produto">Produtos</a></li>
-                                        <li><a href="Controle?action=Listar&listar=servico">Serviços</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                        <ul class="collapsible collapsible-accordion">
-                            <li>
-                                <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
-                                <div class="collapsible-body">
-                                    <ul>
-                                        <li><a href="SolicitarServico">Solicitar Serviço</a></li>
-                                        <li><a href="ListarSolicitacaoEmAnalise">Aprovar Solicitações</a></li>
-                                        <li><a href="Controle?action=Listar&listar=solicitacao">Solicitações</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
+                            <ul class="collapsible collapsible-accordion">
+                                <li>
+                                    <a class="collapsible-header waves-effect waves-teal">Cadastros Pessoais<i class="material-icons">arrow_drop_down</i></a>
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
+                                            <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="collapsible collapsible-accordion">
+                                <li>
+                                    <a class="collapsible-header waves-effect waves-teal">Cadastros Gerais<i class="material-icons">arrow_drop_down</i></a>
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            <li><a href="Controle?action=Listar&listar=produto">Produtos</a></li>
+                                            <li><a href="Controle?action=Listar&listar=servico">Serviços</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="collapsible collapsible-accordion">
+                                <li>
+                                    <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            <li><a href="SolicitarServico">Solicitar Serviço</a></li>
+                                            <li><a href="ListarSolicitacaoEmAnalise">Aprovar Solicitações</a></li>
+                                            <li><a href="Controle?action=Listar&listar=solicitacao">Solicitações</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
 
-                        <%      }
-                            } else {
-                                response.sendRedirect("index.jsp");
-                            }
+                        <% }
+        } else {
+            response.sendRedirect("index.jsp");
+        }
 
-                        %>
+    %>
                         <%-- \/ NÃO VARIA \/--%>
                     <li><a href="logout">Sair</a></li>
                     </li>
