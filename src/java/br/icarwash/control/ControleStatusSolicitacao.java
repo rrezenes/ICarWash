@@ -37,27 +37,40 @@ public class ControleStatusSolicitacao extends HttpServlet {
         String URIRetorno = "painel_admin.jsp";
 
         if (URI.endsWith("/AprovarSolicitacao")) {
+            
             solicitacao.analisarSolicitacao();
             URIRetorno = "ListarSolicitacaoEmAnalise";
 
         } else if (URI.endsWith("/CancelarSolicitacao")) {
+            
             solicitacao.cancelarSolicitacao();
             
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
+            
             if (usuario.getNivel() == 1) {
                 URIRetorno = "ListarSolicitacaoCliente?x";
             }
+            
         } else if (URI.endsWith("/ProcessarSolicitacao")) {
+            
             solicitacao.processarSolicitacao();
             URIRetorno = "ListarSolicitacaoLavador";
 
         } else if (URI.endsWith("/FinalizarSolicitacao")) {
+            
             solicitacao.finalizarSolicitacao();
             URIRetorno = "ListarSolicitacaoLavador";
 
         } else if (URI.endsWith("/AvaliarSolicitacao")) {
-            Avaliacao avaliacao = new Avaliacao(BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))), BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))));
+            
+            Avaliacao avaliacao = new Avaliacao(
+                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))), 
+                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))), 
+                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))), 
+                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade")))
+            );
+            
             solicitacao.setAvaliacao(avaliacao);
             solicitacao.avaliarSolicitacao();
             URIRetorno = "ListarSolicitacaoCliente";

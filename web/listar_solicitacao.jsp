@@ -50,4 +50,5 @@
         </tbody>
     </table>
 </div>
+<script type="text/javascript" src="js/materialize.js"></script>
 <%@include file="rodape.jsp"%>

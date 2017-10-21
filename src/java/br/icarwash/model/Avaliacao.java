@@ -29,6 +29,7 @@ public class Avaliacao {
         this.notaServico = notaServico;
         this.notaAtendimento = notaAtendimento;
         this.notaAgilidade = notaAgilidade;
+        this.notaMedia = this.calcularMedia();
     }
 
     public Avaliacao(int ID, BigDecimal notaPontualidade, BigDecimal notaServico, BigDecimal notaAtendimento, BigDecimal notaAgilidade, BigDecimal notaMedia) {

@@ -45,8 +45,6 @@
                                 <div class="col-sm-9 col-sm-offset-4">
                                     <button type="submit" class="btn btn-primary" name="signup1" value="Cadastrar">Cadastrar</button>
                                     <button type="button" class="btn btn-primary" name="back" value="Back" onclick="window.history.back()">Voltar</button>
-
-
                                 </div>
                             </div>
                         </form>

@@ -1,9 +1,19 @@
 body {
     padding-left: 300px;
+    overflow: scroll;
 }
 
 @media only screen and (max-width : 992px) {
     body {
         padding-left: 0;
     }
+}
+
+.modal-avaliar { 
+    width: 30% !important; 
+    height: 75% !important; 
+}
+
+.modal-titulo-avaliar{
+    margin-top: 30px;
 }
