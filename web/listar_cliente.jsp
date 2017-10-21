@@ -3,8 +3,140 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 
-
 <div class="container">
+    <div class="row">
+        <h4>Controle de Clientes</h4>
+        <div class="divider"></div>
+    </div>
+    <div class="row">
+        <div class="col s3">
+            <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
+        </div>
+        <div class="col s9">
+            <input id="buscar" type="text" />
+        </div>
+    </div>
+    <table id="clientes" class="table table-hover centered striped responsive-table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>CPF</th>
+                <th>CEP</th>
+                <th>Cidade</th>
+                <th>Bairro</th>
+                <th colspan=2></th>
+            </tr>
+        </thead>
+        <tbody>  
+            <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
+                <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
+                <tr>
+                    <td>${usuarios.get(posicao.index).email}</td>
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.telefone}</td>
+                    <td>${cliente.CPF}</td>
+                    <td>${cliente.endereco.CEP}</td>
+                    <td>${cliente.endereco.cidade}</td>
+                    <td>${cliente.endereco.bairro}</td>
+                    <td>
+                        <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
+                        <a class="btn-floating red"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"><i class="material-icons">delete_forever</i></a>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
+
+<div id="modal" class="modal modal-fixed-footer modal-avaliar">
+    <div class="modal-content">
+        <div class="row">
+            <h4>Cadastrar Cliente</h4>
+            <div class="divider"></div>
+        </div>
+        <form id="CadastrarCliente" action="Controle" method="post">
+            <div class="form-group">
+                <input type="hidden" name="quem" value="cliente">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Email:</label>
+                        <input class="form-control erro-email" type="text" name="email" id="email"><br>
+                    </div>
+                </div>    
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Senha:</label> 
+                        <input class="form-control erro-senha" type="password" name="senha" id="senha" ><br>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="confirme_senha">Confirme a Senha:</label> 
+                        <input class="form-control erro-confirme" type="password" name="confirme" id="confirme" placeholder="Confirme aqui sua senha"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Nome:</label> 
+                        <input class="form-control erro-nome" type="text" name="nome"><br>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Telefone:</label> 
+                        <input class="form-control erro-telefone" type="text" name="telefone" id="telefone"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Data de Nascimento:</label> 
+                        <input class="form-control erro-nascimento" type="text" name="nascimento" id="nascimento"><br>
+                    </div>
+                    <div class="col-md-6">
+                        <label>CPF:</label> 
+                        <input class="form-control erro-cpf" type="text" name="cpf" id="cpf"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>CEP:</label> 
+                        <input class="form-control erro-cep" type="text" name="cep" id="cep"><br>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Estado:</label> 
+                        <input class="form-control erro-estado" type="text" name="estado" id="estado"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Cidade:</label> 
+                        <input class="form-control erro-cidade" type="text" name="cidade" id="cidade"><br>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Bairro:</label> 
+                        <input class="form-control erro-bairro" type="text" name="bairro" id="bairro"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>Endereço:</label> 
+                        <input class="form-control erro-endereco" type="text" name="endereco" id="endereco"><br>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Número:</label> 
+                        <input class="form-control erro-numero" type="text" name="numero" id="numero"><br>
+                    </div>
+                </div>   
+            </div>
+            <div class="form-group">
+                <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar"><br>
+            </div>
+        </form>  
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+<%--<div class="container">
     <div class="jumbotron">
         <h2>Controle de Clientes</h2>
     </div>
@@ -51,7 +183,7 @@
 
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
+         Modal content
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -138,10 +270,34 @@
             </div>
         </div>
     </div>
-</div>
+</div>--%>
 
 <script src="js/jquery.validate.js"></script>
 <script type="text/javascript">
+
+    function filterTable(event) {
+        var filter = event.target.value.toUpperCase();
+        var rows = document.querySelector("#clientes tbody").rows;
+
+        for (var i = 0; i < rows.length; i++) {
+
+            var email = rows[i].cells[0].textContent.toUpperCase();
+            var nome = rows[i].cells[1].textContent.toUpperCase();
+            var telefone = rows[i].cells[2].textContent.toUpperCase();
+            var cpf = rows[i].cells[3].textContent.toUpperCase();
+            var cep = rows[i].cells[4].textContent.toUpperCase();
+            var cidade = rows[i].cells[5].textContent.toUpperCase();
+            var bairro = rows[i].cells[6].textContent.toUpperCase();
+
+            if (email.indexOf(filter) > -1 || nome.indexOf(filter) > -1 || telefone.indexOf(filter) > -1 || cpf.indexOf(filter) > -1 || cep.indexOf(filter) > -1 || cidade.indexOf(filter) > -1 || bairro.indexOf(filter) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
+    document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
 
     jQuery.validator.addMethod("cpf", function (value, element) {
         value = jQuery.trim(value);
@@ -205,6 +361,7 @@
     });
 
     $(document).ready(function () {
+        $('.modal').modal();
         $("#CadastrarCliente").validate({
             rules: {
                 email: {

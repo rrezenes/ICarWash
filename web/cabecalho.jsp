@@ -86,7 +86,7 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
-                                        <li><a href="Controle?action=Listar&listar=lavadores">Lavadores</a></li>
+                                        <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
                                     </ul>
                                 </div>
                             </li>

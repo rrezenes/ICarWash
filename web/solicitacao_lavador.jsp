@@ -11,7 +11,7 @@
         <h4>Minhas solicitações</h4>
         <div class="divider"></div>
     </div>
-    <table class="table table-hover bordered responsive-table">
+    <table class="table table-hover centered striped responsive-table">
         <thead>
             <tr>
                 <th>Solicitação</th>
