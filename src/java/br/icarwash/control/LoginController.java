@@ -42,13 +42,10 @@ public class LoginController extends HttpServlet {
 
     public void validaLogin(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws IOException, ServletException {
 
-        if (!usuario.isAtivo() || usuario == null) {
-            PrintWriter out = response.getWriter();
-            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-            out.println("<font color=red>Usuario e ou senha errado</font>");
-            rd.include(request, response);
+        if (!usuario.isAtivo() || usuario == null) {            
+            response.sendRedirect("?invalido");
         } else {
-            HttpSession session = request.getSession(true);
+            HttpSession session = request.getSession();
             session.setAttribute("user", usuario);
             session.setAttribute("acesso", usuario.getNivel());
             //tempo de limite da sesssão em segundos
