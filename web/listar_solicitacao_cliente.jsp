@@ -12,7 +12,7 @@
         <h4>Minhas solicitações</h4>
         <div class="divider"></div>
     </div>
-    <table class="table table-hover bordered responsive-table">
+    <table class="table table-hover centered striped responsive-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -116,12 +116,8 @@
 
 
 <script>
-    function avaliar(pontualidade,servico,atendimento,agilidade, solicitacao){
-        console.log(pontualidade,servico,atendimento,agilidade);
-        console.log(solicitacao);
-
+    function avaliar(pontualidade,servico,atendimento,agilidade, solicitacao){        
         var dataString = 'pontualidade='+ pontualidade + '&servico='+ servico + '&atendimento='+ atendimento + '&agilidade='+ agilidade + '&id_solicitacao='+ solicitacao;
-
         $.ajax({
             type: "POST",
             url: "AvaliarSolicitacao",

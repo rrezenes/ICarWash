@@ -17,3 +17,11 @@ body {
 .modal-titulo-avaliar{
     margin-top: 30px;
 }
+
+.titulo-controle{
+    text-align: center;
+    font-size: 29px; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+}
