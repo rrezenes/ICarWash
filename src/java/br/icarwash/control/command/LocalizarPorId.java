@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.control.command;
 
 import br.icarwash.dao.ClienteDAO;
@@ -18,10 +13,6 @@ import br.icarwash.model.Lavador;
 import br.icarwash.model.Produto;
 import br.icarwash.model.Servico;
 
-/**
- *
- * @author rezen
- */
 public class LocalizarPorId implements ICommand {
 
     @Override

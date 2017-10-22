@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.control;
 
 import br.icarwash.dao.UsuarioDAO;
@@ -20,10 +15,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- *
- * @author Ricardo
- */
 public class ControleNovoClienteTest {
 
     @Test

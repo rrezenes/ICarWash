@@ -8,7 +8,6 @@ import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -94,11 +93,6 @@ public class FiltroAcessoLavador implements Filter {
     public void destroy() {
     }
 
-    /**
-     * Init method for this filter
-     *
-     * @param filterConfig
-     */
     @Override
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
@@ -109,10 +103,7 @@ public class FiltroAcessoLavador implements Filter {
         }
     }
 
-    /**
-     * Return a String representation of this object.
-     */
-    @Override
+   @Override
     public String toString() {
         if (filterConfig == null) {
             return ("FiltroAcessoCadastros()");

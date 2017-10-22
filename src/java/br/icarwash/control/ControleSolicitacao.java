@@ -5,7 +5,6 @@ import br.icarwash.model.*;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.System.out;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
