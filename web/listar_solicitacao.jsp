@@ -5,8 +5,13 @@
 <%@include file="cabecalho.jsp"%>
 
 <div class="row">
-    <p class="titulo-controle">Solicitações</p>
+    <p class="titulo-controle">Solicitações Realizadas</p>
     <div class="divider"></div>
+</div>
+<div class="row">
+    <div class="col s12">
+        <input id="buscar" type="text" />
+    </div>
 </div>
 
 <table id="produtos" class="table table-hover centered striped responsive-table">
@@ -50,6 +55,33 @@
         </c:forEach>
     </tbody>
 </table>
+
+<script>
+    function filterTable(event) {
+        var filter = event.target.value.toUpperCase();
+        var rows = document.querySelector("#produtos tbody").rows;
+
+        for (var i = 0; i < rows.length; i++) {
+
+            var primeiro = rows[i].cells[0].textContent.toUpperCase();
+            var segundo = rows[i].cells[1].textContent.toUpperCase();
+            var terceiro = rows[i].cells[2].textContent.toUpperCase();
+            var quarto = rows[i].cells[3].textContent.toUpperCase();
+            var quinto = rows[i].cells[4].textContent.toUpperCase();
+            var sexto = rows[i].cells[5].textContent.toUpperCase();
+            var setemo = rows[i].cells[6].textContent.toUpperCase();
+
+            if (primeiro.indexOf(filter) > -1 || segundo.indexOf(filter) > -1 || terceiro.indexOf(filter) > -1 || quarto.indexOf(filter) > -1 || quinto.indexOf(filter) > -1 || sexto.indexOf(filter) > -1 || setemo.indexOf(filter) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
+    document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
+
+</script>
 
 <script type="text/javascript" src="js/materialize.js"></script>
 <%@include file="rodape.jsp"%>

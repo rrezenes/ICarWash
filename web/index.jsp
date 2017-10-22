@@ -4,93 +4,109 @@
 
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>ICarWash</title>        
+
         <link rel="shortcut icon" href="img/favicon.ico" />
 
-        <!-- CSS -->
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/form-elements.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/materialize.css">
+        <style>
+            body {
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
 
-        <!-- Favicon and touch icons -->
-        <link rel="shortcut icon" href="assets/ico/favicon.png">
+            main {
+                flex: 1 0 auto;
+            }
+
+            body {
+                background-image: linear-gradient(to bottom, #bbdefb, #0d47a1);
+                
+            }
+
+            .input-field input[type=date]:focus + label,
+            .input-field input[type=text]:focus + label,
+            .input-field input[type=email]:focus + label,
+            .input-field input[type=password]:focus + label {
+                color: #01579b !important;
+            }
+
+            .input-field input[type=date]:focus,
+            .input-field input[type=text]:focus,
+            .input-field input[type=email]:focus,
+            .input-field input[type=password]:focus {
+                border-bottom: 2px solid #01579b !important;
+                box-shadow: none;
+            }
+        </style>
     </head>
 
     <body>
+        <div class="section"></div>
+        <main>
+            <center>
+                <div class="section"></div>
 
-        <!-- Top content -->
-        <div class="top-content">
+                <h5 class="indigo-text">ICarWash</h5>
+                <div class="section"></div>
 
-            <div class="inner-bg">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-sm-8 col-sm-offset-2 text">
-                            <h1><strong>ICarWash</strong> Login</h1>
+                    <div class="z-depth-4 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+                        <form class="col s12" role="form" action="Login" method="post" class="login-form">
+                            <div class='row'>
+                                <div class='col s12'>
+                                </div>
+                            </div>
                             <div class="description">
                                 <%  if (request.getParameter("c") != null) {
                                         if (request.getParameter("c").equals("ok")) {%>
-                                            <p>Cadastrado com Sucesso!</p>
-                                            <p>Acesse abaixo com seu usuario e senha.</p>
-
+                                <p>Cadastrado com Sucesso!</p>
+                                <p>Acesse abaixo com seu usuario e senha.</p>
                                 <%
                                         }
                                     }
 
                                 %>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6 col-sm-offset-3 form-box">
-                            <div class="form-top">
-                                <div class="form-top-left">
-                                    <h3>Acesse o ICarWash!</h3>
-                                    <p>Insira seu nome de usuario e senha para acessar:</p>
-                                </div>
-                                <div class="form-top-right">
-                                    <i class="glyphicon glyphicon-lock"></i>
+                            <div class='row'>
+                                <div class='input-field col s12'>
+                                    <input class="validate" type="email" name="email" id="email"/>
+
+                                    <label for='email'>Entre com o seu e-mail</label>
                                 </div>
                             </div>
-
-                            <div class="form-bottom">
-                                <form role="form" action="Login" method="post" class="login-form">
-                                    <div class="form-group">
-                                        <label class="sr-only" for="form-username">Email:</label>
-                                        <input type="text" name="email" placeholder="Email..." class="form-username form-control" id="form-username">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="sr-only" for="form-password">Senha:</label>
-                                        <input type="password" name="senha" placeholder="Senha..." class="form-password form-control" id="form-password">
-                                    </div>
-                                    <button type="submit" class="btn">Entrar!</button>
-
-                                </form>
-
+                            <div class='row'>
+                                <div class='input-field col s12'>
+                                    <input class='validate' type='password' name='senha' id="password" />
+                                    <label for='password'>Entre com a sua senha</label>
+                                </div>
+                                <label style='float: right;'>
+                                    <a class='blue-text' href='#!'><b>Esqueceu sua senha?</b></a>
+                                </label>
                             </div>
-                            <div>
-                                <a href="novo-cliente" align="right">Cadastre-se</a>
-                            </div>
-                        </div>
+
+                            <br />
+                            <center>
+                                <div class='row'>
+                                    <button type='submit' name='btn' class='col s12 btn btn-large waves-effect light-blue darken-4'>Entrar</button>
+                                </div>
+                            </center>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
+                <a class='blue-text' href="novo-cliente">Criar uma conta</a>
+            </center>
 
+            <div class="section"></div>
+            <div class="section"></div>
+        </main>
 
-        <!-- Javascript -->
-        <script src="js/jquery-3.1.1.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.backstretch.min.js"></script>
-        <script src="js/scripts.js"></script>
-
-        <!--[if lt IE 10]>
-            <script src="assets/js/placeholder.js"></script>
-        <![endif]-->
-
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
     </body>
 
+    <script type="text/javascript" src="js/materialize.js"></script>
 </html>
