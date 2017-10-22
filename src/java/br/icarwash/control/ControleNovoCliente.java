@@ -20,8 +20,7 @@ public class ControleNovoCliente extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), 1, true, false);
         UsuarioDAO usuarioDAO = new UsuarioDAO();
