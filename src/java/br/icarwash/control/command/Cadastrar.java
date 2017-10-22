@@ -55,8 +55,8 @@ public class Cadastrar implements ICommand {
                     }
                 }
                 
-                request.setAttribute("objCliente", cliente);
-                return "Controle?action=Listar&listar=cliente&Ok";
+                request.setAttribute("cadastrado", "ok");
+                return "Controle?action=Listar&listar=cliente";
             }
 
             case "lavador": {
@@ -87,16 +87,16 @@ public class Cadastrar implements ICommand {
                         throw new RuntimeException(e);
                     }
                 }
-                request.setAttribute("objLavador", lavador);
-                return "Controle?action=Listar&listar=lavador&Ok";
+                request.setAttribute("cadastrado", "ok");
+                return "Controle?action=Listar&listar=lavador";
             }
             case "produto": {
                 Produto produto = new Produto(request.getParameter("nome"), request.getParameter("descricao"), true);
                 ProdutoDAO produtoDAO = new ProdutoDAO();
                 produtoDAO.cadastrar(produto);
 
-                request.setAttribute("objProduto", produto);
-                return "Controle?action=Listar&listar=produto&Ok";
+                request.setAttribute("cadastrado", "ok");
+                return "Controle?action=Listar&listar=produto";
             }
             case "servico": {
 
@@ -131,9 +131,9 @@ public class Cadastrar implements ICommand {
                         throw new RuntimeException(e);
                     }
                 }
-
-                request.setAttribute("objServico", servico);
-                return "Controle?action=Listar&listar=servico&Ok";
+                
+                request.setAttribute("cadastrado", "ok");
+                return "Controle?action=Listar&listar=servico";
             }
             default:
                 return "painel_admin.jsp";

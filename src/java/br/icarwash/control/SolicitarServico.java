@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "SolicitarServico", urlPatterns = {"/SolicitarServico"})
+/**
+ *
+ * @author Mirian
+ */
+@WebServlet(name = "SolicitarServico", urlPatterns = {"/SolicitarServico", "/solicitar-servico"})
 public class SolicitarServico extends HttpServlet {
 
     @Override

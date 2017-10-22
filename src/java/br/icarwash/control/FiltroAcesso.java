@@ -65,38 +65,43 @@ public class FiltroAcesso implements Filter {
 
         Throwable problem = null;
         if (usuario != null) {
-            switch (usuario.getNivel()) {
-                case 3:
-                    session.setAttribute("nome", "Admin");
-                    request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
-                    break;
-                case 2:
-                    
-                    session.setAttribute("nome", new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getNome());
-                    request.getRequestDispatcher("/ListarSolicitacaoLavador").forward(request, response);
-                    break;
-                case 1:
-                    session.setAttribute("nome", new ClienteDAO().localizarPorIdUsuario(usuario.getId()).getNome());
-                    request.getRequestDispatcher("/ListarSolicitacaoCliente").forward(request, response);
-                    break;
-                default:
-                    aprovado = false;
-                    log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                    session.invalidate();
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
-                    break;
+            if (usuario.isCadastroCompleto()) {
+                switch (usuario.getNivel()) {
+                    case 3:
+                        session.setAttribute("nome", "Admin");
+                        request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
+                        break;
+                    case 2:
+                        session.setAttribute("nome", new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getNome());
+                        request.getRequestDispatcher("/ListarSolicitacaoLavador").forward(request, response);
+                        break;
+                    case 1:
+                        session.setAttribute("nome", new ClienteDAO().localizarPorIdUsuario(usuario.getId()).getNome());
+                        request.getRequestDispatcher("/ListarSolicitacaoCliente").forward(request, response);
+                        break;
+                    default:
+                        aprovado = false;
+                        log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+                        session.invalidate();
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                        break;
+                }
+            } else {
+                session.setAttribute("nome", "");
+                RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
+                rd.forward(request, response);
             }
-        }
-        doAfterProcessing(request, response);
+            doAfterProcessing(request, response);
 
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
+            if (problem != null) {
+                if (problem instanceof ServletException) {
+                    throw (ServletException) problem;
+                }
+                if (problem instanceof IOException) {
+                    throw (IOException) problem;
+                }
+                sendProcessingError(problem, response);
             }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
-            }
-            sendProcessingError(problem, response);
         }
     }
 
@@ -105,8 +110,7 @@ public class FiltroAcesso implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig
-    ) {
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {

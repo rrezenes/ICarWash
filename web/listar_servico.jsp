@@ -2,6 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 
+<c:if test="${!empty cadastrado}">
+    <script>Materialize.toast('Produto Cadastrado', 6000, 'rounded');</script>        
+</c:if>
 
 <div class="row">
     <p class="titulo-controle">Controle de Serviços</p>
@@ -112,104 +115,106 @@
 
 <script src="js/jquery.validate.js"></script>
 <script type="text/javascript">
-                                               function filterTable(event) {
-                                                   var filter = event.target.value.toUpperCase();
-                                                   var rows = document.querySelector("#servicos tbody").rows;
+    function filterTable(event) {
+        var filter = event.target.value.toUpperCase();
+        var rows = document.querySelector("#servicos tbody").rows;
 
-                                                   for (var i = 0; i < rows.length; i++) {
+        for (var i = 0; i < rows.length; i++) {
 
-                                                       var nome = rows[i].cells[0].textContent.toUpperCase();
-                                                       var descricao = rows[i].cells[1].textContent.toUpperCase();
-                                                       var valor = rows[i].cells[2].textContent.toUpperCase();
+            var nome = rows[i].cells[0].textContent.toUpperCase();
+            var descricao = rows[i].cells[1].textContent.toUpperCase();
+            var valor = rows[i].cells[2].textContent.toUpperCase();
 
-                                                       if (nome.indexOf(filter) > -1 || descricao.indexOf(filter) > -1 || valor.indexOf(filter) > -1) {
-                                                           rows[i].style.display = "";
-                                                       } else {
-                                                           rows[i].style.display = "none";
-                                                       }
-                                                   }
-                                               }
+            if (nome.indexOf(filter) > -1 || descricao.indexOf(filter) > -1 || valor.indexOf(filter) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
 
-                                               document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
+    document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
 
-                                               $(document).ready(function () {
-                                                   $('.modal').modal();
-                                                   $("#formServico").validate({
-                                                       rules: {
-                                                           nome: {
-                                                               maxlength: 50,
-                                                               required: true,
-                                                               minlength: 3
-                                                           },
-                                                           descricao: {
-                                                               maxlength: 50,
-                                                               required: true,
-                                                               minlength: 3
-                                                           },
-                                                           valor: {
-                                                               maxlength: 6,
-                                                               required: true,
-                                                               number: true
-                                                           }
+    $(document).ready(function () {
+         
+        $('.modal').modal();
+        
+        $("#formServico").validate({
+            rules: {
+                nome: {
+                    maxlength: 50,
+                    required: true,
+                    minlength: 3
+                },
+                descricao: {
+                    maxlength: 50,
+                    required: true,
+                    minlength: 3
+                },
+                valor: {
+                    maxlength: 6,
+                    required: true,
+                    number: true
+                }
 
-                                                       },
-                                                       messages: {
-                                                           nome: {
-                                                               maxlength: "Utilize no máximo 50 caracteres",
-                                                               required: "Campo obrigarório preencher",
-                                                               minlength: "Utilize no mínimo 3 caracteres"
-                                                           },
-                                                           descricao: {
-                                                               maxlength: "Utilize no máximo 50 caracteres",
-                                                               required: "Campo obrigarório preencher",
-                                                               minlength: "Utilize no mínimo 3 caracteres"
-                                                           },
-                                                           valor: {
-                                                               maxlength: "Utilize no máximo 6 caracteres",
-                                                               required: "Campo obrigarório preencher",
-                                                               number: "Apenas valores reais, utilize ponto para separar reais dos centavos"
-                                                           }
-                                                       },
-                                                       errorElement: "em",
-                                                       errorPlacement: function (error, element) {
-                                                           // Add the `help-block` class to the error element
-                                                           //error.addClass("help-block");
+            },
+            messages: {
+                nome: {
+                    maxlength: "Utilize no máximo 50 caracteres",
+                    required: "Campo obrigarório preencher",
+                    minlength: "Utilize no mínimo 3 caracteres"
+                },
+                descricao: {
+                    maxlength: "Utilize no máximo 50 caracteres",
+                    required: "Campo obrigarório preencher",
+                    minlength: "Utilize no mínimo 3 caracteres"
+                },
+                valor: {
+                    maxlength: "Utilize no máximo 6 caracteres",
+                    required: "Campo obrigarório preencher",
+                    number: "Apenas valores reais, utilize ponto para separar reais dos centavos"
+                }
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                //error.addClass("help-block");
 
-                                                           // Add `has-feedback` class to the parent div.form-group
-                                                           // in order to add icons to inputs
-                                                           element.parents(".col-sm-5").addClass("has-feedback");
+                // Add `has-feedback` class to the parent div.form-group
+                // in order to add icons to inputs
+                element.parents(".col-sm-5").addClass("has-feedback");
 
-                                                           if (element.prop("nome") === "nome") {
-                                                               error.insertAfter(".erro-nome");
-                                                           } else if (element.prop("descricao") === "descricao") {
-                                                               error.insertAfter(".erro-descricao");
-                                                           } else if (element.prop("valor") === "valor") {
-                                                               error.insertAfter(".erro-valor");
-                                                           } else {
-                                                               error.insertAfter(element);
-                                                           }
+                if (element.prop("nome") === "nome") {
+                    error.insertAfter(".erro-nome");
+                } else if (element.prop("descricao") === "descricao") {
+                    error.insertAfter(".erro-descricao");
+                } else if (element.prop("valor") === "valor") {
+                    error.insertAfter(".erro-valor");
+                } else {
+                    error.insertAfter(element);
+                }
 
-                                                           // Add the span element, if doesn't exists, and apply the icon classes to it.
-                                                           if (!element.next("span")[ 0 ]) {
-                                                               $("<span class='glyphicon form-control-feedback'></span>").insertAfter(element);
-                                                           }
-                                                       },
-                                                       success: function (label, element) {
-                                                           // Add the span element, if doesn't exists, and apply the icon classes to it.
-                                                           if (!$(element).next("span")[ 0 ]) {
-                                                               $("<span class='glyphicon form-control-feedback'></span>").insertAfter($(element));
-                                                           }
-                                                       },
-                                                       highlight: function (element, errorClass, validClass) {
-                                                           $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
-                                                           //$(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
-                                                       },
-                                                       unhighlight: function (element, errorClass, validClass) {
-                                                           $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
-                                                           //$(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
-                                                       }
-                                                   });
-                                               });
+                // Add the span element, if doesn't exists, and apply the icon classes to it.
+                if (!element.next("span")[ 0 ]) {
+                    $("<span class='glyphicon form-control-feedback'></span>").insertAfter(element);
+                }
+            },
+            success: function (label, element) {
+                // Add the span element, if doesn't exists, and apply the icon classes to it.
+                if (!$(element).next("span")[ 0 ]) {
+                    $("<span class='glyphicon form-control-feedback'></span>").insertAfter($(element));
+                }
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
+                //$(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
+                //$(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
+            }
+        });
+    });
 </script>
 
 <%@include file="rodape.jsp"%>

@@ -86,7 +86,7 @@ public class ControleSolicitacao extends HttpServlet {
         //response.sendRedirect("/ICarWash/ListarSolicitacaoCliente");
 
         PrintWriter out = response.getWriter();
-        out.println("/ICarWash/ListarSolicitacaoCliente?ok");
+        out.println("/ICarWash/solicitacoes-cliente?ok"); //ListarSolicitacaoCliente
         out.flush();
 
     }
