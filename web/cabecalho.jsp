@@ -45,8 +45,8 @@
                                     <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
                                     <div class="collapsible-body">
                                         <ul>
-                                            <li><a href="SolicitarServico">Solicitar Serviço</a></li>
-                                            <li><a href="ListarSolicitacaoCliente">Minhas Solicitações</a></li>
+                                            <li><a href="solicitar-servico">Solicitar Serviço</a></li>
+                                            <li><a href="solicitacoes-cliente">Minhas Solicitações</a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -60,7 +60,7 @@
                                     <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
                                     <div class="collapsible-body">
                                         <ul>
-                                            <li><a href="ListarSolicitacaoLavador">Solicitar Serviço</a></li>
+                                            <li><a href="solicitacoes-lavador">Solicitar Serviço</a></li>
                                             <li><a href="ListarSolicitacaoHojeLavador">Solicitações Para Hoje</a></li>
                                         </ul>
                                     </div>

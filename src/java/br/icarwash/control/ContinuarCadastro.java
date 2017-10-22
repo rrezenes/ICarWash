@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,8 +54,9 @@ public class ContinuarCadastro extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-        RequestDispatcher rd = request.getRequestDispatcher("SolicitarServico");
-        rd.forward(request, response);
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        session.setAttribute("nome", request.getParameter("nome"));
+        response.sendRedirect("solicitar-servico");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

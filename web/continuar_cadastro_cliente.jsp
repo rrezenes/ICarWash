@@ -59,6 +59,7 @@
         </center>
     </form>
 </div>
+<script src="js/jquery.maskedinput.min.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script type="text/javascript">
 
