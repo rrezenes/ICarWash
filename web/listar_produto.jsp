@@ -2,53 +2,52 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 
-<div class="container">
-    <div class="row">
-        <h4>Controle de Produtos</h4>
-        <div class="divider"></div>
-    </div>
-    <div class="row">
-        <div class="col s3">
-            <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
-        </div>
-        <div class="col s9">
-            <input id="buscar" type="text" />
-        </div>
-    </div>
-    <table id="produtos" class="table table-hover centered striped responsive-table">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th colspan="2"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="produto" items="${produtos}">
-                <tr>
-                    <td>${produto.nome}</td>
-                    <td>${produto.descricao}</td>
-                    <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=${produto.id}"></a></td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${produto.ativo}">          	
-                                <a class="btn-floating red" type="button" href="Controle?action=Excluir&q=produto&id=${produto.id}"><i class="material-icons">delete</i></a>
-                            </c:when> 
-                            <c:otherwise>
-                                <a class="btn-floating blue" type="button" href="Controle?action=Ativar&q=produto&id=${produto.id}"><i class="material-icons">done</i></a>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-</div>
 
-<div id="modal" class="modal modal-fixed-footer modal-avaliar">
+<div class="row">
+    <p class="titulo-controle">Controle de Produtos</p>
+    <div class="divider"></div>
+</div>
+<div class="row">
+    <div class="col s3">
+        <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
+    </div>
+    <div class="col s9">
+        <input id="buscar" type="text" />
+    </div>
+</div>
+<table id="produtos" class="table table-hover centered striped responsive-table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="produto" items="${produtos}">
+            <tr>
+                <td>${produto.nome}</td>
+                <td>${produto.descricao}</td>
+                <td>
+                    <a type="button" class="btn-floating blue" href="Controle?action=LocalizarPorId&q=produto&id=${produto.id}"><i class="material-icons">&#xE254;</i></a>
+                    <c:choose>
+                        <c:when test="${produto.ativo}">                                       
+                            <a class="btn-floating red" type="button" href="Controle?action=Excluir&q=produto&id=${produto.id}"><i class="material-icons">delete</i></a>
+                        </c:when> 
+                        <c:otherwise>
+                            <a class="btn-floating green" type="button" href="Controle?action=Ativar&q=produto&id=${produto.id}"><i class="material-icons">done</i></a>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+
+<div id="modal" class="modal modal-fixed-footer">
     <div class="modal-content">
         <div class="row">
-            <h4>Cadastrar Produto</h4>
+            <p class="titulo-controle">Cadastrar Produto</p>
             <div class="divider"></div>
         </div>
         <form id="formProduto" action="Controle" method="post">
@@ -85,7 +84,7 @@
 
             var nome = rows[i].cells[0].textContent.toUpperCase();
             var descricao = rows[i].cells[1].textContent.toUpperCase();
-            
+
 
             if (nome.indexOf(filter) > -1 || descricao.indexOf(filter) > -1) {
                 rows[i].style.display = "";

@@ -3,56 +3,56 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 
-<div class="container">
-    <div class="row">
-        <h4>Controle de Lavadores</h4>
-        <div class="divider"></div>
-    </div>
-    <div class="row">
-        <div class="col s3">
-            <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
-        </div>
-        <div class="col s9">
-            <input id="buscar" type="text" />
-        </div>
-    </div>
-    <table id="lavadores" class="table table-hover centered striped responsive-table">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>CPF</th>
-                <th>Cidade</th>
-                <th>Bairro</th>
-                <th colspan="2"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="lavador" items="${lavadores}" varStatus="posicao">
-                <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
-                <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
-                <tr>
-                    <td>${usuarios.get(posicao.index).email}</td>
-                    <td>${lavador.nome}</td>
-                    <td>${lavador.telefone}</td>
-                    <td>${lavador.CPF}</td>
-                    <td>${lavador.endereco.cidade}</td>
-                    <td>${lavador.endereco.bairro}</td>
-                    <td>
-                        <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"><i class="material-icons">mode_edit</i></a>
-                        <a class="btn-floating red" href="Controle?action=Excluir&q=lavador&id=${lavador.idUsuario}"><i class="material-icons">delete_forever</i></a>
-                    </td>
-                </tr>
-            </c:forEach>        
-        </tbody>
-    </table>
-</div>
 
-<div id="modal" class="modal modal-fixed-footer modal-avaliar">
+<div class="row">
+    <h4 class="titulo-controle">Controle de Lavadores</h4>
+    <div class="divider"></div>
+</div>
+<div class="row">
+    <div class="col s3">
+        <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
+    </div>
+    <div class="col s9">
+        <input id="buscar" type="text" />
+    </div>
+</div>
+<table id="lavadores" class="table table-hover centered striped responsive-table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>CPF</th>
+            <th>Cidade</th>
+            <th>Bairro</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="lavador" items="${lavadores}" varStatus="posicao">
+            <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
+            <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
+            <tr>
+                <td>${usuarios.get(posicao.index).email}</td>
+                <td>${lavador.nome}</td>
+                <td>${lavador.telefone}</td>
+                <td>${lavador.CPF}</td>
+                <td>${lavador.endereco.cidade}</td>
+                <td>${lavador.endereco.bairro}</td>
+                <td>
+                    <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating red" href="Controle?action=Excluir&q=lavador&id=${lavador.idUsuario}"><i class="material-icons">delete_forever</i></a>
+                </td>
+            </tr>
+        </c:forEach>        
+    </tbody>
+</table>
+
+
+<div id="modal" class="modal modal-fixed-footer">
     <div class="modal-content">
         <div class="row">
-            <h4>Cadastrar Lavador</h4>
+            <p class="titulo-controle">Cadastrar Lavador</p>
             <div class="divider"></div>
         </div>
         <form id="CadastrarLavador" action="Controle" method="post">
@@ -127,6 +127,7 @@
     </div>
 </div>
 
+<script src="js/jquery.maskedinput.min.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script type="text/javascript">
     function filterTable(event) {
@@ -152,7 +153,7 @@
     }
 
     document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
-    
+
     jQuery.validator.addMethod("cpf", function (value, element) {
         value = jQuery.trim(value);
 

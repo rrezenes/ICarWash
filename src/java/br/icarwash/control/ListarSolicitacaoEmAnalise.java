@@ -33,7 +33,7 @@ public class ListarSolicitacaoEmAnalise extends HttpServlet {
         
         request.setAttribute("solicitacoes", solicitacoes);
 
-        RequestDispatcher rd = request.getRequestDispatcher("/solicitacoes.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/listar_solicitacoes_pendentes.jsp");
         rd.forward(request, response);
 
     }

@@ -3,57 +3,56 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 
-<div class="container">
-    <div class="row">
-        <h4>Controle de Clientes</h4>
-        <div class="divider"></div>
-    </div>
-    <div class="row">
-        <div class="col s3">
-            <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
-        </div>
-        <div class="col s9">
-            <input id="buscar" type="text" />
-        </div>
-    </div>
-    <table id="clientes" class="table table-hover centered striped responsive-table">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>CPF</th>
-                <th>CEP</th>
-                <th>Cidade</th>
-                <th>Bairro</th>
-                <th colspan=2></th>
-            </tr>
-        </thead>
-        <tbody>  
-            <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
-                <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
-                <tr>
-                    <td>${usuarios.get(posicao.index).email}</td>
-                    <td>${cliente.nome}</td>
-                    <td>${cliente.telefone}</td>
-                    <td>${cliente.CPF}</td>
-                    <td>${cliente.endereco.CEP}</td>
-                    <td>${cliente.endereco.cidade}</td>
-                    <td>${cliente.endereco.bairro}</td>
-                    <td>
-                        <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
-                        <a class="btn-floating red"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"><i class="material-icons">delete_forever</i></a>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+<div class="row">
+    <p class="titulo-controle">Controle de Clientes</p>
+    <div class="divider"></div>
 </div>
+<div class="row">
+    <div class="col s3">
+        <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
+    </div>
+    <div class="col s9">
+        <input id="buscar" type="text" />
+    </div>
+</div>
+<table id="clientes" class="table table-hover centered striped responsive-table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>CPF</th>
+            <th>CEP</th>
+            <th>Cidade</th>
+            <th>Bairro</th>
+            <th colspan=2></th>
+        </tr>
+    </thead>
+    <tbody>  
+        <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
+            <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
+            <tr>
+                <td>${usuarios.get(posicao.index).email}</td>
+                <td>${cliente.nome}</td>
+                <td>${cliente.telefone}</td>
+                <td>${cliente.CPF}</td>
+                <td>${cliente.endereco.CEP}</td>
+                <td>${cliente.endereco.cidade}</td>
+                <td>${cliente.endereco.bairro}</td>
+                <td>
+                    <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating red"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"><i class="material-icons">delete_forever</i></a>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
 
-<div id="modal" class="modal modal-fixed-footer modal-avaliar">
+
+<div id="modal" class="modal modal-fixed-footer">
     <div class="modal-content">
         <div class="row">
-            <h4>Cadastrar Cliente</h4>
+            <p class="titulo-controle">Cadastrar Cliente</p>
             <div class="divider"></div>
         </div>
         <form id="CadastrarCliente" action="Controle" method="post">
@@ -136,6 +135,7 @@
     </div>
 </div>
 
+<script src="js/jquery.maskedinput.min.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script type="text/javascript">
 
