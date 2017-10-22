@@ -3,6 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 
+<c:if test="${!empty cadastrado}">
+    <script>Materialize.toast('Produto Cadastrado', 6000, 'rounded');</script>        
+</c:if>
+
 <div class="row">
     <p class="titulo-controle">Controle de Clientes</p>
     <div class="divider"></div>
@@ -225,7 +229,11 @@
     });
 
     $(document).ready(function () {
+        
+        //inicializa o modal
         $('.modal').modal();
+        
+        
         $("#CadastrarCliente").validate({
             rules: {
                 email: {
@@ -365,12 +373,13 @@
             }
         });
     });
+    
+    //inicializa mascara
     jQuery(function ($) {
         $("#nascimento").mask("99/99/9999");
         $("#telefone").mask("(99)99999-9999");
         $("#cpf").mask("999.999.999-99");
         $("#cep").mask("99999-999");
-
     });
 </script>    
 

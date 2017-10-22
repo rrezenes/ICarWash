@@ -57,7 +57,7 @@ public class Listar implements ICommand {
                 ArrayList<Lavador> lavadores = null;
                 LavadorDAO lavadorDAO = new LavadorDAO();
                 lavadores = lavadorDAO.listar();
-                
+
                 try {
 
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
@@ -79,33 +79,33 @@ public class Listar implements ICommand {
 
                 request.setAttribute("lavadores", lavadores);
                 request.setAttribute("usuarios", usuarios);
-                
+
                 return "listar_lavador.jsp";
-                
+
             case "produto":
-                
+
                 ProdutoDAO produtoDAO = new ProdutoDAO();
                 ArrayList<Produto> produtos = produtoDAO.listar();
                 request.setAttribute("produtos", produtos);
                 
-                return "listar_produto.jsp";
-                
+                return "listar_produto.jsp"; 
+
             case "servico":
-                
+
                 ServicoDAO servicoDAO = new ServicoDAO();
                 ArrayList<Servico> servicos = servicoDAO.listar();
                 request.setAttribute("servicos", servicos);
-                
+
                 return "listar_servico.jsp";
-                
+
             case "solicitacao":
-                
+
                 SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
                 ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listar();
                 request.setAttribute("solicitacoes", solicitacoes);
-                
+
                 return "listar_solicitacao.jsp";
-                
+
             default:
                 return "painel_admin.jsp";
         }

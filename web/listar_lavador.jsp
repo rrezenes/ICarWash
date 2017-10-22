@@ -3,6 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="cabecalho.jsp"%>
 
+<c:if test="${!empty cadastrado}">
+    <script>Materialize.toast('Produto Cadastrado', 6000, 'rounded');</script>        
+</c:if>
 
 <div class="row">
     <h4 class="titulo-controle">Controle de Lavadores</h4>
@@ -216,6 +219,7 @@
     });
 
     $(document).ready(function () {
+        
         $('.modal').modal();
         $("#CadastrarLavador").validate({
             rules: {

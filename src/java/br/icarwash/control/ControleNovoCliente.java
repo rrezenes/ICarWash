@@ -9,12 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "ControleNovoCliente", urlPatterns = {"/NovoCliente", "/novo-cliente"})
 public class ControleNovoCliente extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {        
         RequestDispatcher rd = request.getRequestDispatcher("cadastro.jsp");
         rd.forward(request, response);
     }
@@ -22,11 +23,15 @@ public class ControleNovoCliente extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), 1, true, false);
+        
         UsuarioDAO usuarioDAO = new UsuarioDAO();
+        
         usuarioDAO.cadastrar(usuario);
-
-        new LoginController().validaLogin(request, response, usuario);
+        
+        usuarioDAO = new UsuarioDAO();
+        
+        new LoginController().validaLogin(request, response, usuarioDAO.usuarioLogin(usuario));
     }
 }
