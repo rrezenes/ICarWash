@@ -104,11 +104,6 @@ public class FiltroAcesso implements Filter {
     public void destroy() {
     }
 
-    /**
-     * Init method for this filter
-     *
-     * @param filterConfig
-     */
     @Override
     public void init(FilterConfig filterConfig
     ) {
@@ -120,9 +115,6 @@ public class FiltroAcesso implements Filter {
         }
     }
 
-    /**
-     * Return a String representation of this object.
-     */
     @Override
     public String toString() {
         if (filterConfig == null) {

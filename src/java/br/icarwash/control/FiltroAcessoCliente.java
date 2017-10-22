@@ -97,11 +97,6 @@ public class FiltroAcessoCliente implements Filter {
     public void destroy() {
     }
 
-    /**
-     * Init method for this filter
-     *
-     * @param filterConfig
-     */
     @Override
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
@@ -112,9 +107,6 @@ public class FiltroAcessoCliente implements Filter {
         }
     }
 
-    /**
-     * Return a String representation of this object.
-     */
     @Override
     public String toString() {
         if (filterConfig == null) {

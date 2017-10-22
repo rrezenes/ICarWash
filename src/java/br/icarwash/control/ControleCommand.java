@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.control;
 
 import br.icarwash.control.command.ICommand;
@@ -13,10 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Renan
- */
 @WebServlet(name = "ControleCommand", urlPatterns = "/Controle")
 public class ControleCommand extends HttpServlet {
 

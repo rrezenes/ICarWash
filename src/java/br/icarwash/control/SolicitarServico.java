@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.icarwash.control;
-
 import br.icarwash.dao.ServicoDAO;
 import br.icarwash.model.Servico;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,10 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Mirian
- */
 @WebServlet(name = "SolicitarServico", urlPatterns = {"/SolicitarServico"})
 public class SolicitarServico extends HttpServlet {
 
