@@ -34,6 +34,7 @@ public class Listar implements ICommand {
 
         switch (quemListar) {
             case "cliente":
+                
                 ClienteDAO clienteDAO = new ClienteDAO();
                 ArrayList<Cliente> clientes = clienteDAO.listar();
                 
@@ -51,8 +52,11 @@ public class Listar implements ICommand {
 
                 request.setAttribute("clientes", clientes);
                 request.setAttribute("usuarios", usuarios);
+                
                 return "listar_cliente.jsp";
+                
             case "lavador":
+                
                 LavadorDAO lavadorDAO = new LavadorDAO();
                 ArrayList<Lavador> lavadores = lavadorDAO.listar();
 
@@ -71,15 +75,7 @@ public class Listar implements ICommand {
                 request.setAttribute("lavadores", lavadores);
                 request.setAttribute("usuarios", usuarios);
 
-                return "listar_lavador.jsp";
-
-            case "produto":
-
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                ArrayList<Produto> produtos = produtoDAO.listar();
-                request.setAttribute("produtos", produtos);
-                
-                return "listar_produto.jsp"; 
+                return "listar_lavador.jsp"; 
 
             case "servico":
 
@@ -89,6 +85,14 @@ public class Listar implements ICommand {
 
                 return "listar_servico.jsp";
 
+            case "produto":
+
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+                ArrayList<Produto> produtos = produtoDAO.listar();
+                request.setAttribute("produtos", produtos);
+                
+                return "listar_produto.jsp";
+                
             case "solicitacao":
 
                 SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
