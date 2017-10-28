@@ -12,11 +12,13 @@
     <div class="divider"></div>
 </div>
 <div class="row">
-    <div class="col s3">
-        <a class="waves-effect waves-light btn-floating btn-large green modal-trigger" href="#modal"><i class="material-icons">&#xE145;</i></a>
+    <div class="col s6">
+        <a class="waves-effect waves-light btn green modal-trigger" href="#modal">Cadastrar</a>
     </div>
-    <div class="col s9">
-        <input id="buscar" type="text" />
+    <div class="input-field col s6">
+        <input class="validate" id="buscar" type="text" name="buscar" data-length="10"/>
+        <label for='email'>Buscar</label>
+                                
     </div>
 </div>
 <table id="clientes" class="table table-hover centered striped responsive-table">

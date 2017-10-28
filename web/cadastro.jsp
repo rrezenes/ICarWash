@@ -1,59 +1,108 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
     <head>
-        <meta charset="utf-8"/>
-        <title>Cadastro</title>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link href="css/navbar-fixed-side.css" rel="stylesheet" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery-3.1.1.js"></script>
-        <script src="js/jquery.maskedinput.min.js"></script>
-        <title>ICarWash</title>
+        <meta charset="utf-8">
+
+        <title>Cadastro de um novo cliente</title>        
+
+        <link rel="shortcut icon" href="img/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="css/materialize.css">
+        <link rel="stylesheet" type="text/css" href="css/estilo-index.css">
+
     </head>
+
     <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
-                    <div class="page-header">
-                        <div class="alert alert-info" role="alert">
-                            <h4>Cadastro de um novo cliente</h4>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <form id="formCliente" method="post" class="form-horizontal" action="NovoCliente">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label" for="email" name="txtEmail">Email</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
+        <div class="section"></div>
+        <main>
+            <center>
+                <div class="section"></div>
+
+                <h5 class="indigo-text">Cadastro de um novo cliente</h5>
+                <div class="section"></div>
+
+                <div class="container">
+                    <div class="z-depth-4 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+                        <form class="col s12" role="form" action="NovoCliente" id="formCliente" method="post" class="login-form">
+                            <div class='row'>
+                                <div class='col s12'>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label" for="senha">Senha</label>
-                                <div class="col-sm-5">
-                                    <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite aqui sua senha" />
+                            <div class='row'>
+                                <div class='input-field col s12'>
+                                    <input class="validate" type="email" id="email" for="email" name="txtEmail"/>
+                                    <label for='email'>E-mail</label>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label" for="confirme_senha">Confirme a senha</label>
-                                <div class="col-sm-5">
-                                    <input type="password" class="form-control" id="confirme_senha" name="confirme_senha" placeholder="Confirme aqui sua senha" />
+                            <div class='row'>
+                                <div class='input-field col s12'>
+                                    <input class='validate' type='password' name='senha' id="password" />
+                                    <label for='password'>Entre com a sua senha</label>
                                 </div>
+                                <label style='float: right;'>
+                                    <a class='blue-text' href='#!'><b>Esqueceu sua senha?</b></a>
+                                </label>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-9 col-sm-offset-4">
-                                    <button type="submit" class="btn btn-primary" name="signup1" value="Cadastrar">Cadastrar</button>
-                                    <button type="button" class="btn btn-primary" name="back" value="Back" onclick="window.history.back()">Voltar</button>
+
+                            <br />
+                            <center>
+                                <div class='row'>
+                                    <button type='submit' name='btn' class='col s12 btn btn-large waves-effect light-blue darken-4'>Entrar</button>
                                 </div>
-                            </div>
+                            </center>
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-        <script src="js/jquery.validate.js"></script>
-        <script type="text/javascript">
+                <a class='blue-text' href="novo-cliente">Criar uma conta</a>
+            </center>
+
+            <div class="section"></div>
+            <div class="section"></div>
+        </main>
+
+        <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+        <script type="text/javascript" src="js/materialize.js"></script>
+    </body>
+
+    <script type="text/javascript" src="js/materialize.js"></script>
+</html>
+
+
+
+
+
+<div class="form-group">
+    <label class="col-sm-4 control-label" for="email" name="txtEmail">Email</label>
+    <div class="col-sm-5">
+        <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-4 control-label" for="senha">Senha</label>
+    <div class="col-sm-5">
+        <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite aqui sua senha" />
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-4 control-label" for="confirme_senha">Confirme a senha</label>
+    <div class="col-sm-5">
+        <input type="password" class="form-control" id="confirme_senha" name="confirme_senha" placeholder="Confirme aqui sua senha" />
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-9 col-sm-offset-4">
+        <button type="submit" class="btn btn-primary" name="signup1" value="Cadastrar">Cadastrar</button>
+        <button type="button" class="btn btn-primary" name="back" value="Back" onclick="window.history.back()">Voltar</button>
+    </div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<script src="js/jquery.validate.js"></script>
+<script type="text/javascript">
             $(document).ready(function () {
                 $("#formCliente").validate({
                     rules: {
@@ -71,24 +120,24 @@
                             minlength: 5,
                             equalTo: "#senha"
                         }
-                        
+
                     },
                     messages: {
                         email: {
-                            remote: "E-mail j√° est√° em uso.",
-                            required: "Por favor, coloque um e-mail v√°lido.",
-                            email: "Por favor, coloque um e-mail v√°lido."
+                            remote: "E-mail j· est· em uso.",
+                            required: "Por favor, coloque um e-mail v·lido.",
+                            email: "Por favor, coloque um e-mail v·lido."
                         },
                         senha: {
                             required: "Por favor, coloque sua senha.",
-                            minlength: "Sua senha deve conter no m√≠nimo 5 caracteres."
+                            minlength: "Sua senha deve conter no mÌnimo 5 caracteres."
                         },
                         confirme_senha: {
                             required: "Por favor, coloque sua senha novamente.",
-                            minlength: "Sua senha deve conter no m√≠nimo 5 caracteres",
+                            minlength: "Sua senha deve conter no mÌnimo 5 caracteres",
                             equalTo: "Sua senha deve ser a mesma a cima."
                         }
-                        
+
                     },
                     errorElement: "em",
                     errorPlacement: function (error, element) {
@@ -126,5 +175,5 @@
                     }
                 });
             });
-        </script>
-        <%@include file="rodape.jsp"%>
+</script>
+<%@include file="rodape.jsp"%>
