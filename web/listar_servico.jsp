@@ -96,7 +96,7 @@
                                 </p>             
                             </div>
                             <div class="input-field col s3">
-                                <input id="quantidade${produto.id}" type="number" class="validate" min="1" max="5" disabled>
+                                <input id="quantidade${produto.id}" name="quantidade${produto.id}" type="number" class="validate" min="1" max="5" disabled>
                                 <label class="quantidade${produto.id}" for="quantidade${produto.id}">Qtd</label>
                             </div> 
                         </c:if>
