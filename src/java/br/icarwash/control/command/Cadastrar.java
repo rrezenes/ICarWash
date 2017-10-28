@@ -113,7 +113,7 @@ public class Cadastrar implements ICommand {
                     ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 
                     for (String idProduto : produtos) {
-                        int quantidade = Integer.parseInt(request.getParameter("combo" + idProduto));
+                        int quantidade = Integer.parseInt(request.getParameter("quantidade" + idProduto));
                         servicoProdutoDAO.cadastraServicoProduto(servico.getId(), Integer.parseInt(idProduto), quantidade);
                     }
                     conexao.commit();
