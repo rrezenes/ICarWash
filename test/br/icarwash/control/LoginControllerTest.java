@@ -1,11 +1,5 @@
 package br.icarwash.control;
 
-import br.icarwash.control.LoginController;
-import br.icarwash.dao.UsuarioDAO;
-import br.icarwash.model.Usuario;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
