@@ -19,11 +19,11 @@ public class LavadorDAO {
     private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into lavador(id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF) values(?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, u.ativo from Lavador l, usuario u, endereco e, lavador_endereco le where u.id = l.id_usuario and l.id = le.id_lavador and e.id = le.id_endereco and u.ativo = 1";
+    private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, e.nome, u.ativo from Lavador l, usuario u, endereco e, lavador_endereco le where u.id = l.id_usuario and l.id = le.id_lavador and e.id = le.id_endereco and u.ativo = 1";
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id = ?;";
-    private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id = ?";
-    private static final String SELECT_BY_ID_USUARIO = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id_usuario = ?";
+    private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF from lavador where id = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select l.id, l.id_usuario, l.dt_contrato, l.nome, l.telefone, l.dt_nascimento, l.CPF, e.CEP, e.estado, e.cidade, e.bairro, e.endereco, e.numero from lavador l, endereco e, lavador_endereco le where le.id_lavador = l.id and le.id_endereco = e.id and id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from lavador where cpf = ?";
     private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ?";
     private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
@@ -73,7 +73,7 @@ public class LavadorDAO {
                 cal1.setTimeInMillis(timestamp.getTime());
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal2.setTimeInMillis(timestamp.getTime());
-                Lavador lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                Lavador lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
                 lavadores.add(lavador);
             }
         } catch (SQLException e) {
@@ -93,7 +93,7 @@ public class LavadorDAO {
             if (rs.next()) {
                 cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
                 cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
-                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -112,7 +112,7 @@ public class LavadorDAO {
             if (rs.next()) {
                 cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
                 cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
-                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
