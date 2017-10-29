@@ -1,3 +1,4 @@
+/*
 package br.icarwash.control;
 
 import br.icarwash.dao.UsuarioDAO;
@@ -24,12 +25,12 @@ public class ControleNovoClienteTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         
         new ControleNovoCliente().doGet(request, response);
-         */
+         
     }
 
     /**
      * Test of doPost method, of class ControleNovoCliente.
-     */
+     
     @Test
     public void testDoPost() throws Exception {
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -45,3 +46,4 @@ public class ControleNovoClienteTest {
     }
 
 }
+* */

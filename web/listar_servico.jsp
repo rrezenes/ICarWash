@@ -14,8 +14,9 @@
     <div class="col s6">
         <a class="waves-effect waves-light btn green modal-trigger" href="#modal">Cadastrar</a>
     </div>
-    <div class="col s6">
-        <input id="buscar" type="text" />
+    <div class="input-field col s6">
+        <input class="validate" id="buscar" type="text" name="buscar" />
+        <label for='email'>Buscar</label>
     </div>
 </div>
 <table id="servicos" class="table table-hover centered striped responsive-table">
