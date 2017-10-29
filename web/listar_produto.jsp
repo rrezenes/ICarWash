@@ -18,7 +18,7 @@
         <label for='email'>Buscar</label>
     </div>
 </div>
-<table id="tabela2" class="table table-hover centered striped responsive-table">
+<table id="tabela" class="table table-hover centered striped responsive-table">
     <thead>
         <tr>
             <th>Nome</th>
@@ -80,7 +80,7 @@
 <script src="js/jquery.validate.js"></script>
 <script src="js/inicializar-modal.js"></script>
 <script src="js/inicializar-validate.js"></script>
-<script src="js/buscar-na-tabela.js"></script>
+<script src="js/buscar-na-tabela-2.js"></script>
 <script src="js/validar-apenas-letras-numeros.js"></script>
 
 <%@include file="rodape.jsp"%>
