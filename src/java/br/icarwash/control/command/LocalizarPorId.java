@@ -12,6 +12,11 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Produto;
 import br.icarwash.model.Servico;
+import br.icarwash.model.ServicoProduto;
+import br.icarwash.util.Conexao;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LocalizarPorId implements ICommand {
 
@@ -39,9 +44,23 @@ public class LocalizarPorId implements ICommand {
                 return "localizar_produto.jsp";
             }
             case "servico": {
-                ServicoDAO servicoDAO = new ServicoDAO();
-                Servico servico = servicoDAO.localizarPorId(Integer.parseInt(request.getParameter("id")));
+                
+                ServicoDAO servicoDAO = new ServicoDAO(Conexao.getConexao());
+                Servico servico = servicoDAO.localizarPorId(Integer.parseInt(request.getParameter("id")));                
+                ArrayList<ServicoProduto> servicoProdutos = servicoDAO.selecionaProdutosPorIdServico(servico.getId());
+                servicoDAO.fechaConexao();
+                
+                Map<String, Object> mapaProdutos = new HashMap<>();               
+                                
+                servicoProdutos.forEach(servicoProduto -> {
+                    mapaProdutos.put(String.valueOf(servicoProduto.getProduto().getId()), servicoProduto.getProduto());
+                });                
+                
+                request.setAttribute("todosProdutos", new ProdutoDAO().listar());
                 request.setAttribute("servico", servico);
+                request.setAttribute("mapaProdutos", mapaProdutos);
+                request.setAttribute("servicoProdutos", servicoProdutos);
+                 
                 return "localizar_servico.jsp";
             }
             default:

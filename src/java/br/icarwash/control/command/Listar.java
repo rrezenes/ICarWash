@@ -34,16 +34,16 @@ public class Listar implements ICommand {
 
         switch (quemListar) {
             case "cliente":
-
-                ArrayList<Cliente> clientes = null;
+                
                 ClienteDAO clienteDAO = new ClienteDAO();
-                clientes = clienteDAO.listar();
+                ArrayList<Cliente> clientes = clienteDAO.listar();
+                
                 try {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
 
-                    for (Cliente cliente : clientes) {
+                    clientes.forEach((cliente) -> {
                         usuarios.add(usuarioDAO.localizarUsuarioPorID(cliente.getIdUsuario()));
-                    }
+                    });
 
                     conexao.close();
                 } catch (SQLException ex) {
@@ -52,25 +52,20 @@ public class Listar implements ICommand {
 
                 request.setAttribute("clientes", clientes);
                 request.setAttribute("usuarios", usuarios);
+                
                 return "listar_cliente.jsp";
+                
             case "lavador":
-                ArrayList<Lavador> lavadores = null;
+                
                 LavadorDAO lavadorDAO = new LavadorDAO();
-                lavadores = lavadorDAO.listar();
+                ArrayList<Lavador> lavadores = lavadorDAO.listar();
 
                 try {
-
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
 
-                    for (Lavador lavador : lavadores) {
+                    lavadores.forEach((lavador) -> {
                         usuarios.add(usuarioDAO.localizarUsuarioPorID(lavador.getIdUsuario()));
-                        System.out.println(lavador.getId());
-                    }
-
-                    for (Usuario u : usuarios) {
-                        System.out.println(u.getId());
-                        System.out.println(u.getEmail());
-                    }
+                    });
 
                     conexao.close();
                 } catch (SQLException ex) {
@@ -80,15 +75,7 @@ public class Listar implements ICommand {
                 request.setAttribute("lavadores", lavadores);
                 request.setAttribute("usuarios", usuarios);
 
-                return "listar_lavador.jsp";
-
-            case "produto":
-
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                ArrayList<Produto> produtos = produtoDAO.listar();
-                request.setAttribute("produtos", produtos);
-                
-                return "listar_produto.jsp"; 
+                return "listar_lavador.jsp"; 
 
             case "servico":
 
@@ -98,6 +85,14 @@ public class Listar implements ICommand {
 
                 return "listar_servico.jsp";
 
+            case "produto":
+
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+                ArrayList<Produto> produtos = produtoDAO.listar();
+                request.setAttribute("produtos", produtos);
+                
+                return "listar_produto.jsp";
+                
             case "solicitacao":
 
                 SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
