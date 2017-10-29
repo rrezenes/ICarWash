@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 public class Pessoa {
 
-   
     private String nome;
     private String telefone;
     private Calendar dtNascimento = Calendar.getInstance();
@@ -12,7 +11,7 @@ public class Pessoa {
     private Endereco endereco;
 
     public Pessoa(String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
-       
+
         this.nome = nome;
         this.telefone = telefone;
         this.dtNascimento = dtNascimento;
@@ -20,12 +19,20 @@ public class Pessoa {
     }
 
     public Pessoa(String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-     
+
         this.nome = nome;
         this.telefone = telefone;
         this.dtNascimento = dtNascimento;
         this.CPF = CPF;
         this.endereco = endereco;
+    }
+
+    public Pessoa(String nome, String telefone, Calendar dtNascimento, String CPF) {
+
+        this.nome = nome;
+        this.telefone = telefone;
+        this.dtNascimento = dtNascimento;
+        this.CPF = CPF;
     }
 
     public Pessoa(String nome) {
@@ -39,7 +46,6 @@ public class Pessoa {
         this.nome = nome;
         this.endereco = endereco;
     }
-
 
     public Calendar getDtNascimento() {
         return dtNascimento;

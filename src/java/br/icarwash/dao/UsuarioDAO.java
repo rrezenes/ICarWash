@@ -1,4 +1,3 @@
-
 package br.icarwash.dao;
 
 import br.icarwash.model.Usuario;
@@ -7,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
@@ -30,10 +30,10 @@ public class UsuarioDAO {
         fechaConexao = true;
     }
 
-    public void cadastrar(Usuario usuario) {
-
+    public int cadastrar(Usuario usuario) {
+        int idUsuario = 0;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(CREATE_USUARIO);
+            PreparedStatement pstmt = conexao.prepareStatement(CREATE_USUARIO, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, usuario.getEmail());
             pstmt.setString(2, usuario.getSenha());
             pstmt.setInt(3, usuario.getNivel());
@@ -42,10 +42,16 @@ public class UsuarioDAO {
 
             pstmt.execute();
 
+            final ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                idUsuario = rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
+        return idUsuario;
     }
 
     public Usuario usuarioLogin(Usuario usuarioLogin) {//terminar de implementar
@@ -135,7 +141,7 @@ public class UsuarioDAO {
             this.fechaConexao();
         }
     }
-    
+
     public boolean isCadastroCompleto(int id) {
         boolean cadastro = false;
         try {

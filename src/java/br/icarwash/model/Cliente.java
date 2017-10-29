@@ -31,6 +31,12 @@ public class Cliente extends Pessoa {
         this.idUsuario = idUsuario;
     }
 
+    public Cliente(int id, int idUsuario, String nome, String telefone, Calendar dtNascimento, String CPF) {
+        super(nome, telefone, dtNascimento, CPF);
+        this.id = id;
+        this.idUsuario = idUsuario;
+    }
+
     public Cliente(int idUsuario, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
         super(nome, telefone, dtNascimento, CPF, endereco);
         this.idUsuario = idUsuario;

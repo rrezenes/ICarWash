@@ -10,16 +10,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
+import java.sql.Statement;
 
 public class ClienteDAO {
 
     private boolean fechaConexao = false;
     private final Connection conexao;
-    private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, c.cep, c.estado, c.cidade, c.bairro, c.endereco, c.numero, u.ativo from Cliente c, usuario u where c.id_usuario = u.id and u.ativo = 1";
+    private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf) values(?,?,?,?,?)";
+    private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, u.ativo from Cliente c, usuario u, endereco e, cliente_endereco ce where c.id_usuario = u.id and c.id = ce.id_cliente and e.id = ce.id_endereco and u.ativo = 1";
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
-    private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id = ?";
+    private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf from cliente where id = ?";
     private static final String SELECT_BY_ID_USUARIO = "select id, id_usuario, nome, telefone, dt_nascimento, cpf, cep, estado, cidade, bairro, endereco, numero from cliente where id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
 
@@ -32,28 +33,31 @@ public class ClienteDAO {
         fechaConexao = true;
     }
 
-    public void cadastrar(Cliente cliente) {
+    public int cadastrar(Cliente cliente) {
+        int idCliente = 0;
 
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(INSERT);
+            PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, cliente.getIdUsuario());
             pstmt.setString(2, cliente.getNome());
             pstmt.setString(3, cliente.getTelefone());
             pstmt.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
             pstmt.setString(5, cliente.getCPF());
-            pstmt.setString(6, cliente.getEndereco().getCEP());
-            pstmt.setString(7, cliente.getEndereco().getEstado());
-            pstmt.setString(8, cliente.getEndereco().getCidade());
-            pstmt.setString(9, cliente.getEndereco().getBairro());
-            pstmt.setString(10, cliente.getEndereco().getEndereco());
-            pstmt.setInt(11, cliente.getEndereco().getNumero());
 
             pstmt.execute();
+
+            final ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                idCliente = rs.getInt(1);
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         this.fechaConexao();
+
+        return idCliente;
     }
 
     public ArrayList<Cliente> listar() {
@@ -90,7 +94,7 @@ public class ClienteDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero")));
+                cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -98,7 +102,6 @@ public class ClienteDAO {
         this.fechaConexao();
         return cli;
     }
-
 
     public void atualizar(Cliente cliente) {
         try {

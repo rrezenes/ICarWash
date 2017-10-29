@@ -2,6 +2,7 @@ package br.icarwash.model;
 
 public class Endereco {
 
+    private int id;
     private String CEP;
     private String estado;
     private String cidade;
@@ -18,11 +19,29 @@ public class Endereco {
         this.numero = numero;
     }
 
+    public Endereco(int id, String CEP, String estado, String cidade, String bairro, String endereco, int numero) {
+        this.id = id;
+        this.CEP = CEP;
+        this.estado = estado;
+        this.cidade = cidade;
+        this.bairro = bairro;
+        this.endereco = endereco;
+        this.numero = numero;
+    }
+
     public Endereco(String cidade, String bairro) {
         this.cidade = cidade;
         this.bairro = bairro;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public int getNumero() {
         return numero;
     }
