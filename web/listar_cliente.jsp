@@ -209,14 +209,14 @@
         }, "Informe um CPF válido");
 
         $.validator.addMethod(
-            "regex",
-            function (value, element, regexp) {
-                if (regexp.constructor != RegExp)
-                    regexp = new RegExp(regexp);
-                else if (regexp.global)
-                    regexp.lastIndex = 0;
-                return this.optional(element) || regexp.test(value);
-            }
+                "regex",
+                function (value, element, regexp) {
+                    if (regexp.constructor != RegExp)
+                        regexp = new RegExp(regexp);
+                    else if (regexp.global)
+                        regexp.lastIndex = 0;
+                    return this.optional(element) || regexp.test(value);
+                }
         );
 
         var msg_cep;
@@ -270,7 +270,7 @@
                     },
                     nascimento: {
                         required: true,
-                        regex: ""
+                        regex: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}$"
                     },
                     cpf: {
                         remote: 'CheckCpfCliente',
