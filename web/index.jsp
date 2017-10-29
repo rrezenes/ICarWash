@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -69,11 +68,8 @@
             <div class="section"></div>
         </main>
 
-
-
-
         <div id="modal" class="modal modal-fixed-footer">
-            <form class="col s12" role="form" action="NovoCliente" id="CadastrarCliente" method="post" class="login-form">
+            <form class="col s12" role="form" action="NovoCliente" id="FormValidate" method="post" class="login-form">
                 <div class="modal-content">
                     <div class="col s12">
                         <div class="row">
@@ -94,77 +90,19 @@
                         </div>
                     </div> 
                 </div>
-
                 <div class="modal-footer">
                     <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar">
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
                 </div>  
             </form> 
         </div>
-
     </body>
-
-
-
 
     <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
     <script src="js/jquery.validate.js"></script>
-    <script>
-        $(document).ready(function () {
-
-            //inicializa o modal
-            $('.modal').modal();
-
-            $("#CadastrarCliente").validate({
-                rules: {
-                    email: {
-                        remote: 'CheckUsuarioEmail',
-                        required: true,
-                        email: true
-                    },
-                    senha: {
-                        required: true,
-                        minlength: 5
-                    },
-                    confirme: {
-                        required: true,
-                        minlength: 5,
-                        equalTo: "#senha"
-                    }
-                },
-                messages: {
-                    email: {
-                        remote: "E-mail já está em uso",
-                        required: "Por favor, coloque um e-mail válido.",
-                        email: "Por favor, coloque um e-mail válido."
-                    },
-                    senha: {
-                        required: "Por favor, coloque sua senha.",
-                        minlength: "Sua senha deve conter no mínimo 5 caracteres."
-                    },
-                    confirme: {
-                        required: "Por favor, coloque sua senha novamente.",
-                        minlength: "Sua senha deve conter no mínimo 5 caracteres",
-                        equalTo: "Sua senha deve ser a mesma."
-                    }
-                },
-                errorElement: "em",
-                errorPlacement: function (error, element) {
-                    // Add the `help-block` class to the error element
-                    error.addClass("help-block");
-
-                    if (element.prop("name") === "email") {
-                        error.insertAfter(".erro-email");
-                    } else if (element.prop("name") === "senha") {
-                        error.insertAfter(".erro-senha");
-                    } else if (element.prop("name") === "confirme") {
-                        error.insertAfter(".erro-confirme");
-                    } else {
-                        error.insertAfter(".erro-data");
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="js/inicializar-modal.js"></script>
+    <script src="js/inicializar-modal.js"></script>
+    <script src="js/inicializar-validate.js"></script>
 
     <%@include file="rodape.jsp"%>
