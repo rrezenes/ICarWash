@@ -9,7 +9,7 @@
     <form id="formServico" action="Controle" method="post">
         <div class="form-group">
             <input type="hidden" name="quem" value="servico"/>
-            <input type="hidden" name="txtId" value="${servico.id}"/>
+            <input type="hidden" name="id" value="${servico.id}"/>
             <div class="row">
                 <div class="input-field col s12">
                     <label>Nome:</label> 

@@ -33,6 +33,33 @@ public class ServicoProdutoDAO {
         this.fechaConexao();
     }
 
+    public void atualizarServicoProduto(int idServico, int idProduto, int quantidade) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement("update servico_produtos set quantidade = ? where id_servico = ? and id_produto = ?");
+            pstmt.setInt(1, quantidade);
+            pstmt.setInt(2, idServico);
+            pstmt.setInt(3, idProduto);
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+    }
+
+    public void excluirServicoProduto(int idServico, int idProduto) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement("DELETE FROM servico_produtos where id_servico = ? and id_produto = ?");
+            pstmt.setInt(1, idServico);
+            pstmt.setInt(2, idProduto);
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+    }
+
     private void fechaConexao() throws RuntimeException {
         if (fechaConexao) {
             try {
