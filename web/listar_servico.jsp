@@ -19,7 +19,7 @@
         <label for='email'>Buscar</label>
     </div>
 </div>
-<table id="servicos" class="table table-hover centered striped responsive-table">
+<table id="tabela3" class="table table-hover centered striped responsive-table">
     <thead>
         <tr>
             <th>Nome</th>
@@ -52,12 +52,12 @@
 
 
 <div id="modal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-        <div class="row">
-            <p class="titulo-controle">Cadastrar Serviço</p>
-            <div class="divider"></div>
-        </div>
-        <form id="formServico" action="Controle" method="post">
+    <form id="FormValidate" action="Controle" method="post">
+        <div class="modal-content">
+            <div class="row">
+                <p class="titulo-controle">Cadastrar Serviço</p>
+                <div class="divider"></div>
+            </div>
             <div class="form-group">
                 <input type="hidden" name="quem" value="servico">
                 <div class="row">
@@ -104,118 +104,17 @@
                     </c:forEach>
                 </div>
             </div>
-            <div class="form-group">
-                <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar"><br>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+        </div>
+    </form>
 </div>
 
 <script src="js/jquery.validate.js"></script>
-<script type="text/javascript">
-    function filterTable(event) {
-        var filter = event.target.value.toUpperCase();
-        var rows = document.querySelector("#servicos tbody").rows;
-
-        for (var i = 0; i < rows.length; i++) {
-
-            var nome = rows[i].cells[0].textContent.toUpperCase();
-            var descricao = rows[i].cells[1].textContent.toUpperCase();
-            var valor = rows[i].cells[2].textContent.toUpperCase();
-
-            if (nome.indexOf(filter) > -1 || descricao.indexOf(filter) > -1 || valor.indexOf(filter) > -1) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
-            }
-        }
-    }
-
-    document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
-
-    $(document).ready(function () {
-         
-        $('.modal').modal();
-        
-        $("#formServico").validate({
-            rules: {
-                nome: {
-                    maxlength: 50,
-                    required: true,
-                    minlength: 3
-                },
-                descricao: {
-                    maxlength: 50,
-                    required: true,
-                    minlength: 3
-                },
-                valor: {
-                    maxlength: 6,
-                    required: true,
-                    number: true
-                }
-
-            },
-            messages: {
-                nome: {
-                    maxlength: "Utilize no máximo 50 caracteres",
-                    required: "Campo obrigarório preencher",
-                    minlength: "Utilize no mínimo 3 caracteres"
-                },
-                descricao: {
-                    maxlength: "Utilize no máximo 50 caracteres",
-                    required: "Campo obrigarório preencher",
-                    minlength: "Utilize no mínimo 3 caracteres"
-                },
-                valor: {
-                    maxlength: "Utilize no máximo 6 caracteres",
-                    required: "Campo obrigarório preencher",
-                    number: "Apenas valores reais, utilize ponto para separar reais dos centavos"
-                }
-            },
-            errorElement: "em",
-            errorPlacement: function (error, element) {
-                // Add the `help-block` class to the error element
-                //error.addClass("help-block");
-
-                // Add `has-feedback` class to the parent div.form-group
-                // in order to add icons to inputs
-                element.parents(".col-sm-5").addClass("has-feedback");
-
-                if (element.prop("nome") === "nome") {
-                    error.insertAfter(".erro-nome");
-                } else if (element.prop("descricao") === "descricao") {
-                    error.insertAfter(".erro-descricao");
-                } else if (element.prop("valor") === "valor") {
-                    error.insertAfter(".erro-valor");
-                } else {
-                    error.insertAfter(element);
-                }
-
-                // Add the span element, if doesn't exists, and apply the icon classes to it.
-                if (!element.next("span")[ 0 ]) {
-                    $("<span class='glyphicon form-control-feedback'></span>").insertAfter(element);
-                }
-            },
-            success: function (label, element) {
-                // Add the span element, if doesn't exists, and apply the icon classes to it.
-                if (!$(element).next("span")[ 0 ]) {
-                    $("<span class='glyphicon form-control-feedback'></span>").insertAfter($(element));
-                }
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
-                //$(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
-                //$(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
-            }
-        });
-    });
-</script>
+<script src="js/inicializar-modal.js"></script>
+<script src="js/inicializar-validate.js"></script>
+<script src="js/buscar-na-tabela.js"></script>
 
 <%@include file="rodape.jsp"%>

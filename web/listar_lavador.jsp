@@ -20,7 +20,7 @@
         <label for='email'>Buscar</label>
     </div>
 </div>
-<table id="lavadores" class="table table-hover centered striped responsive-table">
+<table id="tabela7" class="table table-hover centered striped responsive-table">
     <thead>
         <tr>
             <th>Email</th>
@@ -146,33 +146,6 @@
 <script src="js/inicializar-modal.js"></script>
 <script src="js/inicializar-mascara.js"></script>
 <script src="js/inicializar-validate.js"></script>
-<script type="text/javascript">
-        function filterTable(event) {
-            var filter = event.target.value.toUpperCase();
-            var rows = document.querySelector("#lavadores tbody").rows;
-
-            for (var i = 0; i < rows.length; i++) {
-
-                var email = rows[i].cells[0].textContent.toUpperCase();
-                var nome = rows[i].cells[1].textContent.toUpperCase();
-                var telefone = rows[i].cells[2].textContent.toUpperCase();
-                var cpf = rows[i].cells[3].textContent.toUpperCase();
-                var cep = rows[i].cells[4].textContent.toUpperCase();
-                var cidade = rows[i].cells[5].textContent.toUpperCase();
-                var bairro = rows[i].cells[6].textContent.toUpperCase();
-
-                if (email.indexOf(filter) > -1 || nome.indexOf(filter) > -1 || telefone.indexOf(filter) > -1 || cpf.indexOf(filter) > -1 || cep.indexOf(filter) > -1 || cidade.indexOf(filter) > -1 || bairro.indexOf(filter) > -1) {
-                    rows[i].style.display = "";
-                } else {
-                    rows[i].style.display = "none";
-                }
-            }
-        }
-
-        document.querySelector('#buscar').addEventListener('keyup', filterTable, false);
-
-
-
-</script>    
+<script src="js/buscar-na-tabela.js"></script>        
 
 <%@include file="rodape.jsp"%>

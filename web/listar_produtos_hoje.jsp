@@ -1,8 +1,4 @@
-<%-- 
-    Document   : listaProduto
-    Created on : 17/11/2016, 22:13:43
-    Author     : rezen
-
+<%--
     Fazer essa página recuperar a lista dos produtos de acordo com os serviços 
     do Lavador que tenha para a data de hoje.
 --%>

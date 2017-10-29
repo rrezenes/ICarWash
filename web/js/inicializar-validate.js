@@ -3,11 +3,11 @@ $(document).ready(function () {
     $("#FormValidate").validate({
         rules: {
             nome: {
-                    maxlength: 50,
-                    required: true,
-                    minlength: 3,
-                    lettersonly: true
-                },
+                maxlength: 50,
+                required: true,
+                minlength: 3,
+                lettersonly: true
+            },
             email: {
                 remote: 'CheckUsuarioEmail',
                 required: true,
@@ -54,61 +54,82 @@ $(document).ready(function () {
             },
             numero: {
                 required: true
-            }
+            },
+            descricao: {
+                maxlength: 50,
+                required: true,
+                minlength: 3
+            },
+            valor: {
+                    maxlength: 6,
+                    required: true,
+                    number: true
+                }
         },
         messages: {
             nome: {
-                    maxlength: "Por favor, entre com seu nome apenas",
-                    required: "Por favor, digite seu nome aqui!",
-                    minlength: "Por favor, digite um nome de no mínimo 3 dígitos"
-                },
+                maxlength: "Por favor, entre com seu nome apenas!",
+                required: "Por favor, digite seu nome aqui!",
+                minlength: "Por favor, digite um nome de no mínimo 3 dígitos!",
+                lettersonly: "Por favor, utilize apenas letras!"
+            },
             email: {
-                remote: "E-mail já está em uso",
+                remote: "E-mail já está em uso!",
                 required: "Por favor, coloque um e-mail válido!",
-                email: "Por favor, coloque um e-mail válido."
+                email: "Por favor, coloque um e-mail válido!"
             },
             senha: {
-                required: "Por favor, coloque sua senha.",
-                minlength: "Sua senha deve conter no mínimo 5 caracteres."
+                required: "Por favor, coloque sua senha!",
+                minlength: "Sua senha deve conter no mínimo 5 caracteres!"
             },
             confirme: {
-                required: "Por favor, coloque sua senha novamente.",
-                minlength: "Sua senha deve conter no mínimo 5 caracteres",
-                equalTo: "Sua senha deve ser a mesma."
+                required: "Por favor, coloque sua senha novamente!",
+                minlength: "Sua senha deve conter no mínimo 5 caracteres!",
+                equalTo: "Sua senha deve ser a mesma!"
             },
             telefone: {
                 required: "Por favor, digite seu telefone celular aqui!",
-                maxlength: "Por favor, digite seu telefone válido"
+                maxlength: "Por favor, digite seu telefone válido!"
             },
             dataNascimento: {
-                required: "Por favor, seleciona uma data de nascimento",
-                regex: "Data inválida"
+                required: "Por favor, seleciona uma data de nascimento!",
+                regex: "Data inválida!"
             },
             cpf: {
-                remote: "Cpf já está em uso",
-                cpf: "CPF inválido",
-                required: "Por favor, digite seu CPF aqui."
+                remote: "Cpf já está em uso!",
+                cpf: "CPF inválido!",
+                required: "Por favor, digite seu CPF aqui!"
             },
             cep: {
-                required: "Por favor, digite seu CEP aqui"
+                required: "Por favor, digite seu CEP aqui!"
             },
             estado: {
-                required: "Por favor, digite corretamente as siglas de seu estado aqui.",
-                minlength: "Por favor, digite corretamente as siglas de seu estado aqui.",
-                maxlength: "Por favor, digite corretamente as siglas de seu estado aqui."
+                required: "Por favor, digite corretamente as siglas de seu estado aqui!",
+                minlength: "Por favor, digite corretamente as siglas de seu estado aqui!",
+                maxlength: "Por favor, digite corretamente as siglas de seu estado aqui!"
             },
             cidade: {
-                required: "Por favor, digite sua cidade aqui"
+                required: "Por favor, digite sua cidade aqui!"
             },
             bairro: {
-                required: "Por favor, digite sua bairro aqui"
+                required: "Por favor, digite sua bairro aqui!"
             },
             endereco: {
-                required: "Por favor, digite seu endereço aqui"
+                required: "Por favor, digite seu endereço aqui!"
             },
             numero: {
-                required: "Por favor, digite seu número aqui"
-            }
+                required: "Por favor, digite seu número aqui!"
+            },
+            descricao: {
+                maxlength: "Utilize no máximo 50 caracteres!",
+                required: "Campo obrigarório preencher!",
+                minlength: "Utilize no mínimo 3 caracteres!"
+            },
+            valor: {
+                    maxlength: "Utilize no máximo 6 caracteres!",
+                    required: "Campo obrigarório preencher!",
+                    number: "Apenas valores reais, utilize ponto para separar reais dos centavos!"
+                }
         },
         errorElement: "em",
         errorPlacement: function (error, element) {
@@ -141,6 +162,10 @@ $(document).ready(function () {
                 error.insertAfter(".erro-endereco");
             } else if (element.prop("name") === "numero") {
                 error.insertAfter(".erro-numero");
+            } else if (element.prop("name") === "descricao") {
+                error.insertAfter(".erro-descricao");
+            } else if (element.prop("name") === "valor") {
+                error.insertAfter(".erro-valor");
             } else {
                 error.insertAfter(".erro-data");
             }
