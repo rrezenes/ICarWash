@@ -16,9 +16,8 @@
         <a class="waves-effect waves-light btn green modal-trigger" href="#modal">Cadastrar</a>
     </div>
     <div class="input-field col s6">
-        <input class="validate" id="buscar" type="text" name="buscar" data-length="10"/>
+        <input class="validate" id="buscar" type="text" name="buscar" />
         <label for='email'>Buscar</label>
-
     </div>
 </div>
 <table id="clientes" class="table table-hover centered striped responsive-table">
@@ -269,8 +268,9 @@
                     telefone: {
                         required: true
                     },
-                    data: {
-                        required: true
+                    nascimento: {
+                        required: true,
+                        regex: ""
                     },
                     cpf: {
                         remote: 'CheckCpfCliente',
@@ -320,8 +320,9 @@
                     telefone: {
                         required: "Por favor, digite seu celular de contato aqui"
                     },
-                    data: {
-                        required: "Por favor, seleciona uma data de nascimento"
+                    nascimento: {
+                        required: "Por favor, seleciona uma data de nascimento",
+                        regex: "Data inválida"
                     },
                     cpf: {
                         remote: "Cpf já está em uso",
@@ -368,6 +369,8 @@
                         error.insertAfter(".erro-cep");
                     } else if (element.prop("name") === "telefone") {
                         error.insertAfter(".erro-telefone");
+                    } else if (element.prop("name") === "nascimento") {
+                        error.insertAfter(".erro-nascimento");
                     } else if (element.prop("name") === "estado") {
                         error.insertAfter(".erro-estado");
                     } else if (element.prop("name") === "cidade") {
