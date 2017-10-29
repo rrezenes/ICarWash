@@ -1,6 +1,7 @@
 package br.icarwash.control.command;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
 import br.icarwash.dao.ServicoDAO;
@@ -9,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Produto;
 import br.icarwash.model.Servico;
@@ -26,14 +28,22 @@ public class LocalizarPorId implements ICommand {
 
         switch (localizar) {
             case "cliente": {
-                ClienteDAO clienteDAO = new ClienteDAO();
-                Cliente cliente = clienteDAO.localizarPorId(Integer.parseInt(request.getParameter("id")));
+                
+                Cliente cliente = new ClienteDAO().localizarPorId(Integer.parseInt(request.getParameter("id")));
+                
+                ArrayList<Endereco> enderecos = new EnderecoDAO().listarEnderecosCliente(cliente.getId());
+                
+                request.setAttribute("enderecos", enderecos);
                 request.setAttribute("cliente", cliente);
                 return "localizar_cliente.jsp";
             }
             case "lavador": {
-                LavadorDAO lavadorDAO = new LavadorDAO();
-                Lavador lavador = lavadorDAO.localizarPorId(Integer.parseInt(request.getParameter("id")));
+                
+                Lavador lavador = new LavadorDAO().localizarPorId(Integer.parseInt(request.getParameter("id")));
+                
+                ArrayList<Endereco> enderecos = new EnderecoDAO().listarEnderecosLavador(lavador.getId());
+                
+                request.setAttribute("enderecos", enderecos);
                 request.setAttribute("lavador", lavador);
                 return "localizar_lavador.jsp";
             }

@@ -24,7 +24,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +40,7 @@ public class Atualizar implements ICommand {
                 calendar.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
                 ClienteDAO dao = new ClienteDAO();
-                Cliente cli = new Cliente(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("telefone"), calendar, new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
+                Cliente cli = new Cliente(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("telefone"), calendar, new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")));
                 dao.atualizar(cli);
 
                 return "Controle?action=Listar&listar=cliente";
@@ -54,7 +53,7 @@ public class Atualizar implements ICommand {
                 cal2.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
                 LavadorDAO dao = new LavadorDAO();
-                Lavador lavador = new Lavador(Integer.parseInt(request.getParameter("id")), cal1, request.getParameter("nome"), request.getParameter("telefone"), cal2, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
+                Lavador lavador = new Lavador(Integer.parseInt(request.getParameter("id")), cal1, request.getParameter("nome"), request.getParameter("telefone"), cal2, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")));
                 dao.atualizar(lavador);
 
                 return "Controle?action=Listar&listar=lavador";

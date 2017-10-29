@@ -26,6 +26,13 @@ public class Lavador extends Pessoa {
         this.dataContrato = dtContrato;
     }
 
+    public Lavador(int id, int idUsuario, Calendar dtContrato, String nome, String telefone, Calendar dtNascimento, String CPF) {
+        super(nome, telefone, dtNascimento, CPF);
+        this.id = id;
+        this.idUsuario = idUsuario;
+        this.dataContrato = dtContrato;
+    }
+
     public Lavador(Calendar dtContrato, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
         super(nome, telefone, dtNascimento, CPF, endereco);
         this.dataContrato = dtContrato;

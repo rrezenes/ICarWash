@@ -28,9 +28,9 @@
                 <ul class="side-nav fixed" id="mobile-demo">
                     <li><div class="user-view">
                             <div class="background">
-                                <img class="responsive-img" src="https://www.insuremyworld.co.uk/Sites/insuremyworld.co.uk/article-img/car-wash-no-water.jpg">
+                                <img class="responsive-img" src="img/backgrounds/car-wash-no-water.jpg">
                             </div>
-                            <a href="usuario"><img class="circle" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAnsAAAAJDIyZDU0OTNkLWUzNDUtNDg1Yi1iZjBmLTViNmFiOTI2MGM3Mg.jpg"></a>
+                            <a href="usuario"><img class="circle" src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"></a>
                             <a href="#!name"><span class="white-text name"><%= session.getAttribute("nome")%></span></a>
                             <a href="#!email"><span class="white-text email"><%= usuario.getEmail()%></span></a>
                         </div></li>
@@ -62,7 +62,7 @@
                                 <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="solicitacoes-lavador">Solicitar Serviço</a></li>
+                                        <li><a href="solicitacoes-lavador">Solicitações</a></li>
                                         <li><a href="ListarSolicitacaoHojeLavador">Solicitações Para Hoje</a></li>
                                     </ul>
                                 </div>
