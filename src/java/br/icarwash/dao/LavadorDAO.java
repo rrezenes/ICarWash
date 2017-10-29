@@ -10,6 +10,7 @@ import java.util.Calendar;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.util.Conexao;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -17,8 +18,8 @@ public class LavadorDAO {
 
     private boolean fechaConexao = false;
     private final Connection conexao;
-    private static final String INSERT = "insert into lavador(id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, l.cep, l.estado, l.cidade, l.bairro, l.endereco, l.numero, u.ativo from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
+    private static final String INSERT = "insert into lavador(id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF) values(?,?,?,?,?,?)";
+    private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, u.ativo from Lavador l, usuario u, endereco e, lavador_endereco le where u.id = l.id_usuario and l.id = le.id_lavador and e.id = le.id_endereco and u.ativo = 1";
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, CEP, estado, cidade, bairro, endereco, numero from lavador where id = ?";
@@ -36,27 +37,28 @@ public class LavadorDAO {
         fechaConexao = true;
     }
 
-    public void cadastrar(Lavador lavador) {
+    public int cadastrar(Lavador lavador) {
+        int idEndereco = 0;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(INSERT);
+            PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, lavador.getIdUsuario());
             pstmt.setDate(2, new java.sql.Date(lavador.getDataContrato().getTimeInMillis()));
             pstmt.setString(3, lavador.getNome());
             pstmt.setString(4, lavador.getTelefone());
             pstmt.setDate(5, new java.sql.Date(lavador.getDataNascimento().getTimeInMillis()));
             pstmt.setString(6, lavador.getCPF());
-            pstmt.setString(7, lavador.getEndereco().getCEP());
-            pstmt.setString(8, lavador.getEndereco().getEstado());
-            pstmt.setString(9, lavador.getEndereco().getCidade());
-            pstmt.setString(10, lavador.getEndereco().getBairro());
-            pstmt.setString(11, lavador.getEndereco().getEndereco());
-            pstmt.setInt(12, lavador.getEndereco().getNumero());
 
             pstmt.execute();
+
+            final ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                idEndereco = rs.getInt(1);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
+        return idEndereco;
     }
 
     public ArrayList<Lavador> listar() {

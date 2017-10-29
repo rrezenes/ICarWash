@@ -1,4 +1,3 @@
-
 package br.icarwash.control.command;
 
 import br.icarwash.control.ControleSolicitacao;
@@ -28,16 +27,21 @@ public class Cadastrar implements ICommand {
             case "cliente": {
                 String[] nascimento = request.getParameter("nascimento").split("/");
                 cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
-                
-                Cliente cliente = new Cliente(request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));    
-                
+
+                Cliente cliente = new Cliente(request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero"))));
+
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
-                            
-                    cliente.setIdUsuario(criaUsuario(request, conexao, 1));                    
+
+                    ClienteEnderecoDAO clienteEnderecoDAO = new ClienteEnderecoDAO(conexao);
+
+                    cliente.setIdUsuario(criaUsuario(request, conexao, 1));
+
                     ClienteDAO clienteDAO = new ClienteDAO(conexao);
-                    clienteDAO.cadastrar(cliente);
+                    EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+
+                    clienteEnderecoDAO.cadastraClienteEndereco(clienteDAO.cadastrar(cliente), enderecoDAO.cadastrar(cliente.getEndereco()));
 
                     conexao.commit();
                 } catch (SQLException e) {
@@ -50,11 +54,11 @@ public class Cadastrar implements ICommand {
                 } finally {
                     try {
                         conexao.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Cadastrar.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=Listar&listar=cliente";
             }
@@ -67,10 +71,15 @@ public class Cadastrar implements ICommand {
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
-                    
-                    lavador.setIdUsuario(criaUsuario(request, conexao, 2));                    
+
+                    LavadorEnderecoDAO lavadorEnderecoDAO = new LavadorEnderecoDAO(conexao);
+
+                    lavador.setIdUsuario(criaUsuario(request, conexao, 2));
+
                     LavadorDAO lavadorDAO = new LavadorDAO(conexao);
-                    lavadorDAO.cadastrar(lavador);
+                    EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+
+                    lavadorEnderecoDAO.cadastraLavadorEndereco(lavadorDAO.cadastrar(lavador), enderecoDAO.cadastrar(lavador.getEndereco()));
 
                     conexao.commit();
                 } catch (SQLException e) {
@@ -105,7 +114,7 @@ public class Cadastrar implements ICommand {
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
-                    
+
                     ServicoDAO servicoDAO = new ServicoDAO(conexao);
                     servicoDAO.cadastrar(servico);
                     servico = servicoDAO.localizarIdUltimoInsert();
@@ -131,7 +140,7 @@ public class Cadastrar implements ICommand {
                         throw new RuntimeException(e);
                     }
                 }
-                
+
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=Listar&listar=servico";
             }
@@ -144,7 +153,6 @@ public class Cadastrar implements ICommand {
     private int criaUsuario(HttpServletRequest request, Connection conexao, int nivelDeAcesso) {
         Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), nivelDeAcesso, true, true);
         UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-        usuarioDAO.cadastrar(usuario);
-        return usuarioDAO.localizarIdPorEmailUsuario(usuario.getEmail());        
+        return usuarioDAO.cadastrar(usuario);
     }
 }
