@@ -44,6 +44,128 @@ INSERT INTO `avaliacao` VALUES (9,5.00,4.00,5.00,3.00,4.25),(10,4.50,4.50,4.00,4
 UNLOCK TABLES;
 
 --
+-- Table structure for table `cliente_endereco`
+--
+
+
+DROP TABLE IF EXISTS `produto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `produto` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `ativo` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `produto`
+--
+
+LOCK TABLES `produto` WRITE;
+/*!40000 ALTER TABLE `produto` DISABLE KEYS */;
+INSERT INTO `produto` VALUES (1,'Limpa Estofados A Seco 5 Litros - Vonixx','Limpa, tira manchas e deixa um agradável aroma',1),(2,'Cristalizador De Vidros','500ml - Braclean',1),(3,'Kit Lavagem','A Seco 500ml + Toalha Microfibra - Braclean',1),(4,'Shampoo Detergente','Automotivo Lave Seco 500ml - Mills',1),(5,'Cristalizador De Vidros','Cristalizador De Vidros 500ml - Mills',1),(6,'Pano','Microfibra 50x60cm - Alcance',1),(7,'Bio W Lavagem','A Seco Concentrado 1 Litro Até 1:50 - Alcance',1),(8,'Auto Lava Seco',' 5 Litros - 3M',1),(9,'Limpeza De Rodas E Motores','Bio W - Alcance',1),(10,'Lavagem A Seco 5 Litros','Ecoflex Ultra - Vonixx',1),(11,'Limpa Estofados A Seco 5 Litros - Vonixx.','Limpa, tira manchas e deixa um agradável aroma',0),(30,'teste','teste',0),(31,'teste','teste',0),(32,'teste','teste',0),(33,'teste','teste',0),(34,'testeasidgyiuasdiuh','asiduhuiasdhasiud',0),(35,'abc','abc',0),(36,'abc','abc',0),(37,'Qwert','Qwert',0);
+/*!40000 ALTER TABLE `produto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `servico`
+--
+
+DROP TABLE IF EXISTS `servico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servico` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `ativo` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `servico`
+--
+
+LOCK TABLES `servico` WRITE;
+/*!40000 ALTER TABLE `servico` DISABLE KEYS */;
+INSERT INTO `servico` VALUES (1,'Aspiração','Aspiração completa do veículo.',20.00,1),(2,'Lavagem a Seco Externa simples','Limpeza externa simples do veículo.',30.00,1),(3,'Lavagem a Seco Interna simples','Limpeza interior simples do veículo.',20.00,1),(4,'Lavagem a Seco Externa completa','Limpeza externa completa do veículo.',50.00,1),(5,'Lavagem a Seco Interna completa','Limpeza interior completa do veículo.',35.00,1),(6,'Cristalização','Cristalização externa do veículo.',110.00,1),(7,'Higienização','Higienização interior do veículo.',30.00,1),(8,'Lavagem de Motor','Lavagem de Motor',49.99,1),(9,'Enceramento','Camada de proteção e brilho por mais tempo.',99.99,1),(10,'Polimento ','Some com as manchas, riscos e imperfeições na pintura.',259.99,1),(13,'aiusdhuiasdhiu','aisudhuiasdui',123.00,1);
+/*!40000 ALTER TABLE `servico` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `servico_produtos`
+--
+
+DROP TABLE IF EXISTS `servico_produtos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servico_produtos` (
+  `id_servico` int(11) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  PRIMARY KEY (`id_servico`,`id_produto`),
+  KEY `id_produto` (`id_produto`),
+  CONSTRAINT `servico_produtos_ibfk_1` FOREIGN KEY (`id_servico`) REFERENCES `servico` (`ID`),
+  CONSTRAINT `servico_produtos_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `servico_produtos`
+--
+
+LOCK TABLES `servico_produtos` WRITE;
+/*!40000 ALTER TABLE `servico_produtos` DISABLE KEYS */;
+INSERT INTO `servico_produtos` VALUES (1,3,2),(1,5,2),(2,2,4),(2,3,2),(2,6,4),(3,3,1),(3,5,1),(3,6,2),(4,1,4),(4,3,3),(4,4,5),(5,1,1),(5,5,2),(5,9,1),(6,1,2),(6,2,4),(6,3,1),(7,2,4),(7,3,2),(7,6,4),(8,3,1),(8,5,1),(8,6,2),(9,1,4),(9,3,3),(9,4,5),(10,1,1),(10,5,2),(10,9,1),(13,1,2),(13,2,5);
+/*!40000 ALTER TABLE `servico_produtos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usuario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `senha` varchar(40) NOT NULL,
+  `nivel` int(1) unsigned NOT NULL DEFAULT '1',
+  `ativo` tinyint(1) NOT NULL DEFAULT '1',
+  `cadastro` datetime NOT NULL,
+  `cadastro_completo` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `nivel` (`nivel`)
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuario`
+--
+
+LOCK TABLES `usuario` WRITE;
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` VALUES (1,'ricardo@icarwash.com','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42',1),(2,'rodrigo@icarwash.com','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42',1),(3,'renan@icarwash.com','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:43',1),(4,'joao@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 17:21:10',1),(5,'pedro@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 19:40:38',1),(6,'maria@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 20:26:04',1),(7,'jose@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:06:07',1),(8,'antonio@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:16:32',1),(9,'tiago@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:49:31',1),(10,'davi@hotmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:50:02',1),(11,'ana@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:05',1),(12,'cristiane@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:28',1),(13,'julia@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:52:38',1),(14,'l1@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-07 08:53:05',1),(15,'l2@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:08',1),(16,'l3@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:59',1),(17,'l4@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 20:34:45',1),(18,'l5@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:08:43',1),(19,'l6@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:35:20',1),(20,'l7@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:37:54',1),(21,'l8@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-28 14:43:00',1),(22,'l9@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:37:54',1),(23,'l10@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:37:54',1),(45,'c20@c20.com','8cb2237d0679ca88db6464eac60da96345513964',1,0,'2017-10-08 20:38:33',1),(46,'c123@c123.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-08 21:09:34',1),(51,'l21@l21.com','8cb2237d0679ca88db6464eac60da96345513964',2,0,'2017-10-08 21:35:54',0),(53,'c20asas@com','8cb2237d0679ca88db6464eac60da96345513964',2,0,'2017-10-08 21:44:01',0),(54,'teste@teste123.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-12 11:14:07',1),(55,'c1234@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-21 17:35:37',1),(56,'l51@icarwash.com','8cb2237d0679ca88db6464eac60da96345513964',2,0,'2017-10-21 17:44:20',1),(57,'aysdgyasdgy@auysdgyas.asd','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 14:01:04',1),(58,'c12345@c12345.com','343f8939de25f70dc999d9f4507338dd863de449',1,1,'2017-10-22 14:45:35',1),(59,'c1234@c12345.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 14:55:40',0),(60,'c12345@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 14:59:29',1),(61,'c12346@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 15:04:44',0),(62,'c1237@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 15:07:56',0),(63,'1uaisdhiua@asiudhias.asd','c06a34fea1fcd5582494d722d22aee23018e2055',1,1,'2017-10-22 15:11:39',0),(64,'11uaisdhiua@asiudhias.asd','c6db25043acf806ce84196ae1ca218b5addce2fd',1,1,'2017-10-22 15:12:07',0),(65,'121uaisdhiua@asiudhias.asd','ce1cf594a0a58ac11bbc2fe6ddaeb8b12d802239',1,1,'2017-10-22 15:15:13',0),(66,'c123@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 15:18:26',0),(67,'c1238@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 16:32:03',1),(68,'c1238@c1238.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 16:46:47',1),(69,'c123@c1123.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-28 20:16:20',0),(70,'Qwert@qwert.com','d033e22ae348aeb5660fc2140aec35850c4da997',1,1,'2017-10-29 00:43:19',1),(77,'c222@c222.com','8cb2237d0679ca88db6464eac60da96345513964',1,0,'2017-10-29 15:19:48',1),(78,'a8sdhiuasdiuasd@asdiuhiuasd.asd','8cb2237d0679ca88db6464eac60da96345513964',1,0,'2017-10-29 15:22:11',1),(79,'iuahsdiuasd@uiashdiuas.asd','8cb2237d0679ca88db6464eac60da96345513964',2,1,'2017-10-29 15:37:58',1);
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-10-29 16:31:04
+
+--
 -- Table structure for table `cliente`
 --
 
@@ -73,11 +195,6 @@ LOCK TABLES `cliente` WRITE;
 INSERT INTO `cliente` VALUES (1,4,'João ','(11)11111-1111','1111-11-11','111.111.111-11'),(2,5,'pedro','123456789','1995-05-06','123.123.123-12'),(3,6,'maria','(12)31231-2312','1880-07-12','123.123.123-11'),(4,7,'jose','(12)32132-1322','2002-07-12','123.654.656-54'),(5,8,'antonio','(22)22222-2222','2001-10-22','165.465.465-46'),(6,9,'tiago','(11)11111-1111','1111-11-11','111.112.111-11'),(7,10,'Davi','(12)45784-5122','2001-09-29','456.879.845-64'),(8,11,'ana','(12)32312-3123','2001-12-12','121.212.121-21'),(9,12,'cristiane','(12)32312-3123','2001-12-12','121.212.121-22'),(10,13,'julia','(12)32312-3123','2001-12-12','121.212.121-23'),(33,45,'abc teste','(11)11111-1111','1111-11-11','405.241.538-84'),(34,46,'Fulano','(11)11111-1111','1111-11-11','406.748.298-16'),(36,54,'Adamastor','(99)99999-9999','1992-01-12','515.352.966-58'),(37,55,'Cosmo','11987647118','1993-06-29','074.621.288-70'),(38,57,'teste','(99)99999-9999','2007-07-08','608.080.442-57'),(41,58,'teste','(99)99999-9999','1999-12-11','655.446.350-05'),(44,60,'abc','(99)99999-9999','1999-11-10','851.661.380-15'),(46,67,'cliente 1','(99)99999-9999','1999-11-10','216.751.620-77'),(47,68,'Gol G3','(99)99999-9999','1999-12-11','129.265.190-36'),(48,70,'Qwert','(11)11111-1111','1800-11-11','885.243.130-64'),(55,77,'teste','(11)11111-1111','1111-11-11','451.782.722-42'),(56,78,'iasudhuais','(11)11111-1111','1111-11-11','654.624.014-93');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `cliente_endereco`
---
-
 DROP TABLE IF EXISTS `cliente_endereco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -192,84 +309,6 @@ UNLOCK TABLES;
 --
 -- Table structure for table `produto`
 --
-
-DROP TABLE IF EXISTS `produto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `produto` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) NOT NULL,
-  `descricao` varchar(255) DEFAULT NULL,
-  `ativo` tinyint(1) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `produto`
---
-
-LOCK TABLES `produto` WRITE;
-/*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Limpa Estofados A Seco 5 Litros - Vonixx','Limpa, tira manchas e deixa um agradável aroma',1),(2,'Cristalizador De Vidros','500ml - Braclean',1),(3,'Kit Lavagem','A Seco 500ml + Toalha Microfibra - Braclean',1),(4,'Shampoo Detergente','Automotivo Lave Seco 500ml - Mills',1),(5,'Cristalizador De Vidros','Cristalizador De Vidros 500ml - Mills',1),(6,'Pano','Microfibra 50x60cm - Alcance',1),(7,'Bio W Lavagem','A Seco Concentrado 1 Litro Até 1:50 - Alcance',1),(8,'Auto Lava Seco',' 5 Litros - 3M',1),(9,'Limpeza De Rodas E Motores','Bio W - Alcance',1),(10,'Lavagem A Seco 5 Litros','Ecoflex Ultra - Vonixx',1),(11,'Limpa Estofados A Seco 5 Litros - Vonixx.','Limpa, tira manchas e deixa um agradável aroma',0),(30,'teste','teste',0),(31,'teste','teste',0),(32,'teste','teste',0),(33,'teste','teste',0),(34,'testeasidgyiuasdiuh','asiduhuiasdhasiud',0),(35,'abc','abc',0),(36,'abc','abc',0),(37,'Qwert','Qwert',0);
-/*!40000 ALTER TABLE `produto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `servico`
---
-
-DROP TABLE IF EXISTS `servico`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `servico` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) NOT NULL,
-  `descricao` varchar(255) DEFAULT NULL,
-  `valor` decimal(10,2) NOT NULL,
-  `ativo` tinyint(1) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `servico`
---
-
-LOCK TABLES `servico` WRITE;
-/*!40000 ALTER TABLE `servico` DISABLE KEYS */;
-INSERT INTO `servico` VALUES (1,'Aspiração','Aspiração completa do veículo.',20.00,1),(2,'Lavagem a Seco Externa simples','Limpeza externa simples do veículo.',30.00,1),(3,'Lavagem a Seco Interna simples','Limpeza interior simples do veículo.',20.00,1),(4,'Lavagem a Seco Externa completa','Limpeza externa completa do veículo.',50.00,1),(5,'Lavagem a Seco Interna completa','Limpeza interior completa do veículo.',35.00,1),(6,'Cristalização','Cristalização externa do veículo.',110.00,1),(7,'Higienização','Higienização interior do veículo.',30.00,1),(8,'Lavagem de Motor','Lavagem de Motor',49.99,1),(9,'Enceramento','Camada de proteção e brilho por mais tempo.',99.99,1),(10,'Polimento ','Some com as manchas, riscos e imperfeições na pintura.',259.99,1),(13,'aiusdhuiasdhiu','aisudhuiasdui',123.00,1);
-/*!40000 ALTER TABLE `servico` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `servico_produtos`
---
-
-DROP TABLE IF EXISTS `servico_produtos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `servico_produtos` (
-  `id_servico` int(11) NOT NULL,
-  `id_produto` int(11) NOT NULL,
-  `quantidade` int(11) NOT NULL,
-  PRIMARY KEY (`id_servico`,`id_produto`),
-  KEY `id_produto` (`id_produto`),
-  CONSTRAINT `servico_produtos_ibfk_1` FOREIGN KEY (`id_servico`) REFERENCES `servico` (`ID`),
-  CONSTRAINT `servico_produtos_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `servico_produtos`
---
-
-LOCK TABLES `servico_produtos` WRITE;
-/*!40000 ALTER TABLE `servico_produtos` DISABLE KEYS */;
-INSERT INTO `servico_produtos` VALUES (1,3,2),(1,5,2),(2,2,4),(2,3,2),(2,6,4),(3,3,1),(3,5,1),(3,6,2),(4,1,4),(4,3,3),(4,4,5),(5,1,1),(5,5,2),(5,9,1),(6,1,2),(6,2,4),(6,3,1),(7,2,4),(7,3,2),(7,6,4),(8,3,1),(8,5,1),(8,6,2),(9,1,4),(9,3,3),(9,4,5),(10,1,1),(10,5,2),(10,9,1),(13,1,2),(13,2,5);
-/*!40000 ALTER TABLE `servico_produtos` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `solicitacao`
 --
@@ -336,41 +375,3 @@ UNLOCK TABLES;
 --
 -- Table structure for table `usuario`
 --
-
-DROP TABLE IF EXISTS `usuario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usuario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(100) NOT NULL,
-  `senha` varchar(40) NOT NULL,
-  `nivel` int(1) unsigned NOT NULL DEFAULT '1',
-  `ativo` tinyint(1) NOT NULL DEFAULT '1',
-  `cadastro` datetime NOT NULL,
-  `cadastro_completo` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  KEY `nivel` (`nivel`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usuario`
---
-
-LOCK TABLES `usuario` WRITE;
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'ricardo@icarwash.com','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42',1),(2,'rodrigo@icarwash.com','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:42',1),(3,'renan@icarwash.com','d033e22ae348aeb5660fc2140aec35850c4da997',3,1,'2017-03-25 13:36:43',1),(4,'joao@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 17:21:10',1),(5,'pedro@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 19:40:38',1),(6,'maria@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-06 20:26:04',1),(7,'jose@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:06:07',1),(8,'antonio@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 01:16:32',1),(9,'tiago@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:49:31',1),(10,'davi@hotmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:50:02',1),(11,'ana@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:05',1),(12,'cristiane@yahoo.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:51:28',1),(13,'julia@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',1,1,'2017-05-07 08:52:38',1),(14,'l1@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-07 08:53:05',1),(15,'l2@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:08',1),(16,'l3@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-15 19:52:59',1),(17,'l4@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,1,'2017-05-17 20:34:45',1),(18,'l5@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:08:43',1),(19,'l6@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:35:20',1),(20,'l7@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:37:54',1),(21,'l8@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-28 14:43:00',1),(22,'l9@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:37:54',1),(23,'l10@icarwash.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef',2,0,'2017-05-17 21:37:54',1),(45,'c20@c20.com','8cb2237d0679ca88db6464eac60da96345513964',1,0,'2017-10-08 20:38:33',1),(46,'c123@c123.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-08 21:09:34',1),(51,'l21@l21.com','8cb2237d0679ca88db6464eac60da96345513964',2,0,'2017-10-08 21:35:54',0),(53,'c20asas@com','8cb2237d0679ca88db6464eac60da96345513964',2,0,'2017-10-08 21:44:01',0),(54,'teste@teste123.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-12 11:14:07',1),(55,'c1234@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-21 17:35:37',1),(56,'l51@icarwash.com','8cb2237d0679ca88db6464eac60da96345513964',2,0,'2017-10-21 17:44:20',1),(57,'aysdgyasdgy@auysdgyas.asd','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 14:01:04',1),(58,'c12345@c12345.com','343f8939de25f70dc999d9f4507338dd863de449',1,1,'2017-10-22 14:45:35',1),(59,'c1234@c12345.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 14:55:40',0),(60,'c12345@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 14:59:29',1),(61,'c12346@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 15:04:44',0),(62,'c1237@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 15:07:56',0),(63,'1uaisdhiua@asiudhias.asd','c06a34fea1fcd5582494d722d22aee23018e2055',1,1,'2017-10-22 15:11:39',0),(64,'11uaisdhiua@asiudhias.asd','c6db25043acf806ce84196ae1ca218b5addce2fd',1,1,'2017-10-22 15:12:07',0),(65,'121uaisdhiua@asiudhias.asd','ce1cf594a0a58ac11bbc2fe6ddaeb8b12d802239',1,1,'2017-10-22 15:15:13',0),(66,'c123@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 15:18:26',0),(67,'c1238@c1234.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 16:32:03',1),(68,'c1238@c1238.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-22 16:46:47',1),(69,'c123@c1123.com','8cb2237d0679ca88db6464eac60da96345513964',1,1,'2017-10-28 20:16:20',0),(70,'Qwert@qwert.com','d033e22ae348aeb5660fc2140aec35850c4da997',1,1,'2017-10-29 00:43:19',1),(77,'c222@c222.com','8cb2237d0679ca88db6464eac60da96345513964',1,0,'2017-10-29 15:19:48',1),(78,'a8sdhiuasdiuasd@asdiuhiuasd.asd','8cb2237d0679ca88db6464eac60da96345513964',1,0,'2017-10-29 15:22:11',1),(79,'iuahsdiuasd@uiashdiuas.asd','8cb2237d0679ca88db6464eac60da96345513964',2,1,'2017-10-29 15:37:58',1);
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-10-29 16:31:04
