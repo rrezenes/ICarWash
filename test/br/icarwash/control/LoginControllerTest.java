@@ -1,4 +1,3 @@
-/*
 package br.icarwash.control;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,4 +33,3 @@ public class LoginControllerTest {
     }
 
 }
-*/

@@ -8,12 +8,8 @@
     <div class="divider"></div>
 </div>
 <div class="row">
-    <div class="col s6">
-        
-    </div>
-    <div class="input-field col s6">
-        <input class="validate" id="buscar" type="text" name="buscar" />
-        <label for='email'>Buscar</label>
+    <div class="col s12">
+        <input id="buscar" type="text" />
     </div>
 </div>
 
