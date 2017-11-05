@@ -6,10 +6,10 @@
         <link rel="shortcut icon" href="img/favicon.ico" />
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="css/estilo.css"/>
-
 
         <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
         <script type="text/javascript" src="js/materialize.js"></script>
@@ -35,7 +35,7 @@
                             <a href="#!email"><span class="white-text email"><%= usuario.getEmail()%></span></a>
                         </div></li>
 
-                    <li><a href="painel">Home</a></li>
+                    <li><a href="painel">Painel Administrativo</a></li>
                     <li class="no-padding">
                         <%-- /\ /\ NÃO VARIA /\ /\--%>
 

@@ -21,7 +21,7 @@
         <label for='email'>Buscar</label>
     </div>
 </div>
-<table class="table table-hover centered striped responsive-table">
+<table id="tabela" class="table table-hover centered striped responsive-table">
     <thead>
         <tr>
             <th>ID</th>
@@ -122,28 +122,6 @@
     </tbody>
 </table>
 
-
-
-<script>
-    function avaliar(pontualidade, servico, atendimento, agilidade, solicitacao) {
-        var dataString = 'pontualidade=' + pontualidade + '&servico=' + servico + '&atendimento=' + atendimento + '&agilidade=' + agilidade + '&id_solicitacao=' + solicitacao;
-        $.ajax({
-            type: "POST",
-            url: "AvaliarSolicitacao",
-            data: dataString,
-            cache: false,
-            success: function (result) {
-                location.reload();
-            }
-        });
-    }
-    $(document).ready(function () {
-        let searchParams = new URLSearchParams(window.location.search);
-        if (searchParams.has('ok')) {
-            Materialize.toast('Solicitacao Efetuada', 6000, 'rounded');
-        } else if (searchParams.has('x')) {
-            Materialize.toast('Solicitacao Cancelada', 6000, 'rounded');
-        }
-    });
-</script>
+<script src="js/avaliar-solicitacao.js"></script>
+<script src="js/buscar-na-tabela-7.js"></script>
 <%@include file="rodape.jsp"%>

@@ -10,7 +10,7 @@
     <div class="divider"></div>
 </div>
 <div class="row">
-    <div class="input-field col s6">
+    <div class="col s6">
         <a class="waves-effect waves-light btn green modal-trigger" href="#modal">Cadastrar</a>
     </div>
     <div class="input-field col s6">
