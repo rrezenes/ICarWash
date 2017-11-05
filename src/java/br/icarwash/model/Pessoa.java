@@ -2,7 +2,7 @@ package br.icarwash.model;
 
 import java.util.Calendar;
 
-public class Pessoa {
+abstract class Pessoa {
 
     private String nome;
     private String telefone;
