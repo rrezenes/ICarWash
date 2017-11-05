@@ -23,8 +23,7 @@ $(document).ready(function () {
                 equalTo: "#senha"
             },
             telefone: {
-                required: true,
-                maxlength: 11
+                required: true
             },
             dataNascimento: {
                 required: true,
@@ -56,20 +55,20 @@ $(document).ready(function () {
                 required: true
             },
             descricao: {
-                maxlength: 50,
                 required: true,
+                maxlength: 50,
                 minlength: 3
             },
             valor: {
-                    maxlength: 6,
-                    required: true,
-                    number: true
-                }
+                maxlength: 6,
+                required: true,
+                number: true
+            }
         },
         messages: {
             nome: {
-                maxlength: "Por favor, entre com seu nome apenas!",
-                required: "Por favor, digite seu nome aqui!",
+                maxlength: "Por favor, entre com o nome apenas!",
+                required: "Por favor, digite o nome aqui!",
                 minlength: "Por favor, digite um nome de no mínimo 3 dígitos!",
                 lettersonly: "Por favor, utilize apenas letras!"
             },
@@ -88,8 +87,7 @@ $(document).ready(function () {
                 equalTo: "Sua senha deve ser a mesma!"
             },
             telefone: {
-                required: "Por favor, digite seu telefone celular aqui!",
-                maxlength: "Por favor, digite seu telefone válido!"
+                required: "Por favor, digite seu telefone celular aqui!"
             },
             dataNascimento: {
                 required: "Por favor, seleciona uma data de nascimento!",
@@ -121,15 +119,15 @@ $(document).ready(function () {
                 required: "Por favor, digite seu número aqui!"
             },
             descricao: {
-                maxlength: "Utilize no máximo 50 caracteres!",
                 required: "Campo obrigarório preencher!",
+                maxlength: "Utilize no máximo 150 caracteres!",
                 minlength: "Utilize no mínimo 3 caracteres!"
             },
             valor: {
-                    maxlength: "Utilize no máximo 6 caracteres!",
-                    required: "Campo obrigarório preencher!",
-                    number: "Apenas valores reais, utilize ponto para separar reais dos centavos!"
-                }
+                maxlength: "Utilize no máximo 6 caracteres!",
+                required: "Campo obrigarório preencher!",
+                number: "Apenas valores reais, utilize ponto para separar reais dos centavos!"
+            }
         },
         errorElement: "em",
         errorPlacement: function (error, element) {
