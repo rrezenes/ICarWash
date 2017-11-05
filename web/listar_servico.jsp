@@ -113,8 +113,8 @@
 </div>
 
 <script src="js/jquery.validate.js"></script>
-<script src="js/inicializar-modal.js"></script>
 <script src="js/inicializar-validate.js"></script>
+<script src="js/inicializar-modal.js"></script>
 <script src="js/buscar-na-tabela-3.js"></script>
 
 <%@include file="rodape.jsp"%>

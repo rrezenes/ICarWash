@@ -15,6 +15,7 @@ public class UsuarioDAO {
     private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(email, senha, nivel, ativo, cadastro, cadastro_completo) VALUES (?, SHA1(?), ?, ?, NOW(), ?);";
+    private static final String UPDATE_USUARIO = "update usuario set senha = SHA1(?) WHERE email = ?";
     private static final String SELECT_USUARIO = "select * from usuario where email = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where email = ?";
     private static final String SELECT_NEXT_USUARIO = "select count(*)+1 as qtd from usuario";
@@ -178,6 +179,18 @@ public class UsuarioDAO {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void alterarSenha(Usuario usuario) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_USUARIO);
+            pstmt.setString(1, usuario.getSenha());
+            pstmt.setString(2, usuario.getEmail());
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
     }
 
 }

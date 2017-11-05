@@ -5,104 +5,129 @@
 <c:if test="${!empty alterado}">
     <script>Materialize.toast('Endereço Alterado', 6000, 'rounded');</script>        
 </c:if>
-    
+
 <div class="row">
     <p class="titulo-controle">Alterar Cliente</p>
     <div class="divider"></div>
 </div>
-    
-<div class="container">
-    <div class="row">
-        <form id="FormValidate" action="Controle" method="post">
-            <div class="form-group">
-                <input type="hidden" name="quem" value="cliente"/>
-                <input type="hidden" name="txtId" value="${cliente.id}"/>
-                <div class="input-field col m6 s12">
-                    <label>Nome</label> 
-                    <input class="form-control erro-nome" type="text" name="nome" value="${cliente.nome}"><br>
+
+<div class="row">
+    <form id="FormValidate" action="Controle" method="post">
+        <div class="form-group">
+            <input type="hidden" name="quem" value="cliente"/>
+            <input type="hidden" name="txtId" value="${cliente.id}"/>
+            <div class="input-field col m6 s12">
+                <label>Nome</label> 
+                <input class="form-control erro-nome" type="text" name="nome" value="${cliente.nome}"><br>
+            </div>
+            <div class="input-field col m3 s6">
+                <label>Telefone celular</label> 
+                <input class="form-control erro-telefone" type="text" name="telefone" id="telefone" value="${cliente.telefone}"><br>
+            </div>
+            <div class="input-field col m3 s6">
+                <%--Formatar a data antes de exibir na tela--%>
+                <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />            
+                <label>Data de Nascimento</label> 
+                <input class="form-control erro-dataNascimento" type="text" name="dataNascimento" id="nascimento" value="${dataNascimento}"><br>
+            </div>
+        </div>
+        <div class="col s3">
+            <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar dados">
+        </div>
+        <div class="col s3">
+            <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Alterar a senha</a>
+
+        </div>
+    </form>
+</div>
+<div class="row">
+    <c:forEach var="endereco" items="${enderecos}">
+        <div class="col s6">
+            <div class="card blue-grey">
+                <div class="card-content white-text">
+                    <span class="card-title">${endereco.nome}</span>
+                    <p>${endereco.endereco}, ${endereco.numero} - ${endereco.bairro}</p>
+                    <p>${endereco.cidade} - ${endereco.estado}</p>
+                    <p>CEP: ${endereco.CEP}</p>
                 </div>
-                <div class="input-field col m3 s6">
-                    <label>Telefone celular</label> 
-                    <input class="form-control erro-telefone" type="text" name="telefone" id="telefone" value="${cliente.telefone}"><br>
-                </div>
-                <div class="input-field col m3 s6">
-                    <%--Formatar a data antes de exibir na tela--%>
-                    <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />            
-                    <label>Data de Nascimento</label> 
-                    <input class="form-control erro-dataNascimento" type="text" name="dataNascimento" id="nascimento" value="${dataNascimento}"><br>
+                <div class="card-action">
+                    <a  class="modal-trigger" href="#modal${endereco.id}">Alterar</a>
                 </div>
             </div>
-            <div class="col s12">
-                <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar"><br>
+        </div>
+
+        <!-- Modal Alterar Endereço -->
+        <div id="modal${endereco.id}" class="modal modal-fixed-footer">
+            <form id="FormValidate" action="ControleEndereco" method="post">
+                <div class="modal-content">
+                    <h4>Alterar Endereço</h4>
+                    <div class="form-group">
+                        <input type="hidden" name="id" value="${cliente.id}"/>
+                        <input type="hidden" name="quem" value="cliente"/>
+                        <input type="hidden" name="idEndereco" value="${endereco.id}"/>
+                        <div class="input-field col s12">
+                            <label>Nome</label> 
+                            <input class="form-control erro-nomeEndereco" type="text" id="nomeEndereco" name="nomeEndereco" value="${endereco.nome}"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>CEP</label> 
+                            <input class="form-control erro-cep" type="text" id="cep" name="cep" value="${endereco.CEP}"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Estado</label> 
+                            <input class="form-control erro-estado" type="text" id="estado" name="estado" value="${endereco.estado}"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Cidade</label> 
+                            <input class="form-control erro-cidade" type="text" id="cidade" name="cidade" value="${endereco.cidade}"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Bairro</label> 
+                            <input class="form-control erro-bairro" type="text" id="bairro" name="bairro" value="${endereco.bairro}"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Endereço</label> 
+                            <input class="form-control erro-endereco" type="text" id="endereco" name="endereco" value="${endereco.endereco}"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Número</label> 
+                            <input class="form-control erro-numero" type="text" name="numero" value="${endereco.numero}"><br>
+                        </div>
+                        <div class="col s12">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+                    <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
+                </div>
+            </form>
+        </div>
+    </c:forEach>
+
+    <!-- Modal Alterar Senha -->
+    <div id="modal-senha" class="modal modal-fixed-footer">
+        <form id="FormValidate" action="ControleNovaSenha" method="post">
+            <div class="modal-content">
+                <h4>Alterar Senha</h4>
+                <div class="form-group">
+                    <div class='input-field col m3 s6'>
+                        <input class='form-control erro-senha' type='password' name='senha' id="senha" />
+                        <label for='password'>Senha atual</label>
+                    </div>
+                    <div class='input-field col m3 s6'>
+                        <input type="password" class="form-control erro-senha" id="nova_senha" name="nova_senha" />
+                        <label for='password'>Nova senha</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+                <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
             </div>
         </form>
     </div>
-    <div class="row">
-        <c:forEach var="endereco" items="${enderecos}">
-            <div class="col s6">
-                <div class="card blue-grey">
-                    <div class="card-content white-text">
-                        <span class="card-title">${endereco.nome}</span>
-                        <p>${endereco.endereco}, ${endereco.numero} - ${endereco.bairro}</p>
-                        <p>${endereco.cidade} - ${endereco.estado}</p>
-                        <p>CEP: ${endereco.CEP}</p>
-                    </div>
-                    <div class="card-action">
-                        <a  class="modal-trigger" href="#modal${endereco.id}">Alterar</a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Modal Structure -->
-            <div id="modal${endereco.id}" class="modal modal-fixed-footer">
-                <form id="FormValidate" action="ControleEndereco" method="post">
-                    <div class="modal-content">
-                        <h4>Alterar Endereço</h4>
-                        <div class="form-group">
-                            <input type="hidden" name="id" value="${cliente.id}"/>
-                            <input type="hidden" name="quem" value="cliente"/>
-                            <input type="hidden" name="idEndereco" value="${endereco.id}"/>
-                            <div class="input-field col s12">
-                                <label>Nome</label> 
-                                <input class="form-control erro-nomeEndereco" type="text" id="nomeEndereco" name="nomeEndereco" value="${endereco.nome}"><br>
-                            </div>
-                            <div class="input-field col s6">
-                                <label>CEP</label> 
-                                <input class="form-control erro-cep" type="text" id="cep" name="cep" value="${endereco.CEP}"><br>
-                            </div>
-                            <div class="input-field col s6">
-                                <label>Estado</label> 
-                                <input class="form-control erro-estado" type="text" id="estado" name="estado" value="${endereco.estado}"><br>
-                            </div>
-                            <div class="input-field col s6">
-                                <label>Cidade</label> 
-                                <input class="form-control erro-cidade" type="text" id="cidade" name="cidade" value="${endereco.cidade}"><br>
-                            </div>
-                            <div class="input-field col s6">
-                                <label>Bairro</label> 
-                                <input class="form-control erro-bairro" type="text" id="bairro" name="bairro" value="${endereco.bairro}"><br>
-                            </div>
-                            <div class="input-field col s6">
-                                <label>Endereço</label> 
-                                <input class="form-control erro-endereco" type="text" id="endereco" name="endereco" value="${endereco.endereco}"><br>
-                            </div>
-                            <div class="input-field col s6">
-                                <label>Número</label> 
-                                <input class="form-control erro-numero" type="text" name="numero" value="${endereco.numero}"><br>
-                            </div>
-                            <div class="col s12">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-                        <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
-                    </div>
-                </form>
-            </div>
-        </c:forEach>
-
-    </div>
 </div>
 
 <script src="js/jquery.validate.js"></script>
