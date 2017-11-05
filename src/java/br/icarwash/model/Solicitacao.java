@@ -9,9 +9,23 @@ import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +35,7 @@ public class Solicitacao {
     private Cliente cliente;
     private Lavador lavador;
     private Avaliacao avaliacao;
+    private Endereco endereco;
     protected SolicitacaoState estado;
     private String porte;
     private Calendar dataSolicitacao;
@@ -31,11 +46,12 @@ public class Solicitacao {
         this.estado = new EmAnalise();
     }
 
-    public Solicitacao(int id, Cliente cliente, Lavador lavador, Avaliacao avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
+    public Solicitacao(int id, Cliente cliente, Lavador lavador, Avaliacao avaliacao, Endereco endereco, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
         this.id = id;
         this.cliente = cliente;
         this.lavador = lavador;
         this.avaliacao = avaliacao;
+        this.endereco = endereco;
         this.estado = estado;
         this.porte = porte;
         this.dataSolicitacao = data_solicitacao;
@@ -180,35 +196,26 @@ public class Solicitacao {
 
         try {
             conexao.setAutoCommit(false);
+
             LavadorDAO lavadorDAO = new LavadorDAO(conexao);
-            //        ArrayList<Lavador> = lavadorDAO.selecionarLavadoresDisponiveis(Calendar calendar);
-            ArrayList<Lavador> lavadores = lavadorDAO.listar();
-            ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
-            boolean disponivel;
-            boolean encontrou = false;
 
-            for (Lavador lavador : lavadores) {
-                disponivel = lavadorDAO.isLavadorDisponivel(lavador, this.getDataSolicitacao());
-                if (disponivel) {
-                    lavadoresDisponiveis.add(lavador);
-                    encontrou = true;
-                }
-            }
-            if (encontrou) {
-                SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
-                Random random = new Random();
+            ArrayList<Lavador> lavadoresDisponiveis = lavadorDAO.lavadoresDisponives(lavadorDAO.listar(), this.dataSolicitacao);
 
-                this.setLavador(lavadoresDisponiveis.get(random.nextInt(lavadoresDisponiveis.size())));
-                solicitacaoDAO.atribuirLavador(this.lavador, this);
-            }// F A L T A  I M P L E M E N T A R  O  E L S E
+            lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, lavadorDAO);
+
+            this.setLavador(lavadoresDisponiveis.get(new Random().nextInt(lavadoresDisponiveis.size())));
+
+            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
+            solicitacaoDAO.atribuirLavador(this.lavador, this);
 
             conexao.commit();
+
         } catch (SQLException e) {
             try {
                 conexao.rollback();
                 throw new RuntimeException(e);
-            } catch (SQLException ex) {                
-                throw new RuntimeException(ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
             }
         } finally {
             try {
@@ -217,6 +224,83 @@ public class Solicitacao {
                 throw new RuntimeException(e);
             }
         }
-
     }
+
+    private ArrayList<Lavador> removeLavadoresDaLista(ArrayList<Lavador> lavadoresDisponiveis, LavadorDAO lavadorDAO) throws NumberFormatException {
+        Map<String, Integer> mapa = new HashMap<>();
+        
+        lavadoresDisponiveis.forEach((lavadorDisponivel) -> {
+            mapa.put(String.valueOf(lavadorDisponivel.getId()), lavadorDAO.quantidadeSolicitacao(lavadorDisponivel.getId(), this.dataSolicitacao));
+        });
+        
+        Map<String, Integer> mapaDecrescente = sortByComparator(mapa, false);
+        
+        List<String> idLavadores = new LinkedList<>(mapaDecrescente.keySet());
+        List<Integer> quantidadeDeSolicitacoes = new LinkedList<>(mapaDecrescente.values());
+        
+        ArrayList<Lavador> lavadoresParaRemover = new ArrayList<>();
+        
+        int valorMaisAlto = 0;
+        int count = 0;
+        if (quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < lavadorDAO.quantidadeLavadores()) {
+            for (int quantidade : quantidadeDeSolicitacoes) {
+                int idLav = Integer.parseInt(idLavadores.get(count));
+                if (quantidade >= valorMaisAlto) {
+                    lavadoresDisponiveis.forEach((lavadorDisponivel) -> {
+                        if (lavadorDisponivel.getId() == idLav) {
+                            lavadoresParaRemover.add(lavadorDisponivel);
+                        }
+                    });
+                    valorMaisAlto = quantidade;
+                }
+                count++;
+            }
+        }
+        
+        lavadoresParaRemover.forEach(lavadorParaRemover -> {
+            lavadoresDisponiveis.remove(lavadorParaRemover);
+        });
+        
+        return lavadoresDisponiveis;
+    }
+
+    private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, final boolean order) {
+
+        List<Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
+
+        // Sorting the list based on values
+        Collections.sort(list, new Comparator<Entry<String, Integer>>() {
+            public int compare(Entry<String, Integer> o1,
+                    Entry<String, Integer> o2) {
+                if (order) {
+                    return o1.getValue().compareTo(o2.getValue());
+                } else {
+                    return o2.getValue().compareTo(o1.getValue());
+
+                }
+            }
+        });
+
+        // Maintaining insertion order with the help of LinkedList
+        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+        for (Entry<String, Integer> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
+    }
+
+    private int quantidadeDeLavadoresParaRemover(List<Integer> quantidadeDeSolicitacoes) {
+        int valorMaisAlto = 0;
+        int aux = 0;
+
+        for (int quantidade : quantidadeDeSolicitacoes) {
+            if (quantidade >= valorMaisAlto) {
+                valorMaisAlto = quantidade;
+                aux++;
+            }
+        }
+        return aux;
+    }
+
 }

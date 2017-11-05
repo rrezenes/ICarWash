@@ -60,21 +60,22 @@ public class SolicitacaoDAO {
         Cliente cliente;
         Lavador lavador;
         Avaliacao avaliacao;
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         SolicitacaoState solicitacaoState;
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(
-                    "SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, "
-                    + "cliente.nome as nome_cliente,solicitacao.id_lavador, "
-                    + "solicitacao.id_avaliacao, solicitacao.porte, "
-                    + "solicitacao.data_solicitacao, solicitacao.valor_total, "
-                    + "solicitacao.status "
-                    + "FROM icarwash.cliente,icarwash.solicitacao, "
-                    + "icarwash.solicitacao_servico,icarwash.servico "
-                    + "where cliente.ID = solicitacao.id_cliente "
-                    + "and solicitacao.ID = solicitacao_servico.id_solicitacao "
-                    + "and cliente.ID = ? group by solicitacao.ID order by solicitacao.data_solicitacao");
+                    "SELECT solicitacao.ID as ID_Solicitacao, cliente.ID as ID_Cliente, "
+                            + "cliente.nome as nome_cliente, solicitacao.id_lavador, "
+                            + "solicitacao.id_avaliacao, solicitacao.porte, solicitacao.data_solicitacao, "
+                            + "solicitacao.valor_total, solicitacao.status, "
+                            + "IF( status = 'Avaliado', (select nota_pontualidade from avaliacao where id = solicitacao.id_avaliacao), 'sem avaliar') as nota_pontualidade, "
+                            + "IF( status = 'Avaliado', (select nota_servico from avaliacao where id = solicitacao.id_avaliacao), 'sem avaliar') as nota_servico, "
+                            + "IF( status = 'Avaliado', (select nota_atendimento from avaliacao where id = solicitacao.id_avaliacao), 'sem avaliar') as nota_atendimento, "
+                            + "IF( status = 'Avaliado', (select nota_agilidade from avaliacao where id = solicitacao.id_avaliacao), 'sem avaliar') as nota_agilidade, "
+                            + "IF( status = 'Avaliado', (select nota_media from avaliacao where id = solicitacao.id_avaliacao), 'sem avaliar') as nota_media "
+                            + "FROM icarwash.cliente, icarwash.solicitacao, icarwash.solicitacao_servico, icarwash.servico "
+                            + "where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao "
+                            + "and cliente.ID = ? group by solicitacao.ID order by solicitacao.data_solicitacao");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -89,12 +90,17 @@ public class SolicitacaoDAO {
                 if (rs.getBoolean("id_avaliacao")) {
 
                     avaliacao = new Avaliacao(rs.getInt("id_avaliacao"));
-                    avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(avaliacao);
-
+                    avaliacao.setNotaPontualidade(rs.getBigDecimal("nota_pontualidade"));
+                    avaliacao.setNotaServico(rs.getBigDecimal("nota_servico"));
+                    avaliacao.setNotaAtendimento(rs.getBigDecimal("nota_atendimento"));
+                    avaliacao.setNotaAgilidade(rs.getBigDecimal("nota_agilidade"));
+                    avaliacao.setNotaMedia(rs.getBigDecimal("nota_media"));
+                    
                 } else {
                     avaliacao = new Avaliacao(0);
                 }
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, avaliacao, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                
+                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, avaliacao, new Endereco("teste", "teste"), solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {

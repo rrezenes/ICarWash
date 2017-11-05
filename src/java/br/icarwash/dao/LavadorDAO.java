@@ -25,7 +25,8 @@ public class LavadorDAO {
     private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF from lavador where id = ?";
     private static final String SELECT_BY_ID_USUARIO = "select l.id, l.id_usuario, l.dt_contrato, l.nome, l.telefone, l.dt_nascimento, l.CPF, e.CEP, e.estado, e.cidade, e.bairro, e.endereco, e.numero from lavador l, endereco e, lavador_endereco le where le.id_lavador = l.id and le.id_endereco = e.id and id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from lavador where cpf = ?";
-    private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ?";
+    private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado'";
+    private static final String QTD_SOLICITACAO = "select count(*) as quantidade FROM solicitacao where id_lavador = ? and data_solicitacao like ?";
     private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
 
     public LavadorDAO(Connection conexao) {
@@ -167,25 +168,53 @@ public class LavadorDAO {
         return IDLavador;
     }
 
-    public boolean isLavadorDisponivel(Lavador lavador, Calendar dataSolicitacao) {
+    public ArrayList<Lavador> lavadoresDisponives(ArrayList<Lavador> lavadores, Calendar dataSolicitacao) {
 
-        boolean disponivel = false;
+        ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
 
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(CHECK_DISPONIVEL);
-            pstmt.setInt(1, lavador.getId());
-            pstmt.setString(2, dataSolicitacaoFormatada);
+            for (Lavador lavador : lavadores) {
+
+                PreparedStatement pstmt = conexao.prepareStatement(CHECK_DISPONIVEL);
+                pstmt.setInt(1, lavador.getId());
+                pstmt.setString(2, dataSolicitacaoFormatada);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (!rs.next()) {
+                    lavadoresDisponiveis.add(lavador);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+        return lavadoresDisponiveis;
+    }
+
+    public int quantidadeSolicitacao(int idLavador, Calendar dataSolicitacao) {
+
+        int quantidade = 0;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
+
+        try {
+
+            PreparedStatement pstmt = conexao.prepareStatement(QTD_SOLICITACAO);
+            pstmt.setInt(1, idLavador);
+            pstmt.setString(2, dataSolicitacaoFormatada + "%");
             ResultSet rs = pstmt.executeQuery();
 
-            disponivel = !rs.next();
+            if (rs.next()) {
+                quantidade = rs.getInt("quantidade");
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
-        return disponivel;
+        return quantidade;
     }
 
     public int quantidadeLavadores() {
@@ -207,7 +236,7 @@ public class LavadorDAO {
         return numeroLavadores;
     }
 
-    private void fechaConexao() throws RuntimeException {
+    public void fechaConexao() throws RuntimeException {
         if (fechaConexao) {
             try {
                 conexao.close();

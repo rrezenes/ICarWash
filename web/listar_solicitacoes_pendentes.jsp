@@ -22,7 +22,6 @@
         <tr>
             <th>ID</th>
             <th>Cliente</th>
-            <th>Lavador</th>
             <th>Porte</th>
             <th>Data</th>
             <th>Valor</th>
@@ -35,10 +34,9 @@
             <tr>
                 <td>${solicitacao.id}</td>
                 <td>${solicitacao.cliente.nome}</td>
-                <td>${solicitacao.lavador.id}</td>
                 <td>${solicitacao.porte}</td>
                 <%--Formatar a data antes de exibir na tela--%>
-                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy" />
+                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy HH:mm" />
                 <td>${dataSolicitacao}</td>
                 <td>${solicitacao.valorTotal}</td>
                 <td>${solicitacao.estado}</td>
