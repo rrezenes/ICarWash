@@ -9,7 +9,6 @@ import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -21,11 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
-import java.util.function.ToLongFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -228,18 +222,18 @@ public class Solicitacao {
 
     private ArrayList<Lavador> removeLavadoresDaLista(ArrayList<Lavador> lavadoresDisponiveis, LavadorDAO lavadorDAO) throws NumberFormatException {
         Map<String, Integer> mapa = new HashMap<>();
-        
+
         lavadoresDisponiveis.forEach((lavadorDisponivel) -> {
             mapa.put(String.valueOf(lavadorDisponivel.getId()), lavadorDAO.quantidadeSolicitacao(lavadorDisponivel.getId(), this.dataSolicitacao));
         });
-        
+
         Map<String, Integer> mapaDecrescente = sortByComparator(mapa, false);
-        
+
         List<String> idLavadores = new LinkedList<>(mapaDecrescente.keySet());
         List<Integer> quantidadeDeSolicitacoes = new LinkedList<>(mapaDecrescente.values());
-        
+
         ArrayList<Lavador> lavadoresParaRemover = new ArrayList<>();
-        
+
         int valorMaisAlto = 0;
         int count = 0;
         if (quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < lavadorDAO.quantidadeLavadores()) {
@@ -256,12 +250,25 @@ public class Solicitacao {
                 count++;
             }
         }
-        
+
         lavadoresParaRemover.forEach(lavadorParaRemover -> {
             lavadoresDisponiveis.remove(lavadorParaRemover);
         });
-        
+
         return lavadoresDisponiveis;
+    }
+
+    private int quantidadeDeLavadoresParaRemover(List<Integer> quantidadeDeSolicitacoes) {
+        int valorMaisAlto = 0;
+        int aux = 0;
+
+        for (int quantidade : quantidadeDeSolicitacoes) {
+            if (quantidade >= valorMaisAlto) {
+                valorMaisAlto = quantidade;
+                aux++;
+            }
+        }
+        return aux;
     }
 
     private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, final boolean order) {
@@ -288,19 +295,6 @@ public class Solicitacao {
         }
 
         return sortedMap;
-    }
-
-    private int quantidadeDeLavadoresParaRemover(List<Integer> quantidadeDeSolicitacoes) {
-        int valorMaisAlto = 0;
-        int aux = 0;
-
-        for (int quantidade : quantidadeDeSolicitacoes) {
-            if (quantidade >= valorMaisAlto) {
-                valorMaisAlto = quantidade;
-                aux++;
-            }
-        }
-        return aux;
     }
 
 }

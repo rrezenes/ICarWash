@@ -4,85 +4,109 @@ import java.math.BigDecimal;
 
 public class Avaliacao {
 
-    private int ID;
+    private int id;
     private BigDecimal notaPontualidade;
     private BigDecimal notaServico;
     private BigDecimal notaAtendimento;
     private BigDecimal notaAgilidade;
     private BigDecimal notaMedia;
 
-    public Avaliacao(int ID) {
-        this.ID = ID;
-    }
-    
-    public Avaliacao(BigDecimal notaPontualidade, BigDecimal notaServico, BigDecimal notaAtendimento, BigDecimal notaAgilidade) {
-        this.notaPontualidade = notaPontualidade;
-        this.notaServico = notaServico;
-        this.notaAtendimento = notaAtendimento;
-        this.notaAgilidade = notaAgilidade;
-        this.notaMedia = this.calcularMedia();
+    public Avaliacao(int id) {
+        this.id = id;
     }
 
-    public Avaliacao(int ID, BigDecimal notaPontualidade, BigDecimal notaServico, BigDecimal notaAtendimento, BigDecimal notaAgilidade, BigDecimal notaMedia) {
-        this.ID = ID;
-        this.notaPontualidade = notaPontualidade;
-        this.notaServico = notaServico;
-        this.notaAtendimento = notaAtendimento;
-        this.notaAgilidade = notaAgilidade;
-        this.notaMedia = notaMedia;
-    }
-    
-    public int getID() {
-        return ID;
+    public Avaliacao(AvaliacaoBuilder builder) {
+        this.id = builder.id;
+        this.notaPontualidade = builder.notaPontualidade;
+        this.notaServico = builder.notaServico;
+        this.notaAtendimento = builder.notaAtendimento;
+        this.notaAgilidade = builder.notaAgilidade;
+        this.notaMedia = builder.notaMedia;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public static class AvaliacaoBuilder {
+
+        private int id;
+        private BigDecimal notaPontualidade;
+        private BigDecimal notaServico;
+        private BigDecimal notaAtendimento;
+        private BigDecimal notaAgilidade;
+        private BigDecimal notaMedia;
+
+        public AvaliacaoBuilder from(Avaliacao avaliacao) {
+            this.id = avaliacao.id;
+            this.notaPontualidade = avaliacao.notaPontualidade;
+            this.notaServico = avaliacao.notaServico;
+            this.notaAtendimento = avaliacao.notaAtendimento;
+            this.notaAgilidade = avaliacao.notaAgilidade;
+            this.notaMedia = avaliacao.notaMedia;
+
+            return this;
+        }
+
+        public AvaliacaoBuilder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public AvaliacaoBuilder withNotaPontualidade(BigDecimal notaPontualidade) {
+            this.notaPontualidade = notaPontualidade;
+            return this;
+        }
+
+        public AvaliacaoBuilder withNotaServico(BigDecimal notaServico) {
+            this.notaServico = notaServico;
+            return this;
+        }
+
+        public AvaliacaoBuilder withNotaAtendimento(BigDecimal notaAtendimento) {
+            this.notaAtendimento = notaAtendimento;
+            return this;
+        }
+
+        public AvaliacaoBuilder withNotaAgilidade(BigDecimal notaAgilidade) {
+            this.notaAgilidade = notaAgilidade;
+            return this;
+        }
+
+        public AvaliacaoBuilder withNotaMedia(BigDecimal notaMedia) {
+            this.notaMedia = notaMedia;
+            return this;
+        }
+
+        public Avaliacao build() {
+            return new Avaliacao(this);
+        }
+
+    }
+
+    public int getId() {
+        return id;
     }
 
     public BigDecimal getNotaPontualidade() {
         return notaPontualidade;
     }
 
-    public void setNotaPontualidade(BigDecimal notaPontualidade) {
-        this.notaPontualidade = notaPontualidade;
-    }
-
     public BigDecimal getNotaServico() {
         return notaServico;
-    }
-
-    public void setNotaServico(BigDecimal notaServico) {
-        this.notaServico = notaServico;
     }
 
     public BigDecimal getNotaAtendimento() {
         return notaAtendimento;
     }
 
-    public void setNotaAtendimento(BigDecimal notaAtendimento) {
-        this.notaAtendimento = notaAtendimento;
-    }
-
     public BigDecimal getNotaAgilidade() {
         return notaAgilidade;
-    }
-
-    public void setNotaAgilidade(BigDecimal notaAgilidade) {
-        this.notaAgilidade = notaAgilidade;
     }
 
     public BigDecimal getNotaMedia() {
         return notaMedia;
     }
 
-    public void setNotaMedia(BigDecimal notaMedia) {
-        this.notaMedia = notaMedia;
-    }
-
-    public BigDecimal calcularMedia(){
+    public BigDecimal calcularMedia() {
         notaMedia = notaPontualidade.add(notaServico.add(notaAtendimento.add(notaAgilidade)));
         return this.notaMedia = this.notaMedia.divide(BigDecimal.valueOf(4));
     }
-    
+
 }
