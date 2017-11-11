@@ -2,6 +2,7 @@ package br.icarwash.control;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
+import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
@@ -55,14 +56,14 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         } else if (URI.endsWith("/AvaliarSolicitacao")) {
 
-            Avaliacao avaliacao = new Avaliacao(
-                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))),
-                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))),
-                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))),
-                    BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade")))
-            );
+            AvaliacaoBuilder avaliacaoBuilder = new AvaliacaoBuilder()
+                    .withNotaPontualidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))))
+                    .withNotaServico(BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))))
+                    .withNotaAtendimento(BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))))
+                    .withNotaAgilidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))));
+            
 
-            solicitacao.setAvaliacao(avaliacao);
+            solicitacao.setAvaliacao(avaliacaoBuilder.build());
             solicitacao.avaliarSolicitacao();
             URIRetorno = "ListarSolicitacaoCliente";
         }
