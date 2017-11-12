@@ -7,6 +7,7 @@ public class Lavador extends Pessoa {
     private int id;
     private Calendar dataContrato = Calendar.getInstance();
     private int idUsuario;
+    private boolean ocupado = false;
 
     public Lavador(int id, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
         super(nome, telefone, dtNascimento, endereco);
@@ -64,6 +65,14 @@ public class Lavador extends Pessoa {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public boolean isOcupado() {
+        return ocupado;
+    }
+
+    public void setOcupado(boolean ocupado) {
+        this.ocupado = ocupado;
     }
 
 }

@@ -58,7 +58,7 @@
 
         <!-- Modal Alterar Endereço -->
         <div id="modal${endereco.id}" class="modal modal-fixed-footer">
-            <form id="FormValidate" action="ControleEndereco" method="post">
+            <form id="FormValidate" action="AlterarEndereco" method="post">
                 <div class="modal-content">
                     <h4>Alterar Endereço</h4>
                     <div class="form-group">

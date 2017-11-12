@@ -92,10 +92,10 @@ public class LavadorDAO {
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
-                cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
-                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"));
-                lavador.setEndereco(new Endereco(rs.getInt("id_endereco")));
+                cal1.setTimeInMillis(rs.getDate("dt_contrato").getTime());
+                cal2.setTimeInMillis(rs.getDate("dt_nascimento").getTime());
+                System.out.println(rs.getDate("dt_nascimento"));
+                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getInt("id_endereco")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -129,6 +129,7 @@ public class LavadorDAO {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, lavador.getNome());
             pstmt.setString(2, lavador.getTelefone());
+            System.out.println("asd " + new java.sql.Date(lavador.getDataNascimento().getTimeInMillis()));
             pstmt.setDate(3, new java.sql.Date(lavador.getDataNascimento().getTimeInMillis()));
             pstmt.setInt(4, lavador.getId());
             pstmt.execute();
