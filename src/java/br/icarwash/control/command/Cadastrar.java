@@ -25,7 +25,7 @@ public class Cadastrar implements ICommand {
 
         switch (cadastrar) {
             case "cliente": {
-                String[] nascimento = request.getParameter("nascimento").split("/");
+                String[] nascimento = request.getParameter("dataNascimento").split("/");
                 cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
                 Cliente cliente = new Cliente(request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")));
@@ -64,22 +64,22 @@ public class Cadastrar implements ICommand {
             }
 
             case "lavador": {
-                String[] nascimento = request.getParameter("nascimento").split("/");
+                String[] nascimento = request.getParameter("dataNascimento").split("/");
                 cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
-                Lavador lavador = new Lavador(cal2, request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")));
+                Lavador lavador = new Lavador(cal2, request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), "Casa"));
 
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
-
-                    LavadorEnderecoDAO lavadorEnderecoDAO = new LavadorEnderecoDAO(conexao);
 
                     lavador.setIdUsuario(criaUsuario(request, conexao, 2));
 
                     LavadorDAO lavadorDAO = new LavadorDAO(conexao);
                     EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
 
-                    lavadorEnderecoDAO.cadastraLavadorEndereco(lavadorDAO.cadastrar(lavador), enderecoDAO.cadastrar(lavador.getEndereco()));
+                    lavador.setEndereco(new Endereco(enderecoDAO.cadastrar(lavador.getEndereco())));
+
+                    lavadorDAO.cadastrar(lavador);
 
                     conexao.commit();
                 } catch (SQLException e) {

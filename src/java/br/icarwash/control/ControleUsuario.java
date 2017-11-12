@@ -40,9 +40,8 @@ public class ControleUsuario extends HttpServlet {
         } else if (usuario.getNivel() == 2) {
             Lavador lavador = new LavadorDAO().localizarPorIdUsuario(usuario.getId());
 
-            ArrayList<Endereco> enderecos = new EnderecoDAO().listarEnderecosLavador(lavador.getId());
+            lavador.setEndereco(new EnderecoDAO().localizarPorId(lavador.getEndereco().getId()));
 
-            request.setAttribute("enderecos", enderecos);
             request.setAttribute("lavador", lavador);
 
             RequestDispatcher rd = request.getRequestDispatcher("localizar_lavador.jsp");

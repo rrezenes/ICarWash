@@ -41,9 +41,8 @@ public class LocalizarPorId implements ICommand {
                 
                 Lavador lavador = new LavadorDAO().localizarPorId(Integer.parseInt(request.getParameter("id")));
                 
-                ArrayList<Endereco> enderecos = new EnderecoDAO().listarEnderecosLavador(lavador.getId());
+                lavador.setEndereco(new EnderecoDAO().localizarPorId(lavador.getEndereco().getId()));
                 
-                request.setAttribute("enderecos", enderecos);
                 request.setAttribute("lavador", lavador);
                 return "localizar_lavador.jsp";
             }

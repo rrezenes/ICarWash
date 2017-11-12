@@ -27,9 +27,10 @@ public class ControleCommand extends HttpServlet {
 
         } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException | ServletException erro) {
             // Exibe uma mensagem de erro para o usuário.
-            request.setAttribute("erro", erro);
+            request.setAttribute("erro", new RuntimeException(erro));
             RequestDispatcher rd = request.getRequestDispatcher("//erro.jsp");
             rd.forward(request, response);
+            throw new RuntimeException(erro);
         }
     }
 

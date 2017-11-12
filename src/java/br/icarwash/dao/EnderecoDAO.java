@@ -13,7 +13,7 @@ public class EnderecoDAO {
 
     private boolean fechaConexao = false;
     private final Connection conexao;
-    private static final String INSERT = "insert into endereco(cep, estado, cidade, bairro, endereco, numero) values(?,?,?,?,?,?)";
+    private static final String INSERT = "insert into endereco(cep, estado, cidade, bairro, endereco, numero, nome) values(?,?,?,?,?,?,?)";
     private static final String UPDATE = "update endereco set cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ?, nome = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "delete from endereco where id = ?;";
     private static final String SELECT_BY_ID = "select id, cep, estado, cidade, bairro, endereco, numero, nome from endereco where id = ?";
@@ -39,6 +39,7 @@ public class EnderecoDAO {
             pstmt.setString(4, endereco.getBairro());
             pstmt.setString(5, endereco.getEndereco());
             pstmt.setInt(6, endereco.getNumero());
+            pstmt.setString(7, endereco.getNome());
 
             pstmt.execute();
 
@@ -60,26 +61,6 @@ public class EnderecoDAO {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL_CLIENTE);
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome"));
-
-                enderecos.add(endereco);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-        return enderecos;
-    }
-
-    public ArrayList<Endereco> listarEnderecosLavador(int id) {
-
-        ArrayList<Endereco> enderecos = new ArrayList();
-
-        try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL_LAVADOR);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
