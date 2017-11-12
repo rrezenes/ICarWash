@@ -17,8 +17,8 @@ public class ClienteDAO {
     private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf) values(?,?,?,?,?)";
-    private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, e.nome, u.ativo from Cliente c, usuario u, endereco e, cliente_endereco ce where c.id_usuario = u.id and c.id = ce.id_cliente and e.id = ce.id_endereco and u.ativo = 1";
-    private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
+    private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, u.ativo from Cliente c, usuario u where c.id_usuario = u.id and u.ativo = 1 group by id";
+    private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf from cliente where id = ?";
     private static final String SELECT_BY_ID_USUARIO = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero from cliente c, endereco e, cliente_endereco ce where ce.id_cliente = c.id and ce.id_endereco = e.id and id_usuario = ?";
@@ -72,7 +72,7 @@ public class ClienteDAO {
                 Timestamp timestamp;
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                Cliente cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
+                Cliente cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco());
 
                 clientes.add(cli);
             }
@@ -109,13 +109,7 @@ public class ClienteDAO {
             pstmt.setString(1, cliente.getNome());
             pstmt.setString(2, cliente.getTelefone());
             pstmt.setDate(3, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
-            pstmt.setString(4, cliente.getEndereco().getCEP());
-            pstmt.setString(5, cliente.getEndereco().getEstado());
-            pstmt.setString(6, cliente.getEndereco().getCidade());
-            pstmt.setString(7, cliente.getEndereco().getBairro());
-            pstmt.setString(8, cliente.getEndereco().getEndereco());
-            pstmt.setInt(9, cliente.getEndereco().getNumero());
-            pstmt.setInt(10, cliente.getId());
+            pstmt.setInt(4, cliente.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

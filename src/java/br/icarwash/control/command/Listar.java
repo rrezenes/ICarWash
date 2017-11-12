@@ -1,6 +1,7 @@
 package br.icarwash.control.command;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
 import br.icarwash.dao.ServicoDAO;
@@ -59,6 +60,10 @@ public class Listar implements ICommand {
                 
                 LavadorDAO lavadorDAO = new LavadorDAO();
                 ArrayList<Lavador> lavadores = lavadorDAO.listar();
+                
+                lavadores.forEach(lavador ->{
+                    lavador.setEndereco(new EnderecoDAO().localizarPorId(lavador.getEndereco().getId()));
+                });
 
                 try {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);

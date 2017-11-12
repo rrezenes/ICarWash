@@ -15,7 +15,7 @@
     <form id="FormValidate" action="Controle" method="post">
         <div class="form-group">
             <input type="hidden" name="quem" value="cliente"/>
-            <input type="hidden" name="txtId" value="${cliente.id}"/>
+            <input type="hidden" name="id" value="${cliente.id}"/>
             <div class="input-field col m6 s12">
                 <label>Nome</label> 
                 <input class="form-control erro-nome" type="text" name="nome" value="${cliente.nome}"><br>
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="col s3">
-            <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar dados">
+            <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
         </div>
         <div class="col s3">
             <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Alterar a senha</a>

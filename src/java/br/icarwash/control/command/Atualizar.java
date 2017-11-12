@@ -40,7 +40,7 @@ public class Atualizar implements ICommand {
                 calendar.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
                 ClienteDAO dao = new ClienteDAO();
-                Cliente cli = new Cliente(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("telefone"), calendar, new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")));
+                Cliente cli = new Cliente(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("telefone"), calendar, new Endereco());
                 dao.atualizar(cli);
 
                 return "Controle?action=Listar&listar=cliente";
@@ -52,9 +52,9 @@ public class Atualizar implements ICommand {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
                 cal2.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                LavadorDAO dao = new LavadorDAO();
-                Lavador lavador = new Lavador(Integer.parseInt(request.getParameter("id")), cal1, request.getParameter("nome"), request.getParameter("telefone"), cal2, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")));
-                dao.atualizar(lavador);
+                LavadorDAO lavadorDAO = new LavadorDAO();
+                Lavador lavador = new Lavador(Integer.parseInt(request.getParameter("id")), cal1, request.getParameter("nome"), request.getParameter("telefone"), cal2, request.getParameter("cpf"), new Endereco());
+                lavadorDAO.atualizar(lavador);
 
                 return "Controle?action=Listar&listar=lavador";
             }

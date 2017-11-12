@@ -27,9 +27,6 @@
             <th>Nome</th>
             <th>Telefone</th>
             <th>CPF</th>
-            <th>CEP</th>
-            <th>Cidade</th>
-            <th>Bairro</th>
             <th colspan=2></th>
         </tr>
     </thead>
@@ -41,9 +38,6 @@
                 <td>${cliente.nome}</td>
                 <td>${cliente.telefone}</td>
                 <td>${cliente.CPF}</td>
-                <td>${cliente.endereco.CEP}</td>
-                <td>${cliente.endereco.cidade}</td>
-                <td>${cliente.endereco.bairro}</td>
                 <td>
                     <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
                     <a class="btn-floating red"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"><i class="material-icons">delete_forever</i></a>
@@ -126,6 +120,12 @@
                     <div class="input-field col s6">
                         <label>Número</label> 
                         <input class="form-control erro-numero" type="text" name="numero" id="numero"><br>
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label>Nome Endereço</label> 
+                        <input class="form-control erro-nomeEndereco" type="text" name="nomeEndereco" id="nomeEndereco"><br>
                     </div>
                 </div>   
             </div>
