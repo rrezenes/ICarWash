@@ -11,6 +11,21 @@
     </div>
 
     <form name="solicitarServico" action="ControleSolicitacao" method="post" class="col s12">
+
+        <div class="row">
+            <h5 class="erro-data"></h5>
+            <div class="input-field col s6">
+                <input  type="text" class="datepicker" id="data_solicitacao" name="data_solicitacao">
+                <label>Data da Solicitação</label>
+            </div>
+            <div class="input-field col s6">
+                <select id="selectHora" name="selectHora">
+                    <option value=" " selected></option>
+                </select>
+                <label>Hora da Solicitação</label>
+            </div>
+        </div>
+
         <div class="row">
             <h5 class="erro-porte col s12">Porte do Veículo</h5>
             <p class="col s4">
@@ -26,7 +41,7 @@
                 <label for="grande">Grande</label>
             </p>
         </div>
-        <div class="row col s12">
+        <div class="row col s6">
             <h5 class="erro-servico col s12">Serviços</h5>
             <c:forEach var="servico" items="${servicos}">
                 <c:if test = "${servico.ativo}">
@@ -38,21 +53,14 @@
             </c:forEach> 
         </div>
 
-        <div class="row">
-            <h5 class="erro-data"></h5>
-            <div class="input-field col s12">
-                <input  type="text" class="datepicker" id="data_solicitacao" name="data_solicitacao">
-                <label>Data da Solicitação</label>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="input-field col s12">
-                <select id="selectHora" name="selectHora">
-                    <option value=" " selected></option>
-                </select>
-                <label>Hora da Solicitação</label>
-            </div>
+        <div class="row col s6">
+            <h5 class="erro-porte col s12">Endereço</h5>
+            <c:forEach var="endereco" items="${enderecos}">
+                <p class="col s3">
+                    <input type="radio" name="endereco" id="endereco${endereco.id}" value="${endereco.id}"/>
+                    <label for="endereco${endereco.id}">${endereco.nome}</label>
+                </p>
+            </c:forEach> 
         </div>
 
         <div class="fixed-action-btn">
