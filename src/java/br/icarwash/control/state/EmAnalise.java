@@ -8,6 +8,8 @@ public class EmAnalise implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        solicitacaoDAO.agendarSolicitacao(solicitacao);
         solicitacao.atribuirLavador();
         return new Agendado();
     }

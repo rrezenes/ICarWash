@@ -16,7 +16,7 @@ public class EnderecoDAO {
     private static final String INSERT = "insert into endereco(cep, estado, cidade, bairro, endereco, numero, nome) values(?,?,?,?,?,?,?)";
     private static final String UPDATE = "update endereco set cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ?, nome = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "delete from endereco where id = ?;";
-    private static final String SELECT_BY_ID = "select id, cep, estado, cidade, bairro, endereco, numero, nome from endereco where id = ?";
+    private static final String SELECT_BY_ID = "select id, cep, estado, cidade, bairro, endereco, numero from endereco where id = ?";
     private static final String SELECT_ALL_CLIENTE = "select e.id, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, e.nome from endereco e, cliente_endereco ce where e.id = ce.id_endereco and ce.id_cliente = ?";
     private static final String SELECT_ALL_LAVADOR = "select e.id, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, e.nome from endereco e, lavador_endereco le where e.id = le.id_endereco and le.id_lavador = ?";
 

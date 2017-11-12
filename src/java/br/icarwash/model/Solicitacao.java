@@ -81,13 +81,12 @@ public class Solicitacao {
         this.valorTotal = valorTotal;
     }
 
-    public Solicitacao(Cliente cliente, String porte, Calendar dataSolicitacao, BigDecimal valorTotal, Endereco endereco) {
+    public Solicitacao(Cliente cliente, String porte, Calendar dataSolicitacao, BigDecimal valorTotal) {
         this.cliente = cliente;
         this.porte = porte;
         this.estado = new EmAnalise();
         this.dataSolicitacao = dataSolicitacao;
         this.valorTotal = valorTotal;
-        this.endereco = endereco;
     }
 
     public Solicitacao() {
@@ -158,14 +157,6 @@ public class Solicitacao {
         this.valorTotal = valorTotal;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
     public void analisarSolicitacao() {
         this.estado = this.estado.analisarSolicitacao(this);
     }
@@ -200,19 +191,16 @@ public class Solicitacao {
         try {
             conexao.setAutoCommit(false);
 
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
             LavadorDAO lavadorDAO = new LavadorDAO(conexao);
-            
-            ArrayList<Lavador> lavadoresDisponiveis = solicitacaoDAO.lavadoresDisponives(lavadorDAO.listar(), this.dataSolicitacao);
 
-            lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, solicitacaoDAO);
-            Random random = new Random();
+            ArrayList<Lavador> lavadoresDisponiveis = lavadorDAO.lavadoresDisponives(lavadorDAO.listar(), this.dataSolicitacao);
 
-            int qtdLavadores = random.nextInt(lavadoresDisponiveis.size());
+            lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, lavadorDAO);
 
-            this.setLavador(lavadoresDisponiveis.get(qtdLavadores));
+            this.setLavador(lavadoresDisponiveis.get(new Random().nextInt(lavadoresDisponiveis.size())));
+
+            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
             solicitacaoDAO.atribuirLavador(this.lavador, this);
-            solicitacaoDAO.agendarSolicitacao(this);
 
             conexao.commit();
 
@@ -232,41 +220,23 @@ public class Solicitacao {
         }
     }
 
-    /**
-     * Retorna uma lista com os lavadores que possuem menor quantidade de
-     * lavagem no dia.
-     */
-    private ArrayList<Lavador> removeLavadoresDaLista(ArrayList<Lavador> lavadoresDisponiveis, SolicitacaoDAO solicitacaoDAO) throws NumberFormatException {
+    private ArrayList<Lavador> removeLavadoresDaLista(ArrayList<Lavador> lavadoresDisponiveis, LavadorDAO lavadorDAO) throws NumberFormatException {
         Map<String, Integer> mapa = new HashMap<>();
 
         lavadoresDisponiveis.forEach((lavadorDisponivel) -> {
-            mapa.put(String.valueOf(lavadorDisponivel.getId()), solicitacaoDAO.quantidadeSolicitacao(lavadorDisponivel.getId(), this.dataSolicitacao));
+            mapa.put(String.valueOf(lavadorDisponivel.getId()), lavadorDAO.quantidadeSolicitacao(lavadorDisponivel.getId(), this.dataSolicitacao));
         });
 
         Map<String, Integer> mapaDecrescente = sortByComparator(mapa, false);
 
-        ArrayList<Lavador> lavadoresParaRemover = criarListaDeLavadoresParaRemover(mapaDecrescente, lavadoresDisponiveis);
-
-        lavadoresParaRemover.forEach(lavadorParaRemover -> {
-            lavadoresDisponiveis.remove(lavadorParaRemover);
-        });
-
-        return lavadoresDisponiveis;
-    }
-
-    /**
-     * Retorna uma lista de Lavadores que serão removidos do sorteio, no momento
-     * de atribuir um lavador
-     */
-    private ArrayList<Lavador> criarListaDeLavadoresParaRemover(Map<String, Integer> mapaDecrescente, ArrayList<Lavador> lavadoresDisponiveis) throws NumberFormatException {
         List<String> idLavadores = new LinkedList<>(mapaDecrescente.keySet());
-
         List<Integer> quantidadeDeSolicitacoes = new LinkedList<>(mapaDecrescente.values());
+
         ArrayList<Lavador> lavadoresParaRemover = new ArrayList<>();
-        
+
         int valorMaisAlto = 0;
         int count = 0;
-        if ((quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < new LavadorDAO().quantidadeLavadores()) && lavadoresNaoPossuemMesmaQuantidade(quantidadeDeSolicitacoes)) {
+        if (quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < lavadorDAO.quantidadeLavadores()) {
             for (int quantidade : quantidadeDeSolicitacoes) {
                 int idLav = Integer.parseInt(idLavadores.get(count));
                 if (quantidade >= valorMaisAlto) {
@@ -280,27 +250,14 @@ public class Solicitacao {
                 count++;
             }
         }
-        return lavadoresParaRemover;
+
+        lavadoresParaRemover.forEach(lavadorParaRemover -> {
+            lavadoresDisponiveis.remove(lavadorParaRemover);
+        });
+
+        return lavadoresDisponiveis;
     }
 
-    /**
-     * Retorna um verdadeiro caso lavadores não possuam a mesma quantidade
-     */
-    private boolean lavadoresNaoPossuemMesmaQuantidade(List<Integer> quantidadeDeSolicitacoes) {
-        double total = 0;
-        for (int quantidade : quantidadeDeSolicitacoes) {
-            total += quantidade;
-        }
-        boolean remove = true;
-        if ((total / quantidadeDeSolicitacoes.size()) == quantidadeDeSolicitacoes.get(0)) {
-            remove = false;
-        }
-        return remove;
-    }
-
-    /**
-     * Retorna um inteiro com a quantidade de lavadores para remover,
-     */
     private int quantidadeDeLavadoresParaRemover(List<Integer> quantidadeDeSolicitacoes) {
         int valorMaisAlto = 0;
         int aux = 0;
@@ -320,12 +277,13 @@ public class Solicitacao {
 
         // Sorting the list based on values
         Collections.sort(list, new Comparator<Entry<String, Integer>>() {
-            @Override
-            public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+            public int compare(Entry<String, Integer> o1,
+                    Entry<String, Integer> o2) {
                 if (order) {
                     return o1.getValue().compareTo(o2.getValue());
                 } else {
                     return o2.getValue().compareTo(o1.getValue());
+
                 }
             }
         });
