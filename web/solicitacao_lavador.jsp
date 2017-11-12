@@ -27,7 +27,7 @@
         </thead>
         <tbody>  
             <c:forEach var="solicitacao" items="${solicitacoes}">
-                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy HH:mm" />
+                <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy" />
                 <tr>
                     <td>#${solicitacao.id}</td>
                     <td>${solicitacao.cliente.nome}</td>
@@ -37,7 +37,7 @@
                     <td>${dataSolicitacao}</td>
                     <td>${solicitacao.valorTotal.doubleValue()}</td>
                     <td>${solicitacao.estado}</td>
-                    <c:if test="${solicitacao.estado == 'Agendado' && !ocupado}">
+                    <c:if test="${solicitacao.estado == 'Agendado'}">
                         <td>
                             <form action="CancelarSolicitacao" method="post">
                                 <input type="hidden" name="id_solicitacao" value="${solicitacao.id}"/> 
