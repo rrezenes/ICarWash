@@ -11,6 +11,10 @@ public class Endereco {
     private int numero;
     private String nome;
 
+    public Endereco(int id) {
+        this.id = id;
+    }
+    
     public Endereco(String CEP, String estado, String cidade, String bairro, String endereco, int numero, String nome) {
         this.CEP = CEP;
         this.estado = estado;
@@ -37,6 +41,9 @@ public class Endereco {
         this.bairro = bairro;
     }
 
+    public Endereco() {
+    }
+
     public int getId() {
         return id;
     }
@@ -44,7 +51,7 @@ public class Endereco {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public int getNumero() {
         return numero;
     }
@@ -100,7 +107,5 @@ public class Endereco {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    
 
 }

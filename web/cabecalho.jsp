@@ -17,7 +17,7 @@
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
-    <%  if (session != null && request.getRequestedSessionId() != null && session.getAttribute("acesso") != null) {
+    <%  if (session != null && request.getRequestedSessionId() != null && session.getAttribute("user") != null) {
             Usuario usuario = (Usuario) session.getAttribute("user");%>
     <body>
         <nav>
@@ -39,7 +39,7 @@
                     <li class="no-padding">
                         <%-- /\ /\ NÃO VARIA /\ /\--%>
 
-                        <%if (Integer.parseInt(session.getAttribute("acesso").toString()) == 1) {%>
+                        <%if (usuario.getNivel() == 1) {%>
                         <%--Menu do Cliente--%>
 
                         <ul class="collapsible collapsible-accordion">
@@ -56,7 +56,7 @@
 
                         <%--Menu do Lavador---%>
 
-                        <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 2) {%>
+                        <% } else if (usuario.getNivel() == 2) {%>
                         <ul class="collapsible collapsible-accordion">
                             <li>
                                 <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
@@ -80,7 +80,7 @@
                         </ul>
 
                         <%--Menu do Admin---%>
-                        <% } else if (Integer.parseInt(session.getAttribute("acesso").toString()) == 3) {%>
+                        <% } else if (usuario.getNivel() == 3) {%>
 
                         <ul class="collapsible collapsible-accordion">
                             <li>
