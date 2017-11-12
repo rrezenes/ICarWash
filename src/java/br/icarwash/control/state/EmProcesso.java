@@ -1,8 +1,15 @@
 package br.icarwash.control.state;
 
+import br.icarwash.control.ControleSolicitacao;
+import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.util.Conexao;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EmProcesso implements SolicitacaoState {
 
@@ -23,9 +30,34 @@ public class EmProcesso implements SolicitacaoState {
 
     @Override
     public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.finalizarSolicitacao(solicitacao);
-        return new Finalizado();
+        Connection conexao = Conexao.getConexao();
+
+        try {
+            conexao.setAutoCommit(false);
+
+            new LavadorDAO(conexao).desocuparLavador(solicitacao.getLavador().getId());
+            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+            solicitacaoDAO.finalizarSolicitacao(solicitacao);
+
+            conexao.commit();
+
+            return new Finalizado();
+
+        } catch (SQLException e) {
+            try {
+                conexao.rollback();
+                throw new RuntimeException(e);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return this;
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

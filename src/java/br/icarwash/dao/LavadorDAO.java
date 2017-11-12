@@ -11,8 +11,6 @@ import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.util.Conexao;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class LavadorDAO {
 
@@ -22,11 +20,11 @@ public class LavadorDAO {
     private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, e.nome, u.ativo from Lavador l, usuario u, endereco e, lavador_endereco le where u.id = l.id_usuario and l.id = le.id_lavador and e.id = le.id_endereco and u.ativo = 1";
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id = ?;";
-    private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF from lavador where id = ?";
-    private static final String SELECT_BY_ID_USUARIO = "select l.id, l.id_usuario, l.dt_contrato, l.nome, l.telefone, l.dt_nascimento, l.CPF, e.CEP, e.estado, e.cidade, e.bairro, e.endereco, e.numero from lavador l, endereco e, lavador_endereco le where le.id_lavador = l.id and le.id_endereco = e.id and id_usuario = ?";
+    private static final String OCUPAR_LAVADOR = "UPDATE lavador SET ocupado = true where id = ?;";
+    private static final String DESOCUPAR_LAVADOR = "UPDATE lavador SET ocupado = false where id = ?;";
+    private static final String SELECT_BY_ID = "select id, id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF, ocupado from lavador where id = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select l.id, l.id_usuario, l.dt_contrato, l.nome, l.telefone, l.dt_nascimento, l.CPF, l.ocupado, e.CEP, e.estado, e.cidade, e.bairro, e.endereco, e.numero from lavador l, endereco e, lavador_endereco le where le.id_lavador = l.id and le.id_endereco = e.id and id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from lavador where cpf = ?";
-    private static final String CHECK_DISPONIVEL = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado'";
-    private static final String QTD_SOLICITACAO = "select count(*) as quantidade FROM solicitacao where id_lavador = ? and data_solicitacao like ?";
     private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
 
     public LavadorDAO(Connection conexao) {
@@ -75,6 +73,7 @@ public class LavadorDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal2.setTimeInMillis(timestamp.getTime());
                 Lavador lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
+                lavador.setOcupado(rs.getBoolean("ocupado"));
                 lavadores.add(lavador);
             }
         } catch (SQLException e) {
@@ -114,6 +113,7 @@ public class LavadorDAO {
                 cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
                 cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
                 lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
+                lavador.setOcupado(rs.getBoolean("ocupado"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -168,55 +168,11 @@ public class LavadorDAO {
         return IDLavador;
     }
 
-    public ArrayList<Lavador> lavadoresDisponives(ArrayList<Lavador> lavadores, Calendar dataSolicitacao) {
-
-        ArrayList<Lavador> lavadoresDisponiveis = new ArrayList<>();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
-
-        try {
-            for (Lavador lavador : lavadores) {
-
-                PreparedStatement pstmt = conexao.prepareStatement(CHECK_DISPONIVEL);
-                pstmt.setInt(1, lavador.getId());
-                pstmt.setString(2, dataSolicitacaoFormatada);
-                ResultSet rs = pstmt.executeQuery();
-
-                if (!rs.next()) {
-                    lavadoresDisponiveis.add(lavador);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-        return lavadoresDisponiveis;
-    }
-
-    public int quantidadeSolicitacao(int idLavador, Calendar dataSolicitacao) {
-
-        int quantidade = 0;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String dataSolicitacaoFormatada = format.format(dataSolicitacao.getTime());
-
-        try {
-
-            PreparedStatement pstmt = conexao.prepareStatement(QTD_SOLICITACAO);
-            pstmt.setInt(1, idLavador);
-            pstmt.setString(2, dataSolicitacaoFormatada + "%");
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                quantidade = rs.getInt("quantidade");
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-        return quantidade;
-    }
-
+    /**
+     * Retorna um inteiro com a quantidade de lavadores
+     *
+     * @return
+     */
     public int quantidadeLavadores() {
         int numeroLavadores = 0;
 
@@ -252,6 +208,30 @@ public class LavadorDAO {
             pstmt.setString(1, cpf);
             ResultSet rs = pstmt.executeQuery();
             return !rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.fechaConexao();
+        }
+    }
+
+    public void ocuparLavador(int id) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(OCUPAR_LAVADOR);
+            pstmt.setInt(1, id);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.fechaConexao();
+        }
+    }
+
+    public void desocuparLavador(int id) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(DESOCUPAR_LAVADOR);
+            pstmt.setInt(1, id);
+            pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
