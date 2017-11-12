@@ -45,12 +45,10 @@ public class ControleSolicitacao extends HttpServlet {
 
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dataSolicitacao + " " + request.getParameter("selectHora")));
 
-            int idEndereco = Integer.parseInt(request.getParameter("endereco"));
-            
             Servico servico;
             ServicoDAO servicoDAO = new ServicoDAO(conexao);
 
-            Solicitacao solicitacao = new Solicitacao(cliente, porteVeiculo, dataHoraSolicitacao, somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO), new Endereco(idEndereco));
+            Solicitacao solicitacao = new Solicitacao(cliente, porteVeiculo, dataHoraSolicitacao, somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO));
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
             solicitacaoDAO.cadastrar(solicitacao);
             solicitacao = solicitacaoDAO.selecionaUltimoIdSolicitacao();

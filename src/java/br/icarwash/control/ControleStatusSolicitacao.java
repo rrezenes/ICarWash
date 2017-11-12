@@ -1,9 +1,8 @@
 package br.icarwash.control;
 
-import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
-import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
@@ -46,13 +45,10 @@ public class ControleStatusSolicitacao extends HttpServlet {
             }
 
         } else if (URI.endsWith("/ProcessarSolicitacao")) {
-            
-            Lavador lavador = new LavadorDAO().localizarPorId(solicitacao.getLavador().getId());
-            
-            if (!lavador.isOcupado()) {
-                solicitacao.processarSolicitacao();
-                URIRetorno = "ListarSolicitacaoLavador";
-            }
+
+            solicitacao.processarSolicitacao();
+            URIRetorno = "ListarSolicitacaoLavador";
+
         } else if (URI.endsWith("/FinalizarSolicitacao")) {
 
             solicitacao.finalizarSolicitacao();
@@ -65,6 +61,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
                     .withNotaServico(BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))))
                     .withNotaAtendimento(BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))))
                     .withNotaAgilidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))));
+            
 
             solicitacao.setAvaliacao(avaliacaoBuilder.build());
             solicitacao.avaliarSolicitacao();

@@ -64,10 +64,11 @@ public class AvaliacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        this.fechaConexao();
         return builder.build();
     }
 
-    public void fechaConexao() throws RuntimeException {
+    private void fechaConexao() throws RuntimeException {
         if (fechaConexao) {
             try {
                 conexao.close();
