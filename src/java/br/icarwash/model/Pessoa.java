@@ -2,49 +2,59 @@ package br.icarwash.model;
 
 import java.util.Calendar;
 
-abstract class Pessoa {
+public abstract class Pessoa {
 
-    private String nome;
-    private String telefone;
-    private Calendar dtNascimento = Calendar.getInstance();
-    private String CPF;
-    private Endereco endereco;
+    protected String nome;
+    protected String telefone;
+    protected Calendar dtNascimento = Calendar.getInstance();
+    protected String CPF;
+    protected Endereco endereco;
 
-    public Pessoa(String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
-
-        this.nome = nome;
-        this.telefone = telefone;
-        this.dtNascimento = dtNascimento;
-        this.endereco = endereco;
+    protected Pessoa() {
     }
+    
+    protected abstract static class PessoaBuilder<T extends Pessoa, builder extends PessoaBuilder<T, builder>> {
 
-    public Pessoa(String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
+        protected T object;
+        protected builder thisObject;
 
-        this.nome = nome;
-        this.telefone = telefone;
-        this.dtNascimento = dtNascimento;
-        this.CPF = CPF;
-        this.endereco = endereco;
-    }
+        protected abstract T getObject(); //Each concrete implementing subclass overrides this so that T becomes an object of the concrete subclass
 
-    public Pessoa(String nome, String telefone, Calendar dtNascimento, String CPF) {
+        protected abstract builder thisObject(); //Each concrete implementing subclass builder overrides this for the same reason, but for B for the builder
 
-        this.nome = nome;
-        this.telefone = telefone;
-        this.dtNascimento = dtNascimento;
-        this.CPF = CPF;
-    }
+        protected PessoaBuilder() {
+            object = getObject();
+            thisObject = thisObject();
+        }
 
-    public Pessoa(String nome) {
-        this.nome = nome;
-    }
+        public builder withNome(String nome) {
+            object.nome = nome;
+            return thisObject;
+        }
 
-    public Pessoa() {
-    }
+        public builder withTelefone(String telefone) {
+            object.telefone = telefone;
+            return thisObject;
+        }
 
-    public Pessoa(String nome, Endereco endereco) {
-        this.nome = nome;
-        this.endereco = endereco;
+        public builder withdtNascimento(Calendar dtNascimento) {
+            object.dtNascimento = dtNascimento;
+            return thisObject;
+        }
+
+        public builder withCpf(String cpf) {
+            object.CPF = cpf;
+            return thisObject;
+        }
+
+        public builder withEndereco(Endereco endereco) {
+            object.endereco = endereco;
+            return thisObject;
+        }
+
+        public T build() {
+            return object;
+        }
     }
 
     public Calendar getDtNascimento() {

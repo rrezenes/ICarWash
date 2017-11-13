@@ -63,7 +63,7 @@ public class ClienteDAO {
     public ArrayList<Cliente> listar() {
 
         ArrayList<Cliente> clientes = new ArrayList();
-
+        Cliente cliente;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
@@ -72,9 +72,17 @@ public class ClienteDAO {
                 Timestamp timestamp;
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                Cliente cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco());
 
-                clientes.add(cli);
+                cliente = new Cliente.ClienteBuilder()
+                        .withId(rs.getInt("id"))
+                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withNome(rs.getString("nome"))
+                        .withTelefone(rs.getString("telefone"))
+                        .withdtNascimento(cal)
+                        .withCpf(rs.getString("cpf"))
+                        .build();
+
+                clientes.add(cliente);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -84,7 +92,7 @@ public class ClienteDAO {
     }
 
     public Cliente localizarPorId(int id) {
-        Cliente cli = null;
+        Cliente cliente = null;
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
@@ -94,13 +102,20 @@ public class ClienteDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cli = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"));
+                cliente = new Cliente.ClienteBuilder()
+                        .withId(rs.getInt("id"))
+                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withNome(rs.getString("nome"))
+                        .withTelefone(rs.getString("telefone"))
+                        .withdtNascimento(cal)
+                        .withCpf(rs.getString("cpf"))
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
-        return cli;
+        return cliente;
     }
 
     public void atualizar(Cliente cliente) {
@@ -155,7 +170,18 @@ public class ClienteDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cliente = new Cliente(rs.getInt("id"), rs.getInt("id_usuario"), rs.getString("nome"), rs.getString("telefone"), cal, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
+                
+                Endereco endereco = new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome"));
+                
+                cliente = new Cliente.ClienteBuilder()
+                        .withId(rs.getInt("id"))
+                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withNome(rs.getString("nome"))
+                        .withTelefone(rs.getString("telefone"))
+                        .withdtNascimento(cal)
+                        .withCpf(rs.getString("cpf"))
+                        .withEndereco(endereco)
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

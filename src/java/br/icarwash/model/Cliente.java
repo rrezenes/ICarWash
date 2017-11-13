@@ -1,54 +1,46 @@
 package br.icarwash.model;
 
-import java.util.Calendar;
-
-public class Cliente extends Pessoa {
+public final class Cliente extends Pessoa {
 
     private int id;
     private int idUsuario;
 
-    public Cliente(int id) {
-        this.id = id;
+    protected Cliente() {
     }
 
-    public Cliente(int id, String nome, Endereco endereco) {
-        super(nome, endereco);
-        this.id = id;
-    }
+    public static final class ClienteBuilder extends Pessoa.PessoaBuilder<Cliente, ClienteBuilder> {
 
-    public Cliente(int id, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
-        super(nome, telefone, dtNascimento, endereco);
-        this.id = id;
-    }
+        private int id;
+        private int idUsuario;
 
-    public Cliente(String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(nome, telefone, dtNascimento, CPF, endereco);
-    }
+        public ClienteBuilder() {
+        }
 
-    public Cliente(int id, int idUsuario, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(nome, telefone, dtNascimento, CPF, endereco);
-        this.id = id;
-        this.idUsuario = idUsuario;
-    }
+        public ClienteBuilder from(Cliente cliente) {
+            this.id = cliente.id;
+            this.idUsuario = cliente.idUsuario;
+            return this;
+        }
 
-    public Cliente(int id, int idUsuario, String nome, String telefone, Calendar dtNascimento, String CPF) {
-        super(nome, telefone, dtNascimento, CPF);
-        this.id = id;
-        this.idUsuario = idUsuario;
-    }
+        public ClienteBuilder withId(int id) {
+            object.id = id;
+            return this;
+        }
 
-    public Cliente(int idUsuario, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(nome, telefone, dtNascimento, CPF, endereco);
-        this.idUsuario = idUsuario;
-    }
+        public ClienteBuilder withIdUsuario(int idUsuario) {
+            object.idUsuario = idUsuario;
+            return this;
+        }
 
-    public Cliente() {
+        @Override
+        protected Cliente getObject() {
+            return new Cliente();
+        }
 
-    }
-
-    public Cliente(int id, String nome) {
-        super(nome);
-        this.id = id;
+        @Override
+        protected ClienteBuilder thisObject() {
+            return this;
+        }
     }
 
     public int getId() {
