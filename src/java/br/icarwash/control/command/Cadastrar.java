@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.*;
 import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -107,9 +108,14 @@ public class Cadastrar implements ICommand {
                 return "Controle?action=Listar&listar=lavador";
             }
             case "produto": {
-                Produto produto = new Produto(request.getParameter("nome"), request.getParameter("descricao"), true);
+                
+                ProdutoBuilder produtoBuilder = new ProdutoBuilder()
+                        .withNome(request.getParameter("nome"))
+                        .withDescricao(request.getParameter("descricao"))
+                        .withAtivo(true);
+                
                 ProdutoDAO produtoDAO = new ProdutoDAO();
-                produtoDAO.cadastrar(produto);
+                produtoDAO.cadastrar(produtoBuilder.build());
 
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=Listar&listar=produto";
