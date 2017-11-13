@@ -15,10 +15,10 @@ public class SolicitacaoServicoDAO {
         this.conexao = conexao;
     }
 
-    public void cadastraSolicitacaoServico(Solicitacao solicitacao, Servico servico) {
+    public void cadastraSolicitacaoServico(int idSolicitacao, Servico servico) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao_servico(id_solicitacao, id_servico) values (?,?)");
-            pstmt.setInt(1, solicitacao.getId());
+            pstmt.setInt(1, idSolicitacao);
             pstmt.setInt(2, servico.getId());
             pstmt.execute();
 

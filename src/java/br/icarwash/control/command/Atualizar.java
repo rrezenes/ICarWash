@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Produto;
 import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.Servico;
@@ -40,35 +41,43 @@ public class Atualizar implements ICommand {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
                 calendar.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                ClienteDAO dao = new ClienteDAO();
-                Cliente cli = new Cliente(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("telefone"), calendar, new Endereco());
-                dao.atualizar(cli);
+                Cliente cliente = new Cliente.ClienteBuilder()
+                        .withId(Integer.parseInt(request.getParameter("id")))
+                        .withNome(request.getParameter("nome"))
+                        .withTelefone(request.getParameter("telefone"))
+                        .build();
+
+                new ClienteDAO().atualizar(cliente);
 
                 return "Controle?action=Listar&listar=cliente";
             }
             case "lavador": {
 
-                Calendar cal1, cal2 = Calendar.getInstance();
-                cal1 = (Calendar) request.getAttribute("DtAdmissao");
-                
+                Calendar nascimentoLavador = Calendar.getInstance();
+
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
-                cal2.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+                nascimentoLavador.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                LavadorDAO lavadorDAO = new LavadorDAO();
-                Lavador lavador = new Lavador(Integer.parseInt(request.getParameter("id")), cal1, request.getParameter("nome"), request.getParameter("telefone"), cal2, request.getParameter("cpf"), new Endereco());
+                Lavador lavador = new LavadorBuilder()
+                        .withId(Integer.parseInt(request.getParameter("id")))
+                        .withNome(request.getParameter("nome"))
+                        .withTelefone(request.getParameter("telefone"))
+                        .withDataNascimento(nascimentoLavador)
+                        .withCpf(request.getParameter("cpf"))
+                        .build();
 
-                lavadorDAO.atualizar(lavador);
+                new LavadorDAO().atualizar(lavador);
 
                 return "Controle?action=Listar&listar=lavador";
             }
             case "produto": {
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                ProdutoBuilder produtoBuilder = new Produto.ProdutoBuilder()
+                Produto produto = new Produto.ProdutoBuilder()
                         .withId(Integer.parseInt(request.getParameter("id")))
                         .withNome(request.getParameter("nome"))
-                        .withDescricao(request.getParameter("descricao"));
-                
-                produtoDAO.atualizar(produtoBuilder.build());
+                        .withDescricao(request.getParameter("descricao"))
+                        .build();
+
+                new ProdutoDAO().atualizar(produto);
 
                 return "Controle?action=Listar&listar=produto";
             }

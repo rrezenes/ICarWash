@@ -13,12 +13,16 @@ import br.icarwash.control.state.Finalizado;
 import br.icarwash.control.state.SolicitacaoState;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Endereco.EnderecoBuilder;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,11 +45,11 @@ public class SolicitacaoDAO {
         this.conexao = conexao;
     }
 
-    public void cadastrar(Object object) {
-        Solicitacao solicitacao = (Solicitacao) object;
+    public int cadastrar(Solicitacao solicitacao) {
         Timestamp timestamp = new Timestamp(solicitacao.getDataSolicitacao().getTimeInMillis());
+        int idSolicitacao = 0;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)");
+            PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setInt(1, solicitacao.getCliente().getId());
             pstmt.setInt(2, solicitacao.getEndereco().getId());
@@ -54,10 +58,16 @@ public class SolicitacaoDAO {
             pstmt.setBigDecimal(5, solicitacao.getValorTotal());
             pstmt.execute();
 
+            final ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                idSolicitacao = rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
+        return idSolicitacao;
     }
 
     public ArrayList<Solicitacao> listarSolicitacaoPorIDCliente(int id) {
@@ -74,8 +84,13 @@ public class SolicitacaoDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
 
-                cliente = new Cliente(rs.getInt("id_cliente"));
-                lavador = new Lavador(rs.getInt("id_lavador"));
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
 
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
@@ -112,8 +127,15 @@ public class SolicitacaoDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                endereco = new Endereco(rs.getInt("id_endereco"));
-                cliente = new Cliente(rs.getInt("id_cliente"));
+
+                endereco = new EnderecoBuilder()
+                        .withId(rs.getInt("id"))
+                        .build();
+
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
@@ -147,8 +169,16 @@ public class SolicitacaoDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                endereco = new Endereco(rs.getString("cidade"), rs.getString("bairro"));
-                cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"), endereco);
+                endereco = new EnderecoBuilder()
+                        .withCidade(rs.getString("cidade"))
+                        .withBairro(rs.getString("bairro"))
+                        .build();
+
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("ID_Cliente"))
+                        .withNome(rs.getString("nome_cliente"))
+                        .withEndereco(endereco)
+                        .build();
 
                 //lavador = new Lavador(rs.getInt("id_lavador"));
                 solicitacaoState = validarStatus(rs.getString("status"));
@@ -176,8 +206,15 @@ public class SolicitacaoDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                cliente = new Cliente(rs.getInt("id_cliente"));
-                lavador = new Lavador(rs.getInt("id_lavador"));
+
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
@@ -202,8 +239,15 @@ public class SolicitacaoDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                cliente = new Cliente(rs.getInt("ID_Cliente"), rs.getString("nome_cliente"));
-                lavador = new Lavador(rs.getInt("id_lavador"));
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("ID_Cliente"))
+                        .withNome(rs.getString("nome_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
@@ -229,9 +273,15 @@ public class SolicitacaoDAO {
             PreparedStatement pstmt = conexao.prepareStatement("SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao AND solicitacao.status = 'Em Analise' group by solicitacao.ID");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                cliente = new Cliente(rs.getInt("ID_Cliente"));
-                cliente.setNome(rs.getString("nome_cliente"));
-                lavador = new Lavador(rs.getInt("id_lavador"));
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .withNome(rs.getString("nome_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));

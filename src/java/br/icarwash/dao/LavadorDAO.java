@@ -8,7 +8,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.util.Conexao;
 import java.sql.Statement;
 
@@ -63,17 +65,28 @@ public class LavadorDAO {
 
     public ArrayList<Lavador> listar() {
         ArrayList<Lavador> lavadores = new ArrayList();
+        Lavador lavador;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+                Calendar dataContrato = Calendar.getInstance(), dataNascimento = Calendar.getInstance();
                 Timestamp timestamp;
                 timestamp = rs.getTimestamp("dt_contrato");
-                cal1.setTimeInMillis(timestamp.getTime());
+                dataContrato.setTimeInMillis(timestamp.getTime());
                 timestamp = rs.getTimestamp("dt_nascimento");
-                cal2.setTimeInMillis(timestamp.getTime());
-                Lavador lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco());
+                dataNascimento.setTimeInMillis(timestamp.getTime());
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id"))
+                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withDataContrato(dataContrato)
+                        .withNome(rs.getString("nome"))
+                        .withTelefone(rs.getString("telefone"))
+                        .withDataNascimento(dataNascimento)
+                        .withCpf(rs.getString("cpf"))
+                        .build();
+
                 lavador.setOcupado(rs.getBoolean("ocupado"));
                 lavadores.add(lavador);
             }
@@ -85,17 +98,32 @@ public class LavadorDAO {
     }
 
     public Lavador localizarPorId(int id) {
-        Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+        Calendar dataContrato = Calendar.getInstance(), dataNascimento = Calendar.getInstance();
         Lavador lavador = null;
+        Endereco endereco;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                cal1.setTimeInMillis(rs.getDate("dt_contrato").getTime());
-                cal2.setTimeInMillis(rs.getDate("dt_nascimento").getTime());
-                System.out.println(rs.getDate("dt_nascimento"));
-                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getInt("id_endereco")));
+
+                dataContrato.setTimeInMillis(rs.getDate("dt_contrato").getTime());
+                dataNascimento.setTimeInMillis(rs.getDate("dt_nascimento").getTime());
+
+                endereco = new Endereco.EnderecoBuilder()
+                        .withId(rs.getInt("id"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id"))
+                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withDataContrato(dataContrato)
+                        .withNome(rs.getString("nome"))
+                        .withTelefone(rs.getString("telefone"))
+                        .withDataNascimento(dataNascimento)
+                        .withCpf(rs.getString("cpf"))
+                        .withEndereco(endereco)
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -105,16 +133,38 @@ public class LavadorDAO {
     }
 
     public Lavador localizarPorIdUsuario(int id) {
-        Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+        Calendar dataContrato = Calendar.getInstance(), dataNascimento = Calendar.getInstance();
         Lavador lavador = null;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                cal1.setTimeInMillis(rs.getTime("dt_contrato").getTime());
-                cal2.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
-                lavador = new Lavador(rs.getInt("id"), rs.getInt("id_usuario"), cal1, rs.getString("nome"), rs.getString("telefone"), cal2, rs.getString("cpf"), new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome")));
+
+                dataContrato.setTimeInMillis(rs.getTime("dt_contrato").getTime());
+                dataNascimento.setTimeInMillis(rs.getTime("dt_nascimento").getTime());
+                
+                Endereco endereco = new EnderecoBuilder()
+                        .withCep(rs.getString("cep"))
+                        .withEstado(rs.getString("estado"))
+                        .withCidade(rs.getString("cidade"))
+                        .withBairro(rs.getString("bairro"))
+                        .withEndereco(rs.getString("endereco"))
+                        .withNumero(rs.getInt("numero"))
+                        .withNome(rs.getString("nome"))
+                        .build();
+                
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id"))
+                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withDataContrato(dataContrato)
+                        .withNome(rs.getString("nome"))
+                        .withTelefone(rs.getString("telefone"))
+                        .withDataNascimento(dataNascimento)
+                        .withCpf(rs.getString("cpf"))
+                        .withEndereco(endereco)
+                        .build();
+
                 lavador.setOcupado(rs.getBoolean("ocupado"));
             }
         } catch (SQLException e) {
@@ -129,7 +179,6 @@ public class LavadorDAO {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE);
             pstmt.setString(1, lavador.getNome());
             pstmt.setString(2, lavador.getTelefone());
-            System.out.println("asd " + new java.sql.Date(lavador.getDataNascimento().getTimeInMillis()));
             pstmt.setDate(3, new java.sql.Date(lavador.getDataNascimento().getTimeInMillis()));
             pstmt.setInt(4, lavador.getId());
             pstmt.execute();

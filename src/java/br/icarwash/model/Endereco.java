@@ -11,37 +11,85 @@ public class Endereco {
     private int numero;
     private String nome;
 
-    public Endereco(int id) {
-        this.id = id;
-    }
-    
-    public Endereco(String CEP, String estado, String cidade, String bairro, String endereco, int numero, String nome) {
-        this.CEP = CEP;
-        this.estado = estado;
-        this.cidade = cidade;
-        this.bairro = bairro;
-        this.endereco = endereco;
-        this.numero = numero;
-        this.nome = nome;
-    }
-
-    public Endereco(int id, String CEP, String estado, String cidade, String bairro, String endereco, int numero, String nome) {
-        this.id = id;
-        this.CEP = CEP;
-        this.estado = estado;
-        this.cidade = cidade;
-        this.bairro = bairro;
-        this.endereco = endereco;
-        this.numero = numero;
-        this.nome = nome;
-    }
-
-    public Endereco(String cidade, String bairro) {
-        this.cidade = cidade;
-        this.bairro = bairro;
-    }
-
     public Endereco() {
+    }
+
+    public Endereco(EnderecoBuilder builder) {
+        this.CEP = builder.CEP;
+        this.estado = builder.estado;
+        this.cidade = builder.cidade;
+        this.bairro = builder.bairro;
+        this.endereco = builder.endereco;
+        this.numero = builder.numero;
+        this.nome = builder.nome;
+    }
+
+    public static class EnderecoBuilder {
+
+        private int id;
+        private String CEP;
+        private String estado;
+        private String cidade;
+        private String bairro;
+        private String endereco;
+        private int numero;
+        private String nome;
+
+        public EnderecoBuilder from(Endereco endereco) {
+            this.id = endereco.id;
+            this.CEP = endereco.CEP;
+            this.estado = endereco.estado;
+            this.cidade = endereco.cidade;
+            this.bairro = endereco.bairro;
+            this.endereco = endereco.endereco;
+            this.numero = endereco.numero;
+            this.nome = endereco.nome;
+            return this;
+        }
+
+        public EnderecoBuilder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public EnderecoBuilder withCep(String cep) {
+            this.CEP = cep;
+            return this;
+        }
+
+        public EnderecoBuilder withEstado(String estado) {
+            this.estado = estado;
+            return this;
+        }
+
+        public EnderecoBuilder withCidade(String cidade) {
+            this.cidade = cidade;
+            return this;
+        }
+
+        public EnderecoBuilder withBairro(String bairro) {
+            this.bairro = bairro;
+            return this;
+        }
+
+        public EnderecoBuilder withEndereco(String endereco) {
+            this.endereco = endereco;
+            return this;
+        }
+
+        public EnderecoBuilder withNumero(int numero) {
+            this.numero = numero;
+            return this;
+        }
+
+        public EnderecoBuilder withNome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public Endereco build() {
+            return new Endereco(this);
+        }
     }
 
     public int getId() {

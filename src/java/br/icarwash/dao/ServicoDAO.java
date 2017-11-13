@@ -135,14 +135,21 @@ public class ServicoDAO {
         ArrayList<ServicoProduto> servicosProdutos = new ArrayList<>();
         ServicoProduto servicoProduto;
         Servico servico = new Servico(idServico);
-        
+
         try {
             PreparedStatement pstmt = conexao.prepareStatement("select s.`ID` as id_servico, p.`ID` as id_produto, s.nome as nome_servico, p.nome as nome_produto, s.descricao as descricao_servico, p.descricao as descricao_produto, s.valor as valor_servico, quantidade as quantidade_produtos from servico_produtos sp, servico s, produto p where sp.id_servico = s.id and sp.id_produto = p.id and s.id = ?");
             pstmt.setInt(1, idServico);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                servicosProdutos.add(new ServicoProduto(servico, new Produto(rs.getInt("id_produto"), rs.getString("nome_produto"), rs.getString("descricao_produto")), rs.getInt("quantidade_produtos")));
+
+                Produto produto = new Produto.ProdutoBuilder()
+                        .withId(rs.getInt("id_produto"))
+                        .withNome(rs.getString("nome_produto"))
+                        .withDescricao(rs.getString("descricao_produto"))
+                        .build();
+                
+                servicosProdutos.add(new ServicoProduto(servico, produto, rs.getInt("quantidade_produtos")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
