@@ -17,10 +17,12 @@ import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Lavador.LavadorBuilder;
+import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -104,7 +106,16 @@ public class SolicitacaoDAO {
                     avaliacaoBuilder = new AvaliacaoBuilder().withId(0);
                 }
 
-                solicitacao = new Solicitacao(rs.getInt("ID"), cliente, lavador, avaliacaoBuilder.build(), new Endereco(), solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withAvaliacao(avaliacaoBuilder.build())
+                        .withSolicitacaoState(solicitacaoState)
+                        .withPorte(rs.getString("porte"))
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .build();
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -120,7 +131,6 @@ public class SolicitacaoDAO {
         Cliente cliente;
         Endereco endereco;
         Avaliacao avaliacao;
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         SolicitacaoState solicitacaoState;
         try {
             PreparedStatement pstmt = conexao.prepareStatement("select ID as ID_Solicitacao, id_cliente, id_avaliacao, id_endereco, porte, data_solicitacao, valor_total, status from solicitacao where id_lavador = ? order by data_solicitacao");
@@ -141,14 +151,21 @@ public class SolicitacaoDAO {
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
                 if (rs.getBoolean("id_avaliacao")) {
-                    avaliacao = new Avaliacao(rs.getInt("id_avaliacao"));
+                    avaliacao = new AvaliacaoBuilder().withId(rs.getInt("id_avaliacao")).build();
 
                 } else {
-                    avaliacao = new Avaliacao(0);
+                    avaliacao = new AvaliacaoBuilder().withId(0).build();
                 }
-
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, avaliacao, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
-                solicitacao.setEndereco(endereco);
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withCliente(cliente)
+                        .withAvaliacao(avaliacao)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withPorte(rs.getString("porte"))
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withEndereco(endereco)
+                        .build();
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -185,7 +202,15 @@ public class SolicitacaoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withCliente(cliente)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withPorte(rs.getString("porte"))
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .build();
+
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {
@@ -219,7 +244,16 @@ public class SolicitacaoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withPorte(rs.getString("porte"))
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .build();
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -252,7 +286,16 @@ public class SolicitacaoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withPorte(rs.getString("porte"))
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .build();
+
                 solicitacoes.add(solicitacao);
             }
 
@@ -286,7 +329,16 @@ public class SolicitacaoDAO {
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
-                solicitacao = new Solicitacao(rs.getInt("ID_Solicitacao"), cliente, lavador, solicitacaoState, rs.getString("porte"), data, rs.getBigDecimal("valor_total"));
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withPorte(rs.getString("porte"))
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .build();
+
                 solicitacoes.add(solicitacao);
             }
         } catch (SQLException e) {

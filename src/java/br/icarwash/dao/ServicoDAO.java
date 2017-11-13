@@ -6,8 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import br.icarwash.model.Servico;
+import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
 import br.icarwash.util.Conexao;
+import java.math.BigDecimal;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ServicoDAO {
@@ -30,28 +33,43 @@ public class ServicoDAO {
         fechaConexao = true;
     }
 
-    public void cadastrar(Servico servico) {
+    public int cadastrar(Servico servico) {
+        int idServico = 0;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(INSERT);
+            PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, servico.getNome());
             pstmt.setString(2, servico.getDescricao());
             pstmt.setBigDecimal(3, servico.getValor());
             pstmt.setBoolean(4, servico.isAtivo());
 
             pstmt.execute();
+
+            final ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                idServico = rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
+        return idServico;
     }
 
     public ArrayList listar() {
         ArrayList<Servico> servicos = new ArrayList();
+        Servico servico;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Servico servico = new Servico(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"), rs.getBigDecimal("valor"), rs.getBoolean("ativo"));
+                servico = new ServicoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withNome(rs.getString("nome"))
+                        .withDescricao(rs.getString("descricao"))
+                        .withValor(rs.getBigDecimal("valor"))
+                        .withAtivo(rs.getBoolean("ativo"))
+                        .build();
                 servicos.add(servico);
             }
         } catch (SQLException e) {
@@ -68,7 +86,13 @@ public class ServicoDAO {
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                servico = new Servico(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"), rs.getBigDecimal("valor"), rs.getBoolean("ativo"));
+                servico = new ServicoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withNome(rs.getString("nome"))
+                        .withDescricao(rs.getString("descricao"))
+                        .withValor(rs.getBigDecimal("valor"))
+                        .withAtivo(rs.getBoolean("ativo"))
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -133,8 +157,7 @@ public class ServicoDAO {
     public ArrayList<ServicoProduto> selecionaProdutosPorIdServico(int idServico) {
 
         ArrayList<ServicoProduto> servicosProdutos = new ArrayList<>();
-        ServicoProduto servicoProduto;
-        Servico servico = new Servico(idServico);
+        Servico servico = new ServicoBuilder().withId(idServico).build();
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement("select s.`ID` as id_servico, p.`ID` as id_produto, s.nome as nome_servico, p.nome as nome_produto, s.descricao as descricao_servico, p.descricao as descricao_produto, s.valor as valor_servico, quantidade as quantidade_produtos from servico_produtos sp, servico s, produto p where sp.id_servico = s.id and sp.id_produto = p.id and s.id = ?");
@@ -148,7 +171,7 @@ public class ServicoDAO {
                         .withNome(rs.getString("nome_produto"))
                         .withDescricao(rs.getString("descricao_produto"))
                         .build();
-                
+
                 servicosProdutos.add(new ServicoProduto(servico, produto, rs.getInt("quantidade_produtos")));
             }
         } catch (SQLException e) {

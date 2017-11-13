@@ -55,8 +55,7 @@ public class Produto {
         }
     }
     
-    public Produto(int id) {
-        this.id = id;
+    public Produto() {
     }
 
     public int getId() {

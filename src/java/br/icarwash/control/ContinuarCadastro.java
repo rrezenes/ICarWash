@@ -1,9 +1,12 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
+import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Usuario;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
@@ -32,22 +35,30 @@ public class ContinuarCadastro extends HttpServlet {
             Calendar cal1 = Calendar.getInstance();
             cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]), Integer.parseInt(nascimento[0]));
 
-            Endereco endereco = new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco"));
-            
+            Endereco endereco = new EnderecoBuilder()
+                    .withCep(request.getParameter("cep"))
+                    .withEstado(request.getParameter("estado"))
+                    .withCidade(request.getParameter("cidade"))
+                    .withBairro(request.getParameter("bairro"))
+                    .withEndereco(request.getParameter("endereco"))
+                    .withNumero(Integer.parseInt(request.getParameter("numero")))
+                    .withNome(request.getParameter("nomeEndereco"))
+                    .build();
+
             Cliente cliente = new Cliente.ClienteBuilder()
                     .withIdUsuario(usuario.getId())
                     .withNome(request.getParameter("nome"))
                     .withTelefone(request.getParameter("telefone"))
                     .withDataNascimento(cal1)
                     .withCpf(request.getParameter("cpf"))
-                    .withEndereco(endereco)
                     .build();
+            
 
-            ClienteDAO clienteDAO = new ClienteDAO(conexao);
-            clienteDAO.cadastrar(cliente);
+            int idCliente = new ClienteDAO(conexao).cadastrar(cliente);
+            int idEndereco = new EnderecoDAO(conexao).cadastrar(endereco);
 
-            UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-            usuarioDAO.concluirCadastro(usuario.getId());
+            new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(idCliente, idEndereco);
+            new UsuarioDAO(conexao).concluirCadastro(usuario.getId());
 
             conexao.commit();
         } catch (SQLException e) {

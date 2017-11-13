@@ -149,20 +149,28 @@ public class Cadastrar implements ICommand {
             case "servico": {
 
                 String[] produtos = request.getParameterValues("produtos");
-                Servico servico = new Servico(request.getParameter("nome"), request.getParameter("descricao"), new BigDecimal(request.getParameter("valor")), true);
+
+                Servico servico = new Servico.ServicoBuilder()
+                        .withId(Integer.parseInt(request.getParameter("id")))
+                        .withNome(request.getParameter("nome"))
+                        .withDescricao(request.getParameter("descricao"))
+                        .withValor(new BigDecimal(request.getParameter("valor")))
+                        .withAtivo(true)
+                        .build();
+
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
 
                     ServicoDAO servicoDAO = new ServicoDAO(conexao);
-                    servicoDAO.cadastrar(servico);
-                    servico = servicoDAO.localizarIdUltimoInsert();
+
+                    int idServico = servicoDAO.cadastrar(servico);
 
                     ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 
                     for (String idProduto : produtos) {
                         int quantidade = Integer.parseInt(request.getParameter("quantidade" + idProduto));
-                        servicoProdutoDAO.cadastraServicoProduto(servico.getId(), Integer.parseInt(idProduto), quantidade);
+                        servicoProdutoDAO.cadastraServicoProduto(idServico, Integer.parseInt(idProduto), quantidade);
                     }
                     conexao.commit();
                 } catch (SQLException e) {

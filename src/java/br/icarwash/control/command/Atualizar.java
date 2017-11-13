@@ -12,12 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Cliente;
-import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Produto;
-import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.Servico;
+import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
@@ -92,7 +91,13 @@ public class Atualizar implements ICommand {
                     ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
                     ServicoDAO servicoDAO = new ServicoDAO(conexao);
 
-                    Servico servico = new Servico(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("descricao"), new BigDecimal(request.getParameter("valor")));
+                    Servico servico = new ServicoBuilder()
+                            .withId(Integer.parseInt(request.getParameter("id")))
+                            .withNome(request.getParameter("nome"))
+                            .withDescricao(request.getParameter("descricao"))
+                            .withValor(new BigDecimal(request.getParameter("valor")))
+                            .build();
+                    
                     servicoDAO.atualizar(servico);
 
                     ArrayList<ServicoProduto> servicoProdutos = servicoDAO.selecionaProdutosPorIdServico(servico.getId());
