@@ -1,6 +1,7 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.Produto;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,8 +50,14 @@ public class ProdutoDAO {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Produto produto = new Produto(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"), rs.getBoolean("ativo"));
-                produtos.add(produto);
+                ProdutoBuilder produtoBuilder = new Produto.ProdutoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withNome(rs.getString("nome"))
+                        .withDescricao(rs.getString("descricao"))
+                        .withAtivo(rs.getBoolean("ativo"));
+                
+                
+                produtos.add(produtoBuilder.build());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -66,7 +73,11 @@ public class ProdutoDAO {
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                produto = new Produto(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"), rs.getBoolean("ativo"));
+                ProdutoBuilder produtoBuilder = new Produto.ProdutoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withNome(rs.getString("nome"))
+                        .withDescricao(rs.getString("descricao"))
+                        .withAtivo(rs.getBoolean("ativo"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

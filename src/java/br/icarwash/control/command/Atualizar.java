@@ -15,6 +15,7 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Produto;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.Servico;
 import br.icarwash.model.ServicoProduto;
 import br.icarwash.util.Conexao;
@@ -62,8 +63,12 @@ public class Atualizar implements ICommand {
             }
             case "produto": {
                 ProdutoDAO produtoDAO = new ProdutoDAO();
-                Produto produto = new Produto(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("descricao"));
-                produtoDAO.atualizar(produto);
+                ProdutoBuilder produtoBuilder = new Produto.ProdutoBuilder()
+                        .withId(Integer.parseInt(request.getParameter("id")))
+                        .withNome(request.getParameter("nome"))
+                        .withDescricao(request.getParameter("descricao"));
+                
+                produtoDAO.atualizar(produtoBuilder.build());
 
                 return "Controle?action=Listar&listar=produto";
             }
