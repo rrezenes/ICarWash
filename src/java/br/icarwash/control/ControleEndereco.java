@@ -32,7 +32,17 @@ public class ControleEndereco extends HttpServlet {
     protected void alterarEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Endereco endereco = new Endereco(Integer.parseInt(request.getParameter("idEndereco")), request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco"));
+        Endereco endereco = new Endereco.EnderecoBuilder()
+                .withId(Integer.parseInt(request.getParameter("idEndereco")))
+                .withCep(request.getParameter("cep"))
+                .withEstado(request.getParameter("estado"))
+                .withCidade(request.getParameter("cidade"))
+                .withBairro(request.getParameter("bairro"))
+                .withEndereco(request.getParameter("endereco"))
+                .withNumero(Integer.parseInt(request.getParameter("numero")))
+                .withNome(request.getParameter("nomeEndereco"))
+                .build();
+
         new EnderecoDAO().atualizar(endereco);
 
         request.setAttribute("alterado", "ok");
@@ -42,8 +52,17 @@ public class ControleEndereco extends HttpServlet {
 
     protected void adicionarEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        Endereco endereco = new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco"));
+
+        Endereco endereco = new Endereco.EnderecoBuilder()
+                .withCep(request.getParameter("cep"))
+                .withEstado(request.getParameter("estado"))
+                .withCidade(request.getParameter("cidade"))
+                .withBairro(request.getParameter("bairro"))
+                .withEndereco(request.getParameter("endereco"))
+                .withNumero(Integer.parseInt(request.getParameter("numero")))
+                .withNome(request.getParameter("nomeEndereco"))
+                .build();
+
         new EnderecoDAO().cadastrar(endereco);
 
         request.setAttribute("alterado", "ok");

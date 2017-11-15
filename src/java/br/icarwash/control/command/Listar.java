@@ -8,6 +8,8 @@ import br.icarwash.dao.ServicoDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Endereco;
+import br.icarwash.model.Endereco.EnderecoBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -62,7 +64,9 @@ public class Listar implements ICommand {
                 ArrayList<Lavador> lavadores = lavadorDAO.listar();
                 
                 lavadores.forEach(lavador ->{
-                    lavador.setEndereco(new EnderecoDAO().localizarPorId(lavador.getEndereco().getId()));
+                    System.out.println(lavador.getId());
+                    Endereco endereco = new EnderecoDAO().localizarPorId(lavador.getEndereco().getId());
+                    lavador.setEndereco(new EnderecoBuilder().from(endereco).build());
                 });
 
                 try {

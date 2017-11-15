@@ -34,7 +34,7 @@
     </thead>
     <tbody>
         <c:forEach var="lavador" items="${lavadores}" varStatus="posicao">
-            <fmt:formatDate value="${lavador.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
+            <fmt:formatDate value="${lavador.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
             <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
             <tr>
                 <td>${usuarios.get(posicao.index).email}</td>

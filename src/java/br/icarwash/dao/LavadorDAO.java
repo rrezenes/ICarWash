@@ -19,13 +19,13 @@ public class LavadorDAO {
     private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into lavador(id_usuario, id_endereco, dt_contrato, nome, telefone, dt_nascimento, CPF) values(?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "select l.id, l.id_usuario, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, l.ocupado, u.ativo from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
+    private static final String SELECT_ALL = "select l.id, l.id_usuario, l.id_endereco, l.dt_contrato, u.email, l.nome, l.telefone, l.dt_nascimento, l.cpf, l.ocupado, u.ativo from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
     private static final String UPDATE = "update lavador set nome = ?, telefone = ?, dt_nascimento = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo=0 where id = ?;";
     private static final String OCUPAR_LAVADOR = "UPDATE lavador SET ocupado = true where id = ?;";
     private static final String DESOCUPAR_LAVADOR = "UPDATE lavador SET ocupado = false where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, id_endereco, dt_contrato, nome, telefone, dt_nascimento, CPF, ocupado from lavador where id = ?";
-    private static final String SELECT_BY_ID_USUARIO = "select l.id, l.id_usuario, l.dt_contrato, l.nome, l.telefone, l.dt_nascimento, l.CPF, l.ocupado, e.CEP, e.estado, e.cidade, e.bairro, e.endereco, e.numero from lavador l, endereco e, lavador_endereco le where le.id_lavador = l.id and le.id_endereco = e.id and id_usuario = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select l.id, l.id_usuario, l.dt_contrato, l.nome, l.telefone, l.dt_nascimento, l.CPF, l.ocupado, e.CEP, e.estado, e.cidade, e.bairro, e.endereco, e.numero from lavador l, endereco e where l.id_endereco = e.id and id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from lavador where cpf = ?";
     private static final String SELECT_QTD_LAVADORES = "select COUNT(*) as quantidade_lavadores from Lavador l, usuario u where u.id = l.id_usuario and u.ativo = 1";
 
@@ -77,6 +77,10 @@ public class LavadorDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 dataNascimento.setTimeInMillis(timestamp.getTime());
 
+                Endereco endereco = new EnderecoBuilder()
+                        .withId(rs.getInt("id"))
+                        .build();
+                
                 lavador = new LavadorBuilder()
                         .withId(rs.getInt("id"))
                         .withIdUsuario(rs.getInt("id_usuario"))
@@ -85,6 +89,7 @@ public class LavadorDAO {
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(dataNascimento)
                         .withCpf(rs.getString("cpf"))
+                        .withEndereco(endereco)
                         .build();
 
                 lavador.setOcupado(rs.getBoolean("ocupado"));

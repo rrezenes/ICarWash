@@ -22,7 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import br.icarwash.util.Conexao;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -35,6 +34,11 @@ public class SolicitacaoDAO {
 
     private boolean fechaConexao = false;
     private final Connection conexao;
+    
+    private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)";    
+    private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao, porte, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
+    private static final String SELECT_SOLICITACAO_BY_ID_CLIENTE = "SELECT * FROM solicitacao where id_cliente = ? order by solicitacao.data_solicitacao";
+    private static final String SELECT_SOLICITACAO_BY_ID_LAVADOR = "select ID as ID_Solicitacao, id_cliente, id_avaliacao, id_endereco, porte, data_solicitacao, valor_total, status from solicitacao where id_lavador = ? order by data_solicitacao";
     private static final String QTD_SOLICITACAO_BY_IDLAVADOR_AND_DATE = "select count(*) as quantidade FROM solicitacao where id_lavador = ? and status <> 'Cancelado' and data_solicitacao like ?";
     private static final String CHECK_LAVADORES_DISPONIVEIS = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado'";
 
@@ -51,7 +55,7 @@ public class SolicitacaoDAO {
         Timestamp timestamp = new Timestamp(solicitacao.getDataSolicitacao().getTimeInMillis());
         int idSolicitacao = 0;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setInt(1, solicitacao.getCliente().getId());
             pstmt.setInt(2, solicitacao.getEndereco().getId());
@@ -81,7 +85,7 @@ public class SolicitacaoDAO {
         SolicitacaoState solicitacaoState;
 
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT * FROM solicitacao where id_cliente = ? order by solicitacao.data_solicitacao");
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_SOLICITACAO_BY_ID_CLIENTE);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -133,13 +137,13 @@ public class SolicitacaoDAO {
         Avaliacao avaliacao;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("select ID as ID_Solicitacao, id_cliente, id_avaliacao, id_endereco, porte, data_solicitacao, valor_total, status from solicitacao where id_lavador = ? order by data_solicitacao");
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_SOLICITACAO_BY_ID_LAVADOR);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
 
                 endereco = new EnderecoBuilder()
-                        .withId(rs.getInt("id"))
+                        .withId(rs.getInt("id_endereco"))
                         .build();
 
                 cliente = new ClienteBuilder()
@@ -226,7 +230,7 @@ public class SolicitacaoDAO {
         Lavador lavador;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT ID, id_cliente, id_lavador, id_avaliacao, porte, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?");
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setInt(1, id);
 
             ResultSet rs = pstmt.executeQuery();

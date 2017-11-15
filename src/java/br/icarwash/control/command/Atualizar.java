@@ -36,14 +36,15 @@ public class Atualizar implements ICommand {
         switch (request.getParameter("quem")) {
             case "cliente": {
 
-                Calendar calendar = Calendar.getInstance();
+                Calendar calendarNascimento = Calendar.getInstance();
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
-                calendar.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
-
+                calendarNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+                
                 Cliente cliente = new Cliente.ClienteBuilder()
                         .withId(Integer.parseInt(request.getParameter("id")))
                         .withNome(request.getParameter("nome"))
                         .withTelefone(request.getParameter("telefone"))
+                        .withDataNascimento(calendarNascimento)
                         .build();
 
                 new ClienteDAO().atualizar(cliente);

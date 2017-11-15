@@ -151,7 +151,6 @@ public class Cadastrar implements ICommand {
                 String[] produtos = request.getParameterValues("produtos");
 
                 Servico servico = new Servico.ServicoBuilder()
-                        .withId(Integer.parseInt(request.getParameter("id")))
                         .withNome(request.getParameter("nome"))
                         .withDescricao(request.getParameter("descricao"))
                         .withValor(new BigDecimal(request.getParameter("valor")))

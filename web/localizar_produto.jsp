@@ -16,7 +16,7 @@
     <form id="FormValidate" action="Controle" method="post">
         <div class="form-group">
             <input type="hidden" name="quem" value="produto"/>
-            <input type="hidden" name="txtId" value="<%= produto.getId()%>"/>
+            <input type="hidden" name="id" value="<%= produto.getId()%>"/>
             <div class="input-field col s6">
                 <label>Nome</label> 
                 <input class="form-control erro-nome" type="text" name="nome" value="<%= produto.getNome()%>"><br>
@@ -32,7 +32,5 @@
 
 <script src="js/jquery.validate.js"></script>
 <script src="js/inicializar-validate.js"></script>
-<script src="js/validar-apenas-letras-numeros.js"></script>
-<script src="js/validar-apenas-letras.js"></script>
 
 <%@include file="rodape.jsp"%>

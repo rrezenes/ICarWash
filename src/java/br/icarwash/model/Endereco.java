@@ -15,6 +15,7 @@ public class Endereco {
     }
 
     public Endereco(EnderecoBuilder builder) {
+        this.id = builder.id;
         this.CEP = builder.CEP;
         this.estado = builder.estado;
         this.cidade = builder.cidade;

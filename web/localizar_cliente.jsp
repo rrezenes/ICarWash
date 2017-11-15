@@ -26,7 +26,7 @@
             </div>
             <div class="input-field col m3 s6">
                 <%--Formatar a data antes de exibir na tela--%>
-                <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />            
+                <fmt:formatDate value="${cliente.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />            
                 <label>Data de Nascimento</label> 
                 <input class="form-control erro-dataNascimento" type="text" name="dataNascimento" id="nascimento" value="${dataNascimento}"><br>
             </div>
