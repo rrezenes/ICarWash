@@ -47,8 +47,7 @@ public class LocalizarPorId implements ICommand {
                 return "localizar_lavador.jsp";
             }
             case "produto": {
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                Produto produto = produtoDAO.localizarPorId(Integer.parseInt(request.getParameter("id")));
+                Produto produto = new ProdutoDAO().localizarPorId(Integer.parseInt(request.getParameter("id")));
                 request.setAttribute("produto", produto);
                 return "localizar_produto.jsp";
             }

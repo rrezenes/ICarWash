@@ -6,7 +6,7 @@ public abstract class Pessoa {
 
     protected String nome;
     protected String telefone;
-    protected Calendar dtNascimento = Calendar.getInstance();
+    protected Calendar dataNascimento = Calendar.getInstance();
     protected String CPF;
     protected Endereco endereco;
 
@@ -37,8 +37,8 @@ public abstract class Pessoa {
             return thisObject;
         }
 
-        public builder withdtNascimento(Calendar dtNascimento) {
-            object.dtNascimento = dtNascimento;
+        public builder withDataNascimento(Calendar dtNascimento) {
+            object.dataNascimento = dtNascimento;
             return thisObject;
         }
 
@@ -57,12 +57,12 @@ public abstract class Pessoa {
         }
     }
 
-    public Calendar getDtNascimento() {
-        return dtNascimento;
+    public Calendar getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setDtNascimento(Calendar dtNascimento) {
-        this.dtNascimento = dtNascimento;
+    public void setDataNascimento(Calendar dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getNome() {
@@ -95,14 +95,6 @@ public abstract class Pessoa {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
-    }
-
-    public Calendar getDataNascimento() {
-        return dtNascimento;
-    }
-
-    public void setDataNascimento(Calendar dt) {
-        this.dtNascimento = dt;
     }
 
 }

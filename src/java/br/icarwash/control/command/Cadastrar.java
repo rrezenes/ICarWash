@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.*;
 import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.Endereco.EnderecoBuilder;
+import br.icarwash.model.Lavador.LavadorBuilder;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -22,19 +25,29 @@ public class Cadastrar implements ICommand {
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String cadastrar = request.getParameter("quem");
-        Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+        Calendar dataNascimento = Calendar.getInstance(), dataContrato = Calendar.getInstance();
 
         switch (cadastrar) {
             case "cliente": {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
-                cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+                dataNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+
+                Endereco endereco = new EnderecoBuilder()
+                        .withCep(request.getParameter("cep"))
+                        .withEstado(request.getParameter("estado"))
+                        .withCidade(request.getParameter("cidade"))
+                        .withBairro(request.getParameter("bairro"))
+                        .withEndereco(request.getParameter("endereco"))
+                        .withNumero(Integer.parseInt(request.getParameter("numero")))
+                        .withNome(request.getParameter("nomeEndereco"))
+                        .build();
 
                 Cliente cliente = new ClienteBuilder()
                         .withNome(request.getParameter("nome"))
                         .withTelefone(request.getParameter("telefone"))
-                        .withdtNascimento(cal1)
+                        .withDataNascimento(dataNascimento)
                         .withCpf(request.getParameter("cpf"))
-                        .withEndereco(new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), request.getParameter("nomeEndereco")))
+                        .withEndereco(endereco)
                         .build();
 
                 Connection conexao = Conexao.getConexao();
@@ -72,21 +85,35 @@ public class Cadastrar implements ICommand {
 
             case "lavador": {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
-                cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
-                Lavador lavador = new Lavador(cal2, request.getParameter("nome"), request.getParameter("telefone"), cal1, request.getParameter("cpf"), new Endereco(request.getParameter("cep"), request.getParameter("estado"), request.getParameter("cidade"), request.getParameter("bairro"), request.getParameter("endereco"), Integer.parseInt(request.getParameter("numero")), "Casa"));
+                dataNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
 
-                    lavador.setIdUsuario(criaUsuario(request, conexao, 2));
+                    Endereco endereco = new EnderecoBuilder()
+                            .withCep(request.getParameter("cep"))
+                            .withEstado(request.getParameter("estado"))
+                            .withCidade(request.getParameter("cidade"))
+                            .withBairro(request.getParameter("bairro"))
+                            .withEndereco(request.getParameter("endereco"))
+                            .withNumero(Integer.parseInt(request.getParameter("numero")))
+                            .withNome("Residencia")
+                            .build();
 
-                    LavadorDAO lavadorDAO = new LavadorDAO(conexao);
-                    EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+                    endereco.setId(new EnderecoDAO(conexao).cadastrar(endereco));
 
-                    lavador.setEndereco(new Endereco(enderecoDAO.cadastrar(lavador.getEndereco())));
+                    Lavador lavador = new LavadorBuilder()
+                            .withIdUsuario(criaUsuario(request, conexao, 2))
+                            .withDataContrato(dataContrato)
+                            .withNome(request.getParameter("nome"))
+                            .withTelefone(request.getParameter("telefone"))
+                            .withDataNascimento(dataNascimento)
+                            .withCpf(request.getParameter("cpf"))
+                            .withEndereco(endereco)
+                            .build();
 
-                    lavadorDAO.cadastrar(lavador);
+                    new LavadorDAO(conexao).cadastrar(lavador);
 
                     conexao.commit();
                 } catch (SQLException e) {
@@ -107,9 +134,14 @@ public class Cadastrar implements ICommand {
                 return "Controle?action=Listar&listar=lavador";
             }
             case "produto": {
-                Produto produto = new Produto(request.getParameter("nome"), request.getParameter("descricao"), true);
+
+                ProdutoBuilder produtoBuilder = new ProdutoBuilder()
+                        .withNome(request.getParameter("nome"))
+                        .withDescricao(request.getParameter("descricao"))
+                        .withAtivo(true);
+
                 ProdutoDAO produtoDAO = new ProdutoDAO();
-                produtoDAO.cadastrar(produto);
+                produtoDAO.cadastrar(produtoBuilder.build());
 
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=Listar&listar=produto";
@@ -117,20 +149,27 @@ public class Cadastrar implements ICommand {
             case "servico": {
 
                 String[] produtos = request.getParameterValues("produtos");
-                Servico servico = new Servico(request.getParameter("nome"), request.getParameter("descricao"), new BigDecimal(request.getParameter("valor")), true);
+
+                Servico servico = new Servico.ServicoBuilder()
+                        .withNome(request.getParameter("nome"))
+                        .withDescricao(request.getParameter("descricao"))
+                        .withValor(new BigDecimal(request.getParameter("valor")))
+                        .withAtivo(true)
+                        .build();
+
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
 
                     ServicoDAO servicoDAO = new ServicoDAO(conexao);
-                    servicoDAO.cadastrar(servico);
-                    servico = servicoDAO.localizarIdUltimoInsert();
+
+                    int idServico = servicoDAO.cadastrar(servico);
 
                     ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 
                     for (String idProduto : produtos) {
                         int quantidade = Integer.parseInt(request.getParameter("quantidade" + idProduto));
-                        servicoProdutoDAO.cadastraServicoProduto(servico.getId(), Integer.parseInt(idProduto), quantidade);
+                        servicoProdutoDAO.cadastraServicoProduto(idServico, Integer.parseInt(idProduto), quantidade);
                     }
                     conexao.commit();
                 } catch (SQLException e) {

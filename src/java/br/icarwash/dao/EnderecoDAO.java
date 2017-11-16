@@ -1,6 +1,7 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,7 +65,16 @@ public class EnderecoDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome"));
+                Endereco endereco = new EnderecoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withCep(rs.getString("cep"))
+                        .withEstado(rs.getString("estado"))
+                        .withCidade(rs.getString("cidade"))
+                        .withBairro(rs.getString("bairro"))
+                        .withEndereco(rs.getString("endereco"))
+                        .withNumero(rs.getInt("numero"))
+                        .withNome(rs.getString("nome"))
+                        .build();
 
                 enderecos.add(endereco);
             }
@@ -82,7 +92,16 @@ public class EnderecoDAO {
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome"));
+                endereco = new EnderecoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withCep(rs.getString("cep"))
+                        .withEstado(rs.getString("estado"))
+                        .withCidade(rs.getString("cidade"))
+                        .withBairro(rs.getString("bairro"))
+                        .withEndereco(rs.getString("endereco"))
+                        .withNumero(rs.getInt("numero"))
+                        .withNome(rs.getString("nome"))
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

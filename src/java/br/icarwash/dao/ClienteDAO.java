@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Endereco.EnderecoBuilder;
 import java.sql.Statement;
 
 public class ClienteDAO {
@@ -78,7 +79,7 @@ public class ClienteDAO {
                         .withIdUsuario(rs.getInt("id_usuario"))
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
-                        .withdtNascimento(cal)
+                        .withDataNascimento(cal)
                         .withCpf(rs.getString("cpf"))
                         .build();
 
@@ -107,7 +108,7 @@ public class ClienteDAO {
                         .withIdUsuario(rs.getInt("id_usuario"))
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
-                        .withdtNascimento(cal)
+                        .withDataNascimento(cal)
                         .withCpf(rs.getString("cpf"))
                         .build();
             }
@@ -170,15 +171,23 @@ public class ClienteDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                
-                Endereco endereco = new Endereco(rs.getString("cep"), rs.getString("estado"), rs.getString("cidade"), rs.getString("bairro"), rs.getString("endereco"), rs.getInt("numero"), rs.getString("nome"));
-                
+
+                Endereco endereco = new EnderecoBuilder()
+                        .withCep(rs.getString("cep"))
+                        .withEstado(rs.getString("estado"))
+                        .withCidade(rs.getString("cidade"))
+                        .withBairro(rs.getString("bairro"))
+                        .withEndereco(rs.getString("endereco"))
+                        .withNumero(rs.getInt("numero"))
+                        .withNome(rs.getString("nome"))
+                        .build();
+
                 cliente = new Cliente.ClienteBuilder()
                         .withId(rs.getInt("id"))
                         .withIdUsuario(rs.getInt("id_usuario"))
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
-                        .withdtNascimento(cal)
+                        .withDataNascimento(cal)
                         .withCpf(rs.getString("cpf"))
                         .withEndereco(endereco)
                         .build();

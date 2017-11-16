@@ -73,11 +73,12 @@ public class ProdutoDAO {
             pstmt.setString(1, Integer.toString(id));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                ProdutoBuilder produtoBuilder = new Produto.ProdutoBuilder()
+                produto = new Produto.ProdutoBuilder()
                         .withId(rs.getInt("id"))
                         .withNome(rs.getString("nome"))
                         .withDescricao(rs.getString("descricao"))
-                        .withAtivo(rs.getBoolean("ativo"));
+                        .withAtivo(rs.getBoolean("ativo"))
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

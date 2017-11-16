@@ -32,7 +32,7 @@
     </thead>
     <tbody>  
         <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
-            <fmt:formatDate value="${cliente.dtNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
+            <fmt:formatDate value="${cliente.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
             <tr>
                 <td>${usuarios.get(posicao.index).email}</td>
                 <td>${cliente.nome}</td>

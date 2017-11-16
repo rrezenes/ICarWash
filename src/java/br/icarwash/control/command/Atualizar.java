@@ -12,11 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Cliente;
-import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Produto;
-import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.Servico;
+import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
@@ -36,39 +36,48 @@ public class Atualizar implements ICommand {
         switch (request.getParameter("quem")) {
             case "cliente": {
 
-                Calendar calendar = Calendar.getInstance();
+                Calendar calendarNascimento = Calendar.getInstance();
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
-                calendar.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+                calendarNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+                
+                Cliente cliente = new Cliente.ClienteBuilder()
+                        .withId(Integer.parseInt(request.getParameter("id")))
+                        .withNome(request.getParameter("nome"))
+                        .withTelefone(request.getParameter("telefone"))
+                        .withDataNascimento(calendarNascimento)
+                        .build();
 
-                ClienteDAO dao = new ClienteDAO();
-                Cliente cli = new Cliente(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("telefone"), calendar, new Endereco());
-                dao.atualizar(cli);
+                new ClienteDAO().atualizar(cliente);
 
                 return "Controle?action=Listar&listar=cliente";
             }
             case "lavador": {
 
-                Calendar cal1, cal2 = Calendar.getInstance();
-                cal1 = (Calendar) request.getAttribute("DtAdmissao");
-                
+                Calendar nascimentoLavador = Calendar.getInstance();
+
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
-                cal2.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
+                nascimentoLavador.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                LavadorDAO lavadorDAO = new LavadorDAO();
-                Lavador lavador = new Lavador(Integer.parseInt(request.getParameter("id")), cal1, request.getParameter("nome"), request.getParameter("telefone"), cal2, request.getParameter("cpf"), new Endereco());
+                Lavador lavador = new LavadorBuilder()
+                        .withId(Integer.parseInt(request.getParameter("id")))
+                        .withNome(request.getParameter("nome"))
+                        .withTelefone(request.getParameter("telefone"))
+                        .withDataNascimento(nascimentoLavador)
+                        .withCpf(request.getParameter("cpf"))
+                        .build();
 
-                lavadorDAO.atualizar(lavador);
+                new LavadorDAO().atualizar(lavador);
 
                 return "Controle?action=Listar&listar=lavador";
             }
             case "produto": {
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                ProdutoBuilder produtoBuilder = new Produto.ProdutoBuilder()
+                Produto produto = new Produto.ProdutoBuilder()
                         .withId(Integer.parseInt(request.getParameter("id")))
                         .withNome(request.getParameter("nome"))
-                        .withDescricao(request.getParameter("descricao"));
-                
-                produtoDAO.atualizar(produtoBuilder.build());
+                        .withDescricao(request.getParameter("descricao"))
+                        .build();
+
+                new ProdutoDAO().atualizar(produto);
 
                 return "Controle?action=Listar&listar=produto";
             }
@@ -83,7 +92,13 @@ public class Atualizar implements ICommand {
                     ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
                     ServicoDAO servicoDAO = new ServicoDAO(conexao);
 
-                    Servico servico = new Servico(Integer.parseInt(request.getParameter("id")), request.getParameter("nome"), request.getParameter("descricao"), new BigDecimal(request.getParameter("valor")));
+                    Servico servico = new ServicoBuilder()
+                            .withId(Integer.parseInt(request.getParameter("id")))
+                            .withNome(request.getParameter("nome"))
+                            .withDescricao(request.getParameter("descricao"))
+                            .withValor(new BigDecimal(request.getParameter("valor")))
+                            .build();
+                    
                     servicoDAO.atualizar(servico);
 
                     ArrayList<ServicoProduto> servicoProdutos = servicoDAO.selecionaProdutosPorIdServico(servico.getId());

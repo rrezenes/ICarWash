@@ -2,45 +2,64 @@ package br.icarwash.model;
 
 import java.util.Calendar;
 
-public class Lavador extends Pessoa {
+public final class Lavador extends Pessoa {
 
     private int id;
     private Calendar dataContrato = Calendar.getInstance();
     private int idUsuario;
     private boolean ocupado = false;
 
-    public Lavador(int id, String nome, String telefone, Calendar dtNascimento, Endereco endereco) {
-        super(nome, telefone, dtNascimento, endereco);
-        this.id = id;
+    protected Lavador() {
     }
 
-    public Lavador(int id, Calendar dtContrato, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(nome, telefone, dtNascimento, CPF, endereco);
-        this.id = id;
-        this.dataContrato = dtContrato;
-    }
+    public static final class LavadorBuilder extends Pessoa.PessoaBuilder<Lavador, LavadorBuilder> {
 
-    public Lavador(int id, int idUsuario, Calendar dtContrato, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(nome, telefone, dtNascimento, CPF, endereco);
-        this.id = id;
-        this.idUsuario = idUsuario;
-        this.dataContrato = dtContrato;
-    }
+        private int id;
+        private int idUsuario;
+        private Calendar dataContrato = Calendar.getInstance();
+        private boolean ocupado = false;
 
-    public Lavador(int id, int idUsuario, Calendar dtContrato, String nome, String telefone, Calendar dtNascimento, String CPF) {
-        super(nome, telefone, dtNascimento, CPF);
-        this.id = id;
-        this.idUsuario = idUsuario;
-        this.dataContrato = dtContrato;
-    }
+        public LavadorBuilder() {
+        }
 
-    public Lavador(Calendar dtContrato, String nome, String telefone, Calendar dtNascimento, String CPF, Endereco endereco) {
-        super(nome, telefone, dtNascimento, CPF, endereco);
-        this.dataContrato = dtContrato;
-    }
+        public LavadorBuilder from(Lavador lavador) {
+            this.id = lavador.id;
+            this.idUsuario = lavador.idUsuario;
+            this.dataContrato = lavador.dataContrato;
+            this.ocupado = lavador.ocupado;
+            return this;
+        }
 
-    public Lavador(int id) {
-        this.id = id;
+        public LavadorBuilder withId(int id){
+            object.id = id;
+            return this;
+        }
+        
+        public LavadorBuilder withIdUsuario(int idUsuario){
+            object.idUsuario = idUsuario;
+            return this;
+        }
+        
+        public LavadorBuilder withDataContrato(Calendar dataContrato){
+            object.dataContrato = dataContrato;
+            return this;
+        }
+        
+        public LavadorBuilder withOcupado(boolean ocupado){
+            object.ocupado = ocupado;
+            return  this;
+        }
+        
+        @Override
+        protected Lavador getObject() {
+            return new Lavador();
+        }
+
+        @Override
+        protected LavadorBuilder thisObject() {
+            return this;
+        }
+
     }
 
     public int getId() {

@@ -35,62 +35,95 @@ public class Solicitacao {
     private Calendar dataSolicitacao;
     private BigDecimal valorTotal;
 
-    public Solicitacao(int id) {
-        this.id = id;
-        this.estado = new EmAnalise();
-    }
-
-    public Solicitacao(int id, Cliente cliente, Lavador lavador, Avaliacao avaliacao, Endereco endereco, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
-        this.id = id;
-        this.cliente = cliente;
-        this.lavador = lavador;
-        this.avaliacao = avaliacao;
-        this.endereco = endereco;
-        this.estado = estado;
-        this.porte = porte;
-        this.dataSolicitacao = data_solicitacao;
-        this.valorTotal = valorTotal;
-    }
-
-    public Solicitacao(int id, Cliente cliente, Lavador lavador, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
-        this.id = id;
-        this.cliente = cliente;
-        this.lavador = lavador;
-        this.estado = estado;
-        this.porte = porte;
-        this.dataSolicitacao = data_solicitacao;
-        this.valorTotal = valorTotal;
-    }
-
-    public Solicitacao(int id, Cliente cliente, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
-        this.id = id;
-        this.cliente = cliente;
-        this.estado = estado;
-        this.porte = porte;
-        this.dataSolicitacao = data_solicitacao;
-        this.valorTotal = valorTotal;
-    }
-
-    public Solicitacao(int id, Cliente cliente, Avaliacao avaliacao, SolicitacaoState estado, String porte, Calendar data_solicitacao, BigDecimal valorTotal) {
-        this.id = id;
-        this.cliente = cliente;
-        this.avaliacao = avaliacao;
-        this.estado = estado;
-        this.porte = porte;
-        this.dataSolicitacao = data_solicitacao;
-        this.valorTotal = valorTotal;
-    }
-
-    public Solicitacao(Cliente cliente, String porte, Calendar dataSolicitacao, BigDecimal valorTotal, Endereco endereco) {
-        this.cliente = cliente;
-        this.porte = porte;
-        this.estado = new EmAnalise();
-        this.dataSolicitacao = dataSolicitacao;
-        this.valorTotal = valorTotal;
-        this.endereco = endereco;
-    }
-
     public Solicitacao() {
+    }
+
+    public Solicitacao(SolicitacaoBuilder builder) {
+        this.id = builder.id;
+        this.cliente = builder.cliente;
+        this.lavador = builder.lavador;
+        this.avaliacao = builder.avaliacao;
+        this.endereco = builder.endereco;
+        this.estado = builder.estado;
+        this.porte = builder.porte;
+        this.dataSolicitacao = builder.dataSolicitacao;
+        this.valorTotal = builder.valorTotal;
+    }
+
+    public static class SolicitacaoBuilder {
+
+        private int id;
+        private Cliente cliente;
+        private Lavador lavador;
+        private Avaliacao avaliacao;
+        private Endereco endereco;
+        protected SolicitacaoState estado;
+        private String porte;
+        private Calendar dataSolicitacao;
+        private BigDecimal valorTotal;
+
+        public SolicitacaoBuilder from(Solicitacao solicitacao) {
+            this.id = solicitacao.id;
+            this.cliente = solicitacao.cliente;
+            this.lavador = solicitacao.lavador;
+            this.avaliacao = solicitacao.avaliacao;
+            this.endereco = solicitacao.endereco;
+            this.estado = solicitacao.estado;
+            this.porte = solicitacao.porte;
+            this.dataSolicitacao = solicitacao.dataSolicitacao;
+            this.valorTotal = solicitacao.valorTotal;
+
+            return this;
+        }
+
+        public SolicitacaoBuilder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public SolicitacaoBuilder withCliente(Cliente cliente) {
+            this.cliente = cliente;
+            return this;
+        }
+
+        public SolicitacaoBuilder withLavador(Lavador lavador) {
+            this.lavador = lavador;
+            return this;
+        }
+
+        public SolicitacaoBuilder withAvaliacao(Avaliacao avaliacao) {
+            this.avaliacao = avaliacao;
+            return this;
+        }
+
+        public SolicitacaoBuilder withEndereco(Endereco endereco) {
+            this.endereco = endereco;
+            return this;
+        }
+
+        public SolicitacaoBuilder withSolicitacaoState(SolicitacaoState estado) {
+            this.estado = estado;
+            return this;
+        }
+
+        public SolicitacaoBuilder withPorte(String porte) {
+            this.porte = porte;
+            return this;
+        }
+
+        public SolicitacaoBuilder withDataSolicitacao(Calendar dataSolicitacao) {
+            this.dataSolicitacao = dataSolicitacao;
+            return this;
+        }
+
+        public SolicitacaoBuilder withValorTotal(BigDecimal valorTotal) {
+            this.valorTotal = valorTotal;
+            return this;
+        }
+
+        public Solicitacao build() {
+            return new Solicitacao(this);
+        }
     }
 
     public int getId() {
@@ -202,7 +235,7 @@ public class Solicitacao {
 
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
             LavadorDAO lavadorDAO = new LavadorDAO(conexao);
-            
+
             ArrayList<Lavador> lavadoresDisponiveis = solicitacaoDAO.lavadoresDisponives(lavadorDAO.listar(), this.dataSolicitacao);
 
             lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, solicitacaoDAO);
@@ -263,7 +296,7 @@ public class Solicitacao {
 
         List<Integer> quantidadeDeSolicitacoes = new LinkedList<>(mapaDecrescente.values());
         ArrayList<Lavador> lavadoresParaRemover = new ArrayList<>();
-        
+
         int valorMaisAlto = 0;
         int count = 0;
         if ((quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < new LavadorDAO().quantidadeLavadores()) && lavadoresNaoPossuemMesmaQuantidade(quantidadeDeSolicitacoes)) {

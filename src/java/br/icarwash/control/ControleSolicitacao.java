@@ -1,7 +1,11 @@
 package br.icarwash.control;
 
+import br.icarwash.control.state.EmAnalise;
+import br.icarwash.control.state.SolicitacaoState;
 import br.icarwash.dao.*;
 import br.icarwash.model.*;
+import br.icarwash.model.Endereco.EnderecoBuilder;
+import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,20 +50,26 @@ public class ControleSolicitacao extends HttpServlet {
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dataSolicitacao + " " + request.getParameter("selectHora")));
 
             int idEndereco = Integer.parseInt(request.getParameter("endereco"));
-            
+
             Servico servico;
             ServicoDAO servicoDAO = new ServicoDAO(conexao);
 
-            Solicitacao solicitacao = new Solicitacao(cliente, porteVeiculo, dataHoraSolicitacao, somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO), new Endereco(idEndereco));
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
-            solicitacaoDAO.cadastrar(solicitacao);
-            solicitacao = solicitacaoDAO.selecionaUltimoIdSolicitacao();
+            Solicitacao solicitacao = new SolicitacaoBuilder()
+                    .withCliente(cliente)
+                    .withSolicitacaoState(new EmAnalise())
+                    .withPorte(porteVeiculo)
+                    .withDataSolicitacao(dataHoraSolicitacao)
+                    .withValorTotal(somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO))
+                    .withEndereco(new EnderecoBuilder().withId(idEndereco).build())
+                    .build();
+
+            int idSolicitacao = new SolicitacaoDAO(conexao).cadastrar(solicitacao);
 
             SolicitacaoServicoDAO solicitacaoServicoDAO = new SolicitacaoServicoDAO(conexao);
 
             for (String idServico : IdServicosSolicitados) {
                 servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
-                solicitacaoServicoDAO.cadastraSolicitacaoServico(solicitacao, servico);
+                solicitacaoServicoDAO.cadastraSolicitacaoServico(idSolicitacao, servico);
             }
 
             conexao.commit();

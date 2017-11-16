@@ -31,8 +31,8 @@
                 <tr>
                     <td>#${solicitacao.id}</td>
                     <td>${solicitacao.cliente.nome}</td>
-                    <td>${solicitacao.cliente.endereco.cidade}</td>
-                    <td>${solicitacao.cliente.endereco.bairro}</td>
+                    <td>${solicitacao.endereco.cidade}</td>
+                    <td>${solicitacao.endereco.bairro}</td>
                     <td>${solicitacao.porte}</td>            
                     <td>${dataSolicitacao}</td>
                     <td>${solicitacao.valorTotal.doubleValue()}</td>
