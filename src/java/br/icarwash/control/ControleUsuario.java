@@ -1,12 +1,14 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Usuario;
+import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
@@ -30,7 +32,14 @@ public class ControleUsuario extends HttpServlet {
         if (usuario.getNivel() == 1) {
             Cliente cliente = new ClienteDAO().localizarPorIdUsuario(usuario.getId());
 
-            ArrayList<Endereco> enderecos = new EnderecoDAO().listarEnderecosCliente(cliente.getId());
+            ArrayList<Integer> idsEnderecosCliente = new ClienteEnderecoDAO(Conexao.getConexao()).selecionaEnderecosCliente(cliente.getId());
+            EnderecoDAO enderecoDAO = new EnderecoDAO();
+            ArrayList<Endereco> enderecos = null;
+            
+            idsEnderecosCliente.forEach(id ->{
+                enderecos.add(enderecoDAO.localizarPorId(id));
+            });
+            
 
             request.setAttribute("enderecos", enderecos);
             request.setAttribute("cliente", cliente);

@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import br.icarwash.model.Endereco;
-import br.icarwash.model.Endereco.EnderecoBuilder;
 import java.sql.Statement;
 
 public class ClienteDAO {
@@ -22,7 +20,7 @@ public class ClienteDAO {
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf from cliente where id = ?";
-    private static final String SELECT_BY_ID_USUARIO = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero from cliente c, endereco e, cliente_endereco ce where ce.id_cliente = c.id and ce.id_endereco = e.id and id_usuario = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select * from cliente where id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
 
     public ClienteDAO(Connection conexao) {
@@ -172,16 +170,6 @@ public class ClienteDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
 
-                Endereco endereco = new EnderecoBuilder()
-                        .withCep(rs.getString("cep"))
-                        .withEstado(rs.getString("estado"))
-                        .withCidade(rs.getString("cidade"))
-                        .withBairro(rs.getString("bairro"))
-                        .withEndereco(rs.getString("endereco"))
-                        .withNumero(rs.getInt("numero"))
-                        .withNome(rs.getString("nome"))
-                        .build();
-
                 cliente = new Cliente.ClienteBuilder()
                         .withId(rs.getInt("id"))
                         .withIdUsuario(rs.getInt("id_usuario"))
@@ -189,7 +177,6 @@ public class ClienteDAO {
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
                         .withCpf(rs.getString("cpf"))
-                        .withEndereco(endereco)
                         .build();
             }
         } catch (SQLException e) {
