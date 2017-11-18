@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Excluir implements ICommand {
+public class DesativaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,22 +19,22 @@ public class Excluir implements ICommand {
             case "cliente": {
                 ClienteDAO clienteDAO = new ClienteDAO();
                 clienteDAO.excluir(Integer.parseInt(request.getParameter("id")));
-                return "/Controle?action=Listar&listar=cliente";
+                return "/Controle?action=ListaCommand&listar=cliente";
             }
             case "lavador": {
                 LavadorDAO lavadorDAO = new LavadorDAO();
                 lavadorDAO.excluir(Integer.parseInt(request.getParameter("id")));
-                return "/Controle?action=Listar&listar=lavador";
+                return "/Controle?action=ListaCommand&listar=lavador";
             }
             case "produto": {
                 ProdutoDAO produtoDAO = new ProdutoDAO();
                 produtoDAO.excluir(Integer.parseInt(request.getParameter("id")));
-                return "/Controle?action=Listar&listar=produto";
+                return "/Controle?action=ListaCommand&listar=produto";
             }
             case "servico": {
                 ServicoDAO servicoDAO = new ServicoDAO();
                 servicoDAO.excluir(Integer.parseInt(request.getParameter("id")));
-                return "/Controle?action=Listar&listar=servico";
+                return "/Controle?action=ListaCommand&listar=servico";
             }
             default:
                 return "painel_admin.jsp";

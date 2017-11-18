@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Atualizar implements ICommand {
+public class AtualizaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,7 +49,7 @@ public class Atualizar implements ICommand {
 
                 new ClienteDAO().atualizar(cliente);
 
-                return "Controle?action=Listar&listar=cliente";
+                return "Controle?action=ListaCommand&listar=cliente";
             }
             case "lavador": {
 
@@ -68,7 +68,7 @@ public class Atualizar implements ICommand {
 
                 new LavadorDAO().atualizar(lavador);
 
-                return "Controle?action=Listar&listar=lavador";
+                return "Controle?action=ListaCommand&listar=lavador";
             }
             case "produto": {
                 Produto produto = new Produto.ProdutoBuilder()
@@ -79,7 +79,7 @@ public class Atualizar implements ICommand {
 
                 new ProdutoDAO().atualizar(produto);
 
-                return "Controle?action=Listar&listar=produto";
+                return "Controle?action=ListaCommand&listar=produto";
             }
             case "servico": {
                 Connection conexao = Conexao.getConexao();
@@ -146,7 +146,7 @@ public class Atualizar implements ICommand {
                     }
                 }
 
-                return "Controle?action=Listar&listar=servico";
+                return "Controle?action=ListaCommand&listar=servico";
             }
 
             default:
