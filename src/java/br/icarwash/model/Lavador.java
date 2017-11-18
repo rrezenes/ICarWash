@@ -6,7 +6,7 @@ public final class Lavador extends Pessoa {
 
     private int id;
     private Calendar dataContrato = Calendar.getInstance();
-    private int idUsuario;
+    private Usuario usuario;
     private boolean ocupado = false;
 
     protected Lavador() {
@@ -15,7 +15,7 @@ public final class Lavador extends Pessoa {
     public static final class LavadorBuilder extends Pessoa.PessoaBuilder<Lavador, LavadorBuilder> {
 
         private int id;
-        private int idUsuario;
+        private Usuario usuario;
         private Calendar dataContrato = Calendar.getInstance();
         private boolean ocupado = false;
 
@@ -24,7 +24,7 @@ public final class Lavador extends Pessoa {
 
         public LavadorBuilder from(Lavador lavador) {
             this.id = lavador.id;
-            this.idUsuario = lavador.idUsuario;
+            this.usuario = lavador.usuario;
             this.dataContrato = lavador.dataContrato;
             this.ocupado = lavador.ocupado;
             return this;
@@ -35,8 +35,8 @@ public final class Lavador extends Pessoa {
             return this;
         }
         
-        public LavadorBuilder withIdUsuario(int idUsuario){
-            object.idUsuario = idUsuario;
+        public LavadorBuilder withUsuario(Usuario usuario){
+            object.usuario = usuario;
             return this;
         }
         
@@ -78,12 +78,12 @@ public final class Lavador extends Pessoa {
         this.dataContrato = dataContrato;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public boolean isOcupado() {

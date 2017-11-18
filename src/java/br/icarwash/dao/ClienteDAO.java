@@ -1,6 +1,9 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.Usuario;
+import br.icarwash.model.Usuario.UsuarioBuilder;
 import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +40,7 @@ public class ClienteDAO {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, cliente.getIdUsuario());
+            pstmt.setInt(1, cliente.getUsuario().getId());
             pstmt.setString(2, cliente.getNome());
             pstmt.setString(3, cliente.getTelefone());
             pstmt.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
@@ -72,9 +75,9 @@ public class ClienteDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
 
-                cliente = new Cliente.ClienteBuilder()
+                cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withUsuario(new UsuarioBuilder().withId(rs.getInt("id_usuario")).build())
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
@@ -92,6 +95,7 @@ public class ClienteDAO {
 
     public Cliente localizarPorId(int id) {
         Cliente cliente = null;
+        Usuario usuario;
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
@@ -101,9 +105,14 @@ public class ClienteDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cliente = new Cliente.ClienteBuilder()
+
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id_usuario"))
+                        .build();
+
+                cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withUsuario(usuario)
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
@@ -160,6 +169,7 @@ public class ClienteDAO {
 
     public Cliente localizarPorIdUsuario(int idUsuario) {
         Cliente cliente = null;
+        Usuario usuario;
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
@@ -170,9 +180,13 @@ public class ClienteDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
 
-                cliente = new Cliente.ClienteBuilder()
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id_usuario"))
+                        .build();
+
+                cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withUsuario(usuario)
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)

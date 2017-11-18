@@ -3,7 +3,7 @@ package br.icarwash.model;
 public final class Cliente extends Pessoa {
 
     private int id;
-    private int idUsuario;
+    private Usuario usuario;
 
     protected Cliente() {
     }
@@ -11,14 +11,14 @@ public final class Cliente extends Pessoa {
     public static final class ClienteBuilder extends Pessoa.PessoaBuilder<Cliente, ClienteBuilder> {
 
         private int id;
-        private int idUsuario;
+        private Usuario usuario;
 
         public ClienteBuilder() {
         }
 
         public ClienteBuilder from(Cliente cliente) {
             this.id = cliente.id;
-            this.idUsuario = cliente.idUsuario;
+            this.usuario = cliente.usuario;
             return this;
         }
 
@@ -27,8 +27,8 @@ public final class Cliente extends Pessoa {
             return this;
         }
 
-        public ClienteBuilder withIdUsuario(int idUsuario) {
-            object.idUsuario = idUsuario;
+        public ClienteBuilder withUsuario(Usuario usuario) {
+            object.usuario = usuario;
             return this;
         }
 
@@ -51,12 +51,12 @@ public final class Cliente extends Pessoa {
         this.id = id;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 }

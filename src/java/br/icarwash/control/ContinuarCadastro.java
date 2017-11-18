@@ -1,7 +1,6 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
-import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
@@ -36,6 +35,7 @@ public class ContinuarCadastro extends HttpServlet {
             cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]), Integer.parseInt(nascimento[0]));
 
             Endereco endereco = new EnderecoBuilder()
+                    .withUsuario(usuario)
                     .withCep(request.getParameter("cep"))
                     .withEstado(request.getParameter("estado"))
                     .withCidade(request.getParameter("cidade"))
@@ -46,7 +46,7 @@ public class ContinuarCadastro extends HttpServlet {
                     .build();
 
             Cliente cliente = new Cliente.ClienteBuilder()
-                    .withIdUsuario(usuario.getId())
+                    .withUsuario(usuario)
                     .withNome(request.getParameter("nome"))
                     .withTelefone(request.getParameter("telefone"))
                     .withDataNascimento(cal1)
@@ -54,10 +54,9 @@ public class ContinuarCadastro extends HttpServlet {
                     .build();
             
 
-            int idCliente = new ClienteDAO(conexao).cadastrar(cliente);
-            int idEndereco = new EnderecoDAO(conexao).cadastrar(endereco);
+            new ClienteDAO(conexao).cadastrar(cliente);
+            new EnderecoDAO(conexao).cadastrar(endereco);
 
-            new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(idCliente, idEndereco);
             new UsuarioDAO(conexao).concluirCadastro(usuario.getId());
 
             conexao.commit();

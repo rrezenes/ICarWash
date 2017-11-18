@@ -1,6 +1,7 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.Usuario;
+import br.icarwash.model.Usuario.UsuarioBuilder;
 import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -63,10 +64,17 @@ public class UsuarioDAO {
             pstmt.setString(2, usuarioLogin.getSenha());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                usuario = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getInt("nivel"), rs.getBoolean("ativo"), rs.getBoolean("cadastro_completo"));
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id"))
+                        .withEmail(rs.getString("email"))
+                        .withNivel(rs.getInt("nivel"))
+                        .withAtivo(rs.getBoolean("ativo"))
+                        .withCadastroCompleto(rs.getBoolean("cadastro_completo"))
+                        .build();
             } else {
-                usuario = new Usuario();
-                usuario.setNivel(0);
+                usuario = new UsuarioBuilder()
+                        .withNivel(0)
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -117,9 +125,18 @@ public class UsuarioDAO {
             pstmt.setInt(1, idUsuario);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
+
                 timestamp = rs.getTimestamp("cadastro");
                 dataCadastro.setTimeInMillis(timestamp.getTime());
-                usuario = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getInt("nivel"), rs.getBoolean("ativo"), dataCadastro, rs.getBoolean("cadastro_completo"));
+
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id"))
+                        .withEmail(rs.getString("email"))
+                        .withNivel(rs.getInt("nivel"))
+                        .withAtivo(rs.getBoolean("ativo"))
+                        .withDataCadastro(dataCadastro)
+                        .withCadastroCompleto(rs.getBoolean("cadastro_completo"))
+                        .build();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
