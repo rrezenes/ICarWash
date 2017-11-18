@@ -13,6 +13,7 @@ import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Produto.ProdutoBuilder;
+import br.icarwash.model.Usuario.UsuarioBuilder;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -20,7 +21,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Cadastrar implements ICommand {
+public class CadastroCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,36 +33,31 @@ public class Cadastrar implements ICommand {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
                 dataNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                Endereco endereco = new EnderecoBuilder()
-                        .withCep(request.getParameter("cep"))
-                        .withEstado(request.getParameter("estado"))
-                        .withCidade(request.getParameter("cidade"))
-                        .withBairro(request.getParameter("bairro"))
-                        .withEndereco(request.getParameter("endereco"))
-                        .withNumero(Integer.parseInt(request.getParameter("numero")))
-                        .withNome(request.getParameter("nomeEndereco"))
-                        .build();
-
-                Cliente cliente = new ClienteBuilder()
-                        .withNome(request.getParameter("nome"))
-                        .withTelefone(request.getParameter("telefone"))
-                        .withDataNascimento(dataNascimento)
-                        .withCpf(request.getParameter("cpf"))
-                        .withEndereco(endereco)
-                        .build();
-
                 Connection conexao = Conexao.getConexao();
                 try {
                     conexao.setAutoCommit(false);
 
-                    ClienteEnderecoDAO clienteEnderecoDAO = new ClienteEnderecoDAO(conexao);
+                    Cliente cliente = new ClienteBuilder()
+                            .withUsuario(criaUsuario(request, conexao, 1))
+                            .withNome(request.getParameter("nome"))
+                            .withTelefone(request.getParameter("telefone"))
+                            .withDataNascimento(dataNascimento)
+                            .withCpf(request.getParameter("cpf"))
+                            .build();
 
-                    cliente.setIdUsuario(criaUsuario(request, conexao, 1));
+                    Endereco endereco = new EnderecoBuilder()
+                            .withUsuario(cliente.getUsuario())
+                            .withCep(request.getParameter("cep"))
+                            .withEstado(request.getParameter("estado"))
+                            .withCidade(request.getParameter("cidade"))
+                            .withBairro(request.getParameter("bairro"))
+                            .withEndereco(request.getParameter("endereco"))
+                            .withNumero(Integer.parseInt(request.getParameter("numero")))
+                            .withNome(request.getParameter("nomeEndereco"))
+                            .build();
 
-                    ClienteDAO clienteDAO = new ClienteDAO(conexao);
-                    EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
-
-                    clienteEnderecoDAO.cadastraClienteEndereco(clienteDAO.cadastrar(cliente), enderecoDAO.cadastrar(cliente.getEndereco()));
+                    new ClienteDAO(conexao).cadastrar(cliente);
+                    new EnderecoDAO(conexao).cadastrar(endereco);
 
                     conexao.commit();
                 } catch (SQLException e) {
@@ -75,12 +71,12 @@ public class Cadastrar implements ICommand {
                     try {
                         conexao.close();
                     } catch (SQLException ex) {
-                        Logger.getLogger(Cadastrar.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(CadastroCommand.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
 
                 request.setAttribute("cadastrado", "ok");
-                return "Controle?action=Listar&listar=cliente";
+                return "Controle?action=ListaCommand&listar=cliente";
             }
 
             case "lavador": {
@@ -91,7 +87,17 @@ public class Cadastrar implements ICommand {
                 try {
                     conexao.setAutoCommit(false);
 
+                    Lavador lavador = new LavadorBuilder()
+                            .withUsuario(criaUsuario(request, conexao, 2))
+                            .withDataContrato(dataContrato)
+                            .withNome(request.getParameter("nome"))
+                            .withTelefone(request.getParameter("telefone"))
+                            .withDataNascimento(dataNascimento)
+                            .withCpf(request.getParameter("cpf"))
+                            .build();
+
                     Endereco endereco = new EnderecoBuilder()
+                            .withUsuario(lavador.getUsuario())
                             .withCep(request.getParameter("cep"))
                             .withEstado(request.getParameter("estado"))
                             .withCidade(request.getParameter("cidade"))
@@ -101,19 +107,8 @@ public class Cadastrar implements ICommand {
                             .withNome("Residencia")
                             .build();
 
-                    endereco.setId(new EnderecoDAO(conexao).cadastrar(endereco));
-
-                    Lavador lavador = new LavadorBuilder()
-                            .withIdUsuario(criaUsuario(request, conexao, 2))
-                            .withDataContrato(dataContrato)
-                            .withNome(request.getParameter("nome"))
-                            .withTelefone(request.getParameter("telefone"))
-                            .withDataNascimento(dataNascimento)
-                            .withCpf(request.getParameter("cpf"))
-                            .withEndereco(endereco)
-                            .build();
-
                     new LavadorDAO(conexao).cadastrar(lavador);
+                    new EnderecoDAO(conexao).cadastrar(endereco);
 
                     conexao.commit();
                 } catch (SQLException e) {
@@ -131,7 +126,7 @@ public class Cadastrar implements ICommand {
                     }
                 }
                 request.setAttribute("cadastrado", "ok");
-                return "Controle?action=Listar&listar=lavador";
+                return "Controle?action=ListaCommand&listar=lavador";
             }
             case "produto": {
 
@@ -144,7 +139,7 @@ public class Cadastrar implements ICommand {
                 produtoDAO.cadastrar(produtoBuilder.build());
 
                 request.setAttribute("cadastrado", "ok");
-                return "Controle?action=Listar&listar=produto";
+                return "Controle?action=ListaCommand&listar=produto";
             }
             case "servico": {
 
@@ -188,7 +183,7 @@ public class Cadastrar implements ICommand {
                 }
 
                 request.setAttribute("cadastrado", "ok");
-                return "Controle?action=Listar&listar=servico";
+                return "Controle?action=ListaCommand&listar=servico";
             }
             default:
                 return "painel_admin.jsp";
@@ -196,9 +191,16 @@ public class Cadastrar implements ICommand {
 
     }
 
-    private int criaUsuario(HttpServletRequest request, Connection conexao, int nivelDeAcesso) {
-        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"), nivelDeAcesso, true, true);
-        UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-        return usuarioDAO.cadastrar(usuario);
+    private Usuario criaUsuario(HttpServletRequest request, Connection conexao, int nivelDeAcesso) {
+        Usuario usuario = new UsuarioBuilder()
+                .withEmail(request.getParameter("email"))
+                .withSenha(request.getParameter("senha"))
+                .withNivel(nivelDeAcesso)
+                .withAtivo(true)
+                .withCadastroCompleto(true)
+                .build();
+
+        usuario.setId(new UsuarioDAO(conexao).cadastrar(usuario));
+        return usuario;
     }
 }

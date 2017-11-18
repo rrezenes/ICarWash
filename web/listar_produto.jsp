@@ -32,13 +32,13 @@
                 <td>${produto.nome}</td>
                 <td>${produto.descricao}</td>
                 <td>
-                    <a type="button" class="btn-floating blue" href="Controle?action=LocalizarPorId&q=produto&id=${produto.id}"><i class="material-icons">&#xE254;</i></a>
+                    <a type="button" class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=produto&id=${produto.id}"><i class="material-icons">&#xE254;</i></a>
                     <c:choose>
                         <c:when test="${produto.ativo}">                                       
-                            <a class="btn-floating red" type="button" href="Controle?action=Excluir&q=produto&id=${produto.id}"><i class="material-icons">delete</i></a>
+                            <a class="btn-floating red" type="button" href="Controle?action=DesativaCommand&q=produto&id=${produto.id}"><i class="material-icons">delete</i></a>
                         </c:when> 
                         <c:otherwise>
-                            <a class="btn-floating green" type="button" href="Controle?action=Ativar&q=produto&id=${produto.id}"><i class="material-icons">done</i></a>
+                            <a class="btn-floating green" type="button" href="Controle?action=AtivaCommand&q=produto&id=${produto.id}"><i class="material-icons">done</i></a>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -56,6 +56,7 @@
                     <div class="divider"></div>
                 </div>
                 <div class="form-group">
+                    <input type="hidden" name="action" value="CadastroCommand"/>
                     <input type="hidden" name="quem" value="produto">
                     <div class="row">
                         <div class="input-field col s6">
@@ -71,7 +72,7 @@
             </div>      
         </div>
         <div class="modal-footer">
-            <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar">
+            <input class="form-control btn btn-primary" type="submit" value="Cadastrar">
             <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
         </div>
     </form>

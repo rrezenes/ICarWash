@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Listar implements ICommand {
+public class ListaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,12 +45,12 @@ public class Listar implements ICommand {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
 
                     clientes.forEach((cliente) -> {
-                        usuarios.add(usuarioDAO.localizarUsuarioPorID(cliente.getIdUsuario()));
+                        usuarios.add(usuarioDAO.localizarUsuarioPorID(cliente.getUsuario().getId()));
                     });
 
                     conexao.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(Listar.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaCommand.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 request.setAttribute("clientes", clientes);
@@ -62,26 +62,25 @@ public class Listar implements ICommand {
                 
                 LavadorDAO lavadorDAO = new LavadorDAO();
                 ArrayList<Lavador> lavadores = lavadorDAO.listar();
-                
+                ArrayList<Endereco> enderecos = new ArrayList<>();
                 lavadores.forEach(lavador ->{
-                    System.out.println(lavador.getId());
-                    Endereco endereco = new EnderecoDAO().localizarPorId(lavador.getEndereco().getId());
-                    lavador.setEndereco(new EnderecoBuilder().from(endereco).build());
+                    enderecos.add(new EnderecoDAO().localizarPorIdUsuario(lavador.getUsuario().getId()).get(0));
                 });
 
                 try {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
 
                     lavadores.forEach((lavador) -> {
-                        usuarios.add(usuarioDAO.localizarUsuarioPorID(lavador.getIdUsuario()));
+                        usuarios.add(usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId()));
                     });
 
                     conexao.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(Listar.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaCommand.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 request.setAttribute("lavadores", lavadores);
+                request.setAttribute("enderecos", enderecos);
                 request.setAttribute("usuarios", usuarios);
 
                 return "listar_lavador.jsp"; 

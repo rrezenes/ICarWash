@@ -9,60 +9,81 @@ public class Usuario {
     private String senha;
     private int nivel;
     private boolean ativo;
-    private Calendar cadastro;
+    private Calendar dataCadastro;
     private boolean cadastroCompleto;
 
-    public Usuario(String email, String senha, int nivel, boolean ativo, boolean cadastroCompleto) {
-        this.email = email;
-        this.senha = senha;
-        this.nivel = nivel;
-        this.ativo = ativo;
-        this.cadastroCompleto = cadastroCompleto;
-    }
-
-    
-    
-    public Usuario(int id, String email, int nivel, boolean ativo, Calendar cadastro, boolean cadastroCompleto) {
-        this.id = id;
-        this.email = email;
-        this.nivel = nivel;
-        this.ativo = ativo;
-        this.cadastro = cadastro;
-        this.cadastroCompleto = cadastroCompleto;
-    }
-
-    public Usuario(int id, String email, int nivel, boolean ativo, boolean cadastroCompleto) {
-        this.id = id;
-        this.email = email;
-        this.nivel = nivel;
-        this.ativo = ativo;
-        this.cadastroCompleto = cadastroCompleto;
-    }
-
-    public Usuario(int id) {
-        this.id = id;
-    }
-
-    public Usuario(String senha, int nivel, boolean ativo) {
-        this.senha = senha;
-        this.nivel = nivel;
-        this.ativo = ativo;
-    }
-
-    public Usuario(String email, String senha) {
-        this.email = email;
-        this.senha = senha;
-    }
-
-    public Usuario(int id, String senha, int nivel, boolean ativo) {
-        this.id = id;
-        this.senha = senha;
-        this.nivel = nivel;
-        this.ativo = ativo;
-    }
-
     public Usuario() {
+    }
 
+    public Usuario(UsuarioBuilder builder) {
+        this.id = builder.id;
+        this.email = builder.email;
+        this.senha = builder.senha;
+        this.nivel = builder.nivel;
+        this.ativo = builder.ativo;
+        this.dataCadastro = builder.dataCadastro;
+        this.cadastroCompleto = builder.cadastroCompleto;
+    }
+
+    public static class UsuarioBuilder {
+
+        private int id;
+        private String email;
+        private String senha;
+        private int nivel;
+        private boolean ativo;
+        private Calendar dataCadastro;
+        private boolean cadastroCompleto;
+
+        public UsuarioBuilder from(Usuario usuario) {
+            this.id = usuario.id;
+            this.email = usuario.email;
+            this.senha = usuario.senha;
+            this.nivel = usuario.nivel;
+            this.ativo = usuario.ativo;
+            this.dataCadastro = usuario.dataCadastro;
+            this.cadastroCompleto = usuario.cadastroCompleto;
+            return this;
+        }
+
+        public UsuarioBuilder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public UsuarioBuilder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public UsuarioBuilder withSenha(String senha) {
+            this.senha = senha;
+            return this;
+        }
+
+        public UsuarioBuilder withNivel(int nivel) {
+            this.nivel = nivel;
+            return this;
+        }
+
+        public UsuarioBuilder withAtivo(boolean ativo) {
+            this.ativo = ativo;
+            return this;
+        }
+
+        public UsuarioBuilder withDataCadastro(Calendar dataCadastro) {
+            this.dataCadastro = dataCadastro;
+            return this;
+        }
+
+        public UsuarioBuilder withCadastroCompleto(boolean cadastroCompleto) {
+            this.cadastroCompleto = cadastroCompleto;
+            return this;
+        }
+
+        public Usuario build() {
+            return new Usuario(this);
+        }
     }
 
     public int getId() {
@@ -101,12 +122,12 @@ public class Usuario {
         this.ativo = ativo;
     }
 
-    public Calendar getCadastro() {
-        return cadastro;
+    public Calendar getDataCadastro() {
+        return dataCadastro;
     }
 
-    public void setCadastro(Calendar cadastro) {
-        this.cadastro = cadastro;
+    public void setDataCadastro(Calendar dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 
     public void setNivel(int nivel) {

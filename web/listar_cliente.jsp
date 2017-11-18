@@ -39,8 +39,8 @@
                 <td>${cliente.telefone}</td>
                 <td>${cliente.CPF}</td>
                 <td>
-                    <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
-                    <a class="btn-floating red"  href="Controle?action=Excluir&q=cliente&id=${cliente.idUsuario}"><i class="material-icons">delete_forever</i></a>
+                    <a class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating red"  href="Controle?action=DesativaCommand&q=cliente&id=${cliente.usuario.id}"><i class="material-icons">delete_forever</i></a>
                 </td>
             </tr>
         </c:forEach>
@@ -55,6 +55,7 @@
                 <div class="divider"></div>
             </div>
             <div class="form-group">
+                <input type="hidden" name="action" value="CadastroCommand"/>
                 <input type="hidden" name="quem" value="cliente">
                 <div class="row">
                     <div class="input-field col s6">
@@ -131,7 +132,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar">
+            <input class="form-control btn btn-primary" type="submit" value="Cadastrar">
             <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
         </div>
     </form>

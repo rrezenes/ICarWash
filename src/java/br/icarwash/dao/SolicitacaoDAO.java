@@ -198,7 +198,6 @@ public class SolicitacaoDAO {
                 cliente = new ClienteBuilder()
                         .withId(rs.getInt("ID_Cliente"))
                         .withNome(rs.getString("nome_cliente"))
-                        .withEndereco(endereco)
                         .build();
 
                 //lavador = new Lavador(rs.getInt("id_lavador"));
@@ -213,6 +212,7 @@ public class SolicitacaoDAO {
                         .withPorte(rs.getString("porte"))
                         .withDataSolicitacao(data)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withEndereco(endereco)
                         .build();
 
                 solicitacoes.add(solicitacao);

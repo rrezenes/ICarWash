@@ -1,6 +1,8 @@
 package br.icarwash.control;
+
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
+import br.icarwash.model.Usuario.UsuarioBuilder;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,11 +27,12 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
 
-        Usuario usuario = new Usuario(request.getParameter("email"), request.getParameter("senha"));
+        Usuario usuario = new UsuarioBuilder()
+                .withEmail(request.getParameter("email"))
+                .withSenha(request.getParameter("senha"))
+                .build();
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-
-        usuario = usuarioDAO.usuarioLogin(usuario);
+        usuario = new UsuarioDAO().usuarioLogin(usuario);
 
         this.validaLogin(request, response, usuario);
 
@@ -37,7 +40,7 @@ public class LoginController extends HttpServlet {
 
     public void validaLogin(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws IOException, ServletException {
 
-        if (!usuario.isAtivo() || usuario == null) {            
+        if (!usuario.isAtivo() || usuario == null) {
             response.sendRedirect("?invalido");
         } else {
             HttpSession session = request.getSession();

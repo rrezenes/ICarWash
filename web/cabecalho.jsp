@@ -87,8 +87,8 @@
                                 <a class="collapsible-header waves-effect waves-teal">Cadastros Pessoais<i class="material-icons">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="Controle?action=Listar&listar=cliente">Clientes</a></li>
-                                        <li><a href="Controle?action=Listar&listar=lavador">Lavadores</a></li>
+                                        <li><a href="Controle?action=ListaCommand&listar=cliente">Clientes</a></li>
+                                        <li><a href="Controle?action=ListaCommand&listar=lavador">Lavadores</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -98,8 +98,8 @@
                                 <a class="collapsible-header waves-effect waves-teal">Cadastros Gerais<i class="material-icons">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="Controle?action=Listar&listar=produto">Produtos</a></li>
-                                        <li><a href="Controle?action=Listar&listar=servico">Serviços</a></li>
+                                        <li><a href="Controle?action=ListaCommand&listar=produto">Produtos</a></li>
+                                        <li><a href="Controle?action=ListaCommand&listar=servico">Serviços</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -111,7 +111,7 @@
                                     <ul>
                                         <%--<li><a href="SolicitarServico">Solicitar Serviço</a></li> --%>
                                         <li><a href="ListarSolicitacaoEmAnalise">Aprovar Solicitações</a></li>
-                                        <li><a href="Controle?action=Listar&listar=solicitacao">Solicitações</a></li>
+                                        <li><a href="Controle?action=ListaCommand&listar=solicitacao">Solicitações</a></li>
                                     </ul>
                                 </div>
                             </li>

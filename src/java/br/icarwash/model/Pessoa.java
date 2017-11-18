@@ -8,7 +8,6 @@ public abstract class Pessoa {
     protected String telefone;
     protected Calendar dataNascimento = Calendar.getInstance();
     protected String CPF;
-    protected Endereco endereco;
 
     protected Pessoa() {
     }
@@ -47,11 +46,6 @@ public abstract class Pessoa {
             return thisObject;
         }
 
-        public builder withEndereco(Endereco endereco) {
-            object.endereco = endereco;
-            return thisObject;
-        }
-
         public T build() {
             return object;
         }
@@ -87,14 +81,6 @@ public abstract class Pessoa {
 
     public void setCPF(String CPF) {
         this.CPF = CPF;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 
 }

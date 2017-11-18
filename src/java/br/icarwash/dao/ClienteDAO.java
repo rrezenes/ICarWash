@@ -1,6 +1,9 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.Usuario;
+import br.icarwash.model.Usuario.UsuarioBuilder;
 import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,8 +12,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import br.icarwash.model.Endereco;
-import br.icarwash.model.Endereco.EnderecoBuilder;
 import java.sql.Statement;
 
 public class ClienteDAO {
@@ -22,7 +23,7 @@ public class ClienteDAO {
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf from cliente where id = ?";
-    private static final String SELECT_BY_ID_USUARIO = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero from cliente c, endereco e, cliente_endereco ce where ce.id_cliente = c.id and ce.id_endereco = e.id and id_usuario = ?";
+    private static final String SELECT_BY_ID_USUARIO = "select * from cliente where id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
 
     public ClienteDAO(Connection conexao) {
@@ -39,7 +40,7 @@ public class ClienteDAO {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, cliente.getIdUsuario());
+            pstmt.setInt(1, cliente.getUsuario().getId());
             pstmt.setString(2, cliente.getNome());
             pstmt.setString(3, cliente.getTelefone());
             pstmt.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
@@ -74,9 +75,9 @@ public class ClienteDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
 
-                cliente = new Cliente.ClienteBuilder()
+                cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withUsuario(new UsuarioBuilder().withId(rs.getInt("id_usuario")).build())
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
@@ -94,6 +95,7 @@ public class ClienteDAO {
 
     public Cliente localizarPorId(int id) {
         Cliente cliente = null;
+        Usuario usuario;
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
@@ -103,9 +105,14 @@ public class ClienteDAO {
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
-                cliente = new Cliente.ClienteBuilder()
+
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id_usuario"))
+                        .build();
+
+                cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withUsuario(usuario)
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
@@ -162,6 +169,7 @@ public class ClienteDAO {
 
     public Cliente localizarPorIdUsuario(int idUsuario) {
         Cliente cliente = null;
+        Usuario usuario;
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
@@ -172,24 +180,17 @@ public class ClienteDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
 
-                Endereco endereco = new EnderecoBuilder()
-                        .withCep(rs.getString("cep"))
-                        .withEstado(rs.getString("estado"))
-                        .withCidade(rs.getString("cidade"))
-                        .withBairro(rs.getString("bairro"))
-                        .withEndereco(rs.getString("endereco"))
-                        .withNumero(rs.getInt("numero"))
-                        .withNome(rs.getString("nome"))
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id_usuario"))
                         .build();
 
-                cliente = new Cliente.ClienteBuilder()
+                cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withIdUsuario(rs.getInt("id_usuario"))
+                        .withUsuario(usuario)
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
                         .withCpf(rs.getString("cpf"))
-                        .withEndereco(endereco)
                         .build();
             }
         } catch (SQLException e) {
