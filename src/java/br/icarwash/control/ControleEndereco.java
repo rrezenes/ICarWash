@@ -19,12 +19,15 @@ public class ControleEndereco extends HttpServlet {
 
         String URI = ((HttpServletRequest) request).getRequestURI();
 
-        if (URI.endsWith("/AlterarEndereco")) {
+        if (URI.endsWith("/AlterarEndereco")) {            
             alterarEndereco(request, response);
-        } else if (URI.endsWith("/AdicionarEndereco")) {
+            
+        } else if (URI.endsWith("/AdicionarEndereco")) {            
             adicionarEndereco(request, response);
-        } else if (URI.endsWith("/ExcluirEndereco")) {
+            
+        } else if (URI.endsWith("/ExcluirEndereco")) {            
             excluirEndereco(request, response);
+            
         }
 
     }
@@ -46,7 +49,7 @@ public class ControleEndereco extends HttpServlet {
         new EnderecoDAO().atualizar(endereco);
 
         request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizarPorId&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
+        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
         rd.forward(request, response);
     }
 
@@ -66,7 +69,7 @@ public class ControleEndereco extends HttpServlet {
         new EnderecoDAO().cadastrar(endereco);
 
         request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizarPorId&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
+        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
         rd.forward(request, response);
     }
 
