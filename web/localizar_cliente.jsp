@@ -14,6 +14,7 @@
 <div class="row">
     <form id="FormValidate" action="Controle" method="post">
         <div class="form-group">
+            <input type="hidden" name="action" value="AtualizaCommand"/>
             <input type="hidden" name="quem" value="cliente"/>
             <input type="hidden" name="id" value="${cliente.id}"/>
             <div class="input-field col m6 s12">
@@ -32,7 +33,7 @@
             </div>
         </div>
         <div class="col s3">
-            <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
+            <input class="form-control btn btn-primary" type="submit" value="Atualizar">
         </div>
         <div class="col s3">
             <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Alterar a senha</a>
@@ -99,7 +100,7 @@
                 </div>
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-                    <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
+                    <input class="form-control btn btn-primary" type="submit">
                 </div>
             </form>
         </div>
@@ -123,7 +124,7 @@
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-                <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar">
+                <input class="form-control btn btn-primary" type="submit">
             </div>
         </form>
     </div>

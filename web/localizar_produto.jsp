@@ -15,6 +15,7 @@
 <div class="container">
     <form id="FormValidate" action="Controle" method="post">
         <div class="form-group">
+            <input type="hidden" name="action" value="AtualizaCommand"/>
             <input type="hidden" name="quem" value="produto"/>
             <input type="hidden" name="id" value="<%= produto.getId()%>"/>
             <div class="input-field col s6">
@@ -25,7 +26,7 @@
                 <label>Descrição</label> 
                 <input class="form-control erro-descricao" type="text" name="descricao" value="<%= produto.getDescricao()%>"><br>
             </div>
-            <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar"><br>
+            <input class="form-control btn btn-primary" type="submit" value="Atualizar"><br>
         </div>
     </form>
 </div>

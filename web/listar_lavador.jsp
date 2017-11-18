@@ -41,11 +41,11 @@
                 <td>${lavador.nome}</td>
                 <td>${lavador.telefone}</td>
                 <td>${lavador.CPF}</td>
-                <td>${lavador.endereco.cidade}</td>
-                <td>${lavador.endereco.bairro}</td>
+                <td>${enderecos.get(posicao.index).cidade}</td>
+                <td>${enderecos.get(posicao.index).bairro}</td>
                 <td>
-                    <a class="btn-floating blue" href="Controle?action=LocalizarPorId&q=lavador&id=${lavador.id}"><i class="material-icons">mode_edit</i></a>
-                    <a class="btn-floating red" href="Controle?action=Excluir&q=lavador&id=${lavador.idUsuario}"><i class="material-icons">delete_forever</i></a>
+                    <a class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=lavador&id=${lavador.id}"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating red" href="Controle?action=DesativaCommand&q=lavador&id=${lavador.usuario.id}"><i class="material-icons">delete_forever</i></a>
                 </td>
             </tr>
         </c:forEach>        
@@ -61,6 +61,7 @@
                 <div class="divider"></div>
             </div>
             <div class="form-group">
+                <input type="hidden" name="action" value="CadastroCommand"/>
                 <input type="hidden" name="quem" value="lavador">
                 <div class="row">
                     <div class="input-field col s6">
@@ -132,7 +133,7 @@
             </div>
         </div> 
         <div class="modal-footer">
-            <input class="form-control btn btn-primary" type="submit" name="action" value="Cadastrar">
+            <input class="form-control btn btn-primary" type="submit" value="Cadastrar">
             <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
         </div>
     </form>

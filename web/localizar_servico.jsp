@@ -9,6 +9,7 @@
 </div>
 <form id="FormValidate" action="Controle" method="post">
     <div class="form-group">
+        <input type="hidden" name="action" value="AtualizaCommand"/>
         <input type="hidden" name="quem" value="servico"/>
         <input type="hidden" name="id" value="${servico.id}"/>
         <div class="row">
@@ -80,7 +81,7 @@
         </div>
     </div>
     <div class="">
-        <input class="form-control btn btn-primary" type="submit" name="action" value="Atualizar"><br>
+        <input class="form-control btn btn-primary" type="submit" value="Atualizar"><br>
     </div>
 </form>
 
