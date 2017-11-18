@@ -14,11 +14,11 @@ public class EnderecoDAO {
 
     private boolean fechaConexao = false;
     private final Connection conexao;
-    private static final String INSERT = "insert into endereco(cep, estado, cidade, bairro, endereco, numero, nome) values(?,?,?,?,?,?,?)";
+    private static final String INSERT = "insert into endereco(id_usuario, cep, estado, cidade, bairro, endereco, numero, nome) values(?,?,?,?,?,?,?,?)";
     private static final String UPDATE = "update endereco set cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ?, nome = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "delete from endereco where id = ?";
     private static final String SELECT_BY_ID = "select * from endereco where id = ?";
-    private static final String SELECT_ALL_CLIENTE = "select e.id, e.cep, e.estado, e.cidade, e.bairro, e.endereco, e.numero, e.nome from endereco e, cliente_endereco ce where e.id = ce.id_endereco and ce.id_cliente = ?";
+    private static final String SELECT_ALL_BY_ID_USUARIO = "select * from endereco where id_usuario = ?";
 
     public EnderecoDAO(Connection conexao) {
         this.conexao = conexao;
@@ -33,13 +33,14 @@ public class EnderecoDAO {
         int idEndereco = 0;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, endereco.getCEP());
-            pstmt.setString(2, endereco.getEstado());
-            pstmt.setString(3, endereco.getCidade());
-            pstmt.setString(4, endereco.getBairro());
-            pstmt.setString(5, endereco.getEndereco());
-            pstmt.setInt(6, endereco.getNumero());
-            pstmt.setString(7, endereco.getNome());
+            pstmt.setInt(1, endereco.getUsuario().getId());
+            pstmt.setString(2, endereco.getCEP());
+            pstmt.setString(3, endereco.getEstado());
+            pstmt.setString(4, endereco.getCidade());
+            pstmt.setString(5, endereco.getBairro());
+            pstmt.setString(6, endereco.getEndereco());
+            pstmt.setInt(7, endereco.getNumero());
+            pstmt.setString(8, endereco.getNome());
 
             pstmt.execute();
 
@@ -53,35 +54,6 @@ public class EnderecoDAO {
         }
         this.fechaConexao();
         return idEndereco;
-    }
-
-    public ArrayList<Endereco> listarEnderecosCliente(int id) {
-
-        ArrayList<Endereco> enderecos = new ArrayList();
-
-        try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL_CLIENTE);
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Endereco endereco = new EnderecoBuilder()
-                        .withId(rs.getInt("id"))
-                        .withCep(rs.getString("cep"))
-                        .withEstado(rs.getString("estado"))
-                        .withCidade(rs.getString("cidade"))
-                        .withBairro(rs.getString("bairro"))
-                        .withEndereco(rs.getString("endereco"))
-                        .withNumero(rs.getInt("numero"))
-                        .withNome(rs.getString("nome"))
-                        .build();
-
-                enderecos.add(endereco);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-        return enderecos;
     }
 
     public Endereco localizarPorId(int id) {
@@ -146,6 +118,34 @@ public class EnderecoDAO {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public ArrayList<Endereco> localizarPorIdUsuario(int idUsuario) {
+        ArrayList<Endereco> enderecos = new ArrayList();
+
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL_BY_ID_USUARIO);
+            pstmt.setInt(1, idUsuario);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Endereco endereco = new EnderecoBuilder()
+                        .withId(rs.getInt("id"))
+                        .withCep(rs.getString("cep"))
+                        .withEstado(rs.getString("estado"))
+                        .withCidade(rs.getString("cidade"))
+                        .withBairro(rs.getString("bairro"))
+                        .withEndereco(rs.getString("endereco"))
+                        .withNumero(rs.getInt("numero"))
+                        .withNome(rs.getString("nome"))
+                        .build();
+
+                enderecos.add(endereco);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.fechaConexao();
+        return enderecos;
     }
 
 }

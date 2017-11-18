@@ -1,4 +1,5 @@
 package br.icarwash.control;
+
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.ServicoDAO;
@@ -6,6 +7,7 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Servico;
 import br.icarwash.model.Usuario;
+import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
@@ -16,10 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Mirian
- */
 @WebServlet(name = "SolicitarServico", urlPatterns = {"/SolicitarServico", "/solicitar-servico"})
 public class SolicitarServico extends HttpServlet {
 
@@ -28,17 +26,18 @@ public class SolicitarServico extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
-        
+
         ClienteDAO clienteDAO = new ClienteDAO();
         Cliente cliente = clienteDAO.localizarPorIdUsuario(usuario.getId());
-        
+
         request.getParameter("data");
         ServicoDAO servicoDAO = new ServicoDAO();
         ArrayList<Servico> servicos = servicoDAO.listar();
-        
+
         EnderecoDAO enderecoDAO = new EnderecoDAO();
-        ArrayList<Endereco> enderecos = enderecoDAO.listarEnderecosCliente(cliente.getId());
-        
+
+        ArrayList<Endereco> enderecos = enderecoDAO.localizarPorIdUsuario(usuario.getId());
+
         request.setAttribute("servicos", servicos);
         request.setAttribute("enderecos", enderecos);
 
@@ -51,6 +50,4 @@ public class SolicitarServico extends HttpServlet {
         this.doGet(req, resp);
     }
 
-    
-    
 }
