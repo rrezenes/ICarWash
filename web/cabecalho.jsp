@@ -62,8 +62,9 @@
                                 <a class="collapsible-header waves-effect waves-teal">Solicitações<i class="material-icons">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="solicitacoes-lavador">Solicitações</a></li>
-                                        <li><a href="ListarSolicitacaoHojeLavador">Solicitações Para Hoje</a></li>
+                                        <li><a href="solicitacoes-hoje">Para hoje</a></li>
+                                        <li><a href="solicitacoes-lavador">Geral</a></li>
+                                        
                                     </ul>
                                 </div>
                             </li>
