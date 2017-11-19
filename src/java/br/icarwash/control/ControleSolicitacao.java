@@ -91,7 +91,7 @@ public class ControleSolicitacao extends HttpServlet {
 
             for (String idServico : IdServicosSolicitados) {
                 servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
-                solicitacaoServicoDAO.cadastraSolicitacaoServico(idSolicitacao, servico);
+                solicitacaoServicoDAO.cadastraSolicitacaoServico(idSolicitacao, servico.getId());
             }
 
             conexao.commit();

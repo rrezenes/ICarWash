@@ -19,9 +19,8 @@ public class ClienteDAO {
     private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf) values(?,?,?,?,?)";
-    private static final String SELECT_ALL = "select c.id, c.id_usuario, c.nome, c.telefone, c.dt_nascimento, c.cpf, u.ativo from Cliente c, usuario u where c.id_usuario = u.id and u.ativo = 1 group by id";
+    private static final String SELECT_ALL = "select * from cliente";
     private static final String UPDATE = "update cliente set nome = ?, telefone = ?, dt_nascimento = ? WHERE id = ?";
-    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?;";
     private static final String SELECT_BY_ID = "select id, id_usuario, nome, telefone, dt_nascimento, cpf from cliente where id = ?";
     private static final String SELECT_BY_ID_USUARIO = "select * from cliente where id_usuario = ?";
     private static final String SELECT_ID_BY_CPF = "select id from cliente where cpf = ?";
@@ -66,6 +65,7 @@ public class ClienteDAO {
 
         ArrayList<Cliente> clientes = new ArrayList();
         Cliente cliente;
+        Usuario usuario;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
@@ -75,9 +75,13 @@ public class ClienteDAO {
                 timestamp = rs.getTimestamp("dt_nascimento");
                 cal.setTimeInMillis(timestamp.getTime());
 
+                usuario = new UsuarioBuilder()
+                        .withId(rs.getInt("id_usuario"))
+                        .build();
+                
                 cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
-                        .withUsuario(new UsuarioBuilder().withId(rs.getInt("id_usuario")).build())
+                        .withUsuario(usuario)
                         .withNome(rs.getString("nome"))
                         .withTelefone(rs.getString("telefone"))
                         .withDataNascimento(cal)
@@ -133,17 +137,6 @@ public class ClienteDAO {
             pstmt.setString(2, cliente.getTelefone());
             pstmt.setDate(3, new java.sql.Date(cliente.getDataNascimento().getTimeInMillis()));
             pstmt.setInt(4, cliente.getId());
-            pstmt.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-    }
-
-    public void excluir(int id) {
-        try {
-            PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
-            pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

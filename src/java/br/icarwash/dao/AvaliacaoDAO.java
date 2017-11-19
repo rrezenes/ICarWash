@@ -14,6 +14,7 @@ public class AvaliacaoDAO {
     private final Connection conexao;
     private boolean fechaConexao = false;
     private static final String ATRIBUIR_NOTAS = "INSERT INTO `icarwash`.`avaliacao`(`nota_pontualidade`,`nota_servico`,`nota_atendimento`,`nota_agilidade`,`nota_media`) VALUES (?,?,?,?,?);";
+    private static final String SELECT_BY_ID = "SELECT * FROM avaliacao where id = ?";
 
     public AvaliacaoDAO(Connection conexao) {
         this.conexao = conexao;
@@ -50,7 +51,7 @@ public class AvaliacaoDAO {
     public Avaliacao localizarAvaliacaoPorId(int idAvaliacao) {
         AvaliacaoBuilder builder = null;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT * FROM avaliacao where id = ?");
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
             pstmt.setString(1, Integer.toString(idAvaliacao));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

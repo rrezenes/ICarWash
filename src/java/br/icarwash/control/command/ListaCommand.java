@@ -31,21 +31,19 @@ public class ListaCommand implements ICommand {
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quemListar = request.getParameter("listar");
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-
         Connection conexao = Conexao.getConexao();
 
         switch (quemListar) {
             case "cliente":
-                
+
                 ClienteDAO clienteDAO = new ClienteDAO();
                 ArrayList<Cliente> clientes = clienteDAO.listar();
-                
+
                 try {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
 
                     clientes.forEach((cliente) -> {
-                        usuarios.add(usuarioDAO.localizarUsuarioPorID(cliente.getUsuario().getId()));
+                        cliente.setUsuario(usuarioDAO.localizarUsuarioPorID(cliente.getUsuario().getId()));
                     });
 
                     conexao.close();
@@ -54,24 +52,21 @@ public class ListaCommand implements ICommand {
                 }
 
                 request.setAttribute("clientes", clientes);
-                request.setAttribute("usuarios", usuarios);
-                
+
                 return "listar_cliente.jsp";
-                
+
             case "lavador":
-                
-                LavadorDAO lavadorDAO = new LavadorDAO();
-                ArrayList<Lavador> lavadores = lavadorDAO.listar();
+
+                ArrayList<Lavador> lavadores = new LavadorDAO().listar();
                 ArrayList<Endereco> enderecos = new ArrayList<>();
-                lavadores.forEach(lavador ->{
-                    enderecos.add(new EnderecoDAO().localizarPorIdUsuario(lavador.getUsuario().getId()).get(0));
-                });
 
                 try {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+                    EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
 
-                    lavadores.forEach((lavador) -> {
-                        usuarios.add(usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId()));
+                    lavadores.forEach(lavador -> {
+                        lavador.setUsuario(usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId()));
+                        enderecos.add(enderecoDAO.localizarPorIdUsuario(lavador.getUsuario().getId()).get(0));
                     });
 
                     conexao.close();
@@ -81,31 +76,21 @@ public class ListaCommand implements ICommand {
 
                 request.setAttribute("lavadores", lavadores);
                 request.setAttribute("enderecos", enderecos);
-                request.setAttribute("usuarios", usuarios);
 
-                return "listar_lavador.jsp"; 
+                return "listar_lavador.jsp";
 
             case "servico":
-
-                ServicoDAO servicoDAO = new ServicoDAO();
-                ArrayList<Servico> servicos = servicoDAO.listar();
-                request.setAttribute("servicos", servicos);
+                request.setAttribute("servicos", new ServicoDAO().listar());
 
                 return "listar_servico.jsp";
 
             case "produto":
+                request.setAttribute("produtos", new ProdutoDAO().listar());
 
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                ArrayList<Produto> produtos = produtoDAO.listar();
-                request.setAttribute("produtos", produtos);
-                
                 return "listar_produto.jsp";
-                
-            case "solicitacao":
 
-                SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-                ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listar();
-                request.setAttribute("solicitacoes", solicitacoes);
+            case "solicitacao":
+                request.setAttribute("solicitacoes", new SolicitacaoDAO().listar());
 
                 return "listar_solicitacao.jsp";
 

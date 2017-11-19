@@ -13,6 +13,7 @@ import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Produto.ProdutoBuilder;
+import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.Usuario.UsuarioBuilder;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
@@ -130,13 +131,13 @@ public class CadastroCommand implements ICommand {
             }
             case "produto": {
 
-                ProdutoBuilder produtoBuilder = new ProdutoBuilder()
+                Produto produto = new ProdutoBuilder()
                         .withNome(request.getParameter("nome"))
                         .withDescricao(request.getParameter("descricao"))
-                        .withAtivo(true);
+                        .withAtivo(true)
+                        .build();
 
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                produtoDAO.cadastrar(produtoBuilder.build());
+                new ProdutoDAO().cadastrar(produto);
 
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=ListaCommand&listar=produto";
@@ -145,7 +146,7 @@ public class CadastroCommand implements ICommand {
 
                 String[] produtos = request.getParameterValues("produtos");
 
-                Servico servico = new Servico.ServicoBuilder()
+                Servico servico = new ServicoBuilder()
                         .withNome(request.getParameter("nome"))
                         .withDescricao(request.getParameter("descricao"))
                         .withValor(new BigDecimal(request.getParameter("valor")))
@@ -156,9 +157,7 @@ public class CadastroCommand implements ICommand {
                 try {
                     conexao.setAutoCommit(false);
 
-                    ServicoDAO servicoDAO = new ServicoDAO(conexao);
-
-                    int idServico = servicoDAO.cadastrar(servico);
+                    int idServico = new ServicoDAO(conexao).cadastrar(servico);
 
                     ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 

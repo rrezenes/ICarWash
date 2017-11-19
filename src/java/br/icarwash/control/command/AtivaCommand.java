@@ -12,16 +12,15 @@ public class AtivaCommand implements ICommand {
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ativar = request.getParameter("q");
+        final int id = Integer.parseInt(request.getParameter("id"));
 
         switch (ativar) {
             case "produto": {
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                produtoDAO.ativar(Integer.parseInt(request.getParameter("id")));
+                new ProdutoDAO().ativar(id);
                 return "/Controle?action=ListaCommand&listar=produto";
             }
             case "servico": {
-                ServicoDAO servicoDAO = new ServicoDAO();
-                servicoDAO.ativar(Integer.parseInt(request.getParameter("id")));
+                new ServicoDAO().ativar(id);
                 return "/Controle?action=ListaCommand&listar=servico";
             }
             default:

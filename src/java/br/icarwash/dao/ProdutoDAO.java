@@ -18,7 +18,7 @@ public class ProdutoDAO {
     private static final String UPDATE = "update produto set nome = ?, descricao = ? WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE produto SET ativo=0 where id=?";
     private static final String ACTIVE_BY_ID = "UPDATE produto SET ativo=1 where id=?";
-    private static final String SELECT_BY_ID = "select id, nome, descricao, ativo from produto where id = ?";
+    private static final String SELECT_BY_ID = "select * from produto where id = ?";
 
 
     public ProdutoDAO(Connection conexao) {
@@ -100,7 +100,7 @@ public class ProdutoDAO {
         this.fechaConexao();
     }
 
-    public void excluir(int id) {
+    public void inativar(int id) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
             pstmt.setInt(1, id);

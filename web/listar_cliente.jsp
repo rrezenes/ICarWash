@@ -31,18 +31,20 @@
         </tr>
     </thead>
     <tbody>  
-        <c:forEach var="cliente" items="${clientes}" varStatus="posicao">
-            <fmt:formatDate value="${cliente.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
-            <tr>
-                <td>${usuarios.get(posicao.index).email}</td>
-                <td>${cliente.nome}</td>
-                <td>${cliente.telefone}</td>
-                <td>${cliente.CPF}</td>
-                <td>
-                    <a class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
-                    <a class="btn-floating red"  href="Controle?action=DesativaCommand&q=cliente&id=${cliente.usuario.id}"><i class="material-icons">delete_forever</i></a>
-                </td>
-            </tr>
+        <c:forEach var="cliente" items="${clientes}">
+            <c:if test="${cliente.usuario.ativo}">                
+                <fmt:formatDate value="${cliente.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />
+                <tr>
+                    <td>${cliente.usuario.email}</td>
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.telefone}</td>
+                    <td>${cliente.CPF}</td>
+                    <td>
+                        <a class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=cliente&id=${cliente.id}"><i class="material-icons">mode_edit</i></a>
+                        <a class="btn-floating red"  href="Controle?action=DesativaCommand&q=cliente&id=${cliente.usuario.id}"><i class="material-icons">delete_forever</i></a>
+                    </td>
+                </tr>
+            </c:if>
         </c:forEach>
     </tbody>
 </table>
