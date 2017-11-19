@@ -32,12 +32,11 @@
                 <input class="form-control erro-dataNascimento" type="text" name="dataNascimento" id="nascimento" value="${dataNascimento}"><br>
             </div>
         </div>
-        <div class="col s3">
+        <div class="col s6 m3">
             <input class="form-control btn btn-primary" type="submit" value="Atualizar">
         </div>
-        <div class="col s3">
-            <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Alterar a senha</a>
-
+        <div class="col s6 m3">
+            <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Senha</a>
         </div>
     </form>
 </div>
@@ -128,7 +127,9 @@
             </div>
         </form>
     </div>
-
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+    </div>
 </div>
 
 <script src="js/jquery.validate.js"></script>

@@ -29,13 +29,13 @@ public class Finalizado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
+
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
         
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(); 
-        avaliacao = avaliacaoDAO.atribuirNotas(avaliacao);
-        
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.avaliarSolicitacao(solicitacao, avaliacao);        
-        
+        avaliacao.setId(avaliacaoDAO.atribuirNotas(avaliacao));
+
+        new SolicitacaoDAO().avaliarSolicitacao(solicitacao, avaliacao);
+
         return new Avaliado();
     }
 

@@ -1,15 +1,9 @@
 package br.icarwash.control;
 
-import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.ServicoDAO;
-import br.icarwash.model.Cliente;
-import br.icarwash.model.Endereco;
-import br.icarwash.model.Servico;
 import br.icarwash.model.Usuario;
-import br.icarwash.util.Conexao;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,11 +26,6 @@ public class SolicitarServico extends HttpServlet {
 
         RequestDispatcher rd = request.getRequestDispatcher("/solicitar_servico.jsp");
         rd.forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doGet(req, resp);
     }
 
 }
