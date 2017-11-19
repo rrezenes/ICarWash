@@ -27,19 +27,8 @@ public class SolicitarServico extends HttpServlet {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
 
-        ClienteDAO clienteDAO = new ClienteDAO();
-        Cliente cliente = clienteDAO.localizarPorIdUsuario(usuario.getId());
-
-        request.getParameter("data");
-        ServicoDAO servicoDAO = new ServicoDAO();
-        ArrayList<Servico> servicos = servicoDAO.listar();
-
-        EnderecoDAO enderecoDAO = new EnderecoDAO();
-
-        ArrayList<Endereco> enderecos = enderecoDAO.localizarPorIdUsuario(usuario.getId());
-
-        request.setAttribute("servicos", servicos);
-        request.setAttribute("enderecos", enderecos);
+        request.setAttribute("servicos", new ServicoDAO().listar());
+        request.setAttribute("enderecos", new EnderecoDAO().localizarPorIdUsuario(usuario.getId()));
 
         RequestDispatcher rd = request.getRequestDispatcher("/solicitar_servico.jsp");
         rd.forward(request, response);
