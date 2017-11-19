@@ -112,7 +112,7 @@
     </form>
 </div>
 
-<script type="text/javascript" src="js/solicitar-servico.js"></script>
+<script src="js/solicitar-servico.js"></script>
 <script src="js/validar-cep.js"></script>
 <script src="js/inicializar-mascara.js"></script>
 <script src="js/inicializar-validate.js"></script>
