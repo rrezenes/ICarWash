@@ -63,6 +63,9 @@ $(document).ready(function () {
                 maxlength: 6,
                 required: true,
                 number: true
+            },
+            produtos: {
+                required: {checkboxes = true}
             }
         },
         messages: {
@@ -127,6 +130,9 @@ $(document).ready(function () {
                 maxlength: "Utilize no máximo 6 caracteres!",
                 required: "Campo obrigarório preencher!",
                 number: "Apenas valores reais, utilize ponto para separar reais dos centavos!"
+            },
+            produtos: {
+                required: "Campo obrigarório preencher!"
             }
         },
         errorElement: "em",
@@ -164,6 +170,8 @@ $(document).ready(function () {
                 error.insertAfter(".erro-descricao");
             } else if (element.prop("name") === "valor") {
                 error.insertAfter(".erro-valor");
+            } else if (element.prop("name") === "produtos") {
+                error.insertAfter(".erro-produtos");
             } else {
                 error.insertAfter(".erro-data");
             }

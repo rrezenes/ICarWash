@@ -50,9 +50,8 @@
     </tbody>
 </table>
 
-
 <div id="modal" class="modal modal-fixed-footer">
-    <form id="FormValidate" action="Controle" method="post">
+    <form id="FormValidate" name="listarServico" action="Controle" method="post">
         <div class="modal-content">
             <div class="row">
                 <p class="titulo-controle">Cadastrar Serviço</p>
@@ -64,7 +63,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <label>Nome:</label> 
-                        <input class="form-control erro-nome" type="text" name="nome"><br>
+                        <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
                     </div>
                     <div class="input-field col s12">
                         <label>Descrição:</label> 
@@ -98,7 +97,7 @@
                                 </p>             
                             </div>
                             <div class="input-field col s3">
-                                <input id="quantidade${produto.id}" name="quantidade${produto.id}" type="number" class="validate" min="1" max="5" disabled>
+                                <input class="form-control erro-produtos" id="quantidade${produto.id}" name="quantidade${produto.id}" type="number" class="validate" min="1" max="5" disabled>
                                 <label class="quantidade${produto.id}" for="quantidade${produto.id}">Qtd</label>
                             </div> 
                         </c:if>
@@ -107,12 +106,13 @@
             </div>
         </div>
         <div class="modal-footer">
-            <input class="form-control btn btn-primary" type="submit" value="Cadastrar">
+            <input class="form-control btn btn-primary" type="submit" value="Cadastrar" id="confirmar">
             <a class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
         </div>
     </form>
 </div>
 
+<script src="js/validar-cadastro-servico.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script src="js/inicializar-validate.js"></script>
 <script src="js/inicializar-modal.js"></script>
