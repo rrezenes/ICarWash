@@ -30,20 +30,9 @@ public class ContinuarCadastro extends HttpServlet {
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
 
-            String[] nascimento = request.getParameter("nascimento").split("/");
+            String[] nascimento = request.getParameter("dataNascimento").split("/");
             Calendar cal1 = Calendar.getInstance();
             cal1.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]), Integer.parseInt(nascimento[0]));
-
-            Endereco endereco = new EnderecoBuilder()
-                    .withUsuario(usuario)
-                    .withCep(request.getParameter("cep"))
-                    .withEstado(request.getParameter("estado"))
-                    .withCidade(request.getParameter("cidade"))
-                    .withBairro(request.getParameter("bairro"))
-                    .withEndereco(request.getParameter("endereco"))
-                    .withNumero(Integer.parseInt(request.getParameter("numero")))
-                    .withNome(request.getParameter("nomeEndereco"))
-                    .build();
 
             Cliente cliente = new Cliente.ClienteBuilder()
                     .withUsuario(usuario)
@@ -52,10 +41,8 @@ public class ContinuarCadastro extends HttpServlet {
                     .withDataNascimento(cal1)
                     .withCpf(request.getParameter("cpf"))
                     .build();
-            
 
             new ClienteDAO(conexao).cadastrar(cliente);
-            new EnderecoDAO(conexao).cadastrar(endereco);
 
             new UsuarioDAO(conexao).concluirCadastro(usuario.getId());
 
