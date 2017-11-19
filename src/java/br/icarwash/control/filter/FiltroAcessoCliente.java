@@ -8,7 +8,6 @@ import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -16,13 +15,12 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoCliente", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente", "/ControleSolicitacao", "/AvaliarSolicitacao"})
+@WebFilter(filterName = "FiltroAcessoCliente", urlPatterns = {"/SolicitarServico", "/solicitar-servico", "/ListarSolicitacaoCliente", "/solicitacoes-cliente", "/ControleSolicitacao", "/AvaliarSolicitacao"})
 public class FiltroAcessoCliente implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
-    private boolean aprovado;
 
     public FiltroAcessoCliente() {
     }
@@ -42,7 +40,6 @@ public class FiltroAcessoCliente implements Filter {
         } else {
             log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
             request.getRequestDispatcher("/index.jsp").forward(request, response);
-
         }
     }
 
@@ -63,22 +60,17 @@ public class FiltroAcessoCliente implements Filter {
         Usuario usuario = (Usuario) session.getAttribute("user");
 
         Throwable problem = null;
-        if (usuario != null) {
-            if (usuario.getNivel() == 1) {
-                try {
-                    chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
-                    problem = t;
-                }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                session.invalidate();
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+        
+        if (usuario.getNivel() == 1) {
+            try {
+                chain.doFilter(request, response);
+            } catch (IOException | ServletException t) {
+                problem = t;
             }
         } else {
-            
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+            log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+            session.invalidate();
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 

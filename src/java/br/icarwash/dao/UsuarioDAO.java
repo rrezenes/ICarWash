@@ -2,7 +2,6 @@ package br.icarwash.dao;
 
 import br.icarwash.model.Usuario;
 import br.icarwash.model.Usuario.UsuarioBuilder;
-import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +12,6 @@ import java.util.Calendar;
 
 public class UsuarioDAO {
 
-    private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(email, senha, nivel, ativo, cadastro, cadastro_completo) VALUES (?, SHA1(?), ?, ?, NOW(), ?);";
     private static final String SELECT_USUARIO = "select * from usuario where email = ? and senha = SHA1(?)";
@@ -27,11 +25,6 @@ public class UsuarioDAO {
 
     public UsuarioDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public UsuarioDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public int cadastrar(Usuario usuario) {
@@ -54,7 +47,6 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return idUsuario;
     }
 
@@ -81,7 +73,7 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
+
         return usuario;
     }
 
@@ -97,7 +89,6 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
 
         return idUsuario;
     }
@@ -127,7 +118,6 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
 
         return usuario;
     }
@@ -141,8 +131,6 @@ public class UsuarioDAO {
             return !rs.next();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.fechaConexao();
         }
     }
 
@@ -157,8 +145,6 @@ public class UsuarioDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.fechaConexao();
         }
         return cadastro;
     }
@@ -171,7 +157,6 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void inativar(int id) {
@@ -184,16 +169,6 @@ public class UsuarioDAO {
         }
     }
 
-    private void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     public void alterarSenha(Usuario usuario) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(UPDATE_USUARIO);
@@ -203,7 +178,6 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
 }

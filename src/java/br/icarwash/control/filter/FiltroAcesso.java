@@ -3,6 +3,7 @@ package br.icarwash.control.filter;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.Usuario;
+import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -53,8 +54,7 @@ public class FiltroAcesso implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain)
             throws IOException, ServletException {
 
         doBeforeProcessing(request, response);
@@ -72,12 +72,12 @@ public class FiltroAcesso implements Filter {
                         request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
                         break;
                     case 2:
-                        session.setAttribute("nome", new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getNome());
-                        request.getRequestDispatcher("/ListarSolicitacaoLavador").forward(request, response);
+                        session.setAttribute("nome", new LavadorDAO(Conexao.getConexao()).localizarPorIdUsuario(usuario.getId()).getNome());
+                        request.getRequestDispatcher("/painel_lavador.jsp").forward(request, response);
                         break;
                     case 1:
-                        session.setAttribute("nome", new ClienteDAO().localizarPorIdUsuario(usuario.getId()).getNome());
-                        request.getRequestDispatcher("/ListarSolicitacaoCliente").forward(request, response);
+                        session.setAttribute("nome", new ClienteDAO(Conexao.getConexao()).localizarPorIdUsuario(usuario.getId()).getNome());
+                        request.getRequestDispatcher("/painel_cliente.jsp").forward(request, response);
                         break;
                     default:
                         aprovado = false;

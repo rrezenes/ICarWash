@@ -2,7 +2,6 @@ package br.icarwash.dao;
 
 import br.icarwash.model.Produto;
 import br.icarwash.model.Produto.ProdutoBuilder;
-import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,8 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProdutoDAO {
-    
-    private boolean fechaConexao = false;
+
     private final Connection conexao;
     private static final String INSERT = "insert into produto(nome, descricao, ativo) values(?, ?, ?)";
     private static final String SELECT_ALL = "select * from produto";
@@ -20,14 +18,8 @@ public class ProdutoDAO {
     private static final String ACTIVE_BY_ID = "UPDATE produto SET ativo=1 where id=?";
     private static final String SELECT_BY_ID = "select * from produto where id = ?";
 
-
     public ProdutoDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public ProdutoDAO() {
-        this.conexao = Conexao.getConexao();        
-        fechaConexao = true;
     }
 
     public void cadastrar(Produto produto) {
@@ -41,7 +33,6 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public ArrayList listar() {
@@ -55,14 +46,12 @@ public class ProdutoDAO {
                         .withNome(rs.getString("nome"))
                         .withDescricao(rs.getString("descricao"))
                         .withAtivo(rs.getBoolean("ativo"));
-                
-                
+
                 produtos.add(produtoBuilder.build());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return produtos;
     }
 
@@ -83,7 +72,6 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return produto;
     }
 
@@ -97,7 +85,6 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void inativar(int id) {
@@ -108,7 +95,6 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void ativar(int id) {
@@ -118,17 +104,6 @@ public class ProdutoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-    }
-
-    private void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 

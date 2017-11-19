@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class ServicoProdutoDAO {
 
     private final Connection conexao;
-    private boolean fechaConexao = false;
     private static final String INSERT = "insert into servico_produtos(id_servico, id_produto, quantidade) values (?,?,?)";
     private static final String UPDATE_QTD = "update servico_produtos set quantidade = ? where id_servico = ? and id_produto = ?";
     private static final String DELETE_BY_IDS = "DELETE FROM servico_produtos where id_servico = ? and id_produto = ?";
@@ -21,11 +20,6 @@ public class ServicoProdutoDAO {
 
     public ServicoProdutoDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public ServicoProdutoDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public void cadastraServicoProduto(int idServico, int idProduto, int quantidade) {
@@ -39,7 +33,6 @@ public class ServicoProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void atualizarServicoProduto(int idServico, int idProduto, int quantidade) {
@@ -53,7 +46,6 @@ public class ServicoProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void excluirServicoProduto(int idServico, int idProduto) {
@@ -66,7 +58,6 @@ public class ServicoProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public ArrayList<ServicoProduto> selecionaProdutosPorIdServico(int idServico) {
@@ -91,20 +82,8 @@ public class ServicoProdutoDAO {
             throw new RuntimeException(e);
         }
 
-        this.fechaConexao();
-
         return servicosProdutos;
 
-    }
-
-    private void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
 }

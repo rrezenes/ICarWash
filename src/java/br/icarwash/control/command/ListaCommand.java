@@ -30,14 +30,13 @@ public class ListaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
         String quemListar = request.getParameter("listar");
-        Connection conexao = Conexao.getConexao();
 
         switch (quemListar) {
             case "cliente":
 
-                ClienteDAO clienteDAO = new ClienteDAO();
-                ArrayList<Cliente> clientes = clienteDAO.listar();
+                ArrayList<Cliente> clientes = new ClienteDAO(conexao).listar();
 
                 try {
                     UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
@@ -57,7 +56,7 @@ public class ListaCommand implements ICommand {
 
             case "lavador":
 
-                ArrayList<Lavador> lavadores = new LavadorDAO().listar();
+                ArrayList<Lavador> lavadores = new LavadorDAO(conexao).listar();
                 ArrayList<Endereco> enderecos = new ArrayList<>();
 
                 try {
@@ -80,20 +79,22 @@ public class ListaCommand implements ICommand {
                 return "listar_lavador.jsp";
 
             case "servico":
-                request.setAttribute("servicos", new ServicoDAO().listar());
+                request.setAttribute("servicos", new ServicoDAO(conexao).listar());
 
                 return "listar_servico.jsp";
 
             case "produto":
-                request.setAttribute("produtos", new ProdutoDAO().listar());
+                request.setAttribute("produtos", new ProdutoDAO(conexao).listar());
 
                 return "listar_produto.jsp";
 
             case "solicitacao":
-                ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO().listar();
+                ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO(conexao).listar();
+                ClienteDAO clienteDAO = new ClienteDAO(conexao);
                 
                 solicitacoes.forEach(solicitacao -> {
-                    solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
+                    solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId())
+                );
                 });
 
                 request.setAttribute("solicitacoes", solicitacoes);

@@ -9,6 +9,7 @@ import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "ListarSolicitacaoLavador", urlPatterns = {"/ListarSolicitacaoLavador", "/solicitacoes-lavador"})
 public class ListarSolicitacaoLavador extends HttpServlet {
@@ -24,19 +24,25 @@ public class ListarSolicitacaoLavador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        
         Usuario usuario = (Usuario) ((HttpServletRequest) request).getSession(true).getAttribute("user");
 
-        Lavador lavador = new LavadorDAO().localizarPorIdUsuario(usuario.getId());
+        Lavador lavador = new LavadorDAO(conexao).localizarPorIdUsuario(usuario.getId());
 
-        ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO().listarSolicitacaoDoLavador(lavador.getId());
+        ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO(conexao).listarSolicitacaoDoLavador(lavador.getId());
 
+        EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+        ClienteDAO clienteDAO = new ClienteDAO(conexao);
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
+        
         solicitacoes.forEach(solicitacao -> {
             if (solicitacao.getAvaliacao().getId() != 0) {
-                solicitacao.setAvaliacao(new AvaliacaoDAO().localizarAvaliacaoPorId(solicitacao.getAvaliacao().getId()));
+                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao().getId()));
             }
-            solicitacao.setEndereco(new EnderecoDAO().localizarPorId(solicitacao.getEndereco().getId()));
+            solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco().getId()));
             System.out.println(solicitacao.getEndereco().getBairro());
-            solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId()));
         });
 
         request.setAttribute("ocupado", lavador.isOcupado());

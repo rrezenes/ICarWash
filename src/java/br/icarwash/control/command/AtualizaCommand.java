@@ -1,6 +1,5 @@
 package br.icarwash.control.command;
 
-import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
@@ -18,20 +17,17 @@ import br.icarwash.model.Produto;
 import br.icarwash.model.Servico;
 import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
-import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AtualizaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
         final int id = Integer.parseInt(request.getParameter("id"));
 
         switch (request.getParameter("quem")) {
@@ -48,7 +44,7 @@ public class AtualizaCommand implements ICommand {
                         .withDataNascimento(calendarNascimento)
                         .build();
 
-                new ClienteDAO().atualizar(cliente);
+                new ClienteDAO(conexao).atualizar(cliente);
 
                 return "Controle?action=ListaCommand&listar=cliente";
             }
@@ -67,7 +63,7 @@ public class AtualizaCommand implements ICommand {
                         .withCpf(request.getParameter("cpf"))
                         .build();
 
-                new LavadorDAO().atualizar(lavador);
+                new LavadorDAO(conexao).atualizar(lavador);
 
                 return "Controle?action=ListaCommand&listar=lavador";
             }
@@ -78,41 +74,22 @@ public class AtualizaCommand implements ICommand {
                         .withDescricao(request.getParameter("descricao"))
                         .build();
 
-                new ProdutoDAO().atualizar(produto);
+                new ProdutoDAO(conexao).atualizar(produto);
 
                 return "Controle?action=ListaCommand&listar=produto";
             }
             case "servico": {
-                Connection conexao = Conexao.getConexao();
-                try {
-                    conexao.setAutoCommit(false);
 
-                    Servico servico = new ServicoBuilder()
-                            .withId(id)
-                            .withNome(request.getParameter("nome"))
-                            .withDescricao(request.getParameter("descricao"))
-                            .withValor(new BigDecimal(request.getParameter("valor")))
-                            .build();
+                Servico servico = new ServicoBuilder()
+                        .withId(id)
+                        .withNome(request.getParameter("nome"))
+                        .withDescricao(request.getParameter("descricao"))
+                        .withValor(new BigDecimal(request.getParameter("valor")))
+                        .build();
 
-                    new ServicoDAO(conexao).atualizar(servico);
+                new ServicoDAO(conexao).atualizar(servico);
 
-                    atualizarProdutosDoServico(id, criarMapaProdutosParaAtualizar(request), conexao);
-
-                    conexao.commit();
-                } catch (SQLException e) {
-                    try {
-                        conexao.rollback();
-                        throw new RuntimeException(e);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } finally {
-                    try {
-                        conexao.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                atualizarProdutosDoServico(id, request);
 
                 return "Controle?action=ListaCommand&listar=servico";
             }
@@ -122,13 +99,15 @@ public class AtualizaCommand implements ICommand {
         }
     }
 
-    private void atualizarProdutosDoServico(int idServico, Map<Integer, Integer> mapaProdutosAtualizados, Connection conexao) {
+    private void atualizarProdutosDoServico(int idServico, HttpServletRequest request) {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        
         Map<Integer, Object> mapaProdutosDoServicoAtual = new HashMap<>();
-
         ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 
         ArrayList<ServicoProduto> servicoProdutos = servicoProdutoDAO.selecionaProdutosPorIdServico(idServico);
 
+        Map<Integer, Integer> mapaProdutosAtualizados = criarMapaProdutosParaAtualizar(request);
         servicoProdutos.forEach(servicoProduto -> {
             //Adiciona no HashMap os produtos do serviço atual
             mapaProdutosDoServicoAtual.put(servicoProduto.getProduto().getId(), servicoProduto.getProduto());

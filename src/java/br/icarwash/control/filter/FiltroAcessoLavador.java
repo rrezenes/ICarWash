@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoLavador", urlPatterns = {"/ListarSolicitacaoLavador", "/produtos-hoje"})
+@WebFilter(filterName = "FiltroAcessoLavador", urlPatterns = {"/ListarSolicitacaoLavador", "/produtos-hoje", "/solicitacoes-hoje", "/solicitacoes-lavador"})
 public class FiltroAcessoLavador implements Filter {
 
     private static final boolean debug = true;
@@ -61,20 +61,18 @@ public class FiltroAcessoLavador implements Filter {
         Usuario usuario = (Usuario) session.getAttribute("user");
 
         Throwable problem = null;
-        if (usuario != null) {
-            if (usuario.getNivel() == 2) {
-                try {
-                    chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
-                    problem = t;
-                }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                session.invalidate();
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-
+        if (usuario.getNivel() == 2) {
+            try {
+                chain.doFilter(request, response);
+            } catch (IOException | ServletException t) {
+                problem = t;
             }
+        } else {
+            aprovado = false;
+            log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+            session.invalidate();
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+
         }
         doAfterProcessing(request, response);
 
@@ -103,7 +101,7 @@ public class FiltroAcessoLavador implements Filter {
         }
     }
 
-   @Override
+    @Override
     public String toString() {
         if (filterConfig == null) {
             return ("FiltroAcessoCadastros()");

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -52,9 +53,9 @@ public class FiltroSolicitarServico implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
 
         doBeforeProcessing(request, response);
 
@@ -63,11 +64,10 @@ public class FiltroSolicitarServico implements Filter {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
 
         Usuario usuario = (Usuario) session.getAttribute("user");
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         if (usuario != null && usuario.getNivel() == 1) {
             try {
-                if (!usuarioDAO.isCadastroCompleto(usuario.getId())) {
+                if (!new UsuarioDAO(conexao).isCadastroCompleto(usuario.getId())) {
                     RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
                     rd.forward(request, response);
                 } else {

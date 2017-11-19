@@ -3,6 +3,7 @@ package br.icarwash.model.state;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.util.Conexao;
 
 public class EmAnalise implements SolicitacaoState {
 
@@ -39,8 +40,7 @@ public class EmAnalise implements SolicitacaoState {
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.cancelarSolicitacaoPorId(solicitacao.getId());
+        new SolicitacaoDAO(Conexao.getConexao()).cancelarSolicitacaoPorId(solicitacao.getId());
         return new Cancelado();
     }
 

@@ -32,7 +32,6 @@ import java.util.Calendar;
 
 public class SolicitacaoDAO {
 
-    private boolean fechaConexao = false;
     private final Connection conexao;
 
     private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)";
@@ -46,7 +45,7 @@ public class SolicitacaoDAO {
     private static final String SELECT_ID_ULTIMA_SOLICITACAO = "SELECT id FROM solicitacao WHERE id = (SELECT MAX(id) FROM solicitacao)";
     private static final String SELECT_HORARIO_INDISPONIVEL = "SELECT data_solicitacao as hora, STATUS, count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?";
     private static final String SELECT_QTD_SOLICITACAO_BY_IDLAVADOR_AND_DATE = "select count(*) as quantidade FROM solicitacao where id_lavador = ? and status <> 'Cancelado' and data_solicitacao like ?";
-    private static final String SELECT_CHECK_LAVADORES_DISPONIVEIS = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado'";
+    private static final String SELECT_CHECK_LAVADORES_DISPONIVEIS = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado' and status <> 'Avaliado'";
 
     private static final String CANCELA = "UPDATE solicitacao SET status = 'Cancelado' WHERE ID = ?";
     private static final String AGENDA = "UPDATE solicitacao SET status = 'Agendado' WHERE ID = ?";
@@ -56,13 +55,8 @@ public class SolicitacaoDAO {
     private static final String PROCESSA = "UPDATE solicitacao SET status = 'Em Processo' WHERE ID = ?";
     private static final String ATRIBUI_LAVADOR = "UPDATE solicitacao SET id_lavador = ? WHERE ID = ?";
 
-    public SolicitacaoDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
-    }
-
-    public SolicitacaoDAO(Connection conexao) {
-        this.conexao = conexao;
+    public SolicitacaoDAO(Connection connection) {
+        this.conexao = connection;
     }
 
     public int cadastrar(Solicitacao solicitacao) {
@@ -86,7 +80,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return idSolicitacao;
     }
 
@@ -139,7 +132,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return solicitacoes;
     }
 
@@ -189,7 +181,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return solicitacoes;
     }
 
@@ -233,7 +224,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return solicitacoes;
     }
 
@@ -275,7 +265,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return solicitacao;
     }
 
@@ -316,7 +305,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return solicitacoes;
     }
 
@@ -357,7 +345,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return solicitacoes;
     }
 
@@ -385,7 +372,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void agendarSolicitacao(Solicitacao solicitacao) {
@@ -397,7 +383,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void finalizarSolicitacao(Solicitacao solicitacao) {
@@ -409,7 +394,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
@@ -422,7 +406,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void concluirSolicitacao(Solicitacao solicitacao) {
@@ -434,7 +417,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void processarSolicitacao(Solicitacao solicitacao) {
@@ -446,7 +428,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void atribuirLavador(Lavador lavador, Solicitacao solicitacao) {
@@ -459,7 +440,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public ArrayList consultarHorarioIndisponivel(String dataHoraSolicitacao, int quantidadeLavadores) {
@@ -481,7 +461,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
 
         return horarios;
     }
@@ -513,7 +492,6 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return quantidade;
     }
 
@@ -545,18 +523,7 @@ public class SolicitacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return lavadoresDisponiveis;
-    }
-
-    private void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public SolicitacaoState validarStatus(String status) throws UnsupportedOperationException, SQLException {

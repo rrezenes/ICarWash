@@ -6,23 +6,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import br.icarwash.util.Conexao;
 import java.sql.Statement;
 
 public class AvaliacaoDAO {
 
     private final Connection conexao;
-    private boolean fechaConexao = false;
     private static final String ATRIBUIR_NOTAS = "INSERT INTO `icarwash`.`avaliacao`(`nota_pontualidade`,`nota_servico`,`nota_atendimento`,`nota_agilidade`,`nota_media`) VALUES (?,?,?,?,?);";
     private static final String SELECT_BY_ID = "SELECT * FROM avaliacao where id = ?";
 
     public AvaliacaoDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public AvaliacaoDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public int atribuirNotas(Avaliacao avaliacao) {
@@ -44,7 +37,6 @@ public class AvaliacaoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return idAvaliacao;
     }
 
@@ -67,15 +59,5 @@ public class AvaliacaoDAO {
             throw new RuntimeException(e);
         }
         return builder.build();
-    }
-
-    public void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }

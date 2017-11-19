@@ -4,6 +4,7 @@ import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
 import br.icarwash.model.Usuario.UsuarioBuilder;
 import java.io.IOException;
+import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +26,8 @@ public class LoginController extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        
         response.setContentType("text/html");
 
         Usuario usuario = new UsuarioBuilder()
@@ -32,7 +35,7 @@ public class LoginController extends HttpServlet {
                 .withSenha(request.getParameter("senha"))
                 .build();
 
-        usuario = new UsuarioDAO().usuarioLogin(usuario);
+        usuario = new UsuarioDAO(conexao).usuarioLogin(usuario);
 
         this.validaLogin(request, response, usuario);
 

@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="css/star-rating-svg.css">
 <script src="js/jquery.star-rating-svg.js"></script>
 
-
 <div class="row">
     <p class="titulo-controle">Minhas solicitações</p>
     <div class="divider"></div>

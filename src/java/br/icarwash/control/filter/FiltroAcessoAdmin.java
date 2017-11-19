@@ -30,11 +30,11 @@ public class FiltroAcessoAdmin implements Filter {
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         String url = ((HttpServletRequest) request).getRequestURL().toString();
-        
-        String queryString = ((HttpServletRequest) request).getQueryString();        
+
+        String queryString = ((HttpServletRequest) request).getQueryString();
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
-        
+
         if (usuario != null) {
             if (debug) {
                 log("Usuario: " + usuario.getEmail() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
@@ -63,19 +63,17 @@ public class FiltroAcessoAdmin implements Filter {
         Usuario usuario = (Usuario) session.getAttribute("user");
 
         Throwable problem = null;
-        if (usuario != null) {
-            if (usuario.getNivel() == 3) {
-                try {
-                    chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
-                    problem = t;
-                }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                session.invalidate();
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+        if (usuario.getNivel() == 3) {
+            try {
+                chain.doFilter(request, response);
+            } catch (IOException | ServletException t) {
+                problem = t;
             }
+        } else {
+            aprovado = false;
+            log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+            session.invalidate();
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 

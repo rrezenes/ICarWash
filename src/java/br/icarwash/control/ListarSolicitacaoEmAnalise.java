@@ -4,6 +4,7 @@ import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,12 +19,15 @@ public class ListarSolicitacaoEmAnalise extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
         ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarEmAnalise();
         
+        ClienteDAO clienteDAO = new ClienteDAO(conexao);
+        
         solicitacoes.forEach(solicitacao -> {
-            solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId()));
         });
         
         request.setAttribute("solicitacoes", solicitacoes);

@@ -73,8 +73,7 @@ public class Agendado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.cancelarSolicitacaoPorId(solicitacao.getId());
+        new SolicitacaoDAO(Conexao.getConexao()).cancelarSolicitacaoPorId(solicitacao.getId());
         return new Cancelado();
     }
 
