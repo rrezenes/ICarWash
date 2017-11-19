@@ -80,6 +80,7 @@ public class ListaCommand implements ICommand {
 
             case "servico":
                 request.setAttribute("servicos", new ServicoDAO(conexao).listar());
+                request.setAttribute("produtos", new ProdutoDAO(conexao).listar());
 
                 return "listar_servico.jsp";
 
