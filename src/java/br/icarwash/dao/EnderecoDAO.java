@@ -121,7 +121,7 @@ public class EnderecoDAO {
     }
 
     public ArrayList<Endereco> localizarPorIdUsuario(int idUsuario) {
-        ArrayList<Endereco> enderecos = new ArrayList();
+        ArrayList<Endereco> enderecos = new ArrayList<>();
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL_BY_ID_USUARIO);
@@ -129,7 +129,7 @@ public class EnderecoDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Endereco endereco = new EnderecoBuilder()
-                        .withId(rs.getInt("id"))
+                        .withId(rs.getInt("ID"))
                         .withCep(rs.getString("cep"))
                         .withEstado(rs.getString("estado"))
                         .withCidade(rs.getString("cidade"))

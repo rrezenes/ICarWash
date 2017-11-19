@@ -16,12 +16,14 @@ public class UsuarioDAO {
     private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String CREATE_USUARIO = "INSERT INTO usuario(email, senha, nivel, ativo, cadastro, cadastro_completo) VALUES (?, SHA1(?), ?, ?, NOW(), ?);";
-    private static final String UPDATE_USUARIO = "update usuario set senha = SHA1(?) WHERE email = ?";
     private static final String SELECT_USUARIO = "select * from usuario where email = ? and senha = SHA1(?)";
     private static final String SELECT_ID_BY_USUARIO = "select id from usuario where email = ?";
-    private static final String SELECT_NEXT_USUARIO = "select count(*)+1 as qtd from usuario";
     private static final String SELECT_ID_BY_EMAIL = "select id from usuario where email = ?";
     private static final String SELECT_USUARIO_BY_ID = "select * from usuario where id = ?";
+    private static final String SELECT_CADASTRO_COMPLETO = "SELECT cadastro_completo FROM usuario where id = ?";
+    private static final String UPDATE_USUARIO = "update usuario set senha = SHA1(?) WHERE email = ?";
+    private static final String UPDATE_CONCLUIR_CAD = "update usuario set cadastro_completo = true WHERE id = ?";
+    private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?";
 
     public UsuarioDAO(Connection conexao) {
         this.conexao = conexao;
@@ -100,22 +102,6 @@ public class UsuarioDAO {
         return idUsuario;
     }
 
-    public int selecionarProximoId() {
-        int idProximoUsuario = 0;
-        try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_NEXT_USUARIO);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                idProximoUsuario = rs.getInt("qtd");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-
-        return idProximoUsuario;
-    }
-
     public Usuario localizarUsuarioPorID(int idUsuario) {
         Usuario usuario = null;
         Calendar dataCadastro = Calendar.getInstance();
@@ -163,7 +149,7 @@ public class UsuarioDAO {
     public boolean isCadastroCompleto(int id) {
         boolean cadastro = false;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("SELECT cadastro_completo FROM usuario where id = ?");
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_CADASTRO_COMPLETO);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -179,13 +165,23 @@ public class UsuarioDAO {
 
     public void concluirCadastro(int idUusuario) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement("update usuario set cadastro_completo = true WHERE id = ?");
+            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_CONCLUIR_CAD);
             pstmt.setInt(1, idUusuario);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         this.fechaConexao();
+    }
+
+    public void inativar(int id) {
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(INACTIVE_BY_ID);
+            pstmt.setInt(1, id);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void fechaConexao() throws RuntimeException {

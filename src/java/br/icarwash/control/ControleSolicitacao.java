@@ -27,8 +27,12 @@ public class ControleSolicitacao extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection conexao = Conexao.getConexao();
+        response.setCharacterEncoding("UTF-8"); 
+        request.setCharacterEncoding("UTF-8");
+        
+        Calendar dataHoraSolicitacao = Calendar.getInstance();
 
+        Connection conexao = Conexao.getConexao();
         try {
             conexao.setAutoCommit(false);
 
@@ -40,16 +44,34 @@ public class ControleSolicitacao extends HttpServlet {
             cliente = clienteDAO.localizarPorId(cliente.getId());
 
             /*PEGA OS PARAMETROS DA VIEW*/
-            String porteVeiculo = request.getParameter("porte");
             String[] IdServicosSolicitados = request.getParameterValues("servico");
-            Calendar dataHoraSolicitacao = Calendar.getInstance();
 
             String[] data = request.getParameter("data_solicitacao").split("/");
             String dataSolicitacao = data[2] + "-" + data[1] + "-" + data[0];
-
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dataSolicitacao + " " + request.getParameter("selectHora")));
 
-            int idEndereco = Integer.parseInt(request.getParameter("endereco"));
+            Endereco endereco;
+            
+            if (Boolean.parseBoolean(request.getParameter("cadastraEndereco"))) {
+                
+                endereco = new EnderecoBuilder()
+                        .withUsuario(usuario)
+                        .withCep(request.getParameter("cep"))
+                        .withEstado(request.getParameter("estado"))
+                        .withCidade(request.getParameter("cidade"))
+                        .withBairro(request.getParameter("bairro"))
+                        .withEndereco(request.getParameter("endereco"))
+                        .withNumero(Integer.parseInt(request.getParameter("numero")))
+                        .withNome(request.getParameter("nomeEndereco"))
+                        .build();
+                
+                int idEndereco = new EnderecoDAO(conexao).cadastrar(endereco);
+                endereco.setId(idEndereco);
+                
+            } else {
+                int idEndereco = Integer.parseInt(request.getParameter("endereco"));
+                endereco = new EnderecoBuilder().withId(idEndereco).build();
+            }
 
             Servico servico;
             ServicoDAO servicoDAO = new ServicoDAO(conexao);
@@ -57,10 +79,10 @@ public class ControleSolicitacao extends HttpServlet {
             Solicitacao solicitacao = new SolicitacaoBuilder()
                     .withCliente(cliente)
                     .withSolicitacaoState(new EmAnalise())
-                    .withPorte(porteVeiculo)
+                    .withPorte(request.getParameter("porte"))
                     .withDataSolicitacao(dataHoraSolicitacao)
                     .withValorTotal(somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO))
-                    .withEndereco(new EnderecoBuilder().withId(idEndereco).build())
+                    .withEndereco(endereco)
                     .build();
 
             int idSolicitacao = new SolicitacaoDAO(conexao).cadastrar(solicitacao);
@@ -69,7 +91,7 @@ public class ControleSolicitacao extends HttpServlet {
 
             for (String idServico : IdServicosSolicitados) {
                 servico = servicoDAO.localizarPorId(Integer.parseInt(idServico));
-                solicitacaoServicoDAO.cadastraSolicitacaoServico(idSolicitacao, servico);
+                solicitacaoServicoDAO.cadastraSolicitacaoServico(idSolicitacao, servico.getId());
             }
 
             conexao.commit();
@@ -95,7 +117,6 @@ public class ControleSolicitacao extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-        //response.sendRedirect("/ICarWash/ListarSolicitacaoCliente");
 
         PrintWriter out = response.getWriter();
         out.println("/ICarWash/solicitacoes-cliente?ok"); //ListarSolicitacaoCliente

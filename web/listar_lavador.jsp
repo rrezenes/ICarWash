@@ -34,20 +34,22 @@
     </thead>
     <tbody>
         <c:forEach var="lavador" items="${lavadores}" varStatus="posicao">
-            <fmt:formatDate value="${lavador.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
-            <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
-            <tr>
-                <td>${usuarios.get(posicao.index).email}</td>
-                <td>${lavador.nome}</td>
-                <td>${lavador.telefone}</td>
-                <td>${lavador.CPF}</td>
-                <td>${enderecos.get(posicao.index).cidade}</td>
-                <td>${enderecos.get(posicao.index).bairro}</td>
-                <td>
-                    <a class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=lavador&id=${lavador.id}"><i class="material-icons">mode_edit</i></a>
-                    <a class="btn-floating red" href="Controle?action=DesativaCommand&q=lavador&id=${lavador.usuario.id}"><i class="material-icons">delete_forever</i></a>
-                </td>
-            </tr>
+            <c:if test="${lavador.usuario.ativo}">
+                <fmt:formatDate value="${lavador.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy"/>   
+                <fmt:formatDate value="${lavador.dataContrato.time}" var="dataContrato" type="date" pattern="dd/MM/yyyy"/>   
+                <tr>
+                    <td>${lavador.usuario.email}</td>
+                    <td>${lavador.nome}</td>
+                    <td>${lavador.telefone}</td>
+                    <td>${lavador.CPF}</td>
+                    <td>${enderecos.get(posicao.index).cidade}</td>
+                    <td>${enderecos.get(posicao.index).bairro}</td>
+                    <td>
+                        <a class="btn-floating blue" href="Controle?action=LocalizaPorIdCommand&q=lavador&id=${lavador.id}"><i class="material-icons">mode_edit</i></a>
+                        <a class="btn-floating red" href="Controle?action=DesativaCommand&q=lavador&id=${lavador.usuario.id}"><i class="material-icons">delete_forever</i></a>
+                    </td>
+                </tr>
+            </c:if>
         </c:forEach>        
     </tbody>
 </table>

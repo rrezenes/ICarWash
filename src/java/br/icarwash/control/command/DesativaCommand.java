@@ -4,6 +4,7 @@ import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
 import br.icarwash.dao.ServicoDAO;
+import br.icarwash.dao.UsuarioDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,27 +14,25 @@ public class DesativaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String excluir = request.getParameter("q");
-
-        switch (excluir) {
+        
+        String inativar = request.getParameter("q");
+        int id = Integer.parseInt(request.getParameter("id"));
+        
+        switch (inativar ){
             case "cliente": {
-                ClienteDAO clienteDAO = new ClienteDAO();
-                clienteDAO.excluir(Integer.parseInt(request.getParameter("id")));
+                new UsuarioDAO().inativar(id);
                 return "/Controle?action=ListaCommand&listar=cliente";
             }
             case "lavador": {
-                LavadorDAO lavadorDAO = new LavadorDAO();
-                lavadorDAO.excluir(Integer.parseInt(request.getParameter("id")));
+                new UsuarioDAO().inativar(id);
                 return "/Controle?action=ListaCommand&listar=lavador";
             }
             case "produto": {
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                produtoDAO.excluir(Integer.parseInt(request.getParameter("id")));
+                new ProdutoDAO().inativar(id);
                 return "/Controle?action=ListaCommand&listar=produto";
             }
             case "servico": {
-                ServicoDAO servicoDAO = new ServicoDAO();
-                servicoDAO.excluir(Integer.parseInt(request.getParameter("id")));
+                new ServicoDAO().inativar(id);
                 return "/Controle?action=ListaCommand&listar=servico";
             }
             default:
