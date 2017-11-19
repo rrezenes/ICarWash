@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package br.icarwash.control;
+package br.icarwash.control.filter;
 
+import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,89 +17,44 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Mirian
- */
-@WebFilter(filterName = "FiltroNovoCliente", urlPatterns = {"/NovoCliente", "/novo-cliente"})
-public class FiltroNovoCliente implements Filter {
+@WebFilter(filterName = "FiltroSolicitarServico", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente"})
+public class FiltroSolicitarServico implements Filter {
 
     private static final boolean debug = true;
 
-    // The filter configuration object we are associated with.  If
-    // this value is null, this filter instance is not currently
-    // configured. 
     private FilterConfig filterConfig = null;
 
-    public FiltroNovoCliente() {
+    public FiltroSolicitarServico() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
+        String url = ((HttpServletRequest) request).getRequestURL().toString();
 
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-        /*
-	for (Enumeration en = request.getParameterNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    String values[] = request.getParameterValues(name);
-	    int n = values.length;
-	    StringBuffer buf = new StringBuffer();
-	    buf.append(name);
-	    buf.append("=");
-	    for(int i=0; i < n; i++) {
-	        buf.append(values[i]);
-	        if (i < n-1)
-	            buf.append(",");
-	    }
-	    log(buf.toString());
-	}
-         */
+        String queryString = ((HttpServletRequest) request).getQueryString();
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
+        if (usuario != null) {
+            if (debug) {
+                log("Usuario: " + usuario.getEmail() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
+            }
+        } else {
+            log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+        }
     }
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
 
-        // Write code here to process the request and/or response after
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log the attributes on the
-        // request object after the request has been processed. 
-        RequestDispatcher rd = request.getRequestDispatcher("/novo-cliente");
-        rd.forward(request, response);
-        /*
-        
-	for (Enumeration en = request.getAttributeNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    Object value = request.getAttribute(name);
-	    log("attribute: " + name + "=" + value.toString());
-
-	}
-         */
-        // For example, a filter might append something to the response.
-        /*
-	PrintWriter respOut = new PrintWriter(response.getWriter());
-	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
-         */
     }
 
-    /**
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
-     */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-
-        if (debug) {
-            log("FiltroNovoCliente:doFilter()");
-        }
 
         doBeforeProcessing(request, response);
 
@@ -112,14 +63,26 @@ public class FiltroNovoCliente implements Filter {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
 
         Usuario usuario = (Usuario) session.getAttribute("user");
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        if (usuario != null) {
-            session.invalidate();
+        if (usuario != null && usuario.getNivel() == 1) {
+            try {
+                if (!usuarioDAO.isCadastroCompleto(usuario.getId())) {
+                    RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
+                    rd.forward(request, response);
+                } else {
+                    chain.doFilter(request, response);
+                }
+            } catch (Throwable t) {
+                problem = t;
+                t.printStackTrace();
+            }
+
+        } else {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
         if (problem != null) {
             if (problem instanceof ServletException) {
                 throw (ServletException) problem;
@@ -131,31 +94,17 @@ public class FiltroNovoCliente implements Filter {
         }
     }
 
-    /**
-     * Return the filter configuration object for this filter.
-     */
     public FilterConfig getFilterConfig() {
         return (this.filterConfig);
     }
 
-    /**
-     * Set the filter configuration object for this filter.
-     *
-     * @param filterConfig The filter configuration object
-     */
     public void setFilterConfig(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
     }
 
-    /**
-     * Destroy method for this filter
-     */
     public void destroy() {
     }
 
-    /**
-     * Init method for this filter
-     */
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
@@ -165,9 +114,6 @@ public class FiltroNovoCliente implements Filter {
         }
     }
 
-    /**
-     * Return a String representation of this object.
-     */
     @Override
     public String toString() {
         if (filterConfig == null) {

@@ -1,7 +1,5 @@
-package br.icarwash.control;
+package br.icarwash.control.filter;
 
-import br.icarwash.dao.ClienteDAO;
-import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -18,25 +16,25 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcesso", urlPatterns = {"/Painel", "/painel"})
-public class FiltroAcesso implements Filter {
+@WebFilter(filterName = "FiltroAcessoAdmin", urlPatterns = {"/Controle", "/ListarSolicitacaoEmAnalise"})
+public class FiltroAcessoAdmin implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
     private boolean aprovado;
 
-    public FiltroAcesso() {
+    public FiltroAcessoAdmin() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         String url = ((HttpServletRequest) request).getRequestURL().toString();
-
-        String queryString = ((HttpServletRequest) request).getQueryString();
+        
+        String queryString = ((HttpServletRequest) request).getQueryString();        
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
-
+        
         if (usuario != null) {
             if (debug) {
                 log("Usuario: " + usuario.getEmail() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
@@ -50,6 +48,7 @@ public class FiltroAcesso implements Filter {
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
+
     }
 
     @Override
@@ -65,43 +64,29 @@ public class FiltroAcesso implements Filter {
 
         Throwable problem = null;
         if (usuario != null) {
-            if (usuario.isCadastroCompleto()) {
-                switch (usuario.getNivel()) {
-                    case 3:
-                        session.setAttribute("nome", "Admin");
-                        request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
-                        break;
-                    case 2:
-                        session.setAttribute("nome", new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getNome());
-                        request.getRequestDispatcher("/ListarSolicitacaoLavador").forward(request, response);
-                        break;
-                    case 1:
-                        session.setAttribute("nome", new ClienteDAO().localizarPorIdUsuario(usuario.getId()).getNome());
-                        request.getRequestDispatcher("/ListarSolicitacaoCliente").forward(request, response);
-                        break;
-                    default:
-                        aprovado = false;
-                        log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                        session.invalidate();
-                        request.getRequestDispatcher("index.jsp").forward(request, response);
-                        break;
+            if (usuario.getNivel() == 3) {
+                try {
+                    chain.doFilter(request, response);
+                } catch (IOException | ServletException t) {
+                    problem = t;
                 }
             } else {
-                session.setAttribute("nome", "");
-                RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
-                rd.forward(request, response);
+                aprovado = false;
+                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+                session.invalidate();
+                request.getRequestDispatcher("index.jsp").forward(request, response);
             }
-            doAfterProcessing(request, response);
+        }
+        doAfterProcessing(request, response);
 
-            if (problem != null) {
-                if (problem instanceof ServletException) {
-                    throw (ServletException) problem;
-                }
-                if (problem instanceof IOException) {
-                    throw (IOException) problem;
-                }
-                sendProcessingError(problem, response);
+        if (problem != null) {
+            if (problem instanceof ServletException) {
+                throw (ServletException) problem;
             }
+            if (problem instanceof IOException) {
+                throw (IOException) problem;
+            }
+            sendProcessingError(problem, response);
         }
     }
 

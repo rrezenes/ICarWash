@@ -1,4 +1,4 @@
-package br.icarwash.control;
+package br.icarwash.control.filter;
 
 import br.icarwash.model.Usuario;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -16,33 +15,32 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoAdmin", urlPatterns = {"/Controle", "/ListarSolicitacaoEmAnalise"})
-public class FiltroAcessoAdmin implements Filter {
+@WebFilter(filterName = "FiltroAcessoLavador", urlPatterns = {"/ListarSolicitacaoLavador", "/produtos-hoje"})
+public class FiltroAcessoLavador implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
     private boolean aprovado;
 
-    public FiltroAcessoAdmin() {
+    public FiltroAcessoLavador() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         String url = ((HttpServletRequest) request).getRequestURL().toString();
-        
-        String queryString = ((HttpServletRequest) request).getQueryString();        
+
+        String queryString = ((HttpServletRequest) request).getQueryString();
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
-        
+
         if (usuario != null) {
             if (debug) {
-                log("Usuario: " + usuario.getEmail() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
+                log("Usuário: " + usuario.getEmail() + " Nível: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
             }
         } else {
-            log("usuario sem login tentando acessar " + request.getRemoteAddr());
-            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-            rd.forward(request, response);
+            log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }
 
@@ -64,7 +62,7 @@ public class FiltroAcessoAdmin implements Filter {
 
         Throwable problem = null;
         if (usuario != null) {
-            if (usuario.getNivel() == 3) {
+            if (usuario.getNivel() == 2) {
                 try {
                     chain.doFilter(request, response);
                 } catch (IOException | ServletException t) {
@@ -75,6 +73,7 @@ public class FiltroAcessoAdmin implements Filter {
                 log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
                 session.invalidate();
                 request.getRequestDispatcher("index.jsp").forward(request, response);
+
             }
         }
         doAfterProcessing(request, response);
@@ -104,7 +103,7 @@ public class FiltroAcessoAdmin implements Filter {
         }
     }
 
-    @Override
+   @Override
     public String toString() {
         if (filterConfig == null) {
             return ("FiltroAcessoCadastros()");
