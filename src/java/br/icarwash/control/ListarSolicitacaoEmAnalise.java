@@ -1,5 +1,6 @@
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Solicitacao;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ListarSolicitacaoEmAnalise", urlPatterns = {"/ListarSolicitacaoEmAnalise"})
+@WebServlet(name = "ListarSolicitacaoEmAnalise", urlPatterns = {"/ListarSolicitacaoEmAnalise", "/solicitacao-em-analise"})
 public class ListarSolicitacaoEmAnalise extends HttpServlet {
 
     @Override
@@ -20,16 +21,15 @@ public class ListarSolicitacaoEmAnalise extends HttpServlet {
 
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarEmAnalise();
-
+        
+        solicitacoes.forEach(solicitacao -> {
+            solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
+        });
+        
         request.setAttribute("solicitacoes", solicitacoes);
 
         RequestDispatcher rd = request.getRequestDispatcher("/listar_solicitacoes_pendentes.jsp");
         rd.forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

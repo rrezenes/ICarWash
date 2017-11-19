@@ -33,11 +33,8 @@ public class ListarSolicitacaoHojeLavador extends HttpServlet {
         ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoHojeLavador(new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getId());
 
         solicitacoes.forEach(solicitacao -> {
-
                 solicitacao.setEndereco(new EnderecoDAO().localizarPorId(solicitacao.getEndereco().getId()));
-                System.out.println(solicitacao.getEndereco().getBairro());
-                solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
-           
+                solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));           
         });
 
         request.setAttribute("solicitacoes", solicitacoes);

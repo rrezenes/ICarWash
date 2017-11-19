@@ -37,24 +37,24 @@ public class SolicitacaoDAO {
 
     private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)";
 
-    private static final String SELECT_ALL = "SELECT solicitacao.ID as ID_Solicitacao, cliente.ID as ID_Cliente, cliente.nome as nome_cliente, solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente, icarwash.solicitacao, icarwash.solicitacao_servico, icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao group by solicitacao.ID ORDER BY solicitacao.ID";
+    private static final String SELECT_ALL = "SELECT * FROM solicitacao";
     private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao, porte, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
-    private static final String SELECT_SOLICITACAO_BY_ID_CLIENTE = "SELECT * FROM solicitacao where id_cliente = ? order by solicitacao.data_solicitacao";
-    private static final String SELECT_SOLICITACAO_BY_ID_LAVADOR = "select ID as ID_Solicitacao, id_cliente, id_avaliacao, id_endereco, porte, data_solicitacao, valor_total, status FROM solicitacao where id_lavador = ? order by data_solicitacao";
-    private static final String SELECT_SOLICITACAO_HOJE_LAVADOR = "select ID, id_cliente, id_avaliacao, id_endereco, porte, data_solicitacao, status, valor_total from solicitacao where id_lavador = ? and DATE(DATE_FORMAT(data_solicitacao, '%Y-%m-%d')) = CURDATE()";
-    private static final String SELECT_EM_ANALISE = "SELECT solicitacao.ID as ID_Solicitacao,cliente.ID as ID_Cliente, cliente.nome as nome_cliente,solicitacao.id_lavador, solicitacao.id_avaliacao, solicitacao.porte,solicitacao.data_solicitacao, solicitacao.valor_total, solicitacao.status FROM icarwash.cliente,icarwash.solicitacao,icarwash.solicitacao_servico,icarwash.servico where cliente.ID = solicitacao.id_cliente and solicitacao.ID = solicitacao_servico.id_solicitacao AND solicitacao.status = 'Em Analise' group by solicitacao.ID";
+    private static final String SELECT_BY_ID_CLIENTE = "SELECT * FROM solicitacao where id_cliente = ? order by data_solicitacao";
+    private static final String SELECT_BY_ID_LAVADOR = "select * FROM solicitacao where id_lavador = ? order by data_solicitacao";
+    private static final String SELECT_SOLICITACAO_HOJE_LAVADOR = "select * from solicitacao where id_lavador = ? and DATE(DATE_FORMAT(data_solicitacao, '%Y-%m-%d')) = CURDATE()";
+    private static final String SELECT_EM_ANALISE = "SELECT * FROM solicitacao where solicitacao.status = 'Em Analise'";
     private static final String SELECT_ID_ULTIMA_SOLICITACAO = "SELECT id FROM solicitacao WHERE id = (SELECT MAX(id) FROM solicitacao)";
-    private static final String SELECT_HORARIO_INDISPONIVEL = "SELECT data_solicitacao as hora, STATUS,count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?";
+    private static final String SELECT_HORARIO_INDISPONIVEL = "SELECT data_solicitacao as hora, STATUS, count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?";
     private static final String SELECT_QTD_SOLICITACAO_BY_IDLAVADOR_AND_DATE = "select count(*) as quantidade FROM solicitacao where id_lavador = ? and status <> 'Cancelado' and data_solicitacao like ?";
     private static final String SELECT_CHECK_LAVADORES_DISPONIVEIS = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado'";
 
-    private static final String UPDATE_CANCELAR_SOLICITACAO_POR_ID = "UPDATE solicitacao SET status = 'Cancelado' WHERE ID = ?";
-    private static final String UPDATE_AGENDAR_SOLICITACAO = "UPDATE solicitacao SET status = 'Agendado' WHERE ID = ?";
-    private static final String UPDATE_FINALIZAR_SOLICITACAO = "UPDATE solicitacao SET status = 'Finalizado' WHERE ID = ?";
-    private static final String UPDATE_AVALIAR_SOLICITACAO = "UPDATE solicitacao SET status = 'Avaliado', id_avaliacao = ? WHERE ID = ?";
-    private static final String UPDATE_CONCLUIR_SOLICITACAO = "UPDATE solicitacao SET status = 'Concluido' WHERE ID = ?";
-    private static final String UPDATE_PROCESSAR_SOLICITACAO = "UPDATE solicitacao SET status = 'Em Processo' WHERE ID = ?";
-    private static final String UPDATE_ATRIBUIR_LAVADOR_SOLICITACAO = "UPDATE solicitacao SET id_lavador = ? WHERE ID = ?";
+    private static final String CANCELA = "UPDATE solicitacao SET status = 'Cancelado' WHERE ID = ?";
+    private static final String AGENDA = "UPDATE solicitacao SET status = 'Agendado' WHERE ID = ?";
+    private static final String FINALIZA = "UPDATE solicitacao SET status = 'Finalizado' WHERE ID = ?";
+    private static final String AVALIA = "UPDATE solicitacao SET status = 'Avaliado', id_avaliacao = ? WHERE ID = ?";
+    private static final String CONCLUI = "UPDATE solicitacao SET status = 'Concluido' WHERE ID = ?";
+    private static final String PROCESSA = "UPDATE solicitacao SET status = 'Em Processo' WHERE ID = ?";
+    private static final String ATRIBUI_LAVADOR = "UPDATE solicitacao SET id_lavador = ? WHERE ID = ?";
 
     public SolicitacaoDAO() {
         this.conexao = Conexao.getConexao();
@@ -99,7 +99,7 @@ public class SolicitacaoDAO {
         SolicitacaoState solicitacaoState;
 
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_SOLICITACAO_BY_ID_CLIENTE);
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_CLIENTE);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -151,7 +151,7 @@ public class SolicitacaoDAO {
         Avaliacao avaliacao;
         SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_SOLICITACAO_BY_ID_LAVADOR);
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_LAVADOR);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -175,7 +175,7 @@ public class SolicitacaoDAO {
                     avaliacao = new AvaliacaoBuilder().withId(0).build();
                 }
                 solicitacao = new SolicitacaoBuilder()
-                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withId(rs.getInt("ID"))
                         .withCliente(cliente)
                         .withAvaliacao(avaliacao)
                         .withSolicitacaoState(solicitacaoState)
@@ -284,32 +284,29 @@ public class SolicitacaoDAO {
         Solicitacao solicitacao;
         Cliente cliente;
         Lavador lavador;
-        SolicitacaoState solicitacaoState;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ALL);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 cliente = new ClienteBuilder()
-                        .withId(rs.getInt("ID_Cliente"))
-                        .withNome(rs.getString("nome_cliente"))
+                        .withId(rs.getInt("id_cliente"))
                         .build();
 
                 lavador = new LavadorBuilder()
                         .withId(rs.getInt("id_lavador"))
                         .build();
 
-                solicitacaoState = validarStatus(rs.getString("status"));
-                Calendar data = Calendar.getInstance();
-                data.setTime(rs.getTimestamp("data_solicitacao"));
+                Calendar dataSolicitacao = Calendar.getInstance();
+                dataSolicitacao.setTime(rs.getTimestamp("data_solicitacao"));
 
                 solicitacao = new SolicitacaoBuilder()
-                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withId(rs.getInt("ID"))
                         .withCliente(cliente)
                         .withLavador(lavador)
-                        .withSolicitacaoState(solicitacaoState)
+                        .withSolicitacaoState(validarStatus(rs.getString("status")))
                         .withPorte(rs.getString("porte"))
-                        .withDataSolicitacao(data)
+                        .withDataSolicitacao(dataSolicitacao)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .build();
 
@@ -335,7 +332,6 @@ public class SolicitacaoDAO {
             while (rs.next()) {
                 cliente = new ClienteBuilder()
                         .withId(rs.getInt("id_cliente"))
-                        .withNome(rs.getString("nome_cliente"))
                         .build();
 
                 lavador = new LavadorBuilder()
@@ -347,7 +343,7 @@ public class SolicitacaoDAO {
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
                 solicitacao = new SolicitacaoBuilder()
-                        .withId(rs.getInt("ID_Solicitacao"))
+                        .withId(rs.getInt("ID"))
                         .withCliente(cliente)
                         .withLavador(lavador)
                         .withSolicitacaoState(solicitacaoState)
@@ -382,7 +378,7 @@ public class SolicitacaoDAO {
 
     public void cancelarSolicitacaoPorId(int id) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_CANCELAR_SOLICITACAO_POR_ID);
+            PreparedStatement pstmt = conexao.prepareStatement(CANCELA);
             pstmt.setInt(1, id);
             pstmt.execute();
 
@@ -394,7 +390,7 @@ public class SolicitacaoDAO {
 
     public void agendarSolicitacao(Solicitacao solicitacao) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_AGENDAR_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(AGENDA);
             pstmt.setInt(1, solicitacao.getId());
             pstmt.execute();
 
@@ -406,7 +402,7 @@ public class SolicitacaoDAO {
 
     public void finalizarSolicitacao(Solicitacao solicitacao) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_FINALIZAR_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(FINALIZA);
             pstmt.setInt(1, solicitacao.getId());
             pstmt.execute();
 
@@ -418,7 +414,7 @@ public class SolicitacaoDAO {
 
     public void avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_AVALIAR_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(AVALIA);
             pstmt.setInt(1, avaliacao.getId());
             pstmt.setInt(2, solicitacao.getId());
             pstmt.execute();
@@ -431,7 +427,7 @@ public class SolicitacaoDAO {
 
     public void concluirSolicitacao(Solicitacao solicitacao) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_CONCLUIR_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(CONCLUI);
             pstmt.setInt(1, solicitacao.getId());
             pstmt.execute();
 
@@ -443,7 +439,7 @@ public class SolicitacaoDAO {
 
     public void processarSolicitacao(Solicitacao solicitacao) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_PROCESSAR_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(PROCESSA);
             pstmt.setInt(1, solicitacao.getId());
             pstmt.execute();
 
@@ -455,7 +451,7 @@ public class SolicitacaoDAO {
 
     public void atribuirLavador(Lavador lavador, Solicitacao solicitacao) {
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(UPDATE_ATRIBUIR_LAVADOR_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(ATRIBUI_LAVADOR);
             pstmt.setInt(1, lavador.getId());
             pstmt.setInt(2, solicitacao.getId());
             pstmt.execute();

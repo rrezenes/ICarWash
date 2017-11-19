@@ -90,7 +90,13 @@ public class ListaCommand implements ICommand {
                 return "listar_produto.jsp";
 
             case "solicitacao":
-                request.setAttribute("solicitacoes", new SolicitacaoDAO().listar());
+                ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO().listar();
+                
+                solicitacoes.forEach(solicitacao -> {
+                    solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
+                });
+
+                request.setAttribute("solicitacoes", solicitacoes);
 
                 return "listar_solicitacao.jsp";
 
