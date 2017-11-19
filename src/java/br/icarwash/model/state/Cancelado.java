@@ -1,4 +1,4 @@
-package br.icarwash.control.state;
+package br.icarwash.model.state;
 
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;

@@ -1,9 +1,11 @@
-package br.icarwash.control.state;
+package br.icarwash.model.state;
 
+import br.icarwash.dao.AvaliacaoDAO;
+import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 
-public class Concluido implements SolicitacaoState {
+public class Finalizado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
@@ -27,7 +29,14 @@ public class Concluido implements SolicitacaoState {
 
     @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
-        return this;
+
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
+        
+        avaliacao.setId(avaliacaoDAO.atribuirNotas(avaliacao));
+
+        new SolicitacaoDAO().avaliarSolicitacao(solicitacao, avaliacao);
+
+        return new Avaliado();
     }
 
     @Override
@@ -42,7 +51,7 @@ public class Concluido implements SolicitacaoState {
 
     @Override
     public String toString() {
-        return "Concluido";
+        return "Finalizado";
     }
 
 }

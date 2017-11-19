@@ -1,15 +1,14 @@
-package br.icarwash.control.state;
+package br.icarwash.model.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 
-public class EmAnalise implements SolicitacaoState {
+public class Avaliado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
-        solicitacao.atribuirLavador();
-        return new Agendado();
+        return this;
     }
 
     @Override
@@ -34,18 +33,18 @@ public class EmAnalise implements SolicitacaoState {
 
     @Override
     public SolicitacaoState concluirSolicitacao(Solicitacao solicitacao) {
-        return this;
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        solicitacaoDAO.concluirSolicitacao(solicitacao);
+        return new Concluido();
     }
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.cancelarSolicitacaoPorId(solicitacao.getId());
-        return new Cancelado();
+        return this;
     }
 
     @Override
     public String toString() {
-        return "Em Analise";
+        return "Avaliado";
     }
 }

@@ -1,7 +1,7 @@
 package br.icarwash.control;
 
-import br.icarwash.control.state.EmAnalise;
-import br.icarwash.control.state.SolicitacaoState;
+import br.icarwash.model.state.EmAnalise;
+import br.icarwash.model.state.SolicitacaoState;
 import br.icarwash.dao.*;
 import br.icarwash.model.*;
 import br.icarwash.model.Endereco.EnderecoBuilder;
