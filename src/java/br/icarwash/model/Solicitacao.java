@@ -3,7 +3,6 @@ package br.icarwash.model;
 import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.state.SolicitacaoState;
-import br.icarwash.model.state.EmAnalise;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;

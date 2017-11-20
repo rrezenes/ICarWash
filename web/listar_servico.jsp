@@ -2,10 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 
-<c:if test="${!empty cadastrado}">
-    <script>Materialize.toast('Produto Cadastrado', 6000, 'rounded');</script>        
-</c:if>
-
 <div class="row">
     <p class="titulo-controle">Controle de Serviços</p>
     <div class="divider"></div>

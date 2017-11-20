@@ -102,10 +102,6 @@
         </form>
     </div>
 
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
-    </div>
-
 </div>
 
 <script src="js/jquery.validate.js"></script>

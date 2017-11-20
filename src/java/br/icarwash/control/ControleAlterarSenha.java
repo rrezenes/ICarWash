@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "ControleNovaSenha", urlPatterns = {"/ControleNovaSenha"})
-public class ControleNovaSenha extends HttpServlet {
+public class ControleAlterarSenha extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
