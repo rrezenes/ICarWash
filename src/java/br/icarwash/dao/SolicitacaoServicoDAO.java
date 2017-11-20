@@ -1,7 +1,6 @@
 
 package br.icarwash.dao;
 
-import br.icarwash.model.Servico;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

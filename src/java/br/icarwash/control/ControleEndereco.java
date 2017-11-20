@@ -3,6 +3,7 @@ package br.icarwash.control;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.model.Endereco;
 import java.io.IOException;
+import java.sql.Connection;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,7 @@ public class ControleEndereco extends HttpServlet {
 
     protected void alterarEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
 
         Endereco endereco = new Endereco.EnderecoBuilder()
                 .withId(Integer.parseInt(request.getParameter("idEndereco")))
@@ -46,7 +48,7 @@ public class ControleEndereco extends HttpServlet {
                 .withNome(request.getParameter("nomeEndereco"))
                 .build();
 
-        new EnderecoDAO().atualizar(endereco);
+        new EnderecoDAO(conexao).atualizar(endereco);
 
         request.setAttribute("alterado", "ok");
         RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
@@ -55,6 +57,7 @@ public class ControleEndereco extends HttpServlet {
 
     protected void adicionarEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
 
         Endereco endereco = new Endereco.EnderecoBuilder()
                 .withCep(request.getParameter("cep"))
@@ -66,7 +69,7 @@ public class ControleEndereco extends HttpServlet {
                 .withNome(request.getParameter("nomeEndereco"))
                 .build();
 
-        new EnderecoDAO().cadastrar(endereco);
+        new EnderecoDAO(conexao).cadastrar(endereco);
 
         request.setAttribute("alterado", "ok");
         RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
@@ -75,6 +78,7 @@ public class ControleEndereco extends HttpServlet {
 
     protected void excluirEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
 
     }
 

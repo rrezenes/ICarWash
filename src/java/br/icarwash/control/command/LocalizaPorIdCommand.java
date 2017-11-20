@@ -15,6 +15,7 @@ import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Servico;
 import br.icarwash.model.ServicoProduto;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +24,15 @@ public class LocalizaPorIdCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
         String localizar = request.getParameter("q");
         final int id = Integer.parseInt(request.getParameter("id"));
 
         switch (localizar) {
             case "cliente": {
 
-                Cliente cliente = new ClienteDAO().localizarPorId(id);
-                ArrayList<Endereco> enderecos = new EnderecoDAO().localizarPorIdUsuario(cliente.getUsuario().getId());
+                Cliente cliente = new ClienteDAO(conexao).localizarPorId(id);
+                ArrayList<Endereco> enderecos = new EnderecoDAO(conexao).localizarPorIdUsuario(cliente.getUsuario().getId());
 
                 request.setAttribute("enderecos", enderecos);
                 request.setAttribute("cliente", cliente);
@@ -38,21 +40,21 @@ public class LocalizaPorIdCommand implements ICommand {
             }
             case "lavador": {
 
-                Lavador lavador = new LavadorDAO().localizarPorId(id);
-                Endereco endereco = new EnderecoDAO().localizarPorIdUsuario(lavador.getUsuario().getId()).get(0);
+                Lavador lavador = new LavadorDAO(conexao).localizarPorId(id);
+                Endereco endereco = new EnderecoDAO(conexao).localizarPorIdUsuario(lavador.getUsuario().getId()).get(0);
 
                 request.setAttribute("endereco", endereco);
                 request.setAttribute("lavador", lavador);
                 return "localizar_lavador.jsp";
             }
             case "produto": {
-                request.setAttribute("produto", new ProdutoDAO().localizarPorId(id));
+                request.setAttribute("produto", new ProdutoDAO(conexao).localizarPorId(id));
                 return "localizar_produto.jsp";
             }
             case "servico": {
 
-                Servico servico = new ServicoDAO().localizarPorId(id);
-                ArrayList<ServicoProduto> servicoProdutos = new ServicoProdutoDAO().selecionaProdutosPorIdServico(servico.getId());
+                Servico servico = new ServicoDAO(conexao).localizarPorId(id);
+                ArrayList<ServicoProduto> servicoProdutos = new ServicoProdutoDAO(conexao).selecionaProdutosPorIdServico(servico.getId());
 
                 Map<String, Object> mapaProdutos = new HashMap<>();
 
@@ -60,7 +62,7 @@ public class LocalizaPorIdCommand implements ICommand {
                     mapaProdutos.put(String.valueOf(servicoProduto.getProduto().getId()), servicoProduto.getProduto());
                 });
 
-                request.setAttribute("todosProdutos", new ProdutoDAO().listar());
+                request.setAttribute("todosProdutos", new ProdutoDAO(conexao).listar());
                 request.setAttribute("servico", servico);
                 request.setAttribute("mapaProdutos", mapaProdutos);
                 request.setAttribute("servicoProdutos", servicoProdutos);

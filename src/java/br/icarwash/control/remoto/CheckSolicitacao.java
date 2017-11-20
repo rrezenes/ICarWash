@@ -5,6 +5,7 @@ import br.icarwash.dao.SolicitacaoDAO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,15 +19,17 @@ public class CheckSolicitacao extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
         PrintWriter out = response.getWriter();
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
 
         String[] data = request.getParameter("data").split("/");
         String dataSolicitacao = data[2] + "-" + data[1] + "-" + data[0];
 
         ArrayList<String> horariosDisponiveis = gerarListaHoras();
 
-        ArrayList<Integer> horariosIndisponiveis = solicitacaoDAO.consultarHorarioIndisponivel(dataSolicitacao, new LavadorDAO().quantidadeLavadores());
+        ArrayList<Integer> horariosIndisponiveis = solicitacaoDAO.consultarHorarioIndisponivel(dataSolicitacao, new LavadorDAO(conexao).quantidadeLavadores());
 
         horariosDisponiveis.removeAll(horariosIndisponiveis);
 

@@ -3,6 +3,7 @@ package br.icarwash.control.remoto;
 import br.icarwash.dao.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,12 +16,11 @@ public class CheckUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String URI = ((HttpServletRequest) request).getRequestURI();
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        
         PrintWriter out = response.getWriter();
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-
-        out.print(usuarioDAO.checkEmailDisponivel(request.getParameter("email")));
+        out.print(new UsuarioDAO(conexao).checkEmailDisponivel(request.getParameter("email")));
         out.flush();
     }
 

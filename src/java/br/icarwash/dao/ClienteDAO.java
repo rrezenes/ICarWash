@@ -4,7 +4,6 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Usuario;
 import br.icarwash.model.Usuario.UsuarioBuilder;
-import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +15,6 @@ import java.sql.Statement;
 
 public class ClienteDAO {
 
-    private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into cliente(id_usuario, nome, telefone, dt_nascimento, cpf) values(?,?,?,?,?)";
     private static final String SELECT_ALL = "select * from cliente";
@@ -27,11 +25,6 @@ public class ClienteDAO {
 
     public ClienteDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public ClienteDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public int cadastrar(Cliente cliente) {
@@ -56,8 +49,6 @@ public class ClienteDAO {
             throw new RuntimeException(e);
         }
 
-        this.fechaConexao();
-
         return idCliente;
     }
 
@@ -78,7 +69,7 @@ public class ClienteDAO {
                 usuario = new UsuarioBuilder()
                         .withId(rs.getInt("id_usuario"))
                         .build();
-                
+
                 cliente = new ClienteBuilder()
                         .withId(rs.getInt("id"))
                         .withUsuario(usuario)
@@ -93,7 +84,6 @@ public class ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return clientes;
     }
 
@@ -126,7 +116,6 @@ public class ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return cliente;
     }
 
@@ -141,7 +130,6 @@ public class ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public int localizarIdPorCpf(String cpf) {
@@ -156,16 +144,15 @@ public class ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return IDCliente;
     }
 
     public Cliente localizarPorIdUsuario(int idUsuario) {
         Cliente cliente = null;
         Usuario usuario;
+        Calendar cal = Calendar.getInstance();
+        Timestamp timestamp;
         try {
-            Calendar cal = Calendar.getInstance();
-            Timestamp timestamp;
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
             pstmt.setInt(1, idUsuario);
             ResultSet rs = pstmt.executeQuery();
@@ -189,7 +176,6 @@ public class ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return cliente;
     }
 
@@ -202,18 +188,6 @@ public class ClienteDAO {
             return !rs.next();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.fechaConexao();
-        }
-    }
-
-    private void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 

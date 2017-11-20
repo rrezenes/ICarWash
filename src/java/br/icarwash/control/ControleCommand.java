@@ -15,7 +15,7 @@ public class ControleCommand extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            //recupera a ação o usuário7
+            //recupera a ação o usuário
             String action = "br.icarwash.control.command." + request.getParameter("action");
             Class classeAction = Class.forName(action);
             

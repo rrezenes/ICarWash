@@ -9,6 +9,7 @@ import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
@@ -26,18 +27,20 @@ public class ListarSolicitacaoHojeLavador extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        Connection conexao = (Connection) request.getAttribute("conexao");
+
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
 
-        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoHojeLavador(new LavadorDAO().localizarPorIdUsuario(usuario.getId()).getId());
-
+        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoHojeLavador(new LavadorDAO(conexao).localizarPorIdUsuario(usuario.getId()).getId());
+        
+        EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+        ClienteDAO clienteDAO = new ClienteDAO(conexao);
+        
         solicitacoes.forEach(solicitacao -> {
-
-                solicitacao.setEndereco(new EnderecoDAO().localizarPorId(solicitacao.getEndereco().getId()));
-                System.out.println(solicitacao.getEndereco().getBairro());
-                solicitacao.setCliente(new ClienteDAO().localizarPorId(solicitacao.getCliente().getId()));
-           
+            solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco().getId()));
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId()));
         });
 
         request.setAttribute("solicitacoes", solicitacoes);

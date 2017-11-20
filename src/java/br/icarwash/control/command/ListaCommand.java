@@ -9,93 +9,95 @@ import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Endereco;
-import br.icarwash.model.Endereco.EnderecoBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Lavador;
-import br.icarwash.model.Produto;
-import br.icarwash.model.Servico;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.Usuario;
-import br.icarwash.util.Conexao;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ListaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
         String quemListar = request.getParameter("listar");
-        Connection conexao = Conexao.getConexao();
 
         switch (quemListar) {
             case "cliente":
-
-                ClienteDAO clienteDAO = new ClienteDAO();
-                ArrayList<Cliente> clientes = clienteDAO.listar();
-
-                try {
-                    UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-
-                    clientes.forEach((cliente) -> {
-                        cliente.setUsuario(usuarioDAO.localizarUsuarioPorID(cliente.getUsuario().getId()));
-                    });
-
-                    conexao.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(ListaCommand.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                request.setAttribute("clientes", clientes);
-
-                return "listar_cliente.jsp";
+                return listarClientes(request);
 
             case "lavador":
-
-                ArrayList<Lavador> lavadores = new LavadorDAO().listar();
-                ArrayList<Endereco> enderecos = new ArrayList<>();
-
-                try {
-                    UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-                    EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
-
-                    lavadores.forEach(lavador -> {
-                        lavador.setUsuario(usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId()));
-                        enderecos.add(enderecoDAO.localizarPorIdUsuario(lavador.getUsuario().getId()).get(0));
-                    });
-
-                    conexao.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(ListaCommand.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                request.setAttribute("lavadores", lavadores);
-                request.setAttribute("enderecos", enderecos);
-
-                return "listar_lavador.jsp";
+                return listarLavadores(request);
 
             case "servico":
-                request.setAttribute("servicos", new ServicoDAO().listar());
+                request.setAttribute("servicos", new ServicoDAO(conexao).listar());
+                request.setAttribute("produtos", new ProdutoDAO(conexao).listar());
 
                 return "listar_servico.jsp";
 
             case "produto":
-                request.setAttribute("produtos", new ProdutoDAO().listar());
+                request.setAttribute("produtos", new ProdutoDAO(conexao).listar());
 
                 return "listar_produto.jsp";
 
             case "solicitacao":
-                request.setAttribute("solicitacoes", new SolicitacaoDAO().listar());
-
-                return "listar_solicitacao.jsp";
+                return listarSolicitacoes(request);
 
             default:
                 return "painel_admin.jsp";
         }
     }
+
+    private String listarClientes(HttpServletRequest request) {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        ArrayList<Cliente> clientes = new ClienteDAO(conexao).listar();
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+
+        clientes.forEach((cliente) -> {
+            cliente.setUsuario(usuarioDAO.localizarUsuarioPorID(cliente.getUsuario().getId()));
+        });
+
+        request.setAttribute("clientes", clientes);
+
+        return "listar_cliente.jsp";
+    }
+
+    private String listarLavadores(HttpServletRequest request) {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        ArrayList<Lavador> lavadores = new LavadorDAO(conexao).listar();
+        ArrayList<Endereco> enderecos = new ArrayList<>();
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+        EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+
+        lavadores.forEach(lavador -> {
+            lavador.setUsuario(usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId()));
+            enderecos.add(enderecoDAO.localizarPorIdUsuario(lavador.getUsuario().getId()).get(0));
+        });
+
+        request.setAttribute("lavadores", lavadores);
+        request.setAttribute("enderecos", enderecos);
+
+        return "listar_lavador.jsp";
+    }
+
+    private String listarSolicitacoes(HttpServletRequest request) {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO(conexao).listar();
+        ClienteDAO clienteDAO = new ClienteDAO(conexao);
+
+        solicitacoes.forEach(solicitacao -> {
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId())
+            );
+        });
+
+        request.setAttribute("solicitacoes", solicitacoes);
+
+        return "listar_solicitacao.jsp";
+    }
+
 }

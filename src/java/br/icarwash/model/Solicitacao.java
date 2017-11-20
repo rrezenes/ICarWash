@@ -2,8 +2,7 @@ package br.icarwash.model;
 
 import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.LavadorDAO;
-import br.icarwash.control.state.SolicitacaoState;
-import br.icarwash.control.state.EmAnalise;
+import br.icarwash.model.state.SolicitacaoState;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
@@ -299,7 +298,7 @@ public class Solicitacao {
 
         int valorMaisAlto = 0;
         int count = 0;
-        if ((quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < new LavadorDAO().quantidadeLavadores()) && lavadoresNaoPossuemMesmaQuantidade(quantidadeDeSolicitacoes)) {
+        if ((quantidadeDeLavadoresParaRemover(quantidadeDeSolicitacoes) < new LavadorDAO(Conexao.getConexao()).quantidadeLavadores()) && lavadoresNaoPossuemMesmaQuantidade(quantidadeDeSolicitacoes)) {
             for (int quantidade : quantidadeDeSolicitacoes) {
                 int idLav = Integer.parseInt(idLavadores.get(count));
                 if (quantidade >= valorMaisAlto) {

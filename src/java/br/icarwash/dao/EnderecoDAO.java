@@ -2,7 +2,6 @@ package br.icarwash.dao;
 
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Endereco.EnderecoBuilder;
-import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 
 public class EnderecoDAO {
 
-    private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into endereco(id_usuario, cep, estado, cidade, bairro, endereco, numero, nome) values(?,?,?,?,?,?,?,?)";
     private static final String UPDATE = "update endereco set cep = ?, estado = ?, cidade = ?, bairro = ?, endereco = ?, numero = ?, nome = ? WHERE id = ?";
@@ -22,11 +20,6 @@ public class EnderecoDAO {
 
     public EnderecoDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public EnderecoDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public int cadastrar(Endereco endereco) {
@@ -52,7 +45,6 @@ public class EnderecoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return idEndereco;
     }
 
@@ -77,7 +69,6 @@ public class EnderecoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return endereco;
     }
 
@@ -96,7 +87,6 @@ public class EnderecoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void excluir(int id) {
@@ -106,17 +96,6 @@ public class EnderecoDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-        this.fechaConexao();
-    }
-
-    private void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
@@ -144,7 +123,6 @@ public class EnderecoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return enderecos;
     }
 

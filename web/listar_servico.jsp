@@ -2,10 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
 
-<c:if test="${!empty cadastrado}">
-    <script>Materialize.toast('Produto Cadastrado', 6000, 'rounded');</script>        
-</c:if>
-
 <div class="row">
     <p class="titulo-controle">Controle de Serviços</p>
     <div class="divider"></div>
@@ -73,13 +69,12 @@
                         <label>Valor:</label> 
                         <input class="form-control erro-valor" type="text" name="valor" id="valor"><br>
                     </div>
-                    <jsp:useBean id="produtoDao" class="br.icarwash.dao.ProdutoDAO"/>
                     <div class="row">
                         <h5>Produtos</h5>
                         <div class="divider"></div>
                     </div>
                     <legend></legend>
-                    <c:forEach var="produto" items="${produtoDao.listar()}">
+                    <c:forEach var="produto" items="${produtos}">
                         <c:if test = "${produto.ativo}">
                             <div class="checkbox col s9">
                                 <p>
@@ -117,5 +112,13 @@
 <script src="js/inicializar-validate.js"></script>
 <script src="js/inicializar-modal.js"></script>
 <script src="js/buscar-na-tabela-3.js"></script>
+<script>
+    $(document).ready(function () {
+        let searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.has('ok')) {
+            Materialize.toast('Cadastro Efetuado', 6000, 'rounded');
+        }
+    });
+</script>
 
 <%@include file="rodape.jsp"%>

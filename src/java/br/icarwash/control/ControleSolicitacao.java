@@ -1,12 +1,10 @@
 package br.icarwash.control;
 
-import br.icarwash.control.state.EmAnalise;
-import br.icarwash.control.state.SolicitacaoState;
+import br.icarwash.model.state.EmAnalise;
 import br.icarwash.dao.*;
 import br.icarwash.model.*;
 import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
-import br.icarwash.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -15,8 +13,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -27,14 +23,13 @@ public class ControleSolicitacao extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setCharacterEncoding("UTF-8"); 
-        request.setCharacterEncoding("UTF-8");
-        
-        Calendar dataHoraSolicitacao = Calendar.getInstance();
 
-        Connection conexao = Conexao.getConexao();
+        Calendar dataHoraSolicitacao = Calendar.getInstance();
+        
+        Connection conexao = (Connection) request.getAttribute("conexao");
+
         try {
-            conexao.setAutoCommit(false);
+            
 
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
@@ -51,9 +46,9 @@ public class ControleSolicitacao extends HttpServlet {
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dataSolicitacao + " " + request.getParameter("selectHora")));
 
             Endereco endereco;
-            
+
             if (Boolean.parseBoolean(request.getParameter("cadastraEndereco"))) {
-                
+
                 endereco = new EnderecoBuilder()
                         .withUsuario(usuario)
                         .withCep(request.getParameter("cep"))
@@ -64,10 +59,10 @@ public class ControleSolicitacao extends HttpServlet {
                         .withNumero(Integer.parseInt(request.getParameter("numero")))
                         .withNome(request.getParameter("nomeEndereco"))
                         .build();
-                
+
                 int idEndereco = new EnderecoDAO(conexao).cadastrar(endereco);
                 endereco.setId(idEndereco);
-                
+
             } else {
                 int idEndereco = Integer.parseInt(request.getParameter("endereco"));
                 endereco = new EnderecoBuilder().withId(idEndereco).build();
@@ -94,27 +89,12 @@ public class ControleSolicitacao extends HttpServlet {
                 solicitacaoServicoDAO.cadastraSolicitacaoServico(idSolicitacao, servico.getId());
             }
 
-            conexao.commit();
-
-        } catch (SQLException e) {
-            try {
-                conexao.rollback();
-                throw new RuntimeException(e);
-            } catch (SQLException ex) {
-                Logger.getLogger(ControleSolicitacao.class.getName()).log(Level.SEVERE, null, ex);
-            }
         } catch (ParseException ex) {
             try {
                 conexao.rollback();
                 throw new RuntimeException(ex);
             } catch (SQLException ex1) {
                 throw new RuntimeException(ex1);
-            }
-        } finally {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
         }
 

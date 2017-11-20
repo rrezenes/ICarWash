@@ -1,4 +1,4 @@
-package br.icarwash.control;
+package br.icarwash.control.filter;
 
 import br.icarwash.model.Usuario;
 import java.io.IOException;
@@ -15,15 +15,14 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoLavador", urlPatterns = {"/ListarSolicitacaoLavador", "/produtos-hoje"})
-public class FiltroAcessoLavador implements Filter {
+@WebFilter(filterName = "FiltroAcessoCliente", urlPatterns = {"/SolicitarServico", "/solicitar-servico", "/ListarSolicitacaoCliente", "/solicitacoes-cliente", "/ControleSolicitacao", "/AvaliarSolicitacao"})
+public class FiltroAcessoCliente implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
-    private boolean aprovado;
 
-    public FiltroAcessoLavador() {
+    public FiltroAcessoCliente() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -36,7 +35,7 @@ public class FiltroAcessoLavador implements Filter {
 
         if (usuario != null) {
             if (debug) {
-                log("Usuário: " + usuario.getEmail() + " Nível: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
+                log("Usuario: " + usuario.getEmail() + " Nivel: " + usuario.getNivel() + " Acessando url: " + url + "?" + queryString);
             }
         } else {
             log("Usuário sem login tentando acessar: " + request.getRemoteAddr());
@@ -61,20 +60,17 @@ public class FiltroAcessoLavador implements Filter {
         Usuario usuario = (Usuario) session.getAttribute("user");
 
         Throwable problem = null;
-        if (usuario != null) {
-            if (usuario.getNivel() == 2) {
-                try {
-                    chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
-                    problem = t;
-                }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                session.invalidate();
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-
+        
+        if (usuario.getNivel() == 1) {
+            try {
+                chain.doFilter(request, response);
+            } catch (IOException | ServletException t) {
+                problem = t;
             }
+        } else {
+            log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
+            session.invalidate();
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 
@@ -103,7 +99,7 @@ public class FiltroAcessoLavador implements Filter {
         }
     }
 
-   @Override
+    @Override
     public String toString() {
         if (filterConfig == null) {
             return ("FiltroAcessoCadastros()");

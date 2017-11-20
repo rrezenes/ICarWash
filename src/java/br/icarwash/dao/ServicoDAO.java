@@ -1,21 +1,16 @@
 package br.icarwash.dao;
 
-import br.icarwash.model.Produto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import br.icarwash.model.Servico;
 import br.icarwash.model.Servico.ServicoBuilder;
-import br.icarwash.model.ServicoProduto;
-import br.icarwash.util.Conexao;
-import java.math.BigDecimal;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ServicoDAO {
 
-    private boolean fechaConexao = false;
     private final Connection conexao;
     private static final String INSERT = "insert into servico(nome, descricao, valor, ativo) values(?, ?, ?, ?)";
     private static final String SELECT_ALL = "select * from servico";
@@ -26,11 +21,6 @@ public class ServicoDAO {
 
     public ServicoDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public ServicoDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public int cadastrar(Servico servico) {
@@ -52,7 +42,6 @@ public class ServicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return idServico;
     }
 
@@ -75,7 +64,6 @@ public class ServicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return servicos;
     }
 
@@ -97,7 +85,6 @@ public class ServicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return servico;
     }
 
@@ -112,7 +99,6 @@ public class ServicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void inativar(int id) {
@@ -123,7 +109,6 @@ public class ServicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public void ativar(int id) {
@@ -134,16 +119,6 @@ public class ServicoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
-    public void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 }

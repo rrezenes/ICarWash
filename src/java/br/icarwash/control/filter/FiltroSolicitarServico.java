@@ -1,10 +1,12 @@
-package br.icarwash.control;
+package br.icarwash.control.filter;
 
+import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -16,15 +18,14 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcessoCliente", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente", "/ControleSolicitacao", "/AvaliarSolicitacao"})
-public class FiltroAcessoCliente implements Filter {
+@WebFilter(filterName = "FiltroSolicitarServico", urlPatterns = {"/SolicitarServico", "/ListarSolicitacaoCliente"})
+public class FiltroSolicitarServico implements Filter {
 
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
-    private boolean aprovado;
 
-    public FiltroAcessoCliente() {
+    public FiltroSolicitarServico() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -52,33 +53,33 @@ public class FiltroAcessoCliente implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
 
         doBeforeProcessing(request, response);
+
+        Throwable problem = null;
 
         HttpSession session = ((HttpServletRequest) request).getSession(true);
 
         Usuario usuario = (Usuario) session.getAttribute("user");
 
-        Throwable problem = null;
-        if (usuario != null) {
-            if (usuario.getNivel() == 1) {
-                try {
+        if (usuario != null && usuario.getNivel() == 1) {
+            try {
+                if (!new UsuarioDAO(conexao).isCadastroCompleto(usuario.getId())) {
+                    RequestDispatcher rd = request.getRequestDispatcher("continuar_cadastro_cliente.jsp");
+                    rd.forward(request, response);
+                } else {
                     chain.doFilter(request, response);
-                } catch (IOException | ServletException t) {
-                    problem = t;
                 }
-            } else {
-                aprovado = false;
-                log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
-                session.invalidate();
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+            } catch (Throwable t) {
+                problem = t;
+                t.printStackTrace();
             }
+
         } else {
-            
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
         doAfterProcessing(request, response);
 
@@ -93,16 +94,22 @@ public class FiltroAcessoCliente implements Filter {
         }
     }
 
-    @Override
+    public FilterConfig getFilterConfig() {
+        return (this.filterConfig);
+    }
+
+    public void setFilterConfig(FilterConfig filterConfig) {
+        this.filterConfig = filterConfig;
+    }
+
     public void destroy() {
     }
 
-    @Override
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("FiltroAcessoCadastros:Initializing filter");
+                log("FiltroNovoCliente:Initializing filter");
             }
         }
     }
@@ -110,9 +117,9 @@ public class FiltroAcessoCliente implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("FiltroAcessoCadastros()");
+            return ("FiltroNovoCliente()");
         }
-        StringBuffer sb = new StringBuffer("FiltroAcessoCadastros(");
+        StringBuffer sb = new StringBuffer("FiltroNovoCliente(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -135,7 +142,7 @@ public class FiltroAcessoCliente implements Filter {
                 pw.close();
                 ps.close();
                 response.getOutputStream().close();
-            } catch (IOException ex) {
+            } catch (Exception ex) {
             }
         } else {
             try {
@@ -143,7 +150,7 @@ public class FiltroAcessoCliente implements Filter {
                 t.printStackTrace(ps);
                 ps.close();
                 response.getOutputStream().close();
-            } catch (IOException ex) {
+            } catch (Exception ex) {
             }
         }
     }
@@ -157,7 +164,7 @@ public class FiltroAcessoCliente implements Filter {
             pw.close();
             sw.close();
             stackTrace = sw.getBuffer().toString();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
         }
         return stackTrace;
     }

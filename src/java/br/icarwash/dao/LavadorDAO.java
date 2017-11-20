@@ -16,7 +16,7 @@ import java.sql.Statement;
 
 public class LavadorDAO {
 
-    private boolean fechaConexao = false;
+
     private final Connection conexao;
     private static final String INSERT = "insert into lavador(id_usuario, dt_contrato, nome, telefone, dt_nascimento, CPF) values(?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select * from lavador";
@@ -30,11 +30,6 @@ public class LavadorDAO {
 
     public LavadorDAO(Connection conexao) {
         this.conexao = conexao;
-    }
-
-    public LavadorDAO() {
-        this.conexao = Conexao.getConexao();
-        fechaConexao = true;
     }
 
     public int cadastrar(Lavador lavador) {
@@ -57,7 +52,6 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return idEndereco;
     }
 
@@ -96,7 +90,6 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return lavadores;
     }
 
@@ -130,7 +123,6 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return lavador;
     }
 
@@ -166,7 +158,6 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return lavador;
     }
 
@@ -181,7 +172,6 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
     }
 
     public int localizarIdPorCpf(String cpf) {
@@ -196,7 +186,6 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
         return IDLavador;
     }
 
@@ -219,20 +208,10 @@ public class LavadorDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.fechaConexao();
 
         return numeroLavadores;
     }
 
-    public void fechaConexao() throws RuntimeException {
-        if (fechaConexao) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     public boolean checkCpfDisponivel(String cpf) {
         try {
@@ -242,8 +221,6 @@ public class LavadorDAO {
             return !rs.next();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.fechaConexao();
         }
     }
 
@@ -254,8 +231,6 @@ public class LavadorDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.fechaConexao();
         }
     }
 
@@ -266,8 +241,6 @@ public class LavadorDAO {
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.fechaConexao();
         }
     }
 

@@ -11,7 +11,7 @@ $("#confirmar").click(function () {
             data: dataString,
             cache: false,
             success: function (result) {       
-                window.location = "Controle?action=ListaCommand&listar=servico";                
+                window.location = "Controle?action=ListaCommand&listar=servico&ok";
             }
         });
     } else {

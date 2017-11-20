@@ -2,12 +2,14 @@ package br.icarwash.control;
 
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,11 +23,11 @@ public class ControleStatusSolicitacao extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
 
         String URI = ((HttpServletRequest) request).getRequestURI();
 
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        Solicitacao solicitacao = solicitacaoDAO.localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
+        Solicitacao solicitacao = new SolicitacaoDAO(conexao).localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
 
         String URIRetorno = "painel_admin.jsp";
 
@@ -47,7 +49,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         } else if (URI.endsWith("/ProcessarSolicitacao")) {
             
-            Lavador lavador = new LavadorDAO().localizarPorId(solicitacao.getLavador().getId());
+            Lavador lavador = new LavadorDAO(conexao).localizarPorId(solicitacao.getLavador().getId());
             
             if (!lavador.isOcupado()) {
                 solicitacao.processarSolicitacao();
@@ -60,17 +62,17 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         } else if (URI.endsWith("/AvaliarSolicitacao")) {
 
-            AvaliacaoBuilder avaliacaoBuilder = new AvaliacaoBuilder()
+            Avaliacao avaliacao = new AvaliacaoBuilder()
                     .withNotaPontualidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("pontualidade"))))
                     .withNotaServico(BigDecimal.valueOf(Double.parseDouble(request.getParameter("servico"))))
                     .withNotaAtendimento(BigDecimal.valueOf(Double.parseDouble(request.getParameter("atendimento"))))
-                    .withNotaAgilidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))));
+                    .withNotaAgilidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))))
+                    .build();
 
-            solicitacao.setAvaliacao(avaliacaoBuilder.build());
+            solicitacao.setAvaliacao(avaliacao);
             solicitacao.avaliarSolicitacao();
             URIRetorno = "ListarSolicitacaoCliente";
         }
-        //request.getRequestDispatcher("/ListarSolicitacaoEmAnalise").forward(request, response);
         response.sendRedirect(URIRetorno);
 
     }

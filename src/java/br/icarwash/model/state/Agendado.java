@@ -1,4 +1,4 @@
-package br.icarwash.control.state;
+package br.icarwash.model.state;
 
 import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.LavadorDAO;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class EmProcesso implements SolicitacaoState {
+public class Agendado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
@@ -25,23 +25,19 @@ public class EmProcesso implements SolicitacaoState {
 
     @Override
     public SolicitacaoState processarSolicitacao(Solicitacao solicitacao) {
-        return this;
-    }
-
-    @Override
-    public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
         Connection conexao = Conexao.getConexao();
 
         try {
             conexao.setAutoCommit(false);
 
-            new LavadorDAO(conexao).desocuparLavador(solicitacao.getLavador().getId());
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-            solicitacaoDAO.finalizarSolicitacao(solicitacao);
+            new LavadorDAO(conexao).ocuparLavador(solicitacao.getLavador().getId());
+
+            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
+            solicitacaoDAO.processarSolicitacao(solicitacao);
 
             conexao.commit();
 
-            return new Finalizado();
+            return new EmProcesso();
 
         } catch (SQLException e) {
             try {
@@ -61,6 +57,11 @@ public class EmProcesso implements SolicitacaoState {
     }
 
     @Override
+    public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
+        return this;
+    }
+
+    @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
         return this;
     }
@@ -72,12 +73,13 @@ public class EmProcesso implements SolicitacaoState {
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
-        return this;
+        new SolicitacaoDAO(Conexao.getConexao()).cancelarSolicitacaoPorId(solicitacao.getId());
+        return new Cancelado();
     }
 
     @Override
     public String toString() {
-        return "Em Processo";
+        return "Agendado";
     }
 
 }

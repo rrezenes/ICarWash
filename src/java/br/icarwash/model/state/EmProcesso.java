@@ -1,4 +1,4 @@
-package br.icarwash.control.state;
+package br.icarwash.model.state;
 
 import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.LavadorDAO;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Agendado implements SolicitacaoState {
+public class EmProcesso implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
@@ -25,19 +25,22 @@ public class Agendado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState processarSolicitacao(Solicitacao solicitacao) {
+        return this;
+    }
+
+    @Override
+    public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
         Connection conexao = Conexao.getConexao();
 
         try {
             conexao.setAutoCommit(false);
 
-            new LavadorDAO(conexao).ocuparLavador(solicitacao.getLavador().getId());
-
-            SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
-            solicitacaoDAO.processarSolicitacao(solicitacao);
+            new LavadorDAO(conexao).desocuparLavador(solicitacao.getLavador().getId());
+            new SolicitacaoDAO(conexao).finalizarSolicitacao(solicitacao);
 
             conexao.commit();
 
-            return new EmProcesso();
+            return new Finalizado();
 
         } catch (SQLException e) {
             try {
@@ -57,11 +60,6 @@ public class Agendado implements SolicitacaoState {
     }
 
     @Override
-    public SolicitacaoState finalizarSolicitacao(Solicitacao solicitacao) {
-        return this;
-    }
-
-    @Override
     public SolicitacaoState avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
         return this;
     }
@@ -73,14 +71,12 @@ public class Agendado implements SolicitacaoState {
 
     @Override
     public SolicitacaoState cancelarSolicitacao(Solicitacao solicitacao) {
-        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
-        solicitacaoDAO.cancelarSolicitacaoPorId(solicitacao.getId());
-        return new Cancelado();
+        return this;
     }
 
     @Override
     public String toString() {
-        return "Agendado";
+        return "Em Processo";
     }
 
 }
