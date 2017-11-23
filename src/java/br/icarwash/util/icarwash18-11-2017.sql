@@ -225,13 +225,6 @@ INSERT INTO `servico` VALUES (1,'Aspiraçãoa','Aspiração completa do veículo
 /*!40000 ALTER TABLE `servico` ENABLE KEYS */;
 UNLOCK TABLES;
 
-CREATE TABLE `veiculo` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `marca` varchar(255) NOT NULL,
-  `modelo` varchar(255) NOT NULL,
-  `porte` ENUM('PEQUENO','MEDIO','GRANDE'),
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `servico_produtos`
 --
@@ -249,6 +242,27 @@ CREATE TABLE `servico_produtos` (
   CONSTRAINT `servico_produtos_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+CREATE TABLE `marca` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  nome varchar(255) not null unique,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `modelo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_marca` int(11) NOT NULL,
+  nome varchar(255) not null,
+  `porte` ENUM('PEQUENO','MEDIO','GRANDE'),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `modelo_marca` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+insert into marca (id,nome) values (1,'GM'),(2,'Fiat'),(3,'Ford'),(4,'Volkswagen');
+
+insert into modelo(id_marca, nome, porte) values (1,'Celta','Pequeno'),(1,'Agile','Pequeno'),(1,'Onix','Pequeno'),(1,'Corsa','Pequeno'),(1,'Classic','Pequeno'),(1,'S10','Grande'),(1,'Track','Medio'),(1,'Silverado','Grande'),(1,'Captiva','Medio'),(1,'Astra','Pequeno'),(1,'Blazer','Medio'),(1,'Chevette','Pequeno'),(1,'Camaro','Medio'),(2,'Palio','Pequeno'),(2,'Siena','Pequeno'),(2,'Uno','Pequeno'),(2,'Fiorino','Pequeno'),(2,'Bravo','Medio'),(2,'Punto','Medio'),(2,'Toro','Grande'),(2,'Doblo','Medio'),(3,'Ka','Pequeno'),(3,'Focus','Medio'),(3,'Fiesta','Pequeno'),(3,'Ranger','Grande'),(3,'Ecosport','Medio'),(3,'Edge','Grande'),(3,'Fusion','Medio'),(3,'Mustang','Medio'),(4,'Fox','Pequeno'),(4,'Gol','Pequeno'),(4,'Amarok','Grande'),(4,'Golf','Medio'),(4,'Polo','Medio'),(4,'Saveiro','Pequeno'),(4,'Voyage','Pequeno');
+
 
 --
 -- Dumping data for table `servico_produtos`
@@ -273,6 +287,7 @@ CREATE TABLE `solicitacao` (
   `id_lavador` int(11) DEFAULT NULL,
   `id_avaliacao` int(11) DEFAULT NULL,
   `id_endereco` int(11) NOT NULL,
+  `id_modelo` int(11) NOT NULL,
   `porte` varchar(8) NOT NULL,
   `data_solicitacao` datetime NOT NULL,
   `status` enum('Em Analise','Agendado','Em Processo','Finalizado','Avaliado','Concluido','Cancelado') NOT NULL DEFAULT 'Em Analise',
@@ -281,11 +296,13 @@ CREATE TABLE `solicitacao` (
   KEY `id_cliente` (`id_cliente`),
   KEY `id_lavador` (`id_lavador`),
   KEY `id_avaliacao` (`id_avaliacao`),
-  KEY `solicitacao_ibfk_5` (`id_endereco`),
+  KEY `id_endereco` (`id_endereco`),
+  KEY `id_modelo` (`id_modelo`),
   CONSTRAINT `solicitacao_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`ID`),
   CONSTRAINT `solicitacao_ibfk_3` FOREIGN KEY (`id_lavador`) REFERENCES `lavador` (`ID`),
   CONSTRAINT `solicitacao_ibfk_4` FOREIGN KEY (`id_avaliacao`) REFERENCES `avaliacao` (`ID`),
-  CONSTRAINT `solicitacao_ibfk_5` FOREIGN KEY (`id_endereco`) REFERENCES `endereco` (`ID`)
+  CONSTRAINT `solicitacao_ibfk_5` FOREIGN KEY (`id_endereco`) REFERENCES `endereco` (`ID`),
+  CONSTRAINT `solicitacao_ibfk_6` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=254 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -295,7 +312,11 @@ CREATE TABLE `solicitacao` (
 
 LOCK TABLES `solicitacao` WRITE;
 /*!40000 ALTER TABLE `solicitacao` DISABLE KEYS */;
-INSERT INTO `solicitacao` VALUES (250,1,4,28,1,'medio','2017-11-15 08:00:00','Avaliado',70.00),(251,1,2,29,37,'medio','2017-11-21 08:00:00','Avaliado',50.00),(252,1,2,30,37,'medio','2017-11-22 08:00:00','Avaliado',110.00),(253,1,3,31,37,'medio','2017-11-22 08:00:00','Avaliado',35.00);
+INSERT INTO `solicitacao` VALUES 
+(250,1,4,28,1,20,'medio','2017-11-15 08:00:00','Avaliado',70.00),
+(251,1,2,29,37,20,'medio','2017-11-21 08:00:00','Avaliado',50.00),
+(252,1,2,30,37,20,'medio','2017-11-22 08:00:00','Avaliado',110.00),
+(253,1,3,31,37,20,'medio','2017-11-22 08:00:00','Avaliado',35.00);
 /*!40000 ALTER TABLE `solicitacao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -335,22 +356,3 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-11-18 19:26:44
-
-CREATE TABLE `marca` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  nome varchar(255) not null unique,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `modelo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_marca` int(11) NOT NULL,
-  nome varchar(255) not null,
-  `porte` ENUM('PEQUENO','MEDIO','GRANDE'),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `modelo_marca` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-
-insert into marca (nome) values ('GM'),('Fiat'),('Ford'),('Volkswagen');
-
-insert into modelo(id_marca, nome, porte) values (16,'Celta','Pequeno'),(16,'Agile','Pequeno'),(16,'Onix','Pequeno'),(16,'Corsa','Pequeno'),(16,'Classic','Pequeno'),(16,'S10','Grande'),(16,'Track','Medio'),(16,'Silverado','Grande'),(16,'Captiva','Medio'),(16,'Astra','Pequeno'),(16,'Blazer','Medio'),(16,'Chevette','Pequeno'),(16,'Camaro','Medio'),(17,'Palio','Pequeno'),(17,'Siena','Pequeno'),(17,'Uno','Pequeno'),(17,'Fiorino','Pequeno'),(17,'Bravo','Medio'),(17,'Punto','Medio'),(17,'Toro','Grande'),(17,'Doblo','Medio'),(18,'Ka','Pequeno'),(18,'Focus','Medio'),(18,'Fiesta','Pequeno'),(18,'Ranger','Grande'),(18,'Ecosport','Medio'),(18,'Edge','Grande'),(18,'Fusion','Medio'),(18,'Mustang','Medio'),(19,'Fox','Pequeno'),(19,'Gol','Pequeno'),(19,'Amarok','Grande'),(19,'Golf','Medio'),(19,'Polo','Medio'),(19,'Saveiro','Pequeno'),(19,'Voyage','Pequeno');

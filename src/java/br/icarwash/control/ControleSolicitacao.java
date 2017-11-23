@@ -4,6 +4,7 @@ import br.icarwash.model.state.EmAnalise;
 import br.icarwash.dao.*;
 import br.icarwash.model.*;
 import br.icarwash.model.Endereco.EnderecoBuilder;
+import br.icarwash.model.Modelo.ModeloBuilder;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,11 +26,10 @@ public class ControleSolicitacao extends HttpServlet {
             throws ServletException, IOException {
 
         Calendar dataHoraSolicitacao = Calendar.getInstance();
-        
+
         Connection conexao = (Connection) request.getAttribute("conexao");
 
         try {
-            
 
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
@@ -74,7 +74,7 @@ public class ControleSolicitacao extends HttpServlet {
             Solicitacao solicitacao = new SolicitacaoBuilder()
                     .withCliente(cliente)
                     .withSolicitacaoState(new EmAnalise())
-                    .withPorte(request.getParameter("porte"))
+                    .withModelo(new ModeloBuilder().withId(Integer.parseInt(request.getParameter("modelo"))).build())
                     .withDataSolicitacao(dataHoraSolicitacao)
                     .withValorTotal(somaValorTotalSolicitacao(IdServicosSolicitados, servicoDAO))
                     .withEndereco(endereco)

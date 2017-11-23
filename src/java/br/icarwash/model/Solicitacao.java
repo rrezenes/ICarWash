@@ -30,7 +30,7 @@ public class Solicitacao {
     private Avaliacao avaliacao;
     private Endereco endereco;
     protected SolicitacaoState estado;
-    private String porte;
+    private Modelo modelo;
     private Calendar dataSolicitacao;
     private BigDecimal valorTotal;
 
@@ -44,7 +44,7 @@ public class Solicitacao {
         this.avaliacao = builder.avaliacao;
         this.endereco = builder.endereco;
         this.estado = builder.estado;
-        this.porte = builder.porte;
+        this.modelo = builder.modelo;
         this.dataSolicitacao = builder.dataSolicitacao;
         this.valorTotal = builder.valorTotal;
     }
@@ -57,7 +57,7 @@ public class Solicitacao {
         private Avaliacao avaliacao;
         private Endereco endereco;
         protected SolicitacaoState estado;
-        private String porte;
+        private Modelo modelo;
         private Calendar dataSolicitacao;
         private BigDecimal valorTotal;
 
@@ -68,7 +68,7 @@ public class Solicitacao {
             this.avaliacao = solicitacao.avaliacao;
             this.endereco = solicitacao.endereco;
             this.estado = solicitacao.estado;
-            this.porte = solicitacao.porte;
+            this.modelo = solicitacao.modelo;
             this.dataSolicitacao = solicitacao.dataSolicitacao;
             this.valorTotal = solicitacao.valorTotal;
 
@@ -105,8 +105,8 @@ public class Solicitacao {
             return this;
         }
 
-        public SolicitacaoBuilder withPorte(String porte) {
-            this.porte = porte;
+        public SolicitacaoBuilder withModelo(Modelo modelo) {
+            this.modelo = modelo;
             return this;
         }
 
@@ -158,12 +158,12 @@ public class Solicitacao {
         this.avaliacao = avaliacao;
     }
 
-    public String getPorte() {
-        return porte;
+    public Modelo getModelo() {
+        return modelo;
     }
 
-    public void setPorte(String porte) {
-        this.porte = porte;
+    public void setModelo(Modelo modelo) {
+        this.modelo = modelo;
     }
 
     public SolicitacaoState getEstado() {

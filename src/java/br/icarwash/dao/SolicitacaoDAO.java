@@ -3,20 +3,14 @@ package br.icarwash.dao;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
-import br.icarwash.model.state.Agendado;
-import br.icarwash.model.state.Avaliado;
-import br.icarwash.model.state.Cancelado;
-import br.icarwash.model.state.Concluido;
-import br.icarwash.model.state.EmAnalise;
-import br.icarwash.model.state.EmProcesso;
-import br.icarwash.model.state.Finalizado;
-import br.icarwash.model.state.SolicitacaoState;
+import br.icarwash.model.state.*;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Lavador.LavadorBuilder;
+import br.icarwash.model.Modelo.ModeloBuilder;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,7 +27,7 @@ public class SolicitacaoDAO {
 
     private final Connection conexao;
 
-    private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, porte, data_solicitacao,valor_total) values (?,?,?,?,?)";
+    private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, id_modelo, data_solicitacao,valor_total) values (?,?,?,?,?)";
 
     private static final String SELECT_ALL = "SELECT * FROM solicitacao";
     private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao, porte, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
@@ -66,7 +60,7 @@ public class SolicitacaoDAO {
 
             pstmt.setInt(1, solicitacao.getCliente().getId());
             pstmt.setInt(2, solicitacao.getEndereco().getId());
-            pstmt.setString(3, solicitacao.getPorte());
+            pstmt.setInt(3, solicitacao.getModelo().getId());
             pstmt.setTimestamp(4, timestamp);
             pstmt.setBigDecimal(5, solicitacao.getValorTotal());
             pstmt.execute();
@@ -122,7 +116,7 @@ public class SolicitacaoDAO {
                         .withLavador(lavador)
                         .withAvaliacao(avaliacaoBuilder.build())
                         .withSolicitacaoState(solicitacaoState)
-                        .withPorte(rs.getString("porte"))
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(data)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .build();
@@ -170,7 +164,7 @@ public class SolicitacaoDAO {
                         .withCliente(cliente)
                         .withAvaliacao(avaliacao)
                         .withSolicitacaoState(solicitacaoState)
-                        .withPorte(rs.getString("porte"))
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(data)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .withEndereco(endereco)
@@ -213,7 +207,7 @@ public class SolicitacaoDAO {
                         .withCliente(cliente)
                         .withEndereco(endereco)
                         .withSolicitacaoState(solicitacaoState)
-                        .withPorte(rs.getString("porte"))
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(data)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .build();
@@ -255,7 +249,7 @@ public class SolicitacaoDAO {
                         .withCliente(cliente)
                         .withLavador(lavador)
                         .withSolicitacaoState(solicitacaoState)
-                        .withPorte(rs.getString("porte"))
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(data)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .build();
@@ -293,7 +287,7 @@ public class SolicitacaoDAO {
                         .withCliente(cliente)
                         .withLavador(lavador)
                         .withSolicitacaoState(validarStatus(rs.getString("status")))
-                        .withPorte(rs.getString("porte"))
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(dataSolicitacao)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .build();
@@ -334,7 +328,7 @@ public class SolicitacaoDAO {
                         .withCliente(cliente)
                         .withLavador(lavador)
                         .withSolicitacaoState(solicitacaoState)
-                        .withPorte(rs.getString("porte"))
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(data)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
                         .build();
