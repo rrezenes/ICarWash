@@ -5,7 +5,7 @@ body {
 
 .negrito {
     font-weight: bold; 
-    
+
 }
 .titulo-controle{
     text-align: center;
@@ -38,8 +38,11 @@ body {
 
 
 canvas{
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-    }
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
 
+em{
+    color: red;
+}

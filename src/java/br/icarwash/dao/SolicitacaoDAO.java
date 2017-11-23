@@ -21,7 +21,6 @@ import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import br.icarwash.util.Conexao;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;

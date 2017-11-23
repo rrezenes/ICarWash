@@ -63,9 +63,6 @@ $(document).ready(function () {
                 maxlength: 6,
                 required: true,
                 number: true
-            },
-            produtos: {
-                required: {checkboxes = true}
             }
         },
         messages: {

@@ -11,8 +11,8 @@
         <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="css/estilo.css"/>
 
-        <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-        <script type="text/javascript" src="js/materialize.js"></script>
+        <script charset="UTF-8" type="text/javascript" src="js/jquery-3.1.1.js"></script>
+        <script charset="UTF-8" type="text/javascript" src="js/materialize.js"></script>
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
