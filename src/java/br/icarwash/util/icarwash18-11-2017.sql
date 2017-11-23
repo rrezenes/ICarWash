@@ -225,6 +225,13 @@ INSERT INTO `servico` VALUES (1,'Aspiraçãoa','Aspiração completa do veículo
 /*!40000 ALTER TABLE `servico` ENABLE KEYS */;
 UNLOCK TABLES;
 
+CREATE TABLE `veiculo` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `marca` varchar(255) NOT NULL,
+  `modelo` varchar(255) NOT NULL,
+  `porte` ENUM('PEQUENO','MEDIO','GRANDE'),
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `servico_produtos`
 --
