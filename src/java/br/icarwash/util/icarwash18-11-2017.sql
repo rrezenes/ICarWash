@@ -335,3 +335,22 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-11-18 19:26:44
+
+CREATE TABLE `marca` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  nome varchar(255) not null unique,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `modelo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_marca` int(11) NOT NULL,
+  nome varchar(255) not null,
+  `porte` ENUM('PEQUENO','MEDIO','GRANDE'),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `modelo_marca` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+insert into marca (nome) values ('GM'),('Fiat'),('Ford'),('Volkswagen');
+
+insert into modelo(id_marca, nome, porte) values (16,'Celta','Pequeno'),(16,'Agile','Pequeno'),(16,'Onix','Pequeno'),(16,'Corsa','Pequeno'),(16,'Classic','Pequeno'),(16,'S10','Grande'),(16,'Track','Medio'),(16,'Silverado','Grande'),(16,'Captiva','Medio'),(16,'Astra','Pequeno'),(16,'Blazer','Medio'),(16,'Chevette','Pequeno'),(16,'Camaro','Medio'),(17,'Palio','Pequeno'),(17,'Siena','Pequeno'),(17,'Uno','Pequeno'),(17,'Fiorino','Pequeno'),(17,'Bravo','Medio'),(17,'Punto','Medio'),(17,'Toro','Grande'),(17,'Doblo','Medio'),(18,'Ka','Pequeno'),(18,'Focus','Medio'),(18,'Fiesta','Pequeno'),(18,'Ranger','Grande'),(18,'Ecosport','Medio'),(18,'Edge','Grande'),(18,'Fusion','Medio'),(18,'Mustang','Medio'),(19,'Fox','Pequeno'),(19,'Gol','Pequeno'),(19,'Amarok','Grande'),(19,'Golf','Medio'),(19,'Polo','Medio'),(19,'Saveiro','Pequeno'),(19,'Voyage','Pequeno');
