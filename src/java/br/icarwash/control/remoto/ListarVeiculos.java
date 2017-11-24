@@ -49,7 +49,7 @@ public class ListarVeiculos extends HttpServlet {
             int idMarca = Integer.parseInt(request.getParameter("marca"));
 
             Gson gson = new Gson();
-            String listaJSON = gson.toJson(new ModeloDAO(Conexao.getConexao()).localizarPorId(idMarca));
+            String listaJSON = gson.toJson(new ModeloDAO(Conexao.getConexao()).listarPorIdMarca(idMarca));
             out.println(listaJSON);
 
         }

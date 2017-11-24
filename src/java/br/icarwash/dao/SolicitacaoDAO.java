@@ -30,7 +30,7 @@ public class SolicitacaoDAO {
     private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, id_modelo, data_solicitacao,valor_total) values (?,?,?,?,?)";
 
     private static final String SELECT_ALL = "SELECT * FROM solicitacao";
-    private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao, porte, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
+    private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao, id_modelo, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
     private static final String SELECT_BY_ID_CLIENTE = "SELECT * FROM solicitacao where id_cliente = ? order by data_solicitacao";
     private static final String SELECT_BY_ID_LAVADOR = "select * FROM solicitacao where id_lavador = ? order by data_solicitacao";
     private static final String SELECT_SOLICITACAO_HOJE_LAVADOR = "select * from solicitacao where id_lavador = ? and DATE(DATE_FORMAT(data_solicitacao, '%Y-%m-%d')) = CURDATE()";

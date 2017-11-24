@@ -4,6 +4,7 @@ import br.icarwash.control.ControleSolicitacao;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.state.SolicitacaoState;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -234,8 +235,16 @@ public class Solicitacao {
 
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
             LavadorDAO lavadorDAO = new LavadorDAO(conexao);
+            UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+            ArrayList<Lavador> lavadoresAtivos = lavadorDAO.listar();
 
-            ArrayList<Lavador> lavadoresDisponiveis = solicitacaoDAO.lavadoresDisponives(lavadorDAO.listar(), this.dataSolicitacao);
+            for (int i = 0; i < lavadoresAtivos.size() - 1; i++) {
+                if (usuarioDAO.isAtivo(lavadoresAtivos.get(i).getId())) {
+                    lavadoresAtivos.remove(lavadoresAtivos.get(i));
+                }
+            }
+
+            ArrayList<Lavador> lavadoresDisponiveis = solicitacaoDAO.lavadoresDisponives(lavadoresAtivos, this.dataSolicitacao);
 
             lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, solicitacaoDAO);
             Random random = new Random();
