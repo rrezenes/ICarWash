@@ -48,12 +48,12 @@ function popularSelect() {
 
 $("#confirmar").click(function () {
     var servico = $('input[name=servico]').is(':checked');
-    var porte = $('input[name=porte]').is(':checked');
+    var modelo = $('#modelo').val() !== '';
     var data = $('#data_solicitacao').val() !== '';
-    var hora = $('#selectHora').val() !== ' ';
-    
+    var hora = $('#selectHora').val() !== '';
 
-    if (servico && porte && data && hora) {
+
+    if (servico && modelo && data && hora) {
         var form = document.solicitarServico;
         var dataString = $(form).serialize();
         // AJAX Code To Submit Form.
@@ -62,12 +62,64 @@ $("#confirmar").click(function () {
             url: "ControleSolicitacao",
             data: dataString,
             cache: false,
-            success: function (result) {       
-                window.location = result;                
+            success: function (result) {
+                window.location = result;
             }
         });
     } else {
         Materialize.toast('Por favor preencha todos os campos.', 3000, 'rounded');
     }
     return false;
+});
+
+$(document).ready(function () {
+
+
+
+    $.getJSON('listar-marcas', function (data) {
+        var options = '';
+        $.each(data, function (key, val) {
+            options += '<option value="' + val.id + '">' + val.nome + '</option>';
+        });
+
+        $("#marca").append(options);
+        $('#marca').material_select();
+        
+        $("#marca").change(function () {
+
+            var idMarca = $("#marca").val();
+
+            $.ajax({
+                // url o recurso no servidor
+                url: "listar-modelos",
+                type: 'POST',
+                // tipo de retorno
+                dataType: "json",
+                //parametros da requisição
+                data: {
+                    marca: idMarca
+                },
+
+                // função para tratar o retorno
+                success: function (json) {
+                    //lista os options 
+                    $("#modelo").empty();
+
+                    $("#modelo").append("<option></option>");
+
+                    // preenche as options
+                    for (i = 0; i < json.length; i++) {
+
+                        var option = "<option value=" + json[i].id + ">" + json[i].nome + "</option>";
+
+                        $("#modelo").append(option);
+
+                    }
+                    $('#modelo').material_select();
+                }
+            });
+
+        }).change();
+
+    });
 });

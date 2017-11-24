@@ -2,6 +2,7 @@ package br.icarwash.control;
 
 import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ModeloDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Solicitacao;
@@ -23,7 +24,7 @@ public class ListarSolicitacaoCliente extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
-        
+
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
 
@@ -34,8 +35,10 @@ public class ListarSolicitacaoCliente extends HttpServlet {
         ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(cliente.getId());
 
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
+        ModeloDAO modeloDAO = new ModeloDAO(conexao);
 
         solicitacoes.forEach(solicitacao -> {
+            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo().getId()));
             if (solicitacao.getAvaliacao().getId() != 0) {
                 solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao().getId()));
             }

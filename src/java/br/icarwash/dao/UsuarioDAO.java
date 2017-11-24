@@ -22,6 +22,7 @@ public class UsuarioDAO {
     private static final String UPDATE_USUARIO = "update usuario set senha = SHA1(?) WHERE email = ?";
     private static final String UPDATE_CONCLUIR_CAD = "update usuario set cadastro_completo = true WHERE id = ?";
     private static final String INACTIVE_BY_ID = "UPDATE usuario SET ativo = 0 where id = ?";
+    private static final String USUARIO_ATIVO = "SELECT ativo FROM usuario where id = ?";
 
     public UsuarioDAO(Connection conexao) {
         this.conexao = conexao;
@@ -178,6 +179,21 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isAtivo(int id) {
+        boolean ativo = false;
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(USUARIO_ATIVO);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                ativo = rs.getBoolean("ativo");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ativo;
     }
 
 }
