@@ -4,6 +4,7 @@ import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Cliente;
@@ -31,7 +32,10 @@ public class ControleStatusSolicitacao extends HttpServlet {
         String URI = ((HttpServletRequest) request).getRequestURI();
 
         Solicitacao solicitacao = new SolicitacaoDAO(conexao).localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
-        solicitacao.setCliente(new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente().getId()));
+        Cliente cliente = new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente().getId());
+        cliente.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario().getId()));
+        solicitacao.setCliente(cliente);
+        solicitacao.setLavador(new LavadorDAO(conexao).localizarPorId(solicitacao.getLavador().getId()));
         solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco().getId()));
 
         String URIRetorno = "painel_admin.jsp";
