@@ -1,9 +1,12 @@
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
+import br.icarwash.model.Cliente;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
@@ -28,6 +31,8 @@ public class ControleStatusSolicitacao extends HttpServlet {
         String URI = ((HttpServletRequest) request).getRequestURI();
 
         Solicitacao solicitacao = new SolicitacaoDAO(conexao).localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
+        solicitacao.setCliente(new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente().getId()));
+        solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco().getId()));
 
         String URIRetorno = "painel_admin.jsp";
 
@@ -48,9 +53,9 @@ public class ControleStatusSolicitacao extends HttpServlet {
             }
 
         } else if (URI.endsWith("/ProcessarSolicitacao")) {
-            
+
             Lavador lavador = new LavadorDAO(conexao).localizarPorId(solicitacao.getLavador().getId());
-            
+
             if (!lavador.isOcupado()) {
                 solicitacao.processarSolicitacao();
                 URIRetorno = "ListarSolicitacaoLavador";
