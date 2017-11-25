@@ -2,6 +2,7 @@ package br.icarwash.model.state;
 
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
+import br.icarwash.model.Email;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.util.Conexao;
 
@@ -10,6 +11,7 @@ public class EmAnalise implements SolicitacaoState {
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
         solicitacao.atribuirLavador();
+        new Email().enviarEmailAgendado(solicitacao);
         return new Agendado();
     }
 
