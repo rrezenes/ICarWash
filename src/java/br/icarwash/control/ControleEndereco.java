@@ -2,6 +2,7 @@ package br.icarwash.control;
 
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "ControleEndereco", urlPatterns = {"/AlterarEndereco", "/AdicionarEndereco", "/ExcluirEndereco"})
 public class ControleEndereco extends HttpServlet {
@@ -20,15 +22,15 @@ public class ControleEndereco extends HttpServlet {
 
         String URI = ((HttpServletRequest) request).getRequestURI();
 
-        if (URI.endsWith("/AlterarEndereco")) {            
+        if (URI.endsWith("/AlterarEndereco")) {
             alterarEndereco(request, response);
-            
-        } else if (URI.endsWith("/AdicionarEndereco")) {            
+
+        } else if (URI.endsWith("/AdicionarEndereco")) {
             adicionarEndereco(request, response);
-            
-        } else if (URI.endsWith("/ExcluirEndereco")) {            
+
+        } else if (URI.endsWith("/ExcluirEndereco")) {
             excluirEndereco(request, response);
-            
+
         }
 
     }
@@ -59,7 +61,11 @@ public class ControleEndereco extends HttpServlet {
             throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
 
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
         Endereco endereco = new Endereco.EnderecoBuilder()
+                .withUsuario(usuario)
                 .withCep(request.getParameter("cep"))
                 .withEstado(request.getParameter("estado"))
                 .withCidade(request.getParameter("cidade"))
@@ -80,6 +86,7 @@ public class ControleEndereco extends HttpServlet {
             throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
 
+        
     }
 
 }

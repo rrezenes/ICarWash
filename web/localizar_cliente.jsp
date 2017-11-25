@@ -51,9 +51,61 @@
                     <p>CEP: ${endereco.CEP}</p>
                 </div>
                 <div class="card-action">
-                    <a  class="modal-trigger" href="#modal${endereco.id}">Alterar</a>
+                    <a class="modal-trigger" href="#modal${endereco.id}">Alterar</a>
+                    <form action="ExcluirEndereco" method="post">
+                        
+                        <a class="modal-trigger" href="usuario">Excluir</a>
+                    </form>
                 </div>
             </div>
+        </div>
+
+        <!-- Modal Cadastrar Endereço -->
+        <div id="modal-adicionar-endereco" class="modal modal-fixed-footer">
+            <form id="FormValidate" action="AdicionarEndereco" method="post">
+                <div class="modal-content">
+                    <h4>Cadastrar novo Endereço</h4>
+                    <div class="form-group">
+                        <input type="hidden" name="id" value="${cliente.id}"/>
+                        <input type="hidden" name="quem" value="cliente"/>
+                        <input type="hidden" name="idEndereco" value="${endereco.id}"/>
+                        <div class="input-field col s12">
+                            <label>Nome</label> 
+                            <input class="form-control erro-nomeEndereco" type="text" id="nomeEndereco" name="nomeEndereco"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>CEP</label> 
+                            <input class="form-control erro-cep" type="text" id="cep" name="cep"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Estado</label> 
+                            <input class="form-control erro-estado" type="text" id="estado" name="estado"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Cidade</label> 
+                            <input class="form-control erro-cidade" type="text" id="cidade" name="cidade"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Bairro</label> 
+                            <input class="form-control erro-bairro" type="text" id="bairro" name="bairro"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Endereço</label> 
+                            <input class="form-control erro-endereco" type="text" id="endereco" name="endereco"><br>
+                        </div>
+                        <div class="input-field col s6">
+                            <label>Número</label> 
+                            <input class="form-control erro-numero" type="text" name="numero"><br>
+                        </div>
+                        <div class="col s12">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+                    <input class="form-control btn btn-primary" type="submit">
+                </div>
+            </form>
         </div>
 
         <!-- Modal Alterar Endereço -->
@@ -127,8 +179,9 @@
             </div>
         </form>
     </div>
+
     <div class="fixed-action-btn">
-        <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+        <a class=" modal-trigger btn-floating btn-large waves-effect waves-light red" href="#modal-adicionar-endereco"><i class="material-icons">add</i></a>
     </div>
 </div>
 
