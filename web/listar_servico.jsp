@@ -1,6 +1,9 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="cabecalho.jsp"%>
+
+<c:if test="${!empty cadastrado}">
+    <script>Materialize.toast('Serviço Cadastrado', 6000, 'rounded');</script>        
+</c:if>
 
 <div class="row">
     <p class="titulo-controle">Controle de Serviços</p>
@@ -49,24 +52,24 @@
 <div id="modal" class="modal modal-fixed-footer">
     <form id="FormValidate" name="listarServico" action="Controle" method="post">
         <div class="modal-content">
-            <div class="row">
-                <p class="titulo-controle">Cadastrar Serviço</p>
-                <div class="divider"></div>
-            </div>
             <div class="form-group">
+                <div class="row">
+                    <p class="titulo-controle">Cadastrar Serviço</p>
+                    <div class="divider"></div>
+                </div>
                 <input type="hidden" name="action" value="CadastroCommand"/>
                 <input type="hidden" name="quem" value="servico">
                 <div class="row">
                     <div class="input-field col s12">
-                        <label>Nome:</label> 
+                        <label>Nome</label> 
                         <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
                     </div>
                     <div class="input-field col s12">
-                        <label>Descrição:</label> 
+                        <label>Descrição</label> 
                         <input class="form-control erro-descricao" type="text" name="descricao" id="descricao"><br>
                     </div>
                     <div class="input-field col s12">
-                        <label>Valor:</label> 
+                        <label>Valor</label> 
                         <input class="form-control erro-valor" type="text" name="valor" id="valor"><br>
                     </div>
                     <div class="row">
@@ -107,18 +110,20 @@
     </form>
 </div>
 
-<script src="js/validar-cadastro-servico.js"></script>
 <script src="js/jquery.validate.js"></script>
-<script src="js/inicializar-validate.js"></script>
 <script src="js/inicializar-modal.js"></script>
+<script src="js/validar-cadastro-servico.js"></script>
+<script src="js/validar-apenas-letras-numeros.js"></script>
+<script src="js/inicializar-validate.js"></script>
 <script src="js/buscar-na-tabela-3.js"></script>
+
 <script>
-    $(document).ready(function () {
-        let searchParams = new URLSearchParams(window.location.search);
-        if (searchParams.has('ok')) {
-            Materialize.toast('Cadastro Efetuado', 6000, 'rounded');
-        }
-    });
+                                               $(document).ready(function () {
+                                                   let searchParams = new URLSearchParams(window.location.search);
+                                                   if (searchParams.has('ok')) {
+                                                       Materialize.toast('Cadastro Efetuado', 6000, 'rounded');
+                                                   }
+                                               });
 </script>
 
 <%@include file="rodape.jsp"%>
