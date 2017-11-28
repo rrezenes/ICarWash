@@ -234,19 +234,18 @@ public class Solicitacao {
             conexao.setAutoCommit(false);
 
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
-            LavadorDAO lavadorDAO = new LavadorDAO(conexao);
+            ArrayList<Lavador> lavadoresAtivos = new LavadorDAO(conexao).listar();
             UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-            ArrayList<Lavador> lavadoresAtivos = lavadorDAO.listar();
-
+            
             for (int i = 0; i < lavadoresAtivos.size() - 1; i++) {
-                if (usuarioDAO.isAtivo(lavadoresAtivos.get(i).getId())) {
+                if (!usuarioDAO.isAtivo(lavadoresAtivos.get(i).getUsuario().getId())) {
                     lavadoresAtivos.remove(lavadoresAtivos.get(i));
                 }
             }
 
             ArrayList<Lavador> lavadoresDisponiveis = solicitacaoDAO.lavadoresDisponives(lavadoresAtivos, this.dataSolicitacao);
 
-            lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, solicitacaoDAO);
+            lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, conexao);
             Random random = new Random();
 
             int qtdLavadores = random.nextInt(lavadoresDisponiveis.size());
@@ -277,9 +276,10 @@ public class Solicitacao {
      * Retorna uma lista com os lavadores que possuem menor quantidade de
      * lavagem no dia.
      */
-    private ArrayList<Lavador> removeLavadoresDaLista(ArrayList<Lavador> lavadoresDisponiveis, SolicitacaoDAO solicitacaoDAO) throws NumberFormatException {
+    private ArrayList<Lavador> removeLavadoresDaLista(ArrayList<Lavador> lavadoresDisponiveis, Connection conexao) throws NumberFormatException {
         Map<String, Integer> mapa = new HashMap<>();
-
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
+        
         lavadoresDisponiveis.forEach((lavadorDisponivel) -> {
             mapa.put(String.valueOf(lavadorDisponivel.getId()), solicitacaoDAO.quantidadeSolicitacao(lavadorDisponivel.getId(), this.dataSolicitacao));
         });
