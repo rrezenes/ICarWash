@@ -58,7 +58,7 @@ $(document).ready(function () {
                 required: true,
                 maxlength: 50,
                 minlength: 3,
-                lettersonly: true
+                letterAndNumbersOnly: true
             },
             valor: {
                 maxlength: 6,
@@ -123,7 +123,7 @@ $(document).ready(function () {
                 required: "Campo obrigarório preencher!",
                 maxlength: "Utilize no máximo 150 caracteres!",
                 minlength: "Utilize no mínimo 3 caracteres!",
-                lettersonly: "Por favor, utilize apenas letras!"
+                letterAndNumbersOnly: "Por favor, utilize apenas letras e números!"
             },
             valor: {
                 maxlength: "Utilize no máximo 6 caracteres!",
