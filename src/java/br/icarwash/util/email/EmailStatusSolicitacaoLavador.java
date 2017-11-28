@@ -4,16 +4,16 @@ import br.icarwash.model.Solicitacao;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
-public class EmailStatusSolicitacao {
+public class EmailStatusSolicitacaoLavador {
 
     private String nomeDestinatario;
     private String emailDestinatario;
     private String assunto;
     private String mensagem;
 
-    public EmailStatusSolicitacao(String nomeDestinatario, String emailDestinatario, Solicitacao solicitacao) {
-        this.nomeDestinatario = nomeDestinatario;
-        this.emailDestinatario = emailDestinatario;
+    public EmailStatusSolicitacaoLavador(Solicitacao solicitacao) {
+        this.nomeDestinatario = solicitacao.getLavador().getNome();
+        this.emailDestinatario = solicitacao.getLavador().getUsuario().getEmail();
         switch (solicitacao.getEstado().toString()) {
             case "Em Analise":
                 this.assunto = "Falta implementar assunto";
@@ -50,7 +50,7 @@ public class EmailStatusSolicitacao {
                 this.mensagem = "falta implementar msg";
                 break;
             default:
-                throw new UnsupportedOperationException("Solicitação sem Status");
+                break;
         }
     }
 
@@ -86,13 +86,13 @@ public class EmailStatusSolicitacao {
             email.setSubject(assunto);
             email.setMsg(mensagem);
 
-            System.out.println("autenticando...");
+            //System.out.println("autenticando...");
             email.setAuthentication(EmailAutenticacao.email, EmailAutenticacao.senha);
-            System.out.println("enviando...");
+            //System.out.println("enviando...");
             System.out.println(assunto);
             System.out.println(mensagem);
             System.out.println(email.send());
-            System.out.println("Email enviado!");
+            //System.out.println("Email enviado!");
 
             return true;
         } catch (EmailException e) {

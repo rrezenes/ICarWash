@@ -4,19 +4,12 @@ import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.util.Conexao;
-import br.icarwash.util.email.EmailStatusSolicitacao;
 
 public class EmAnalise implements SolicitacaoState {
 
     @Override
     public SolicitacaoState analisarSolicitacao(Solicitacao solicitacao) {
         solicitacao.atribuirLavador();
-
-        String emailCliente = solicitacao.getCliente().getUsuario().getEmail();
-        String nomeCliente = solicitacao.getCliente().getNome();
-        solicitacao.setEstado(new Agendado());
-        new EmailStatusSolicitacao(nomeCliente, emailCliente, solicitacao).enviar();
-
         return new Agendado();
     }
 
