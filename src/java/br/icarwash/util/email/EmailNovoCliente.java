@@ -42,7 +42,9 @@ public class EmailNovoCliente {
         email.setSmtpPort(587);
         email.setStartTLSEnabled(true);
 
+        // email.setSslSmtpPort("25");
         // email.setSslSmtpPort("456");
+        // email.setSmtpPort(587);
         //email.setSSLOnConnect(true);
         try {
             email.addTo(emailDestinatario, nomeDestinatario);

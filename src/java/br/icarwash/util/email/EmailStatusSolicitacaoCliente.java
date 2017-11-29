@@ -17,11 +17,16 @@ public class EmailStatusSolicitacaoCliente {
         this.emailDestinatario = solicitacao.getCliente().getUsuario().getEmail();
         switch (solicitacao.getEstado().toString()) {
             case "Em Analise":
-                this.assunto = "Falta implementar assunto";
-                this.mensagem = "falta implementar msg";
+                this.assunto = "Solicitação Em Análise!";
+                this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
+                        + "Sua solicitação #" + solicitacao.getId() + " está em análise.\n\n"
+                        + "Aguarde a próxima notificação refernte a sua solictitação!\n\n"
+                        + "Data: " + solicitacao.getDataSolicitacao().getTime() + ",\n"
+                        + "Endereco: " + solicitacao.getEndereco().getEndereco() + " nº " + solicitacao.getEndereco().getNumero() + ",\n"
+                        + "Valor: " + solicitacao.getValorTotal();
                 break;
             case "Agendado":
-                this.assunto = "Solicitação Agendada!!";
+                this.assunto = "Solicitação Agendada!";
                 this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
                         + "Sua solicitação #" + solicitacao.getId() + " foi agendada com sucesso.\n\n"
                         + "Fique esperto com a data do seu serviço!\n\n"
@@ -31,24 +36,37 @@ public class EmailStatusSolicitacaoCliente {
                         + "Valor: " + solicitacao.getValorTotal();
                 break;
             case "Em Processo":
-                this.assunto = "Falta implementar assunto";
-                this.mensagem = "falta implementar msg";
+                this.assunto = "Solicitação já está em processo!";
+                this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
+                        + "Sua solicitação #" + solicitacao.getId() + " já está em processo.\n\n"
+                        + "Aguarde o término do serviço para nos dizer o que achou do serviço do Lavador " + solicitacao.getLavador().getNome()
+                        + "Valor: " + solicitacao.getValorTotal();
                 break;
             case "Finalizado":
-                this.assunto = "Falta implementar assunto";
-                this.mensagem = "falta implementar msg";
+                this.assunto = "Solicitação foi finalizada com sucesso!";
+                this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
+                        + "Parabéns, sua solicitação #" + solicitacao.getId() + " foi finalizada com sucesso!\n\n"
+                        + "Aguardamos sua avaliação do serviço para que possamos sempre melhorar nosso atendimento! \n";
                 break;
             case "Avaliado":
-                this.assunto = "Falta implementar assunto";
-                this.mensagem = "falta implementar msg";
+                this.assunto = "Solicitação Avaliada!";
+                this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
+                        + "Muito obrigado por avaliar a solicitação #" + solicitacao.getId() + "!\n\n"
+                        + "Para nós essas informações são muito importantes, esperamos você na próxima solicitação! \n";
                 break;
             case "Concluido":
-                this.assunto = "Falta implementar assunto";
-                this.mensagem = "falta implementar msg";
+                this.assunto = "Solicitação Concluído!";
+                this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
+                        + "A Solicitação #" + solicitacao.getId() + " foi concluído com sucesso!\n\n";
                 break;
             case "Cancelado":
-                this.assunto = "Falta implementar assunto";
-                this.mensagem = "falta implementar msg";
+                this.assunto = "Solicitação Cancelada!!";
+                this.mensagem = "Olá " + this.nomeDestinatario + ",\n\n"
+                        + "Sua solicitação #" + solicitacao.getId() + " foi cancelada.\n\n"
+                        + "Data: " + solicitacao.getDataSolicitacao().getTime() + ",\n"
+                        + "Endereco: " + solicitacao.getEndereco().getEndereco() 
+                        + " nº " + solicitacao.getEndereco().getNumero() + ",\n"
+                        + "Valor: " + solicitacao.getValorTotal();
                 break;
             default:
                 throw new UnsupportedOperationException("Solicitação sem Status");

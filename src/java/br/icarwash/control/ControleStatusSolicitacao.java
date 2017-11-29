@@ -86,7 +86,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
         if (!solicitacao.getLavador().isOcupado()) {
             solicitacao.processarSolicitacao();
             new EmailStatusSolicitacaoCliente(solicitacao).enviar();
-            
+
             URIRetorno = "ListarSolicitacaoLavador";
         }
         return URIRetorno;
@@ -99,7 +99,10 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         solicitacao.cancelarSolicitacao();
         new EmailStatusSolicitacaoCliente(solicitacao).enviar();
-        new EmailStatusSolicitacaoLavador(solicitacao).enviar();
+
+        if (solicitacao.getLavador() == null) {
+            new EmailStatusSolicitacaoLavador(solicitacao).enviar();
+        }
 
         Usuario usuario = (Usuario) ((HttpServletRequest) request).getSession(true).getAttribute("user");
 

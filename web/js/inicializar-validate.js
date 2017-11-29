@@ -6,7 +6,7 @@ $(document).ready(function () {
                 maxlength: 50,
                 required: true,
                 minlength: 3,
-                lettersonly: true
+                letterAndNumbersOnly: true
             },
             email: {
                 remote: 'CheckUsuarioEmail',
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 maxlength: "Por favor, entre com o nome apenas!",
                 required: "Por favor, digite o nome aqui!",
                 minlength: "Por favor, digite um nome de no mínimo 3 dígitos!",
-                lettersonly: "Por favor, utilize apenas letras!"
+                letterAndNumbersOnly: "Por favor, utilize apenas letras e números!"
             },
             email: {
                 remote: "E-mail já está em uso!",
