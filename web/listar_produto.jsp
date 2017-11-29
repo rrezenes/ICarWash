@@ -55,18 +55,16 @@
                     <p class="titulo-controle">Cadastrar Produto</p>
                     <div class="divider"></div>
                 </div>
-                <div class="form-group">
-                    <input type="hidden" name="action" value="CadastroCommand"/>
-                    <input type="hidden" name="quem" value="produto">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <label>Nome</label> 
-                            <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
-                        </div>
-                        <div class="input-field col s6">
-                            <label>Descrição</label> 
-                            <input class="form-control erro-descricao" type="text" name="descricao" id="descricao"><br>
-                        </div>
+                <input type="hidden" name="action" value="CadastroCommand"/>
+                <input type="hidden" name="quem" value="produto">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label>Nome</label> 
+                        <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
+                    </div>
+                    <div class="input-field col s6">
+                        <label>Descrição</label> 
+                        <input class="form-control erro-descricao" type="text" name="descricao" id="descricao"><br>
                     </div>
                 </div>
             </div>      
@@ -80,8 +78,9 @@
 
 <script src="js/jquery.validate.js"></script>
 <script src="js/inicializar-modal.js"></script>
+<script src="js/validar-apenas-letras.js"></script>
+<script src="js/validar-apenas-letras-numeros.js"></script>
 <script src="js/inicializar-validate.js"></script>
 <script src="js/buscar-na-tabela-2.js"></script>
-<script src="js/validar-apenas-letras-numeros.js"></script>
 
 <%@include file="rodape.jsp"%>

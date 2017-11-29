@@ -148,6 +148,6 @@
 <script src="js/inicializar-modal.js"></script>
 <script src="js/inicializar-mascara.js"></script>
 <script src="js/inicializar-validate.js"></script>
-<script src="js/buscar-na-tabela-7.js"></script>    
+<script src="js/buscar-na-tabela-3.js"></script>    
 
 <%@include file="rodape.jsp"%>

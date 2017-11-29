@@ -31,8 +31,8 @@
                                 <img class="responsive-img" src="img/backgrounds/car-wash-no-water.jpg">
                             </div>
                             <a href="usuario"><img class="circle" src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"></a>
-                            <a href="#!name"><span class="white-text name"><%= session.getAttribute("nome")%></span></a>
-                            <a href="#!email"><span class="white-text email"><%= usuario.getEmail()%></span></a>
+                            <a href="usuario"><span class="white-text name"><%= session.getAttribute("nome")%></span></a>
+                            <a href="usuario"><span class="white-text email"><%= usuario.getEmail()%></span></a>
                         </div></li>
 
                     <li><a href="painel">Painel Administrativo</a></li>

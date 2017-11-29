@@ -87,6 +87,8 @@
 
 
 <script src="js/jquery.validate.js"></script>
+<script src="js/validar-apenas-letras.js"></script>
 <script src="js/inicializar-validate.js"></script>
-<script src="js/validar-apenas-letras-numeros.js"></script>
+<script src="js/validar-cadastro-servico.js"></script>
+
 <%@include file="rodape.jsp"%>

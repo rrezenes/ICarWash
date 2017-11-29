@@ -3,26 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/dao/LavadorDAO.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/dao/ClienteDAO.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/dao/ServicoDAO.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/model/Lavador.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/model/Cliente.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/model/Endereco.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/model/Avaliacao.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/dao/SolicitacaoDAO.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/Listar.java</file>
+            <file>file:/C:/ICarWash/web/localizar_cliente.jsp</file>
+            <file>file:/C:/ICarWash/src/java/br/icarwash/control/filter/FiltroConexao.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/control/ControleEndereco.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/LocalizarPorId.java</file>
             <file>file:/C:/ICarWash/src/java/br/icarwash/dao/EnderecoDAO.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/Cadastrar.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/dao/SolicitacaoServicoDAO.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/ControleSolicitacao.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/SolicitarServico.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/command/Atualizar.java</file>
-            <file>file:/C:/ICarWash/web/listar_solicitacao.jsp</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/model/Pessoa.java</file>
-            <file>file:/C:/ICarWash/src/java/br/icarwash/control/ContinuarCadastro.java</file>
         </group>
     </open-files>
 </project-private>
