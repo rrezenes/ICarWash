@@ -7,11 +7,11 @@ public class EmailStatusSolicitacaoCliente extends Email {
     private final Solicitacao solicitacao;
 
     public EmailStatusSolicitacaoCliente(Solicitacao solicitacao) {
-        super(  solicitacao.getCliente().getNome(),
+        super(solicitacao.getCliente().getNome(),
                 solicitacao.getCliente().getUsuario().getEmail());
         this.solicitacao = solicitacao;
         super.setAssunto(defineAssunto(solicitacao.getEstado().toString()));
-        super.setMensagem(defineAssunto(solicitacao.getEstado().toString()));
+        super.setMensagem(defineMensagem(solicitacao.getEstado().toString()));
     }
 
     private String defineAssunto(String status) {
@@ -98,5 +98,4 @@ public class EmailStatusSolicitacaoCliente extends Email {
         return mensagem;
     }
 
-    
 }
