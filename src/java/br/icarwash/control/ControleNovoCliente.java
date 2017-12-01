@@ -3,6 +3,7 @@ package br.icarwash.control;
 import br.icarwash.dao.*;
 import br.icarwash.model.*;
 import br.icarwash.model.Usuario.UsuarioBuilder;
+import br.icarwash.util.email.EmailNovoCliente;
 import java.io.IOException;
 import java.sql.Connection;
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ public class ControleNovoCliente extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
-        
+
         Usuario usuario = new UsuarioBuilder()
                 .withEmail(request.getParameter("email"))
                 .withSenha(request.getParameter("senha"))
@@ -26,7 +27,13 @@ public class ControleNovoCliente extends HttpServlet {
                 .withCadastroCompleto(false)
                 .build();
 
-        new UsuarioDAO(conexao).cadastrar(usuario);
+        int idUsuario = new UsuarioDAO(conexao).cadastrar(usuario);
+
+        EmailNovoCliente emailNovoCliente = new EmailNovoCliente("Novo cliente", usuario.getEmail());
+        
+        if (idUsuario != 0) {
+            emailNovoCliente.enviar();
+        }
 
         new LoginController().validaLogin(request, response, new UsuarioDAO(conexao).usuarioLogin(usuario));
     }
