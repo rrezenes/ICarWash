@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.model.Usuario;
 import java.sql.Connection;
 
 public class ListaCommand implements ICommand {
@@ -74,10 +75,16 @@ public class ListaCommand implements ICommand {
         UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
         EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
 
-        lavadores.forEach(lavador -> {
-            lavador.setUsuario(usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId()));
-            enderecos.add(enderecoDAO.localizarPorIdUsuario(lavador.getUsuario().getId()).get(0));
-        });
+        Usuario usuario;
+        Endereco endereco;
+
+        for (Lavador lavador : lavadores) {
+            usuario = usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId());
+            lavador.setUsuario(usuario);
+
+            endereco = enderecoDAO.localizarPorIdUsuario(lavador.getUsuario().getId()).get(0);
+            enderecos.add(endereco);
+        };
 
         request.setAttribute("lavadores", lavadores);
         request.setAttribute("enderecos", enderecos);

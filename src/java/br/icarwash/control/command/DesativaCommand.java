@@ -1,7 +1,5 @@
 package br.icarwash.control.command;
 
-import br.icarwash.dao.ClienteDAO;
-import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
 import br.icarwash.dao.ServicoDAO;
 import br.icarwash.dao.UsuarioDAO;
@@ -15,11 +13,11 @@ public class DesativaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Connection conexao = (Connection) request.getAttribute("conexao");        
+        Connection conexao = (Connection) request.getAttribute("conexao");
         String inativar = request.getParameter("q");
         int id = Integer.parseInt(request.getParameter("id"));
-        
-        switch (inativar ){
+
+        switch (inativar) {
             case "cliente": {
                 new UsuarioDAO(conexao).inativar(id);
                 return "/Controle?action=ListaCommand&listar=cliente";
