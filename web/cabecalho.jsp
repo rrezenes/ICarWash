@@ -1,8 +1,9 @@
+
+
 <%@page import="br.icarwash.model.Usuario"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
         <link rel="shortcut icon" href="img/favicon.ico" />
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -11,8 +12,8 @@
         <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="css/estilo.css"/>
 
-        <script charset="UTF-8" type="text/javascript" src="js/jquery-3.1.1.js"></script>
-        <script charset="UTF-8" type="text/javascript" src="js/materialize.js"></script>
+        <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+        <script type="text/javascript" src="js/materialize.js"></script>
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -35,7 +36,7 @@
                             <a href="usuario"><span class="white-text email"><%= usuario.getEmail()%></span></a>
                         </div></li>
 
-                    <li><a href="painel">Painel Administrativo</a></li>
+                    <li><a>Painel</a></li>
                     <li class="no-padding">
                         <%-- /\ /\ NÃO VARIA /\ /\--%>
 
