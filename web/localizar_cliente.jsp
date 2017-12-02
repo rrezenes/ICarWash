@@ -21,7 +21,7 @@
             <input type="hidden" name="id" value="${cliente.id}"/>
             <div class="input-field col m6 s12">
                 <label>Nome</label> 
-                <input class="form-control erro-nome" type="text" name="nome" value="${cliente.nome}"><br>
+                <input class="form-control erro-nome" type="text" name="nome" id="nome" value="${cliente.nome}"><br>           
             </div>
             <div class="input-field col m3 s6">
                 <label>Telefone celular</label> 
@@ -96,11 +96,11 @@
                         </div>
                         <div class="input-field col s6">
                             <label>Endereço</label> 
-                            <input class="form-control erro-endereco" type="text" id="endereco" name="endereco" value="${endereco.endereco}"><br>
+                            <input class="form-control erro-endereco" type="text" id="endereco" name="endereco"  value="${endereco.endereco}"><br>
                         </div>
                         <div class="input-field col s6">
                             <label>Número</label> 
-                            <input class="form-control erro-numero" type="text" name="numero" value="${endereco.numero}"><br>
+                            <input class="form-control erro-numero" type="text" name="numero" id="numero" value="${endereco.numero}"><br>
                         </div>
                         <div class="col s12">
                         </div>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="input-field col s6">
                         <label>Número</label> 
-                        <input class="form-control erro-numero" type="text" name="numero"><br>
+                        <input class="form-control erro-numero" type="text" name="numero" id="numero"><br>
                     </div>
                     <div class="col s12">
                     </div>

@@ -24,7 +24,7 @@
             <input type="hidden" name="id" value="${lavador.id}"/>
             <div class="input-field col m6 s12">
                 <label>Nome</label>
-                <input class="form-control erro-nome" type="text" name="nome" value="${lavador.nome}"><br>
+                <input class="form-control erro-nome" type="text" name="nome" id="nome" value="${lavador.nome}"><br>
             </div>
             <div class="input-field col m3 s6">
                 <label>Telefone</label> 
@@ -96,7 +96,7 @@
                     </div>
                     <div class="input-field col s6">
                         <label>Número</label> 
-                        <input class="form-control erro-numero" type="text" name="numero" value="${endereco.numero}"><br>
+                        <input class="form-control erro-numero" type="text" name="numero" id="numero" value="${endereco.numero}"><br>
                     </div>
                     <div class="col s12">
                     </div>
