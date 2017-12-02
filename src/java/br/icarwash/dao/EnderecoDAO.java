@@ -89,10 +89,10 @@ public class EnderecoDAO {
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(Endereco endereco) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(DELETE_BY_ID);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, endereco.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -40,11 +40,11 @@ public class AvaliacaoDAO {
         return idAvaliacao;
     }
 
-    public Avaliacao localizarAvaliacaoPorId(int idAvaliacao) {
+    public Avaliacao localizarAvaliacaoPorId(Avaliacao avaliacao) {
         AvaliacaoBuilder builder = null;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
-            pstmt.setString(1, Integer.toString(idAvaliacao));
+            pstmt.setString(1, Integer.toString(avaliacao.getId()));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 builder = new Avaliacao.AvaliacaoBuilder()

@@ -17,17 +17,24 @@ import br.icarwash.model.Produto;
 import br.icarwash.model.Servico;
 import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
+import br.icarwash.model.Usuario;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 
 public class AtualizaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
+
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
         final int id = Integer.parseInt(request.getParameter("id"));
 
         switch (request.getParameter("quem")) {
@@ -46,7 +53,11 @@ public class AtualizaCommand implements ICommand {
 
                 new ClienteDAO(conexao).atualizar(cliente);
 
-                return "Controle?action=ListaCommand&listar=cliente";
+                if (usuario.getNivel() == 3) {
+                    return "Controle?action=ListaCommand&listar=cliente";
+                } else {
+                    return "usuario";
+                }
             }
             case "lavador": {
 
@@ -65,7 +76,11 @@ public class AtualizaCommand implements ICommand {
 
                 new LavadorDAO(conexao).atualizar(lavador);
 
-                return "Controle?action=ListaCommand&listar=lavador";
+                if (usuario.getNivel() == 3) {
+                    return "Controle?action=ListaCommand&listar=lavador";
+                } else {
+                    return "usuario";
+                }
             }
             case "produto": {
                 Produto produto = new Produto.ProdutoBuilder()
@@ -101,7 +116,7 @@ public class AtualizaCommand implements ICommand {
 
     private void atualizarProdutosDoServico(int idServico, HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
-        
+
         Map<Integer, Object> mapaProdutosDoServicoAtual = new HashMap<>();
         ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 

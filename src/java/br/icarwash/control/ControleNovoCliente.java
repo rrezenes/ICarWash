@@ -30,11 +30,11 @@ public class ControleNovoCliente extends HttpServlet {
         int idUsuario = new UsuarioDAO(conexao).cadastrar(usuario);
 
         EmailNovoCliente emailNovoCliente = new EmailNovoCliente("Novo cliente", usuario.getEmail());
-        
+
         if (idUsuario != 0) {
             emailNovoCliente.enviar();
-        }
 
-        new LoginController().validaLogin(request, response, new UsuarioDAO(conexao).usuarioLogin(usuario));
+            new LoginController().validaLogin(request, response, new UsuarioDAO(conexao).usuarioLogin(usuario));
+        }
     }
 }

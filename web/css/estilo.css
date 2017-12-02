@@ -46,3 +46,27 @@ canvas{
 em{
     color: red;
 }
+
+.card-action-right {
+    float: right;
+}
+
+.card_excluir {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 13px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+.card_button_excluir {
+    display: block;
+    font-size: 14px;
+    padding-left: 0px;
+    padding-right: 13px;
+}

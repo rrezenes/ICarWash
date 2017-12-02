@@ -2,9 +2,6 @@ package br.icarwash.control.filter;
 
 import br.icarwash.util.Conexao;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;

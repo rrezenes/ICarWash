@@ -38,11 +38,11 @@ public class ListarSolicitacaoLavador extends HttpServlet {
         
         solicitacoes.forEach(solicitacao -> {
             if (solicitacao.getAvaliacao().getId() != 0) {
-                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao().getId()));
+                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao()));
             }
             solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco().getId()));
             System.out.println(solicitacao.getEndereco().getBairro());
-            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId()));
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
         });
 
         request.setAttribute("ocupado", lavador.isOcupado());

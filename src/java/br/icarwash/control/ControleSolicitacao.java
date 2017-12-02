@@ -3,6 +3,7 @@ package br.icarwash.control;
 import br.icarwash.model.state.EmAnalise;
 import br.icarwash.dao.*;
 import br.icarwash.model.*;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Modelo.ModeloBuilder;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
@@ -33,10 +34,13 @@ public class ControleSolicitacao extends HttpServlet {
 
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             Usuario usuario = (Usuario) session.getAttribute("user");
+            Cliente cliente = new ClienteBuilder()
+                    .withUsuario(usuario)
+                    .build();
 
             ClienteDAO clienteDAO = new ClienteDAO(conexao);
-            Cliente cliente = clienteDAO.localizarPorIdUsuario(usuario.getId());
-            cliente = clienteDAO.localizarPorId(cliente.getId());
+            cliente = clienteDAO.localizarPorIdUsuario(cliente);
+            cliente = clienteDAO.localizarPorId(cliente);
 
             /*PEGA OS PARAMETROS DA VIEW*/
             String[] IdServicosSolicitados = request.getParameterValues("servico");
