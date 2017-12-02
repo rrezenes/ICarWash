@@ -40,6 +40,8 @@ public class ContinuarCadastro extends HttpServlet {
 
         new UsuarioDAO(conexao).concluirCadastro(usuario.getId());
 
+        usuario.setCadastroCompleto(true);
+        session.setAttribute("user", usuario);
         session.setAttribute("nome", request.getParameter("nome"));
         response.sendRedirect("solicitar-servico");
     }

@@ -51,7 +51,6 @@
                                     <a class='blue-text' href='#!'><b>Esqueceu sua senha?</b></a>
                                 </label>
                             </div>
-
                             <br />
                             <center>
                                 <div class='row'>
@@ -77,14 +76,14 @@
                             <div class="divider"></div>
                             <div class='input-field col s12'>
                                 <input class="form-control erro-email" type="text" name="email" id="email"><br>
-                                <label for="email">Email:</label>
+                                <label for="email">Email</label>
                             </div>
                             <div class='input-field col s12'>
-                                <label for="senha">Senha:</label> 
+                                <label for="senha">Senha</label> 
                                 <input class="form-control erro-senha" type="password" name="senha" id="senha" ><br>
                             </div>
                             <div class='input-field col s12'>
-                                <label for="confirme_senha">Confirme a Senha:</label> 
+                                <label for="confirme_senha">Confirme a Senha</label> 
                                 <input class="form-control erro-confirme" type="password" name="confirme" id="confirme" ><br>
                             </div>
                         </div>
@@ -100,9 +99,7 @@
 
     <script src="js/jquery.validate.js"></script>
     <script src="js/inicializar-modal.js"></script>
-    <script src="js/inicializar-modal.js"></script>
     <script src="js/inicializar-validate.js"></script>
-    <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
 
     <%@include file="rodape.jsp"%>
