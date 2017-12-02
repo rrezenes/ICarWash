@@ -41,6 +41,21 @@
                 <label>Modelo</label>
             </div>
         </div>
+        <%--<div class="row">
+            <h5 class="erro-porte col s12">Porte do Veículo</h5>
+            <p class="col s4">
+                <input class="with-gap" name="porte" type="radio" id="pequeno" value="pequeno"/>
+                <label for="pequeno">Pequeno</label>
+            </p>
+            <p class="col s4">
+                <input class="with-gap" name="porte" type="radio" id="medio" value="medio"/>
+                <label for="medio">Médio</label>
+            </p>
+            <p class="col s4">
+                <input class="with-gap" name="porte" type="radio" id="grande" value="grande"/>
+                <label for="grande">Grande</label>
+            </p>
+        </div>--%>
         <div class="row col s6">
             <h5 class="erro-servico col s12">Serviços</h5>
             <c:forEach var="servico" items="${servicos}">
@@ -114,7 +129,7 @@
 
 <script src="js/solicitar-servico.js"></script>
 <script src="js/validar-cep.js"></script>
-<script src="js/inicializar-mascara.js"></script>
-<script src="js/inicializar-validate.js"></script>
+<!--<script src="js/inicializar-mascara.js"></script>-->
+<!--<script src="js/inicializar-validate.js"></script>-->
 
 <%@include file="rodape.jsp"%>

@@ -61,7 +61,7 @@
                     <div class="form-group">
                         <input type="hidden" name="quem" value="produto">
                         <div class="row">
-                            <div class="col-md-6"><label>Nome:</label> <input class="form-control" type="text" name="nome" id="nome"><br></div>
+                            <div class="col-md-6"><label>Nome:</label> <input class="form-control" type="text" name="nome"><br></div>
                             <div class="col-md-6"><label>Descrição:</label> <input class="form-control" type="text" name="descricao" id="descricao"><br></div>
                         </div>
                     </div>

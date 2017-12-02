@@ -19,11 +19,11 @@
         <input type="hidden" name="id" value="<%= produto.getId()%>"/>
         <div class="input-field col s6">
             <label>Nome</label> 
-            <input class="form-control erro-nome" type="text" name="nome" id="nome" value="<%= produto.getNome()%>"><br>
+            <input class="form-control erro-nome" type="text" name="nome" value="<%= produto.getNome()%>"><br>
         </div>
         <div class="input-field col s6">
             <label>Descrição</label> 
-            <input class="form-control erro-descricao" type="text" name="descricao" id="descricao" value="<%= produto.getDescricao()%>"><br>
+            <input class="form-control erro-descricao" type="text" name="descricao" value="<%= produto.getDescricao()%>"><br>
         </div>
         <input class="form-control btn btn-primary" type="submit" value="Atualizar"><br>
     </div>

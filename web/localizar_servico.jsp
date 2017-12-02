@@ -15,11 +15,11 @@
         <div class="row">
             <div class="input-field col s12">
                 <label>Nome:</label> 
-                <input class="form-control erro-nome" type="text" name="nome" id="nome" value="${servico.nome}"><br>
+                <input class="form-control erro-nome" type="text" name="nome" value="${servico.nome}"><br>
             </div>
             <div class="input-field col s12">
                 <label>Descrição:</label> 
-                <input class="form-control erro-descricao" type="text" name="descricao" id="descricao" value="${servico.descricao}"><br>
+                <input class="form-control erro-descricao" type="text" name="descricao" value="${servico.descricao}"><br>
             </div>
             <div class="input-field col s12">
                 <label>Valor:</label> 
