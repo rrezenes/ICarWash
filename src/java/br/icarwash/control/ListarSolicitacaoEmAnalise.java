@@ -27,7 +27,7 @@ public class ListarSolicitacaoEmAnalise extends HttpServlet {
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
         
         solicitacoes.forEach(solicitacao -> {
-            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId()));
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
         });
         
         request.setAttribute("solicitacoes", solicitacoes);

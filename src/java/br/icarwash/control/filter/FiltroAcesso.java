@@ -2,6 +2,8 @@ package br.icarwash.control.filter;
 
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Usuario;
 import br.icarwash.util.Conexao;
 import java.io.IOException;
@@ -54,7 +56,7 @@ public class FiltroAcesso implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
         doBeforeProcessing(request, response);
@@ -76,7 +78,10 @@ public class FiltroAcesso implements Filter {
                         request.getRequestDispatcher("/painel_lavador.jsp").forward(request, response);
                         break;
                     case 1:
-                        session.setAttribute("nome", new ClienteDAO(Conexao.getConexao()).localizarPorIdUsuario(usuario.getId()).getNome());
+                        Cliente cliente = new ClienteBuilder()
+                                .withUsuario(usuario)
+                                .build();
+                        session.setAttribute("nome", new ClienteDAO(Conexao.getConexao()).localizarPorIdUsuario(cliente).getNome());
                         request.getRequestDispatcher("/painel_cliente.jsp").forward(request, response);
                         break;
                     default:

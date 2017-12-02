@@ -5,6 +5,9 @@
 <c:if test="${!empty alterado}">
     <script>Materialize.toast('Endereço Alterado', 6000, 'rounded');</script>        
 </c:if>
+<c:if test="${!empty senhaInvalida}">
+    <script>Materialize.toast('Senha atual invalida', 6000, 'rounded');</script>        
+</c:if>
 
 <div class="row">
     <p class="titulo-controle">Alterar Lavador</p>
@@ -33,8 +36,12 @@
                 <label>Data de Nascimento</label> 
                 <input class="form-control erro-data" type="text" id ="nascimento" name="dataNascimento" value="${dataNascimento}"><br>
             </div>
-            <div class="col s12">
+            <div class="col s6 m3">
                 <input class="form-control btn btn-primary" type="submit" value="Atualizar"><br>
+            </div>
+
+            <div class="col s6 m3">
+                <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Senha</a>
             </div>
         </div>
     </form>
@@ -101,6 +108,30 @@
             </div>
         </form>
     </div>
+
+    <!-- Modal Alterar Senha -->
+    <div id="modal-senha" class="modal modal-fixed-footer">
+        <form id="FormValidate" action="usuario" method="post">
+            <div class="modal-content">
+                <h4>Alterar Senha</h4>
+                <div class="form-group">
+                    <div class='input-field col m3 s6'>
+                        <input class='form-control erro-senha' type='password' name='senha' id="senha" />
+                        <label for='password'>Senha atual</label>
+                    </div>
+                    <div class='input-field col m3 s6'>
+                        <input type="password" class="form-control erro-senha" id="nova_senha" name="nova_senha" />
+                        <label for='password'>Nova senha</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+                <input class="form-control btn btn-primary" type="submit" value="">
+            </div>
+        </form>
+    </div>
+
 
 </div>
 

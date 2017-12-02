@@ -22,7 +22,6 @@ public class FiltroAcessoAdmin implements Filter {
     private static final boolean debug = true;
 
     private FilterConfig filterConfig = null;
-    private boolean aprovado;
 
     public FiltroAcessoAdmin() {
     }
@@ -59,18 +58,19 @@ public class FiltroAcessoAdmin implements Filter {
         doBeforeProcessing(request, response);
 
         HttpSession session = ((HttpServletRequest) request).getSession(true);
-
+        
         Usuario usuario = (Usuario) session.getAttribute("user");
 
+        String URI = request.getParameter("action");
+        
         Throwable problem = null;
-        if (usuario.getNivel() == 3) {
+        if (usuario.getNivel() == 3 || URI.equals("AtualizaCommand")) {
             try {
                 chain.doFilter(request, response);
             } catch (IOException | ServletException t) {
                 problem = t;
             }
         } else {
-            aprovado = false;
             log("Acesso ao usuário: " + usuario.getEmail() + " negado. Usuário derrubado do sistema.");
             session.invalidate();
             request.getRequestDispatcher("index.jsp").forward(request, response);

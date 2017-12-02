@@ -1,17 +1,14 @@
 package br.icarwash.control;
 
-import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
-import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +37,7 @@ public class ListarSolicitacaoHojeLavador extends HttpServlet {
         
         solicitacoes.forEach(solicitacao -> {
             solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco().getId()));
-            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId()));
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
         });
 
         request.setAttribute("solicitacoes", solicitacoes);

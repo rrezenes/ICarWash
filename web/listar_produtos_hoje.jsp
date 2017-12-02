@@ -33,7 +33,7 @@
             <%}%>
             <td><%= produto.getNome()%></td>
             <td><%= produto.getDescricao()%></td>
-            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizarPorId&q=produto&id=<%=produto.getId()%>"></a></td>
+            <td><a type="button" class="glyphicon glyphicon-pencil text-info" href="Controle?action=LocalizaPorIdCommand&q=produto&id=<%=produto.getId()%>"></a></td>
             <% if(produto.isAtivo()){%>          	
             	<td><a type="button" href="Controle?action=Excluir&q=produto&id=<%=produto.getId()%>">Inativar</a></td>
             <%}else{%> 

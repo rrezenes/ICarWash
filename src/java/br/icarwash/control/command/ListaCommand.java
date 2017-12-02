@@ -98,7 +98,7 @@ public class ListaCommand implements ICommand {
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
 
         solicitacoes.forEach(solicitacao -> {
-            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente().getId())
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente())
             );
         });
 

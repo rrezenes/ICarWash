@@ -27,8 +27,7 @@ public class ClienteDAO {
         this.conexao = conexao;
     }
 
-    public int cadastrar(Cliente cliente) {
-        int idCliente = 0;
+    public Cliente cadastrar(Cliente cliente) {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -42,14 +41,14 @@ public class ClienteDAO {
 
             final ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
-                idCliente = rs.getInt(1);
+                cliente.setId(rs.getInt(1));
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return idCliente;
+        return cliente;
     }
 
     public ArrayList<Cliente> listar() {
@@ -87,14 +86,13 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public Cliente localizarPorId(int id) {
-        Cliente cliente = null;
+    public Cliente localizarPorId(Cliente cliente) {
         Usuario usuario;
         try {
             Calendar cal = Calendar.getInstance();
             Timestamp timestamp;
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
-            pstmt.setString(1, Integer.toString(id));
+            pstmt.setString(1, Integer.toString(cliente.getId()));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
@@ -132,29 +130,13 @@ public class ClienteDAO {
         }
     }
 
-    public int localizarIdPorCpf(String cpf) {
-        int IDCliente = 0;
-        try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_CPF);
-            pstmt.setString(1, cpf);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                IDCliente = rs.getInt("id");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return IDCliente;
-    }
-
-    public Cliente localizarPorIdUsuario(int idUsuario) {
-        Cliente cliente = null;
+    public Cliente localizarPorIdUsuario(Cliente cliente) {
         Usuario usuario;
         Calendar cal = Calendar.getInstance();
         Timestamp timestamp;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
-            pstmt.setInt(1, idUsuario);
+            pstmt.setInt(1, cliente.getUsuario().getId());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 timestamp = rs.getTimestamp("dt_nascimento");
@@ -179,11 +161,11 @@ public class ClienteDAO {
         return cliente;
     }
 
-    public boolean checkCpfDisponivel(String cpf) {
+    public boolean checkCpfDisponivel(Cliente cliente) {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_CPF);
-            pstmt.setString(1, cpf);
+            pstmt.setString(1, cliente.getCPF());
             ResultSet rs = pstmt.executeQuery();
             return !rs.next();
         } catch (SQLException e) {

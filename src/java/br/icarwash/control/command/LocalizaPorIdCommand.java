@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Servico;
@@ -31,7 +32,10 @@ public class LocalizaPorIdCommand implements ICommand {
         switch (localizar) {
             case "cliente": {
 
-                Cliente cliente = new ClienteDAO(conexao).localizarPorId(id);
+                Cliente cliente = new ClienteBuilder()
+                        .withId(id)
+                        .build();
+                cliente = new ClienteDAO(conexao).localizarPorId(cliente);
                 ArrayList<Endereco> enderecos = new EnderecoDAO(conexao).localizarPorIdUsuario(cliente.getUsuario().getId());
 
                 request.setAttribute("enderecos", enderecos);

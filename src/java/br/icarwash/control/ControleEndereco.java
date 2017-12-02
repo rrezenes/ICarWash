@@ -5,7 +5,6 @@ import br.icarwash.model.Endereco;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +32,7 @@ public class ControleEndereco extends HttpServlet {
 
         }
 
+        response.sendRedirect(request.getContextPath() + "/usuario");
     }
 
     protected void alterarEndereco(HttpServletRequest request, HttpServletResponse response)
@@ -53,8 +53,6 @@ public class ControleEndereco extends HttpServlet {
         new EnderecoDAO(conexao).atualizar(endereco);
 
         request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
-        rd.forward(request, response);
     }
 
     protected void adicionarEndereco(HttpServletRequest request, HttpServletResponse response)
@@ -78,15 +76,19 @@ public class ControleEndereco extends HttpServlet {
         new EnderecoDAO(conexao).cadastrar(endereco);
 
         request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
-        rd.forward(request, response);
     }
 
     protected void excluirEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
-
         
+        Endereco endereco = new Endereco.EnderecoBuilder()
+                .withId(Integer.parseInt(request.getParameter("idEndereco")))
+                .build();
+        
+        new EnderecoDAO(conexao).excluir(endereco);
+        
+        request.setAttribute("excluido", "ok");
     }
 
 }

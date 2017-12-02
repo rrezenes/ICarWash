@@ -129,7 +129,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
         Solicitacao solicitacao = new SolicitacaoDAO(conexao)
                 .localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
 
-        Cliente cliente = new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente().getId());
+        Cliente cliente = new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente());
         cliente.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario().getId()));
 
         solicitacao.setCliente(cliente);

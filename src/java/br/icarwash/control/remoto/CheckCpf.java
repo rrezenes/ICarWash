@@ -2,6 +2,8 @@ package br.icarwash.control.remoto;
 
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -22,7 +24,10 @@ public class CheckCpf extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         if (URI.endsWith("/CheckCpfCliente")) {
-            out.print(new ClienteDAO(conexao).checkCpfDisponivel(request.getParameter("cpf")));
+                        Cliente cliente = new ClienteBuilder()
+                                .withCpf(request.getParameter("cpf"))
+                                .build();
+            out.print(new ClienteDAO(conexao).checkCpfDisponivel(cliente));
             out.flush();
 
         } else {
