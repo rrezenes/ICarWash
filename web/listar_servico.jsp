@@ -50,7 +50,7 @@
 </table>
 
 <div id="modal" class="modal modal-fixed-footer">
-    <form id="FormValidate" name="listarServico" action="Controle" method="post">
+    <form class="col s12" role="form" action="Controle" id="FormValidate" name="listarServico" method="post">
         <div class="modal-content">
             <div class="form-group">
                 <div class="row">

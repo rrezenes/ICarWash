@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="input-field col s6">
                         <label>Nome</label> 
-                        <input class="form-control erro-nome" type="text" name="nome"><br>
+                        <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
                     </div>
                     <div class="input-field col s6">
                         <label>Telefone celular</label> 

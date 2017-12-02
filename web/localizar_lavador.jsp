@@ -21,17 +21,17 @@
             <input type="hidden" name="id" value="${lavador.id}"/>
             <div class="input-field col m6 s12">
                 <label>Nome</label>
-                <input class="form-control erro-nome" type="text" name="nome" value="${lavador.nome}"><br>
+                <input class="form-control erro-nome" type="text" name="nome" id="nome" value="${lavador.nome}"><br>
             </div>
             <div class="input-field col m3 s6">
                 <label>Telefone</label> 
-                <input class="form-control erro-telefone" type="text" id ="telefone" name="telefone" value="${lavador.telefone}"><br>
+                <input class="form-control erro-telefone" type="text" name="telefone" id ="telefone" value="${lavador.telefone}"><br>
             </div>
             <div class="input-field col m3 s6">
                 <%--Formatar a data antes de exibir na tela--%>
                 <fmt:formatDate value="${lavador.dataNascimento.time}" var="dataNascimento" type="date" pattern="dd/MM/yyyy" />            
                 <label>Data de Nascimento</label> 
-                <input class="form-control erro-data" type="text" id ="nascimento" name="dataNascimento" value="${dataNascimento}"><br>
+                <input class="form-control erro-data" type="text" name="dataNascimento" id ="nascimento" value="${dataNascimento}"><br>
             </div>
             <div class="col s12">
                 <input class="form-control btn btn-primary" type="submit" value="Atualizar"><br>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="input-field col s6">
                         <label>CEP</label> 
-                        <input class="form-control erro-cep" type="text" id="cep" name="cep" value="${endereco.CEP}"><br>
+                        <input class="form-control erro-cep" type="text" name="cep" id="cep" value="${endereco.CEP}"><br>
                     </div>
                     <div class="input-field col s6">
                         <label>Estado</label> 
@@ -89,7 +89,7 @@
                     </div>
                     <div class="input-field col s6">
                         <label>Número</label> 
-                        <input class="form-control erro-numero" type="text" name="numero" value="${endereco.numero}"><br>
+                        <input class="form-control erro-numero" type="text" name="numero" id="numero" value="${endereco.numero}"><br>
                     </div>
                     <div class="col s12">
                     </div>

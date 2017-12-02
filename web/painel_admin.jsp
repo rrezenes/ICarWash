@@ -9,26 +9,26 @@
 </div>
 
 <div class="row">
-    <div class="col s6">
+    <div class="col s12">
         <p class="titulo-controle2">Número de serviços realizados</p>
         <div class="divider"></div>
         <canvas id="canvas"></canvas>
     </div>
-    <div class="col s6">
+    <div class="col s12">
         <p class="titulo-controle2">Status das solicitações de hoje</p>
         <div class="divider"></div>
         <div id="canvas-holder" style="width:100%">
             <canvas id="chart-area" /></canvas>
         </div>
     </div>
-    <div class="col s6">
+    <div class="col s12">
         <p class="titulo-controle2">Status das solicitações no mês</p>
         <div class="divider"></div>
         <div id="canvas-holder" style="width:100%">
             <canvas id="chart-data" /></canvas>
         </div>
     </div>
-    <div class="col s6">
+    <div class="col s12">
         <table class="responsive-table centered striped">
             <thead>
             <p class="titulo-controle2">Ranking de Lavador - Média de avaliações</p>
