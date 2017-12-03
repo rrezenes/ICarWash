@@ -8,6 +8,7 @@ import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Usuario;
 import br.icarwash.util.email.EmailStatusSolicitacaoCliente;
@@ -133,9 +134,14 @@ public class ControleStatusSolicitacao extends HttpServlet {
         cliente.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario().getId()));
 
         solicitacao.setCliente(cliente);
-        solicitacao.setLavador(new LavadorDAO(conexao).localizarPorId(solicitacao.getLavador().getId()));
+        
+        Lavador lavador = new LavadorDAO(conexao).localizarPorId(solicitacao.getLavador().getId());
+        lavador.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(lavador.getUsuario().getId()));
+        solicitacao.setLavador(lavador);
+        
         solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco().getId()));
 
+        
         return solicitacao;
     }
 }
