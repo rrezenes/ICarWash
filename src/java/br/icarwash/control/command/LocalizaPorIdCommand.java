@@ -16,6 +16,7 @@ import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Servico;
 import br.icarwash.model.ServicoProduto;
 import java.sql.Connection;
@@ -44,7 +45,7 @@ public class LocalizaPorIdCommand implements ICommand {
                 ArrayList<Endereco> enderecos = new ArrayList<>();
                 
                 for(ClienteEndereco clienteEndereco: clienteEnderecos){
-                    enderecos.add(new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco().getId()));
+                    enderecos.add(new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco()));
                 }
               
 
@@ -53,8 +54,11 @@ public class LocalizaPorIdCommand implements ICommand {
                 return "localizar_cliente.jsp";
             }
             case "lavador": {
+                Lavador lavador = new LavadorBuilder()
+                        .withId(id)
+                        .build();
 
-                Lavador lavador = new LavadorDAO(conexao).localizarPorId(id);
+                lavador = new LavadorDAO(conexao).localizarPorId(lavador);
 
                 request.setAttribute("lavador", lavador);
                 return "localizar_lavador.jsp";

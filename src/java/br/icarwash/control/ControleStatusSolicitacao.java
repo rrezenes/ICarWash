@@ -145,14 +145,14 @@ public class ControleStatusSolicitacao extends HttpServlet {
             Lavador lavador = buscarLavador(solicitacao.getLavador(), request);
             solicitacao.setLavador(lavador);
         }
-        solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco().getId()));
+        solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco()));
 
         return solicitacao;
     }
 
     private Lavador buscarLavador(Lavador lavador, HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
-        lavador = new LavadorDAO(conexao).localizarPorId(lavador.getId());
+        lavador = new LavadorDAO(conexao).localizarPorId(lavador);
         lavador.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(lavador.getUsuario().getId()));
         return lavador;
     }

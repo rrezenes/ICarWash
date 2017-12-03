@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 public class EnderecoDAO {
 
@@ -45,11 +44,10 @@ public class EnderecoDAO {
         return endereco;
     }
 
-    public Endereco localizarPorId(int id) {
-        Endereco endereco = null;
+    public Endereco localizarPorId(Endereco endereco) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
-            pstmt.setString(1, Integer.toString(id));
+            pstmt.setString(1, Integer.toString(endereco.getId()));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 endereco = new EnderecoBuilder()

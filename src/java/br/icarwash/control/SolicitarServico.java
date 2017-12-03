@@ -41,7 +41,7 @@ public class SolicitarServico extends HttpServlet {
         ArrayList<Endereco> enderecos = new ArrayList<>();
 
         for (ClienteEndereco clienteEndereco : clienteEnderecos) {
-            enderecos.add(new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco().getId()));
+            enderecos.add(new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco()));
         }
 
         request.setAttribute("servicos", new ServicoDAO(conexao).listar());

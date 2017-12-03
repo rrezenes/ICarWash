@@ -32,8 +32,7 @@ public class LavadorDAO {
         this.conexao = conexao;
     }
 
-    public int cadastrar(Lavador lavador) {
-        int idEndereco = 0;
+    public Lavador cadastrar(Lavador lavador) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, lavador.getUsuario().getId());
@@ -48,12 +47,12 @@ public class LavadorDAO {
 
             final ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
-                idEndereco = rs.getInt(1);
+                lavador.setId(rs.getInt(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return idEndereco;
+        return lavador;
     }
 
     public ArrayList<Lavador> listar() {
@@ -100,14 +99,13 @@ public class LavadorDAO {
         return lavadores;
     }
 
-    public Lavador localizarPorId(int id) {
+    public Lavador localizarPorId(Lavador lavador) {
         Calendar dataContrato = Calendar.getInstance(), dataNascimento = Calendar.getInstance();
-        Lavador lavador = null;
         Usuario usuario;
         Endereco endereco;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
-            pstmt.setString(1, Integer.toString(id));
+            pstmt.setString(1, Integer.toString(lavador.getId()));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
 
@@ -139,14 +137,13 @@ public class LavadorDAO {
         return lavador;
     }
 
-    public Lavador localizarPorIdUsuario(int id) {
+    public Lavador localizarPorIdUsuario(Lavador lavador) {
         Calendar dataContrato = Calendar.getInstance(), dataNascimento = Calendar.getInstance();
-        Lavador lavador = null;
         Usuario usuario;
         Endereco endereco;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_USUARIO);
-            pstmt.setString(1, Integer.toString(id));
+            pstmt.setString(1, Integer.toString(lavador.getId()));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
 
@@ -216,10 +213,10 @@ public class LavadorDAO {
         return numeroLavadores;
     }
 
-    public boolean checkCpfDisponivel(String cpf) {
+    public boolean checkCpfDisponivel(Lavador lavador) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_BY_CPF);
-            pstmt.setString(1, cpf);
+            pstmt.setString(1, lavador.getCPF());
             ResultSet rs = pstmt.executeQuery();
             return !rs.next();
         } catch (SQLException e) {
@@ -227,20 +224,20 @@ public class LavadorDAO {
         }
     }
 
-    public void ocuparLavador(int id) {
+    public void ocuparLavador(Lavador lavador) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(OCUPAR_LAVADOR);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, lavador.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void desocuparLavador(int id) {
+    public void desocuparLavador(Lavador lavador) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(DESOCUPAR_LAVADOR);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, lavador.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

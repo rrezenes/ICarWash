@@ -10,6 +10,7 @@ import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
@@ -48,7 +49,7 @@ public class ControleUsuario extends HttpServlet {
                 EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
 
                 for (ClienteEndereco clienteEndereco : clienteEnderecos) {
-                    enderecos.add(enderecoDAO.localizarPorId(clienteEndereco.getEndereco().getId()));
+                    enderecos.add(enderecoDAO.localizarPorId(clienteEndereco.getEndereco()));
                 }
 
                 cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
@@ -62,10 +63,12 @@ public class ControleUsuario extends HttpServlet {
                 break;
             }
             case 2: {
+                Lavador lavador = new LavadorBuilder()
+                        .withUsuario(usuario)
+                        .build();
+                lavador = new LavadorDAO(conexao).localizarPorIdUsuario(lavador);
 
-                Lavador lavador = new LavadorDAO(conexao).localizarPorIdUsuario(usuario.getId());
-
-                Endereco endereco = new EnderecoDAO(conexao).localizarPorId(lavador.getEndereco().getId());
+                Endereco endereco = new EnderecoDAO(conexao).localizarPorId(lavador.getEndereco());
 
                 lavador.setEndereco(endereco);
 
