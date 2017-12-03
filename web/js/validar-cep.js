@@ -2,11 +2,6 @@ var msg_cep;
 $("#cep").change(function () {
     buscaCep(this);
 });
-
-$("#cep1").change(function () {
-    buscaCep(this);
-});
-
 function buscaCep(cep) {
     var cep_code = $(cep).val();
     if (cep_code.length <= 0)

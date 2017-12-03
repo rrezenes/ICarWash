@@ -8,6 +8,7 @@ public final class Lavador extends Pessoa {
     private Calendar dataContrato = Calendar.getInstance();
     private Usuario usuario;
     private boolean ocupado = false;
+    Endereco endereco;
 
     protected Lavador() {
     }
@@ -18,38 +19,42 @@ public final class Lavador extends Pessoa {
         private Usuario usuario;
         private Calendar dataContrato = Calendar.getInstance();
         private boolean ocupado = false;
-
-        public LavadorBuilder() {
-        }
+        Endereco endereco;
 
         public LavadorBuilder from(Lavador lavador) {
             this.id = lavador.id;
             this.usuario = lavador.usuario;
             this.dataContrato = lavador.dataContrato;
             this.ocupado = lavador.ocupado;
+            this.endereco = lavador.endereco;
             return this;
         }
 
-        public LavadorBuilder withId(int id){
+        public LavadorBuilder withId(int id) {
             object.id = id;
             return this;
         }
-        
-        public LavadorBuilder withUsuario(Usuario usuario){
+
+        public LavadorBuilder withUsuario(Usuario usuario) {
             object.usuario = usuario;
             return this;
         }
-        
-        public LavadorBuilder withDataContrato(Calendar dataContrato){
+
+        public LavadorBuilder withDataContrato(Calendar dataContrato) {
             object.dataContrato = dataContrato;
             return this;
         }
-        
-        public LavadorBuilder withOcupado(boolean ocupado){
+
+        public LavadorBuilder withOcupado(boolean ocupado) {
             object.ocupado = ocupado;
-            return  this;
+            return this;
         }
-        
+
+        public LavadorBuilder withEndereco(Endereco endereco) {
+            object.endereco = endereco;
+            return this;
+        }
+
         @Override
         protected Lavador getObject() {
             return new Lavador();
@@ -92,6 +97,14 @@ public final class Lavador extends Pessoa {
 
     public void setOcupado(boolean ocupado) {
         this.ocupado = ocupado;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
 }

@@ -30,7 +30,7 @@ public class Agendado implements SolicitacaoState {
         try {
             conexao.setAutoCommit(false);
 
-            new LavadorDAO(conexao).ocuparLavador(solicitacao.getLavador().getId());
+            new LavadorDAO(conexao).ocuparLavador(solicitacao.getLavador());
 
             SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
             solicitacaoDAO.processarSolicitacao(solicitacao);

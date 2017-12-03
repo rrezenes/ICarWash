@@ -32,7 +32,7 @@
                     <td>${solicitacao.cliente.nome}</td>
                     <td>${solicitacao.endereco.cidade}</td>
                     <td>${solicitacao.endereco.bairro}</td>
-                    <td>${solicitacao.porte}</td>            
+                    <td>${solicitacao.modelo.porte}</td>            
                     <td>${dataSolicitacao}</td>
                     <td>${solicitacao.valorTotal.doubleValue()}</td>
                     <td>${solicitacao.estado}</td>

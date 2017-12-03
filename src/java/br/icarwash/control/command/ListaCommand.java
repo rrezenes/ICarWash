@@ -70,24 +70,17 @@ public class ListaCommand implements ICommand {
     private String listarLavadores(HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
         ArrayList<Lavador> lavadores = new LavadorDAO(conexao).listar();
-        ArrayList<Endereco> enderecos = new ArrayList<>();
 
         UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-        EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
 
         Usuario usuario;
-        Endereco endereco;
 
         for (Lavador lavador : lavadores) {
             usuario = usuarioDAO.localizarUsuarioPorID(lavador.getUsuario().getId());
             lavador.setUsuario(usuario);
-
-            endereco = enderecoDAO.localizarPorIdUsuario(lavador.getUsuario().getId()).get(0);
-            enderecos.add(endereco);
         };
 
         request.setAttribute("lavadores", lavadores);
-        request.setAttribute("enderecos", enderecos);
 
         return "listar_lavador.jsp";
     }

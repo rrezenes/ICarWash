@@ -3,7 +3,6 @@ package br.icarwash.model;
 public class Endereco {
 
     private int id;
-    private Usuario usuario;
     private String CEP;
     private String estado;
     private String cidade;
@@ -17,7 +16,6 @@ public class Endereco {
 
     public Endereco(EnderecoBuilder builder) {
         this.id = builder.id;
-        this.usuario = builder.usuario;
         this.CEP = builder.CEP;
         this.estado = builder.estado;
         this.cidade = builder.cidade;
@@ -30,7 +28,6 @@ public class Endereco {
     public static class EnderecoBuilder {
 
         private int id;
-        private Usuario usuario;
         private String CEP;
         private String estado;
         private String cidade;
@@ -41,7 +38,6 @@ public class Endereco {
 
         public EnderecoBuilder from(Endereco endereco) {
             this.id = endereco.id;
-            this.usuario = endereco.usuario;
             this.CEP = endereco.CEP;
             this.estado = endereco.estado;
             this.cidade = endereco.cidade;
@@ -54,11 +50,6 @@ public class Endereco {
 
         public EnderecoBuilder withId(int id) {
             this.id = id;
-            return this;
-        }
-
-        public EnderecoBuilder withUsuario(Usuario usuario) {
-            this.usuario = usuario;
             return this;
         }
 
@@ -164,14 +155,6 @@ public class Endereco {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
 }

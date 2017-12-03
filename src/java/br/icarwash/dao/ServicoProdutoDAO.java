@@ -3,7 +3,6 @@ package br.icarwash.dao;
 import br.icarwash.model.Produto;
 import br.icarwash.model.Servico;
 import br.icarwash.model.ServicoProduto;
-import br.icarwash.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
