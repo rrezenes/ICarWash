@@ -30,7 +30,7 @@ public class SolicitacaoDAO {
     private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, id_modelo, data_solicitacao,valor_total) values (?,?,?,?,?)";
 
     private static final String SELECT_ALL = "SELECT * FROM solicitacao";
-    private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao,id_endereco, id_modelo, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM solicitacao where ID = ?";
     private static final String SELECT_BY_ID_CLIENTE = "SELECT * FROM solicitacao where id_cliente = ? order by data_solicitacao";
     private static final String SELECT_BY_ID_LAVADOR = "select * FROM solicitacao where id_lavador = ? order by data_solicitacao";
     private static final String SELECT_SOLICITACAO_HOJE_LAVADOR = "select * from solicitacao where id_lavador = ? and DATE(DATE_FORMAT(data_solicitacao, '%Y-%m-%d')) = CURDATE()";
@@ -240,11 +240,11 @@ public class SolicitacaoDAO {
                 lavador = new LavadorBuilder()
                         .withId(rs.getInt("id_lavador"))
                         .build();
-                
+
                 endereco = new EnderecoBuilder()
                         .withId(rs.getInt("id_endereco"))
                         .build();
-                
+
                 solicitacaoState = validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
@@ -345,21 +345,6 @@ public class SolicitacaoDAO {
             throw new RuntimeException(e);
         }
         return solicitacoes;
-    }
-
-    public Solicitacao selecionaUltimoIdSolicitacao() {
-        Solicitacao solicitacao = new Solicitacao();
-        try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_ULTIMA_SOLICITACAO);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                solicitacao.setId(rs.getInt("id"));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return solicitacao;
     }
 
     public void cancelarSolicitacaoPorId(int id) {

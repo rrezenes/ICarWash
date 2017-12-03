@@ -108,9 +108,9 @@ public class Avaliacao {
         return notaMedia;
     }
 
-    public BigDecimal calcularMedia() {
+    public void calcularMedia() {
         notaMedia = notaPontualidade.add(notaServico.add(notaAtendimento.add(notaAgilidade)));
-        return this.notaMedia = this.notaMedia.divide(BigDecimal.valueOf(4));
+        this.notaMedia = this.notaMedia.divide(BigDecimal.valueOf(4));
     }
 
 }

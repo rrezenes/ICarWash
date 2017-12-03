@@ -203,6 +203,10 @@
 <script>
     <c:forEach var="endereco" items="${enderecos}">
         $("#cep${endereco.id}").mask("99999-999");
+
+        $("#cep${endereco.id}").change(function () {
+            buscaCep(this);
+        });
     </c:forEach>
 </script>
 <%@include file="rodape.jsp"%>
