@@ -44,7 +44,6 @@ public class CadastroCommand implements ICommand {
                         .build();
 
                 Endereco endereco = new EnderecoBuilder()
-                        .withUsuario(cliente.getUsuario())
                         .withCep(request.getParameter("cep"))
                         .withEstado(request.getParameter("estado"))
                         .withCidade(request.getParameter("cidade"))
@@ -54,9 +53,13 @@ public class CadastroCommand implements ICommand {
                         .withNome(request.getParameter("nomeEndereco"))
                         .build();
 
-                new ClienteDAO(conexao).cadastrar(cliente);
-                new EnderecoDAO(conexao).cadastrar(endereco);
+                cliente = new ClienteDAO(conexao).cadastrar(cliente);
+                endereco = new EnderecoDAO(conexao).cadastrar(endereco);
 
+                ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+                new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(clienteEndereco);
+                
+                
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=ListaCommand&listar=cliente";
             }
@@ -65,17 +68,7 @@ public class CadastroCommand implements ICommand {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
                 dataNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                Lavador lavador = new LavadorBuilder()
-                        .withUsuario(criaUsuario(request, conexao, 2))
-                        .withDataContrato(dataContrato)
-                        .withNome(request.getParameter("nome"))
-                        .withTelefone(request.getParameter("telefone"))
-                        .withDataNascimento(dataNascimento)
-                        .withCpf(request.getParameter("cpf"))
-                        .build();
-
                 Endereco endereco = new EnderecoBuilder()
-                        .withUsuario(lavador.getUsuario())
                         .withCep(request.getParameter("cep"))
                         .withEstado(request.getParameter("estado"))
                         .withCidade(request.getParameter("cidade"))
@@ -84,9 +77,21 @@ public class CadastroCommand implements ICommand {
                         .withNumero(Integer.parseInt(request.getParameter("numero")))
                         .withNome("Residencia")
                         .build();
+                
+                endereco = new EnderecoDAO(conexao).cadastrar(endereco);
+                
+                Lavador lavador = new LavadorBuilder()
+                        .withUsuario(criaUsuario(request, conexao, 2))
+                        .withDataContrato(dataContrato)
+                        .withNome(request.getParameter("nome"))
+                        .withTelefone(request.getParameter("telefone"))
+                        .withDataNascimento(dataNascimento)
+                        .withCpf(request.getParameter("cpf"))
+                        .withEndereco(endereco)
+                        .build();
+
 
                 new LavadorDAO(conexao).cadastrar(lavador);
-                new EnderecoDAO(conexao).cadastrar(endereco);
 
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=ListaCommand&listar=lavador";

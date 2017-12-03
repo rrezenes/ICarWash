@@ -32,7 +32,7 @@ public class ControleNovoCliente extends HttpServlet {
         EmailNovoCliente emailNovoCliente = new EmailNovoCliente("Novo cliente", usuario.getEmail());
 
         if (idUsuario != 0) {
-            emailNovoCliente.enviar();
+            emailNovoCliente.start();
 
             new LoginController().validaLogin(request, response, new UsuarioDAO(conexao).usuarioLogin(usuario));
         }

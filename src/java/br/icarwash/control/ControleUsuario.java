@@ -1,13 +1,16 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
@@ -33,10 +36,21 @@ public class ControleUsuario extends HttpServlet {
 
         switch (usuario.getNivel()) {
             case 1: {
-                ArrayList<Endereco> enderecos = new EnderecoDAO(conexao).localizarPorIdUsuario(usuario.getId());
                 Cliente cliente = new ClienteBuilder()
                         .withUsuario(usuario)
                         .build();
+
+                cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+                ArrayList<ClienteEndereco> clienteEnderecos = new ClienteEnderecoDAO(conexao).selecionaEnderecoPorIdCliente(cliente);
+
+                ArrayList<Endereco> enderecos = new ArrayList<>();
+
+                EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+
+                for (ClienteEndereco clienteEndereco : clienteEnderecos) {
+                    enderecos.add(enderecoDAO.localizarPorId(clienteEndereco.getEndereco()));
+                }
 
                 cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
 
@@ -49,10 +63,15 @@ public class ControleUsuario extends HttpServlet {
                 break;
             }
             case 2: {
-                Endereco endereco = new EnderecoDAO(conexao).localizarPorIdUsuario(usuario.getId()).get(0);
-                Lavador lavador = new LavadorDAO(conexao).localizarPorIdUsuario(usuario.getId());
+                Lavador lavador = new LavadorBuilder()
+                        .withUsuario(usuario)
+                        .build();
+                lavador = new LavadorDAO(conexao).localizarPorIdUsuario(lavador);
 
-                request.setAttribute("endereco", endereco);
+                Endereco endereco = new EnderecoDAO(conexao).localizarPorId(lavador.getEndereco());
+
+                lavador.setEndereco(endereco);
+
                 request.setAttribute("lavador", lavador);
 
                 RequestDispatcher rd = request.getRequestDispatcher("localizar_lavador.jsp");

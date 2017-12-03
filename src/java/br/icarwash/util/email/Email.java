@@ -3,7 +3,7 @@ package br.icarwash.util.email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
-public class Email {
+public class Email extends Thread {
 
     private String nomeDestinatario;
     private String emailDestinatario;
@@ -16,7 +16,7 @@ public class Email {
         this.assunto = assunto;
         this.mensagem = mensagem;
     }
-    
+
     public Email(String nomeDestinatario, String emailDestinatario) {
         this.nomeDestinatario = nomeDestinatario;
         this.emailDestinatario = emailDestinatario;
@@ -38,7 +38,13 @@ public class Email {
         this.mensagem = mensagem;
     }
 
-    public boolean enviar() {
+    @Override
+    public void run() {
+        enviar();
+    }
+
+    private boolean enviar() {
+
         SimpleEmail email = new SimpleEmail();
 
         email.setHostName("smtp.gmail.com");
@@ -53,9 +59,13 @@ public class Email {
             email.setMsg(mensagem);
 
             //Autentica
+            System.out.println("Autencando...");
             email.setAuthentication(EmailAutenticacao.email, EmailAutenticacao.senha);
             //Envia
+            System.out.println("Enviando...");
             email.send();
+            System.out.println("Mensagem: " + this.mensagem);
+            System.out.println("Enviado...");
 
             return true;
         } catch (EmailException e) {

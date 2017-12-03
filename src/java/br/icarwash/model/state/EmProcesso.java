@@ -35,7 +35,7 @@ public class EmProcesso implements SolicitacaoState {
         try {
             conexao.setAutoCommit(false);
 
-            new LavadorDAO(conexao).desocuparLavador(solicitacao.getLavador().getId());
+            new LavadorDAO(conexao).desocuparLavador(solicitacao.getLavador());
             new SolicitacaoDAO(conexao).finalizarSolicitacao(solicitacao);
 
             conexao.commit();

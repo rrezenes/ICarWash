@@ -25,22 +25,25 @@ public class ListarSolicitacaoLavador extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Connection conexao = (Connection) request.getAttribute("conexao");
-        
+
         Usuario usuario = (Usuario) ((HttpServletRequest) request).getSession(true).getAttribute("user");
 
-        Lavador lavador = new LavadorDAO(conexao).localizarPorIdUsuario(usuario.getId());
+        Lavador lavador = new Lavador.LavadorBuilder()
+                .withUsuario(usuario)
+                .build();
+        lavador = new LavadorDAO(conexao).localizarPorIdUsuario(lavador);
 
         ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO(conexao).listarSolicitacaoDoLavador(lavador.getId());
 
         EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
-        
+
         solicitacoes.forEach(solicitacao -> {
             if (solicitacao.getAvaliacao().getId() != 0) {
                 solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao()));
             }
-            solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco().getId()));
+            solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco()));
             System.out.println(solicitacao.getEndereco().getBairro());
             solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
         });

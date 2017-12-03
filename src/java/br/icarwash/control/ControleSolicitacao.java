@@ -54,7 +54,6 @@ public class ControleSolicitacao extends HttpServlet {
             if (Boolean.parseBoolean(request.getParameter("cadastraEndereco"))) {
 
                 endereco = new EnderecoBuilder()
-                        .withUsuario(usuario)
                         .withCep(request.getParameter("cep"))
                         .withEstado(request.getParameter("estado"))
                         .withCidade(request.getParameter("cidade"))
@@ -64,8 +63,7 @@ public class ControleSolicitacao extends HttpServlet {
                         .withNome(request.getParameter("nomeEndereco"))
                         .build();
 
-                int idEndereco = new EnderecoDAO(conexao).cadastrar(endereco);
-                endereco.setId(idEndereco);
+                endereco = new EnderecoDAO(conexao).cadastrar(endereco);
 
             } else {
                 int idEndereco = Integer.parseInt(request.getParameter("endereco"));

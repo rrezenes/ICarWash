@@ -4,6 +4,8 @@ import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -24,14 +26,18 @@ public class CheckCpf extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         if (URI.endsWith("/CheckCpfCliente")) {
-                        Cliente cliente = new ClienteBuilder()
-                                .withCpf(request.getParameter("cpf"))
-                                .build();
+            Cliente cliente = new ClienteBuilder()
+                    .withCpf(request.getParameter("cpf"))
+                    .build();
             out.print(new ClienteDAO(conexao).checkCpfDisponivel(cliente));
             out.flush();
 
         } else {
-            out.print(new LavadorDAO(conexao).checkCpfDisponivel(request.getParameter("cpf")));
+
+            Lavador lavador = new LavadorBuilder()
+                    .withCpf(request.getParameter("cpf"))
+                    .build();
+            out.print(new LavadorDAO(conexao).checkCpfDisponivel(lavador));
             out.flush();
         }
     }

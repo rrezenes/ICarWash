@@ -56,7 +56,8 @@ public class EmailStatusSolicitacaoLavador extends Email {
                 break;
             case "Avaliado":
                 mensagem = "Olá " + solicitacao.getLavador().getNome() + ",\n\n"
-                        + "Sua Solicitação #" + solicitacao.getId() + ", foi avaliada!\n\n";
+                        + "Sua Solicitação #" + solicitacao.getId() + ", foi avaliada!\n\n"
+                        + "Sua média foi de: " + solicitacao.getAvaliacao().getNotaMedia();
                 break;
             case "Concluido":
                 mensagem = "Olá " + solicitacao.getLavador().getNome() + ",\n\n"

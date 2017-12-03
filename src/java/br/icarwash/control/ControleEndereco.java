@@ -1,6 +1,11 @@
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
@@ -62,8 +67,13 @@ public class ControleEndereco extends HttpServlet {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
 
-        Endereco endereco = new Endereco.EnderecoBuilder()
+        Cliente cliente = new ClienteBuilder()
                 .withUsuario(usuario)
+                .build();
+
+        cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+        Endereco endereco = new Endereco.EnderecoBuilder()
                 .withCep(request.getParameter("cep"))
                 .withEstado(request.getParameter("estado"))
                 .withCidade(request.getParameter("cidade"))
@@ -73,7 +83,10 @@ public class ControleEndereco extends HttpServlet {
                 .withNome(request.getParameter("nomeEndereco"))
                 .build();
 
-        new EnderecoDAO(conexao).cadastrar(endereco);
+        endereco = new EnderecoDAO(conexao).cadastrar(endereco);
+
+        ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+        new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(clienteEndereco);
 
         request.setAttribute("alterado", "ok");
     }
@@ -81,13 +94,25 @@ public class ControleEndereco extends HttpServlet {
     protected void excluirEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
-        
+
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
+        Cliente cliente = new ClienteBuilder()
+                .withUsuario(usuario)
+                .build();
+
+        cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
         Endereco endereco = new Endereco.EnderecoBuilder()
                 .withId(Integer.parseInt(request.getParameter("idEndereco")))
                 .build();
+
+        ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+        new ClienteEnderecoDAO(conexao).excluirClienteEndereco(clienteEndereco);
         
         new EnderecoDAO(conexao).excluir(endereco);
-        
+
         request.setAttribute("excluido", "ok");
     }
 
