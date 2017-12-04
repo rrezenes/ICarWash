@@ -3,7 +3,9 @@ package br.icarwash.control.remoto;
 import br.icarwash.dao.MarcaDAO;
 import br.icarwash.dao.ModeloDAO;
 import br.icarwash.model.Marca;
+import br.icarwash.model.Marca.MarcaBuilder;
 import br.icarwash.model.Modelo;
+import br.icarwash.model.Modelo.ModeloBuilder;
 import br.icarwash.util.Conexao;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -15,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ListarVeiculos", urlPatterns = {"/listar-marcas", "/listar-modelos"})
+@WebServlet(name = "ListarVeiculos", urlPatterns = {"/listar-marcas", "/listar-modelos", "/consultar-porte"})
 public class ListarVeiculos extends HttpServlet {
 
     /**
@@ -46,10 +48,26 @@ public class ListarVeiculos extends HttpServlet {
 
         } else if (URI.endsWith("/listar-modelos")) {
 
-            int idMarca = Integer.parseInt(request.getParameter("marca"));
+            Marca marca = new MarcaBuilder()
+                    .withId(Integer.parseInt(request.getParameter("marca")))
+                    .build();
 
+            Modelo modelo = new ModeloBuilder()
+                    .withMarca(marca)
+                    .build();
+            
             Gson gson = new Gson();
-            String listaJSON = gson.toJson(new ModeloDAO(Conexao.getConexao()).listarPorIdMarca(idMarca));
+            String listaJSON = gson.toJson(new ModeloDAO(Conexao.getConexao()).listarPorIdMarca(modelo));
+            out.println(listaJSON);
+
+        } else if (URI.endsWith("/consultar-porte")) {
+
+            Modelo modelo = new ModeloBuilder()
+                    .withId(Integer.parseInt(request.getParameter("modelo")))
+                    .build();
+            
+            Gson gson = new Gson();
+            String listaJSON = gson.toJson(new ModeloDAO(Conexao.getConexao()).localizarPorId(modelo));
             out.println(listaJSON);
 
         }

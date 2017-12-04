@@ -1,12 +1,20 @@
 package br.icarwash.control;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.UsuarioDAO;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.ClienteEndereco;
+import br.icarwash.model.Endereco;
+import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,9 +36,26 @@ public class ControleUsuario extends HttpServlet {
 
         switch (usuario.getNivel()) {
             case 1: {
+                Cliente cliente = new ClienteBuilder()
+                        .withUsuario(usuario)
+                        .build();
 
-                request.setAttribute("enderecos", new EnderecoDAO(conexao).localizarPorIdUsuario(usuario.getId()));
-                request.setAttribute("cliente", new ClienteDAO(conexao).localizarPorIdUsuario(usuario.getId()));
+                cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+                ArrayList<ClienteEndereco> clienteEnderecos = new ClienteEnderecoDAO(conexao).selecionaEnderecoPorIdCliente(cliente);
+
+                ArrayList<Endereco> enderecos = new ArrayList<>();
+
+                EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
+
+                for (ClienteEndereco clienteEndereco : clienteEnderecos) {
+                    enderecos.add(enderecoDAO.localizarPorId(clienteEndereco.getEndereco()));
+                }
+
+                cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+                request.setAttribute("enderecos", enderecos);
+                request.setAttribute("cliente", cliente);
 
                 RequestDispatcher rd = request.getRequestDispatcher("localizar_cliente.jsp");
                 rd.forward(request, response);
@@ -38,15 +63,22 @@ public class ControleUsuario extends HttpServlet {
                 break;
             }
             case 2: {
-                request.setAttribute("endereco", new EnderecoDAO(conexao).localizarPorIdUsuario(usuario.getId()).get(0));
-                request.setAttribute("lavador", new LavadorDAO(conexao).localizarPorIdUsuario(usuario.getId()));
+                Lavador lavador = new LavadorBuilder()
+                        .withUsuario(usuario)
+                        .build();
+                lavador = new LavadorDAO(conexao).localizarPorIdUsuario(lavador);
+
+                Endereco endereco = new EnderecoDAO(conexao).localizarPorId(lavador.getEndereco());
+
+                lavador.setEndereco(endereco);
+
+                request.setAttribute("lavador", lavador);
 
                 RequestDispatcher rd = request.getRequestDispatcher("localizar_lavador.jsp");
                 rd.forward(request, response);
                 break;
             }
             default: {
-
                 RequestDispatcher rd = request.getRequestDispatcher("/painel_admin.jsp");
                 rd.forward(request, response);
                 break;
@@ -68,13 +100,14 @@ public class ControleUsuario extends HttpServlet {
 
         usuario = usuarioDAO.usuarioLogin(usuario);
 
-        if (usuario != null) {
+        if (usuario.getNivel() >= 1) {
             usuario.setSenha(request.getParameter("nova_senha"));
             usuarioDAO.alterarSenha(usuario);
+            request.setAttribute("alterado", "ok");
+        } else {
+            request.setAttribute("senhaInvalida", "ok");
         }
 
-        request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizarPorId&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
-        rd.forward(request, response);
+        doGet(request, response);
     }
 }

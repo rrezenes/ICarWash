@@ -1,11 +1,15 @@
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +37,7 @@ public class ControleEndereco extends HttpServlet {
 
         }
 
+        response.sendRedirect(request.getContextPath() + "/usuario");
     }
 
     protected void alterarEndereco(HttpServletRequest request, HttpServletResponse response)
@@ -53,8 +58,6 @@ public class ControleEndereco extends HttpServlet {
         new EnderecoDAO(conexao).atualizar(endereco);
 
         request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
-        rd.forward(request, response);
     }
 
     protected void adicionarEndereco(HttpServletRequest request, HttpServletResponse response)
@@ -64,8 +67,13 @@ public class ControleEndereco extends HttpServlet {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
 
-        Endereco endereco = new Endereco.EnderecoBuilder()
+        Cliente cliente = new ClienteBuilder()
                 .withUsuario(usuario)
+                .build();
+
+        cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+        Endereco endereco = new Endereco.EnderecoBuilder()
                 .withCep(request.getParameter("cep"))
                 .withEstado(request.getParameter("estado"))
                 .withCidade(request.getParameter("cidade"))
@@ -75,18 +83,37 @@ public class ControleEndereco extends HttpServlet {
                 .withNome(request.getParameter("nomeEndereco"))
                 .build();
 
-        new EnderecoDAO(conexao).cadastrar(endereco);
+        endereco = new EnderecoDAO(conexao).cadastrar(endereco);
+
+        ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+        new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(clienteEndereco);
 
         request.setAttribute("alterado", "ok");
-        RequestDispatcher rd = request.getRequestDispatcher("/Controle?action=LocalizaPorIdCommand&q=" + request.getParameter("quem") + "&id=" + request.getParameter("id"));
-        rd.forward(request, response);
     }
 
     protected void excluirEndereco(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
 
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
+        Cliente cliente = new ClienteBuilder()
+                .withUsuario(usuario)
+                .build();
+
+        cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+        Endereco endereco = new Endereco.EnderecoBuilder()
+                .withId(Integer.parseInt(request.getParameter("idEndereco")))
+                .build();
+
+        ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+        new ClienteEnderecoDAO(conexao).excluirClienteEndereco(clienteEndereco);
         
+        new EnderecoDAO(conexao).excluir(endereco);
+
+        request.setAttribute("excluido", "ok");
     }
 
 }

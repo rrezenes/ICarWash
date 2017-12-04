@@ -1,6 +1,7 @@
 package br.icarwash.control.command;
 
 import br.icarwash.dao.ClienteDAO;
+import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ProdutoDAO;
@@ -11,9 +12,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Lavador.LavadorBuilder;
+import br.icarwash.model.Produto;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.Servico;
+import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -31,35 +38,60 @@ public class LocalizaPorIdCommand implements ICommand {
         switch (localizar) {
             case "cliente": {
 
-                Cliente cliente = new ClienteDAO(conexao).localizarPorId(id);
-                ArrayList<Endereco> enderecos = new EnderecoDAO(conexao).localizarPorIdUsuario(cliente.getUsuario().getId());
+                Cliente cliente = new ClienteBuilder()
+                        .withId(id)
+                        .build();
+                cliente = new ClienteDAO(conexao).localizarPorId(cliente);
+
+                ArrayList<ClienteEndereco> clienteEnderecos = new ClienteEnderecoDAO(conexao).selecionaEnderecoPorIdCliente(cliente);
+
+                ArrayList<Endereco> enderecos = new ArrayList<>();
+
+                for (ClienteEndereco clienteEndereco : clienteEnderecos) {
+                    enderecos.add(new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco()));
+                }
 
                 request.setAttribute("enderecos", enderecos);
                 request.setAttribute("cliente", cliente);
                 return "localizar_cliente.jsp";
             }
             case "lavador": {
+                Lavador lavador = new LavadorBuilder()
+                        .withId(id)
+                        .build();
 
-                Lavador lavador = new LavadorDAO(conexao).localizarPorId(id);
-                Endereco endereco = new EnderecoDAO(conexao).localizarPorIdUsuario(lavador.getUsuario().getId()).get(0);
+                lavador = new LavadorDAO(conexao).localizarPorId(lavador);
 
-                request.setAttribute("endereco", endereco);
+                Endereco endereco = new EnderecoDAO(conexao).localizarPorId(lavador.getEndereco());
+
+                lavador.setEndereco(endereco);
+
                 request.setAttribute("lavador", lavador);
                 return "localizar_lavador.jsp";
             }
             case "produto": {
-                request.setAttribute("produto", new ProdutoDAO(conexao).localizarPorId(id));
+                Produto produto = new ProdutoBuilder()
+                        .withId(id)
+                        .build();
+                request.setAttribute("produto", new ProdutoDAO(conexao).localizarPorId(produto));
                 return "localizar_produto.jsp";
             }
             case "servico": {
+                Servico servico = new ServicoBuilder()
+                        .withId(id)
+                        .build();
 
-                Servico servico = new ServicoDAO(conexao).localizarPorId(id);
-                ArrayList<ServicoProduto> servicoProdutos = new ServicoProdutoDAO(conexao).selecionaProdutosPorIdServico(servico.getId());
+                servico = new ServicoDAO(conexao).localizarPorId(servico);
+
+                ServicoProduto servicoProduto = new ServicoProduto();
+                servicoProduto.setServico(servico);
+
+                ArrayList<ServicoProduto> servicoProdutos = new ServicoProdutoDAO(conexao).selecionaProdutosPorIdServico(servicoProduto);
 
                 Map<String, Object> mapaProdutos = new HashMap<>();
 
-                servicoProdutos.forEach(servicoProduto -> {
-                    mapaProdutos.put(String.valueOf(servicoProduto.getProduto().getId()), servicoProduto.getProduto());
+                servicoProdutos.forEach(servicoProducto -> {
+                    mapaProdutos.put(String.valueOf(servicoProducto.getProduto().getId()), servicoProducto.getProduto());
                 });
 
                 request.setAttribute("todosProdutos", new ProdutoDAO(conexao).listar());

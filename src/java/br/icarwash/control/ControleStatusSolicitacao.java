@@ -8,7 +8,9 @@ import br.icarwash.dao.UsuarioDAO;
 import br.icarwash.model.Avaliacao;
 import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import br.icarwash.model.Usuario;
 import br.icarwash.util.email.EmailStatusSolicitacaoCliente;
 import br.icarwash.util.email.EmailStatusSolicitacaoLavador;
@@ -63,7 +65,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
                 .build();
         solicitacao.setAvaliacao(avaliacao);
         solicitacao.avaliarSolicitacao();
-        new EmailStatusSolicitacaoLavador(solicitacao).enviar();
+        new EmailStatusSolicitacaoLavador(solicitacao).start();
 
         return "ListarSolicitacaoCliente";
     }
@@ -73,7 +75,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
         Solicitacao solicitacao = atribuirDadosSolicitacao(request);
 
         solicitacao.finalizarSolicitacao();
-        new EmailStatusSolicitacaoCliente(solicitacao).enviar();
+        new EmailStatusSolicitacaoCliente(solicitacao).start();
 
         return "ListarSolicitacaoLavador";
     }
@@ -85,7 +87,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         if (!solicitacao.getLavador().isOcupado()) {
             solicitacao.processarSolicitacao();
-            new EmailStatusSolicitacaoCliente(solicitacao).enviar();
+            new EmailStatusSolicitacaoCliente(solicitacao).start();
 
             URIRetorno = "ListarSolicitacaoLavador";
         }
@@ -98,16 +100,18 @@ public class ControleStatusSolicitacao extends HttpServlet {
         Solicitacao solicitacao = atribuirDadosSolicitacao(request);
 
         solicitacao.cancelarSolicitacao();
-        new EmailStatusSolicitacaoCliente(solicitacao).enviar();
+        new EmailStatusSolicitacaoCliente(solicitacao).start();
 
-        if (solicitacao.getLavador() == null) {
-            new EmailStatusSolicitacaoLavador(solicitacao).enviar();
+        if (solicitacao.getLavador().getId() != 0) {
+            new EmailStatusSolicitacaoLavador(solicitacao).start();
         }
 
         Usuario usuario = (Usuario) ((HttpServletRequest) request).getSession(true).getAttribute("user");
 
         if (usuario.getNivel() == 1) {
             URIRetorno = "ListarSolicitacaoCliente?x";
+        } else if (usuario.getNivel() == 3) {
+            URIRetorno = "Controle?action=ListaCommand&listar=solicitacao";
         }
         return URIRetorno;
     }
@@ -116,8 +120,12 @@ public class ControleStatusSolicitacao extends HttpServlet {
         Solicitacao solicitacao = atribuirDadosSolicitacao(request);
 
         solicitacao.analisarSolicitacao();
-        new EmailStatusSolicitacaoCliente(solicitacao).enviar();
-        new EmailStatusSolicitacaoLavador(solicitacao).enviar();
+
+        Lavador lavador = buscarLavador(solicitacao.getLavador(), request);
+        solicitacao.setLavador(lavador);
+
+        new EmailStatusSolicitacaoCliente(solicitacao).start();
+        new EmailStatusSolicitacaoLavador(solicitacao).start();
 
         return "ListarSolicitacaoEmAnalise";
     }
@@ -126,16 +134,30 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         Connection conexao = (Connection) request.getAttribute("conexao");
 
-        Solicitacao solicitacao = new SolicitacaoDAO(conexao)
-                .localizarPorId(Integer.parseInt(request.getParameter("id_solicitacao")));
+        Solicitacao solicitacao = new SolicitacaoBuilder()
+                .withId(Integer.parseInt(request.getParameter("id_solicitacao")))
+                .build();
+        
+        solicitacao = new SolicitacaoDAO(conexao).localizarPorId(solicitacao);
 
-        Cliente cliente = new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente().getId());
-        cliente.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario().getId()));
+        Cliente cliente = new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente());
+        cliente.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario()));
 
         solicitacao.setCliente(cliente);
-        solicitacao.setLavador(new LavadorDAO(conexao).localizarPorId(solicitacao.getLavador().getId()));
-        solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco().getId()));
+
+        if (solicitacao.getLavador().getId() != 0) {
+            Lavador lavador = buscarLavador(solicitacao.getLavador(), request);
+            solicitacao.setLavador(lavador);
+        }
+        solicitacao.setEndereco(new EnderecoDAO(conexao).localizarPorId(solicitacao.getEndereco()));
 
         return solicitacao;
+    }
+
+    private Lavador buscarLavador(Lavador lavador, HttpServletRequest request) {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+        lavador = new LavadorDAO(conexao).localizarPorId(lavador);
+        lavador.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(lavador.getUsuario()));
+        return lavador;
     }
 }

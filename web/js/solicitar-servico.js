@@ -63,6 +63,7 @@ $("#confirmar").click(function () {
             data: dataString,
             cache: false,
             success: function (result) {
+                
                 window.location = result;
             }
         });
@@ -73,9 +74,6 @@ $("#confirmar").click(function () {
 });
 
 $(document).ready(function () {
-
-
-
     $.getJSON('listar-marcas', function (data) {
         var options = '';
         $.each(data, function (key, val) {
@@ -84,7 +82,7 @@ $(document).ready(function () {
 
         $("#marca").append(options);
         $('#marca').material_select();
-        
+
         $("#marca").change(function () {
 
             var idMarca = $("#marca").val();
@@ -119,6 +117,31 @@ $(document).ready(function () {
                 }
             });
 
+        }).change();
+        
+        $("#modelo").change(function () {
+            var idModelo = $("#modelo").val();
+
+            $.ajax({
+                // url o recurso no servidor
+                url: "consultar-porte",
+                type: 'POST',
+                // tipo de retorno
+                dataType: "json",
+                //parametros da requisição
+                data: {
+                    modelo: idModelo
+                },
+
+                // função para tratar o retorno
+                success: function (json) {
+                    //lista os options 
+                    $("#porte").empty();
+
+                    $('#porte').text(json.porte);
+
+                }
+            });
         }).change();
 
     });

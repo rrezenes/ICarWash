@@ -8,7 +8,7 @@
         <div class="row">
             <div class="input-field col s6">
                 <label class="control-label">Nome</label> 
-                <input class="form-control erro-nome" type="text" name="nome"><br>
+                <input class="form-control erro-nome" type="text" name="nome" id="nome"><br>
             </div>
             <div class="input-field col s6">
                 <label>Telefone celular</label> 
@@ -31,10 +31,10 @@
     </form>
 </div>
 <script src="js/jquery.maskedinput.min.js"></script>
-<script charset="UTF-8" src="js/jquery.validate.js"></script>
-<script charset="UTF-8" src="js/validar-cpf.js"></script>
-<script charset="UTF-8" src="js/validar-data-de-nascimento.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validar-cpf.js"></script>
+<script src="js/validar-data-de-nascimento.js"></script>
 <script src="js/inicializar-mascara.js"></script>
-<script charset="UTF-8" src="js/inicializar-validate.js"></script>
+<script src="js/inicializar-validate.js"></script>
 
 <%@include file="rodape.jsp"%>

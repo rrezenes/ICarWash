@@ -5,7 +5,9 @@ import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.ModeloDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
@@ -29,18 +31,27 @@ public class ListarSolicitacaoCliente extends HttpServlet {
         Usuario usuario = (Usuario) session.getAttribute("user");
 
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
-        Cliente cliente = clienteDAO.localizarPorIdUsuario(usuario.getId());
+
+        Cliente cliente = new ClienteBuilder()
+                .withUsuario(usuario)
+                .build();
+
+        cliente = clienteDAO.localizarPorIdUsuario(cliente);
+
+        Solicitacao solicitacaoWithCliente = new SolicitacaoBuilder()
+                .withCliente(cliente)
+                .build();
 
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
-        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(cliente.getId());
+        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(solicitacaoWithCliente);
 
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         ModeloDAO modeloDAO = new ModeloDAO(conexao);
 
         solicitacoes.forEach(solicitacao -> {
-            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo().getId()));
+            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo()));
             if (solicitacao.getAvaliacao().getId() != 0) {
-                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao().getId()));
+                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao()));
             }
         });
 

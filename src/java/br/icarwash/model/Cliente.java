@@ -13,9 +13,6 @@ public final class Cliente extends Pessoa {
         private int id;
         private Usuario usuario;
 
-        public ClienteBuilder() {
-        }
-
         public ClienteBuilder from(Cliente cliente) {
             this.id = cliente.id;
             this.usuario = cliente.usuario;

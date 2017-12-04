@@ -44,7 +44,6 @@ public class CadastroCommand implements ICommand {
                         .build();
 
                 Endereco endereco = new EnderecoBuilder()
-                        .withUsuario(cliente.getUsuario())
                         .withCep(request.getParameter("cep"))
                         .withEstado(request.getParameter("estado"))
                         .withCidade(request.getParameter("cidade"))
@@ -54,8 +53,11 @@ public class CadastroCommand implements ICommand {
                         .withNome(request.getParameter("nomeEndereco"))
                         .build();
 
-                new ClienteDAO(conexao).cadastrar(cliente);
-                new EnderecoDAO(conexao).cadastrar(endereco);
+                cliente = new ClienteDAO(conexao).cadastrar(cliente);
+                endereco = new EnderecoDAO(conexao).cadastrar(endereco);
+
+                ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+                new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(clienteEndereco);
 
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=ListaCommand&listar=cliente";
@@ -65,17 +67,7 @@ public class CadastroCommand implements ICommand {
                 String[] nascimento = request.getParameter("dataNascimento").split("/");
                 dataNascimento.set(Integer.parseInt(nascimento[2]), Integer.parseInt(nascimento[1]) - 1, Integer.parseInt(nascimento[0]));
 
-                Lavador lavador = new LavadorBuilder()
-                        .withUsuario(criaUsuario(request, conexao, 2))
-                        .withDataContrato(dataContrato)
-                        .withNome(request.getParameter("nome"))
-                        .withTelefone(request.getParameter("telefone"))
-                        .withDataNascimento(dataNascimento)
-                        .withCpf(request.getParameter("cpf"))
-                        .build();
-
                 Endereco endereco = new EnderecoBuilder()
-                        .withUsuario(lavador.getUsuario())
                         .withCep(request.getParameter("cep"))
                         .withEstado(request.getParameter("estado"))
                         .withCidade(request.getParameter("cidade"))
@@ -85,8 +77,19 @@ public class CadastroCommand implements ICommand {
                         .withNome("Residencia")
                         .build();
 
+                endereco = new EnderecoDAO(conexao).cadastrar(endereco);
+
+                Lavador lavador = new LavadorBuilder()
+                        .withUsuario(criaUsuario(request, conexao, 2))
+                        .withDataContrato(dataContrato)
+                        .withNome(request.getParameter("nome"))
+                        .withTelefone(request.getParameter("telefone"))
+                        .withDataNascimento(dataNascimento)
+                        .withCpf(request.getParameter("cpf"))
+                        .withEndereco(endereco)
+                        .build();
+
                 new LavadorDAO(conexao).cadastrar(lavador);
-                new EnderecoDAO(conexao).cadastrar(endereco);
 
                 request.setAttribute("cadastrado", "ok");
                 return "Controle?action=ListaCommand&listar=lavador";
@@ -115,13 +118,22 @@ public class CadastroCommand implements ICommand {
                         .withAtivo(true)
                         .build();
 
-                int idServico = new ServicoDAO(conexao).cadastrar(servico);
+                servico = new ServicoDAO(conexao).cadastrar(servico);
 
                 ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
+                ServicoProduto servicoProduto;
+                Produto produto;
 
                 for (String idProduto : produtos) {
                     int quantidade = Integer.parseInt(request.getParameter("quantidade" + idProduto));
-                    servicoProdutoDAO.cadastraServicoProduto(idServico, Integer.parseInt(idProduto), quantidade);
+
+                    produto = new ProdutoBuilder()
+                            .withId(Integer.parseInt(idProduto))
+                            .build();
+
+                    servicoProduto = new ServicoProduto(servico, produto, quantidade);
+
+                    servicoProdutoDAO.cadastraServicoProduto(servicoProduto);
                 }
 
                 request.setAttribute("cadastrado", "ok");
@@ -142,7 +154,7 @@ public class CadastroCommand implements ICommand {
                 .withCadastroCompleto(true)
                 .build();
 
-        usuario.setId(new UsuarioDAO(conexao).cadastrar(usuario));
+        usuario = new UsuarioDAO(conexao).cadastrar(usuario);
         return usuario;
     }
 }

@@ -34,7 +34,7 @@
             <tr>
                 <td>${solicitacao.id}</td>
                 <td>${solicitacao.cliente.nome}</td>
-                <td>${solicitacao.modelo.id}</td>
+                <td>${solicitacao.modelo.porte}</td>
                 <%--Formatar a data antes de exibir na tela--%>
                 <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy HH:mm" />
                 <td>${dataSolicitacao}</td>

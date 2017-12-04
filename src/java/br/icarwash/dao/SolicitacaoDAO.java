@@ -30,15 +30,19 @@ public class SolicitacaoDAO {
     private static final String INSERT = "insert into solicitacao(id_cliente, id_endereco, id_modelo, data_solicitacao,valor_total) values (?,?,?,?,?)";
 
     private static final String SELECT_ALL = "SELECT * FROM solicitacao";
-    private static final String SELECT_BY_ID = "SELECT ID, id_cliente, id_lavador, id_avaliacao,id_endereco, id_modelo, data_solicitacao, valor_total, status FROM solicitacao where solicitacao.ID = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM solicitacao where ID = ?";
     private static final String SELECT_BY_ID_CLIENTE = "SELECT * FROM solicitacao where id_cliente = ? order by data_solicitacao";
     private static final String SELECT_BY_ID_LAVADOR = "select * FROM solicitacao where id_lavador = ? order by data_solicitacao";
     private static final String SELECT_SOLICITACAO_HOJE_LAVADOR = "select * from solicitacao where id_lavador = ? and DATE(DATE_FORMAT(data_solicitacao, '%Y-%m-%d')) = CURDATE()";
-    private static final String SELECT_EM_ANALISE = "SELECT * FROM solicitacao where solicitacao.status = 'Em Analise'";
-    private static final String SELECT_ID_ULTIMA_SOLICITACAO = "SELECT id FROM solicitacao WHERE id = (SELECT MAX(id) FROM solicitacao)";
+    private static final String SELECT_EM_ANALISE = "SELECT * FROM solicitacao where status = 'Em Analise'";
+    private static final String SELECT_AVALIADO = "SELECT * FROM solicitacao where status = 'Avaliado'";
     private static final String SELECT_HORARIO_INDISPONIVEL = "SELECT data_solicitacao as hora, STATUS, count(*) as quantidade FROM solicitacao where  (status like 'Em Analise' or status like 'Agendado') and data_solicitacao like ? group by hora having quantidade >= ?";
     private static final String SELECT_QTD_SOLICITACAO_BY_IDLAVADOR_AND_DATE = "select count(*) as quantidade FROM solicitacao where id_lavador = ? and status <> 'Cancelado' and data_solicitacao like ?";
     private static final String SELECT_CHECK_LAVADORES_DISPONIVEIS = "select * FROM solicitacao where id_lavador = ? and data_solicitacao = ? and status <> 'Cancelado' and status <> 'Avaliado'";
+    private static final String SELECT_AGENDADO = "SELECT * FROM solicitacao where status = 'Agendado'";
+    private static final String SELECT_FINALIZADO = "SELECT * FROM solicitacao where status = 'Finalizado'";
+    private static final String SELECT_EM_PROCESSO = "SELECT * FROM solicitacao where status = 'Em Processo'";
+    private static final String SELECT_CANCELADO = "SELECT * FROM solicitacao where status = 'Cancelado'";
 
     private static final String CANCELA = "UPDATE solicitacao SET status = 'Cancelado' WHERE ID = ?";
     private static final String AGENDA = "UPDATE solicitacao SET status = 'Agendado' WHERE ID = ?";
@@ -76,9 +80,8 @@ public class SolicitacaoDAO {
         return idSolicitacao;
     }
 
-    public ArrayList<Solicitacao> listarSolicitacaoPorIDCliente(int id) {
+    public ArrayList<Solicitacao> listarSolicitacaoPorIDCliente(Solicitacao solicitacao) {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
-        Solicitacao solicitacao;
         Cliente cliente;
         Lavador lavador;
         AvaliacaoBuilder avaliacaoBuilder;
@@ -86,7 +89,7 @@ public class SolicitacaoDAO {
 
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_CLIENTE);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, solicitacao.getCliente().getId());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
 
@@ -98,7 +101,7 @@ public class SolicitacaoDAO {
                         .withId(rs.getInt("id_lavador"))
                         .build();
 
-                solicitacaoState = validarStatus(rs.getString("status"));
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
@@ -128,16 +131,15 @@ public class SolicitacaoDAO {
         return solicitacoes;
     }
 
-    public ArrayList<Solicitacao> listarSolicitacaoDoLavador(int id) {
+    public ArrayList<Solicitacao> listarSolicitacaoDoLavador(Solicitacao solicitacao) {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
-        Solicitacao solicitacao;
         Cliente cliente;
         Endereco endereco;
         Avaliacao avaliacao;
         SolicitacaoState solicitacaoState;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID_LAVADOR);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, solicitacao.getLavador().getId());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
 
@@ -149,7 +151,7 @@ public class SolicitacaoDAO {
                         .withId(rs.getInt("id_cliente"))
                         .build();
 
-                solicitacaoState = validarStatus(rs.getString("status"));
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
@@ -177,15 +179,14 @@ public class SolicitacaoDAO {
         return solicitacoes;
     }
 
-    public ArrayList<Solicitacao> listarSolicitacaoHojeLavador(int id) {
+    public ArrayList<Solicitacao> listarSolicitacaoHojeLavador(Solicitacao solicitacao) {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
-        Solicitacao solicitacao;
         Cliente cliente;
         Endereco endereco;
         SolicitacaoState solicitacaoState;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_SOLICITACAO_HOJE_LAVADOR);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, solicitacao.getLavador().getId());
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -198,7 +199,7 @@ public class SolicitacaoDAO {
                         .build();
 
                 //lavador = new Lavador(rs.getInt("id_lavador"));
-                solicitacaoState = validarStatus(rs.getString("status"));
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
@@ -220,15 +221,14 @@ public class SolicitacaoDAO {
         return solicitacoes;
     }
 
-    public Solicitacao localizarPorId(int id) {
-        Solicitacao solicitacao = null;
+    public Solicitacao localizarPorId(Solicitacao solicitacao) {
         Cliente cliente;
         Lavador lavador;
         Endereco endereco;
         SolicitacaoState solicitacaoState;
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_BY_ID);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, solicitacao.getId());
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -240,12 +240,12 @@ public class SolicitacaoDAO {
                 lavador = new LavadorBuilder()
                         .withId(rs.getInt("id_lavador"))
                         .build();
-                
+
                 endereco = new EnderecoBuilder()
                         .withId(rs.getInt("id_endereco"))
                         .build();
-                
-                solicitacaoState = validarStatus(rs.getString("status"));
+
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
@@ -267,9 +267,9 @@ public class SolicitacaoDAO {
         return solicitacao;
     }
 
-    public ArrayList listar() {
+    public ArrayList<Solicitacao> listar() {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
-        Solicitacao solicitacao;
+        Solicitacao solicitacao = new Solicitacao();
         Cliente cliente;
         Lavador lavador;
         try {
@@ -292,7 +292,7 @@ public class SolicitacaoDAO {
                         .withId(rs.getInt("ID"))
                         .withCliente(cliente)
                         .withLavador(lavador)
-                        .withSolicitacaoState(validarStatus(rs.getString("status")))
+                        .withSolicitacaoState(solicitacao.validarStatus(rs.getString("status")))
                         .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
                         .withDataSolicitacao(dataSolicitacao)
                         .withValorTotal(rs.getBigDecimal("valor_total"))
@@ -307,9 +307,9 @@ public class SolicitacaoDAO {
         return solicitacoes;
     }
 
-    public ArrayList listarEmAnalise() {
+    public ArrayList<Solicitacao> listarEmAnalise() {
         ArrayList<Solicitacao> solicitacoes = new ArrayList();
-        Solicitacao solicitacao;
+        Solicitacao solicitacao = new Solicitacao();
         Cliente cliente;
         Lavador lavador;
         SolicitacaoState solicitacaoState;
@@ -325,7 +325,7 @@ public class SolicitacaoDAO {
                         .withId(rs.getInt("id_lavador"))
                         .build();
 
-                solicitacaoState = validarStatus(rs.getString("status"));
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
                 Calendar data = Calendar.getInstance();
                 data.setTime(rs.getTimestamp("data_solicitacao"));
 
@@ -347,25 +347,51 @@ public class SolicitacaoDAO {
         return solicitacoes;
     }
 
-    public Solicitacao selecionaUltimoIdSolicitacao() {
+    public ArrayList<Solicitacao> listarAvaliado() {
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
         Solicitacao solicitacao = new Solicitacao();
+        Cliente cliente;
+        Lavador lavador;
+        SolicitacaoState solicitacaoState;
         try {
-            PreparedStatement pstmt = conexao.prepareStatement(SELECT_ID_ULTIMA_SOLICITACAO);
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_AVALIADO);
             ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                solicitacao.setId(rs.getInt("id"));
-            }
+            while (rs.next()) {
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
 
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withAvaliacao(new AvaliacaoBuilder().withId(rs.getInt("id_avaliacao")).build())
+                        .build();
+
+                solicitacoes.add(solicitacao);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return solicitacao;
+        return solicitacoes;
     }
 
-    public void cancelarSolicitacaoPorId(int id) {
+    public void cancelarSolicitacaoPorId(Solicitacao solicitacao) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(CANCELA);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, solicitacao.getId());
             pstmt.execute();
 
         } catch (SQLException e) {
@@ -395,10 +421,10 @@ public class SolicitacaoDAO {
         }
     }
 
-    public void avaliarSolicitacao(Solicitacao solicitacao, Avaliacao avaliacao) {
+    public void avaliarSolicitacao(Solicitacao solicitacao) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(AVALIA);
-            pstmt.setInt(1, avaliacao.getId());
+            pstmt.setInt(1, solicitacao.getAvaliacao().getId());
             pstmt.setInt(2, solicitacao.getId());
             pstmt.execute();
 
@@ -429,10 +455,10 @@ public class SolicitacaoDAO {
         }
     }
 
-    public void atribuirLavador(Lavador lavador, Solicitacao solicitacao) {
+    public void atribuirLavador(Solicitacao solicitacao) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(ATRIBUI_LAVADOR);
-            pstmt.setInt(1, lavador.getId());
+            pstmt.setInt(1, solicitacao.getLavador().getId());
             pstmt.setInt(2, solicitacao.getId());
             pstmt.execute();
 
@@ -525,34 +551,171 @@ public class SolicitacaoDAO {
         return lavadoresDisponiveis;
     }
 
-    public SolicitacaoState validarStatus(String status) throws UnsupportedOperationException, SQLException {
+    public ArrayList<Solicitacao> listarCancelado() {
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao = new Solicitacao();
+        Cliente cliente;
+        Lavador lavador;
         SolicitacaoState solicitacaoState;
-        switch (status) {
-            case "Em Analise":
-                solicitacaoState = new EmAnalise();
-                break;
-            case "Agendado":
-                solicitacaoState = new Agendado();
-                break;
-            case "Em Processo":
-                solicitacaoState = new EmProcesso();
-                break;
-            case "Finalizado":
-                solicitacaoState = new Finalizado();
-                break;
-            case "Avaliado":
-                solicitacaoState = new Avaliado();
-                break;
-            case "Concluido":
-                solicitacaoState = new Concluido();
-                break;
-            case "Cancelado":
-                solicitacaoState = new Cancelado();
-                break;
-            default:
-                throw new UnsupportedOperationException("Solicitação sem Status");
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_CANCELADO);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withAvaliacao(new AvaliacaoBuilder().withId(rs.getInt("id_avaliacao")).build())
+                        .build();
+
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return solicitacaoState;
+        return solicitacoes;
+    }
+
+    public ArrayList<Solicitacao> listarEmProcesso() {
+
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao = new Solicitacao();
+        Cliente cliente;
+        Lavador lavador;
+        SolicitacaoState solicitacaoState;
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_EM_PROCESSO);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withAvaliacao(new AvaliacaoBuilder().withId(rs.getInt("id_avaliacao")).build())
+                        .build();
+
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return solicitacoes;
+    }
+
+    public ArrayList<Solicitacao> listarFinalizado() {
+
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao = new Solicitacao();
+        Cliente cliente;
+        Lavador lavador;
+        SolicitacaoState solicitacaoState;
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_FINALIZADO);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withAvaliacao(new AvaliacaoBuilder().withId(rs.getInt("id_avaliacao")).build())
+                        .build();
+
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return solicitacoes;
+    }
+
+    public ArrayList<Solicitacao> listarAgendado() {
+
+        ArrayList<Solicitacao> solicitacoes = new ArrayList();
+        Solicitacao solicitacao = new Solicitacao();
+        Cliente cliente;
+        Lavador lavador;
+        SolicitacaoState solicitacaoState;
+        try {
+            PreparedStatement pstmt = conexao.prepareStatement(SELECT_AGENDADO);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                cliente = new ClienteBuilder()
+                        .withId(rs.getInt("id_cliente"))
+                        .build();
+
+                lavador = new LavadorBuilder()
+                        .withId(rs.getInt("id_lavador"))
+                        .build();
+
+                solicitacaoState = solicitacao.validarStatus(rs.getString("status"));
+                Calendar data = Calendar.getInstance();
+                data.setTime(rs.getTimestamp("data_solicitacao"));
+
+                solicitacao = new SolicitacaoBuilder()
+                        .withId(rs.getInt("ID"))
+                        .withCliente(cliente)
+                        .withLavador(lavador)
+                        .withSolicitacaoState(solicitacaoState)
+                        .withModelo(new ModeloBuilder().withId(rs.getInt("id_modelo")).build())
+                        .withDataSolicitacao(data)
+                        .withValorTotal(rs.getBigDecimal("valor_total"))
+                        .withAvaliacao(new AvaliacaoBuilder().withId(rs.getInt("id_avaliacao")).build())
+                        .build();
+
+                solicitacoes.add(solicitacao);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return solicitacoes;
     }
 
 }

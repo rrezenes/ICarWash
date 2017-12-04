@@ -1,5 +1,20 @@
 
 $(document).ready(function () {
+    $("input#nome").get(0).setAttribute("maxlength", 50);
+    $("input#email").get(0).setAttribute("maxlength", 50);
+    $("input#senha").get(0).setAttribute("maxlength", 50);
+    $("input#confirme").get(0).setAttribute("maxlength", 50);
+    $("input#telefone").get(0).setAttribute("maxlength", 11);
+    $("input#nascimento").get(0).setAttribute("maxlength", 8);
+    $("input#cpf").get(0).setAttribute("maxlength", 11);
+    $("input#cep").get(0).setAttribute("maxlength", 8);
+    $("input#estado").get(0).setAttribute("maxlength", 2);
+    $("input#cidade").get(0).setAttribute("maxlength", 50);
+    $("input#bairro").get(0).setAttribute("maxlength", 50);
+    $("input#endereco").get(0).setAttribute("maxlength", 50);
+    $("input#numero").get(0).setAttribute("maxlength", 5);
+    $("input#descricao").get(0).setAttribute("maxlength", 50);
+    $("input#valor").get(0).setAttribute("maxlength", 6);
     $("#FormValidate").validate({
         rules: {
             nome: {

@@ -5,6 +5,13 @@ import br.icarwash.dao.LavadorDAO;
 import br.icarwash.model.state.SolicitacaoState;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.dao.UsuarioDAO;
+import br.icarwash.model.state.Agendado;
+import br.icarwash.model.state.Avaliado;
+import br.icarwash.model.state.Cancelado;
+import br.icarwash.model.state.Concluido;
+import br.icarwash.model.state.EmAnalise;
+import br.icarwash.model.state.EmProcesso;
+import br.icarwash.model.state.Finalizado;
 import br.icarwash.util.Conexao;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -48,6 +55,36 @@ public class Solicitacao {
         this.modelo = builder.modelo;
         this.dataSolicitacao = builder.dataSolicitacao;
         this.valorTotal = builder.valorTotal;
+    }
+
+    public SolicitacaoState validarStatus(String status) throws UnsupportedOperationException, SQLException {
+        SolicitacaoState solicitacaoState;
+        switch (status) {
+            case "Em Analise":
+                solicitacaoState = new EmAnalise();
+                break;
+            case "Agendado":
+                solicitacaoState = new Agendado();
+                break;
+            case "Em Processo":
+                solicitacaoState = new EmProcesso();
+                break;
+            case "Finalizado":
+                solicitacaoState = new Finalizado();
+                break;
+            case "Avaliado":
+                solicitacaoState = new Avaliado();
+                break;
+            case "Concluido":
+                solicitacaoState = new Concluido();
+                break;
+            case "Cancelado":
+                solicitacaoState = new Cancelado();
+                break;
+            default:
+                throw new UnsupportedOperationException("Solicita\u00e7\u00e3o sem Status");
+        }
+        return solicitacaoState;
     }
 
     public static class SolicitacaoBuilder {
@@ -216,7 +253,7 @@ public class Solicitacao {
     }
 
     public void avaliarSolicitacao() {
-        this.estado = this.estado.avaliarSolicitacao(this, this.avaliacao);
+        this.estado = this.estado.avaliarSolicitacao(this);
     }
 
     public void concluirSolicitacao() {
@@ -238,7 +275,7 @@ public class Solicitacao {
             UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
             
             for (int i = 0; i < lavadoresAtivos.size() - 1; i++) {
-                if (!usuarioDAO.isAtivo(lavadoresAtivos.get(i).getUsuario().getId())) {
+                if (!usuarioDAO.isAtivo(lavadoresAtivos.get(i).getUsuario())) {
                     lavadoresAtivos.remove(lavadoresAtivos.get(i));
                 }
             }
@@ -248,10 +285,11 @@ public class Solicitacao {
             lavadoresDisponiveis = removeLavadoresDaLista(lavadoresDisponiveis, conexao);
             Random random = new Random();
 
-            int qtdLavadores = random.nextInt(lavadoresDisponiveis.size());
+            int lavadorSorteado = random.nextInt(lavadoresDisponiveis.size());
 
-            this.setLavador(lavadoresDisponiveis.get(qtdLavadores));
-            solicitacaoDAO.atribuirLavador(this.lavador, this);
+            setLavador(lavadoresDisponiveis.get(lavadorSorteado));
+            
+            solicitacaoDAO.atribuirLavador(this);
             solicitacaoDAO.agendarSolicitacao(this);
 
             conexao.commit();

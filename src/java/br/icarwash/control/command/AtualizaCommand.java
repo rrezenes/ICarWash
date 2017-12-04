@@ -14,20 +14,28 @@ import br.icarwash.model.Cliente;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Lavador.LavadorBuilder;
 import br.icarwash.model.Produto;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.Servico;
 import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.ServicoProduto;
+import br.icarwash.model.Usuario;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 
 public class AtualizaCommand implements ICommand {
 
     @Override
     public String executar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection conexao = (Connection) request.getAttribute("conexao");
+
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
         final int id = Integer.parseInt(request.getParameter("id"));
 
         switch (request.getParameter("quem")) {
@@ -46,7 +54,11 @@ public class AtualizaCommand implements ICommand {
 
                 new ClienteDAO(conexao).atualizar(cliente);
 
-                return "Controle?action=ListaCommand&listar=cliente";
+                if (usuario.getNivel() == 3) {
+                    return "Controle?action=ListaCommand&listar=cliente";
+                } else {
+                    return "usuario";
+                }
             }
             case "lavador": {
 
@@ -65,7 +77,11 @@ public class AtualizaCommand implements ICommand {
 
                 new LavadorDAO(conexao).atualizar(lavador);
 
-                return "Controle?action=ListaCommand&listar=lavador";
+                if (usuario.getNivel() == 3) {
+                    return "Controle?action=ListaCommand&listar=lavador";
+                } else {
+                    return "usuario";
+                }
             }
             case "produto": {
                 Produto produto = new Produto.ProdutoBuilder()
@@ -89,7 +105,7 @@ public class AtualizaCommand implements ICommand {
 
                 new ServicoDAO(conexao).atualizar(servico);
 
-                atualizarProdutosDoServico(id, request);
+                atualizarProdutosDoServico(servico, request);
 
                 return "Controle?action=ListaCommand&listar=servico";
             }
@@ -99,34 +115,46 @@ public class AtualizaCommand implements ICommand {
         }
     }
 
-    private void atualizarProdutosDoServico(int idServico, HttpServletRequest request) {
+    private void atualizarProdutosDoServico(Servico servico, HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
-        
+
         Map<Integer, Object> mapaProdutosDoServicoAtual = new HashMap<>();
         ServicoProdutoDAO servicoProdutoDAO = new ServicoProdutoDAO(conexao);
 
-        ArrayList<ServicoProduto> servicoProdutos = servicoProdutoDAO.selecionaProdutosPorIdServico(idServico);
+        ServicoProduto servicoProduto = new ServicoProduto();
+        servicoProduto.setServico(servico);
+
+        ArrayList<ServicoProduto> servicoProdutos = servicoProdutoDAO.selecionaProdutosPorIdServico(servicoProduto);
 
         Map<Integer, Integer> mapaProdutosAtualizados = criarMapaProdutosParaAtualizar(request);
-        servicoProdutos.forEach(servicoProduto -> {
+
+        servicoProdutos.forEach(servicoProduto2 -> {
             //Adiciona no HashMap os produtos do serviço atual
-            mapaProdutosDoServicoAtual.put(servicoProduto.getProduto().getId(), servicoProduto.getProduto());
+            mapaProdutosDoServicoAtual.put(servicoProduto2.getProduto().getId(), servicoProduto2.getProduto());
 
             //EXCLUI produtos que perderem a vinculaçao
-            if (!mapaProdutosAtualizados.containsKey(servicoProduto.getProduto().getId())) {
-                servicoProdutoDAO.excluirServicoProduto(idServico, servicoProduto.getProduto().getId());
+            if (!mapaProdutosAtualizados.containsKey(servicoProduto2.getProduto().getId())) {
+                servicoProdutoDAO.excluirServicoProduto(servicoProduto2);
             }
 
         });
+        
+        Produto produto;
+        for (Map.Entry<Integer, Integer> produtoQuantidade : mapaProdutosAtualizados.entrySet()) {
 
-        mapaProdutosAtualizados.forEach((idProduto, quantidade) -> {
-            if (mapaProdutosDoServicoAtual.containsKey(idProduto)) {//Atualiza um novo produto ao serviço
-                servicoProdutoDAO.atualizarServicoProduto(idServico, idProduto, quantidade);
+            produto = new ProdutoBuilder()
+                    .withId(produtoQuantidade.getKey())
+                    .build();
+            servicoProduto.setProduto(produto);
+            servicoProduto.setQuantidade(produtoQuantidade.getValue());
+
+            if (mapaProdutosDoServicoAtual.containsKey(produtoQuantidade.getKey())) {//Atualiza um novo produto ao serviço
+                servicoProdutoDAO.atualizarServicoProduto(servicoProduto);
 
             } else {//Vincula um novo produto ao serviço
-                servicoProdutoDAO.cadastraServicoProduto(idServico, idProduto, quantidade);
+                servicoProdutoDAO.cadastraServicoProduto(servicoProduto);
             }
-        });
+        }
     }
 
     private Map<Integer, Integer> criarMapaProdutosParaAtualizar(HttpServletRequest request) throws NumberFormatException {
