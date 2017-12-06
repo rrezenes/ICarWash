@@ -25,8 +25,13 @@
         </tr>
     </thead>
     <tbody>  -->
-<c:forEach var="servico" items="${solicitacao.servicos}">
-    ${servico.nome} 
+
+<c:forEach var="solicitacao" items="${solicitacoes}">
+    <c:forEach var="servicos" items="${solicitacao.servicos}">
+        <c:forEach var="produto" items="${servicos.produtos}">
+            <p>${produto.nome}</p> 
+        </c:forEach>  
+    </c:forEach>  
 </c:forEach>   
 <%--            <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy HH:mm" />
             <tr>
