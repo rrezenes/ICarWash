@@ -37,10 +37,11 @@
         <div class="col s6 m3">
             <input class="form-control btn btn-primary" type="submit" value="Atualizar">
         </div>
-        <div class="col s6 m3">
-            <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Senha</a>
-        </div>
     </form>
+
+    <div class="col s6 m3">
+        <a class="waves-effect waves-light btn green modal-trigger" href="#modal-senha">Senha</a>
+    </div>
 </div>
 <div class="row">
     <c:forEach var="endereco" items="${enderecos}">

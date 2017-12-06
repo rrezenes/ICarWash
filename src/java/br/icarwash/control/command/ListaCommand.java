@@ -3,6 +3,7 @@ package br.icarwash.control.command;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
+import br.icarwash.dao.ModeloDAO;
 import br.icarwash.dao.ProdutoDAO;
 import br.icarwash.dao.ServicoDAO;
 import br.icarwash.dao.SolicitacaoDAO;
@@ -72,13 +73,16 @@ public class ListaCommand implements ICommand {
         ArrayList<Lavador> lavadores = new LavadorDAO(conexao).listar();
 
         UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+        EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
 
         Usuario usuario;
-
+        Endereco endereco;
         for (Lavador lavador : lavadores) {
             usuario = usuarioDAO.localizarUsuarioPorID(lavador.getUsuario());
             lavador.setUsuario(usuario);
-        };
+            endereco = enderecoDAO.localizarPorId(lavador.getEndereco());
+            lavador.setEndereco(endereco);
+        }
 
         request.setAttribute("lavadores", lavadores);
 
@@ -88,11 +92,13 @@ public class ListaCommand implements ICommand {
     private String listarSolicitacoes(HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
         ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO(conexao).listar();
+
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
+        ModeloDAO modeloDAO = new ModeloDAO(conexao);
 
         solicitacoes.forEach(solicitacao -> {
-            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente())
-            );
+            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
+            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo()));
         });
 
         request.setAttribute("solicitacoes", solicitacoes);

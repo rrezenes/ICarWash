@@ -89,25 +89,26 @@ public class ControleUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection conexao = (Connection) request.getAttribute("conexao");
+        if (request.getParameter("senha") != null) {
+            Connection conexao = (Connection) request.getAttribute("conexao");
 
-        HttpSession session = ((HttpServletRequest) request).getSession(true);
-        Usuario usuario = (Usuario) session.getAttribute("user");
+            HttpSession session = ((HttpServletRequest) request).getSession(true);
+            Usuario usuario = (Usuario) session.getAttribute("user");
 
-        usuario.setSenha(request.getParameter("senha"));
+            usuario.setSenha(request.getParameter("senha"));
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
+            UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
 
-        usuario = usuarioDAO.usuarioLogin(usuario);
+            usuario = usuarioDAO.usuarioLogin(usuario);
 
-        if (usuario.getNivel() >= 1) {
-            usuario.setSenha(request.getParameter("nova_senha"));
-            usuarioDAO.alterarSenha(usuario);
-            request.setAttribute("alterado", "ok");
-        } else {
-            request.setAttribute("senhaInvalida", "ok");
+            if (usuario.getNivel() >= 1) {
+                usuario.setSenha(request.getParameter("nova_senha"));
+                usuarioDAO.alterarSenha(usuario);
+                request.setAttribute("alterado", "ok");
+            } else {
+                request.setAttribute("senhaInvalida", "ok");
+            }
         }
-
         doGet(request, response);
     }
 }

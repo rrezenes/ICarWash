@@ -1,11 +1,8 @@
 package br.icarwash.control;
 
-import br.icarwash.dao.AvaliacaoDAO;
-import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.SolicitacaoDAO;
-import br.icarwash.model.Avaliacao;
-import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import java.time.Instant;
@@ -16,22 +13,39 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.time.DateUtils;
 
-@WebServlet(name = "ControleDashboard", urlPatterns = {"/Dashboard"})
+@WebServlet(name = "ControleDashboard", urlPatterns = {"/Dashboard", "/dashboard"})
 public class ControleDashboard extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
 
+        switch (usuario.getNivel()) {
+            case 1:
+                carregarDashboardCliente(request, response);
+                break;
+            case 2:
+                carregarDashboardLavador(request, response);
+                break;
+            case 3:
+                carregarDashboardAdmin(request, response);
+                break;
+        }
+
+    }
+
+    private void carregarDashboardAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HashMap<String, Integer> qtdPorStatusSolicitacao = geraMapaSolicitacaoQuantidadePorStatus(request);
         HashMap<String, Integer> qtdPorStatusSolicitacaoHoje = geraMapaSolicitacaoQuantidadePorStatusHoje(request);
         HashMap<String, Integer> qtdPorStatusSolicitacaoMes = geraMapaSolicitacaoQuantidadePorStatusMes(request);
@@ -161,4 +175,17 @@ public class ControleDashboard extends HttpServlet {
             }
         }
     }
+
+    private void carregarDashboardCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        RequestDispatcher rd = request.getRequestDispatcher("/painel_cliente.jsp");
+        rd.forward(request, response);
+    }
+
+    private void carregarDashboardLavador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        RequestDispatcher rd = request.getRequestDispatcher("/painel_lavador.jsp");
+        rd.forward(request, response);
+    }
+
 }

@@ -100,6 +100,5 @@
     <script src="js/jquery.validate.js"></script>
     <script src="js/inicializar-modal.js"></script>
     <script src="js/inicializar-validate.js"></script>
-    <script type="text/javascript" src="js/materialize.js"></script>
 
     <%@include file="rodape.jsp"%>

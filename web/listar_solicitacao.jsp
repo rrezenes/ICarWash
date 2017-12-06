@@ -37,7 +37,7 @@
                 <td>${solicitacao.id}</td>
                 <td>${solicitacao.cliente.nome}</td>
                 <td>${solicitacao.lavador.id}</td>
-                <td>${solicitacao.modelo.id}</td>
+                <td>${solicitacao.modelo.porte}</td>
                 <td>${dataSolicitacao}</td>
                 <td>${solicitacao.valorTotal.doubleValue()}</td>
                 <td>${solicitacao.estado}</td>

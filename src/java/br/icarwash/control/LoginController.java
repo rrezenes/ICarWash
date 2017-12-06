@@ -48,7 +48,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", usuario);
             //tempo de limite da sesssão em segundos
             session.setMaxInactiveInterval(600);
-            response.sendRedirect("painel");
+            response.sendRedirect(request.getContextPath() + "/dashboard");
         }
 
     }

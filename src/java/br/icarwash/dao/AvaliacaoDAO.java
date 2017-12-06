@@ -18,8 +18,7 @@ public class AvaliacaoDAO {
         this.conexao = conexao;
     }
 
-    public int atribuirNotas(Avaliacao avaliacao) {
-        int idAvaliacao = 0;
+    public Avaliacao atribuirNotas(Avaliacao avaliacao) {
         try {
             PreparedStatement pstmt = conexao.prepareStatement(ATRIBUIR_NOTAS, Statement.RETURN_GENERATED_KEYS);
             pstmt.setBigDecimal(1, avaliacao.getNotaPontualidade());
@@ -31,13 +30,13 @@ public class AvaliacaoDAO {
 
             final ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
-                idAvaliacao = rs.getInt(1);
+                avaliacao.setId(rs.getInt(1));
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return idAvaliacao;
+        return avaliacao;
     }
 
     public Avaliacao localizarAvaliacaoPorId(Avaliacao avaliacao) {

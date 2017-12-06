@@ -23,7 +23,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcesso", urlPatterns = {"/Painel", "/painel"})
+@WebFilter(filterName = "FiltroAcesso", urlPatterns = {"/dashboard"})
 public class FiltroAcesso implements Filter {
 
     private static final boolean debug = true;
@@ -73,7 +73,7 @@ public class FiltroAcesso implements Filter {
                 switch (usuario.getNivel()) {
                     case 3:
                         session.setAttribute("nome", "Admin");
-                        request.getRequestDispatcher("/painel_admin.jsp").forward(request, response);
+                        chain.doFilter(request, response);
                         break;
                     case 2:
                         Lavador lavador = new LavadorBuilder()
@@ -81,14 +81,15 @@ public class FiltroAcesso implements Filter {
                                 .build();
                         lavador = new LavadorDAO(Conexao.getConexao()).localizarPorIdUsuario(lavador);
                         session.setAttribute("nome", lavador.getNome());
-                        request.getRequestDispatcher("/painel_lavador.jsp").forward(request, response);
+                        chain.doFilter(request, response);
                         break;
                     case 1:
                         Cliente cliente = new ClienteBuilder()
                                 .withUsuario(usuario)
                                 .build();
-                        session.setAttribute("nome", new ClienteDAO(Conexao.getConexao()).localizarPorIdUsuario(cliente).getNome());
-                        request.getRequestDispatcher("/painel_cliente.jsp").forward(request, response);
+                        cliente = new ClienteDAO(Conexao.getConexao()).localizarPorIdUsuario(cliente);
+                        session.setAttribute("nome", cliente.getNome());
+                        chain.doFilter(request, response);
                         break;
                     default:
                         aprovado = false;

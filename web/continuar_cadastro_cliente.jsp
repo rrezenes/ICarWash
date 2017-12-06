@@ -1,9 +1,11 @@
 
 <%@include file="cabecalho.jsp"%>
-<div class="container">
-    <div class="jumbotron">
-        <h5>Falta pouco, antes de solicitar um serviço, finalize seu cadastro</h5>
+<div class="row col s12">
+    <div class="row">
+        <p class="titulo-controle">Falta pouco, antes de solicitar um serviço, finalize seu cadastro</p>
+        <div class="divider"></div>
     </div>
+
     <form id="FormValidate" action="ContinuarCadastro" method="post">
         <div class="row">
             <div class="input-field col s6">

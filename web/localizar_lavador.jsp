@@ -3,7 +3,7 @@
 <%@include file="cabecalho.jsp"%>
 
 <c:if test="${!empty alterado}">
-    <script>Materialize.toast('Endereço Alterado', 6000, 'rounded');</script>        
+    <script>Materialize.toast('Alterado com sucesso', 6000, 'rounded');</script>        
 </c:if>
 <c:if test="${!empty senhaInvalida}">
     <script>Materialize.toast('Senha atual invalida', 6000, 'rounded');</script>        

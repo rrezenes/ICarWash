@@ -34,8 +34,7 @@ public class Finalizado implements SolicitacaoState {
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(Conexao.getConexao());
         Avaliacao avaliacao = solicitacao.getAvaliacao();
         
-        avaliacao.setId(avaliacaoDAO.atribuirNotas(avaliacao));
-        avaliacao.calcularMedia();
+        avaliacao = avaliacaoDAO.atribuirNotas(avaliacao);
         
         new SolicitacaoDAO(Conexao.getConexao()).avaliarSolicitacao(solicitacao);
 
