@@ -64,34 +64,28 @@ public class ListarProdutosHoje extends HttpServlet {
                 servicos.add(servicoDAO.localizarPorId(soliServi.getServico()));
             });
 
-            buscarProdutosDeServicos(servicos, conexao);
-            
+            ProdutoDAO produtoDAO = new ProdutoDAO(conexao);
+            ServicoProduto servicoProduto;
+
+            for (Servico servico : servicos) {
+                servicoProduto = new ServicoProduto(servico);
+
+                ArrayList<ServicoProduto> servicoProdutos = new ServicoProdutoDAO(conexao).selecionaProdutosPorIdServico(servicoProduto);
+
+                ArrayList<Produto> produtos = new ArrayList<>();
+                servicoProdutos.forEach(sp -> {
+                    produtos.add(produtoDAO.localizarPorId(sp.getProduto()));
+                });
+
+                servico.setProdutos(produtos);
+            }
+
             solicitacao.setServicos(servicos);
         }
 
+        request.setAttribute("solicitacoes", solicitacoes);
         RequestDispatcher rd = request.getRequestDispatcher("/produtos_hoje_lavador.jsp");
         rd.forward(request, response);
-    }
-
-    private void buscarProdutosDeServicos(ArrayList<Servico> servicos, Connection conexao) {
-        for (Servico servico : servicos) {
-            
-            servico = new ServicoDAO(conexao).localizarPorId(servico);
-            
-            ServicoProduto servicoProduto = new ServicoProduto(servico);
-            
-            ArrayList<ServicoProduto> servicoProdutos
-                    = new ServicoProdutoDAO(conexao).selecionaProdutosPorIdServico(servicoProduto);
-            
-            ArrayList<Produto> produtos = new ArrayList<>();
-            ProdutoDAO produtoDAO = new ProdutoDAO(conexao);
-            
-            servicoProdutos.forEach(sp -> {
-                produtos.add(produtoDAO.localizarPorId(sp.getProduto()));
-            });
-            
-            servico.setProdutos(produtos);
-        }
     }
 
 }
