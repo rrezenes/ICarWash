@@ -1,8 +1,15 @@
 package br.icarwash.control;
 
+import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.Solicitacao;
+import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import br.icarwash.model.Usuario;
+import br.icarwash.model.state.Avaliado;
+import br.icarwash.model.state.Finalizado;
+import br.icarwash.model.state.SolicitacaoState;
 import java.io.IOException;
 import java.sql.Connection;
 import java.time.Instant;
@@ -47,8 +54,8 @@ public class ControleDashboard extends HttpServlet {
 
     private void carregarDashboardAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HashMap<String, Integer> qtdPorStatusSolicitacao = geraMapaSolicitacaoQuantidadePorStatus(request);
-        HashMap<String, Integer> qtdPorStatusSolicitacaoHoje = geraMapaSolicitacaoQuantidadePorStatusHoje(request);
-        HashMap<String, Integer> qtdPorStatusSolicitacaoMes = geraMapaSolicitacaoQuantidadePorStatusMes(request);
+        HashMap<String, Integer> qtdPorStatusSolicitacaoHoje = gerarMapaSolicitacaoQuantidadePorStatusHoje(request);
+        HashMap<String, Integer> qtdPorStatusSolicitacaoMes = gerarMapaSolicitacaoQuantidadePorStatusMes(request);
 
         request.setAttribute("qtdPorStatusSolicitacao", qtdPorStatusSolicitacao);
         request.setAttribute("qtdPorStatusSolicitacaoHoje", qtdPorStatusSolicitacaoHoje);
@@ -84,7 +91,7 @@ public class ControleDashboard extends HttpServlet {
 
     }
 
-    private HashMap<String, Integer> geraMapaSolicitacaoQuantidadePorStatusHoje(HttpServletRequest request) {
+    private HashMap<String, Integer> gerarMapaSolicitacaoQuantidadePorStatusHoje(HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
 
         HashMap<String, Integer> estadosSolicitacoesHoje = new HashMap<>();
@@ -98,12 +105,12 @@ public class ControleDashboard extends HttpServlet {
         ArrayList<Solicitacao> solicitacoesEmProcesso = solicitacaoDAO.listarEmProcesso();
         ArrayList<Solicitacao> solicitacoesFinalizado = solicitacaoDAO.listarFinalizado();
 
-        mantemSolicitacaoHoje(solicitacoesAgendado);
-        mantemSolicitacaoHoje(solicitacoesAvaliado);
-        mantemSolicitacaoHoje(solicitacoesCancelado);
-        mantemSolicitacaoHoje(solicitacoesEmAnalise);
-        mantemSolicitacaoHoje(solicitacoesEmProcesso);
-        mantemSolicitacaoHoje(solicitacoesFinalizado);
+        manterSolicitacaoHoje(solicitacoesAgendado);
+        manterSolicitacaoHoje(solicitacoesAvaliado);
+        manterSolicitacaoHoje(solicitacoesCancelado);
+        manterSolicitacaoHoje(solicitacoesEmAnalise);
+        manterSolicitacaoHoje(solicitacoesEmProcesso);
+        manterSolicitacaoHoje(solicitacoesFinalizado);
 
         estadosSolicitacoesHoje.put("agendado", solicitacoesAgendado.size());
         estadosSolicitacoesHoje.put("avaliado", solicitacoesAvaliado.size());
@@ -115,7 +122,7 @@ public class ControleDashboard extends HttpServlet {
 
     }
 
-    private void mantemSolicitacaoHoje(ArrayList<Solicitacao> solicitacoes) {
+    private void manterSolicitacaoHoje(ArrayList<Solicitacao> solicitacoes) {
         Calendar calendarHoje = Calendar.getInstance();
         for (Iterator<Solicitacao> i = solicitacoes.iterator(); i.hasNext();) {
             Solicitacao solicitacao = i.next();
@@ -125,7 +132,7 @@ public class ControleDashboard extends HttpServlet {
         }
     }
 
-    private HashMap<String, Integer> geraMapaSolicitacaoQuantidadePorStatusMes(HttpServletRequest request) {
+    private HashMap<String, Integer> gerarMapaSolicitacaoQuantidadePorStatusMes(HttpServletRequest request) {
         Connection conexao = (Connection) request.getAttribute("conexao");
 
         HashMap<String, Integer> estadosSolicitacoesMes = new HashMap<>();
@@ -139,12 +146,12 @@ public class ControleDashboard extends HttpServlet {
         ArrayList<Solicitacao> solicitacoesEmProcesso = solicitacaoDAO.listarEmProcesso();
         ArrayList<Solicitacao> solicitacoesFinalizado = solicitacaoDAO.listarFinalizado();
 
-        mantemSolicitacaoMes(solicitacoesAgendado);
-        mantemSolicitacaoMes(solicitacoesAvaliado);
-        mantemSolicitacaoMes(solicitacoesCancelado);
-        mantemSolicitacaoMes(solicitacoesEmAnalise);
-        mantemSolicitacaoMes(solicitacoesEmProcesso);
-        mantemSolicitacaoMes(solicitacoesFinalizado);
+        manterSolicitacaoMesAtual(solicitacoesAgendado);
+        manterSolicitacaoMesAtual(solicitacoesAvaliado);
+        manterSolicitacaoMesAtual(solicitacoesCancelado);
+        manterSolicitacaoMesAtual(solicitacoesEmAnalise);
+        manterSolicitacaoMesAtual(solicitacoesEmProcesso);
+        manterSolicitacaoMesAtual(solicitacoesFinalizado);
 
         estadosSolicitacoesMes.put("agendado", solicitacoesAgendado.size());
         estadosSolicitacoesMes.put("avaliado", solicitacoesAvaliado.size());
@@ -155,7 +162,7 @@ public class ControleDashboard extends HttpServlet {
         return estadosSolicitacoesMes;
     }
 
-    private void mantemSolicitacaoMes(ArrayList<Solicitacao> solicitacoes) {
+    private void manterSolicitacaoMesAtual(ArrayList<Solicitacao> solicitacoes) {
         Calendar calendarHoje = Calendar.getInstance();
         Instant i1 = calendarHoje.toInstant();
         ZoneId zoneId = ZoneId.of("America/Montreal");
@@ -177,9 +184,56 @@ public class ControleDashboard extends HttpServlet {
     }
 
     private void carregarDashboardCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conexao = (Connection) request.getAttribute("conexao");
+
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
+        Cliente cliente = new ClienteBuilder()
+                .withUsuario(usuario)
+                .build();
+        cliente = new ClienteDAO(conexao).localizarPorIdUsuario(cliente);
+
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO(conexao);
+
+        Solicitacao solicitacao = new SolicitacaoBuilder()
+                .withCliente(cliente)
+                .build();
+
+        ArrayList<Solicitacao> solicitacoes = solicitacaoDAO.listarSolicitacaoPorIDCliente(solicitacao);
+
+        filtrarSomenteSolicitacoesAvaliadasOuFinalizadas(solicitacoes);
+
+        request.setAttribute("qtdTotalDeAguaEconomizado", solicitacoes.size() * 300);
 
         RequestDispatcher rd = request.getRequestDispatcher("/painel_cliente.jsp");
         rd.forward(request, response);
+
+    }
+
+    private void filtrarSomenteSolicitacoesAvaliadasOuFinalizadas(ArrayList<Solicitacao> solicitacoes) {
+        for (Iterator<Solicitacao> i = solicitacoes.iterator(); i.hasNext();) {
+            Solicitacao soli = i.next();
+            SolicitacaoState solicitacaoState = soli.getEstado();
+            String estado = solicitacaoState.toString();
+            switch (estado) {
+                case "Em Analise":
+                    i.remove();
+                    break;
+                case "Aprovado":
+                    i.remove();
+                    break;
+                case "Em Processo":
+                    i.remove();
+                    break;
+                case "Agendado":
+                    i.remove();
+                    break;
+                case "Cancelado":
+                    i.remove();
+                    break;
+            }
+        }
     }
 
     private void carregarDashboardLavador(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

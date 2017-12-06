@@ -38,14 +38,14 @@
                                 <p>
                                     <input type="checkbox" id="check${produto.id}" value="${produto.id}" name="produtos" checked
                                            onclick="
-                                                   if ($(this).is(':checked')) {
-                                                       $('#quantidade${produto.id}').prop('disabled', false);
-                                                   } else {
-                                                       $('#quantidade${produto.id}').prop('disabled', true);
-                                                       $('#quantidade${produto.id}').val(null);
-                                                       $('#quantidade${produto.id}').removeClass('valid');
-                                                       $('.quantidade${produto.id}').removeClass('active')
-                                                   }"/>
+                                        if ($(this).is(':checked')) {
+                                            $('#quantidade${produto.id}').prop('disabled', false);
+                                        } else {
+                                            $('#quantidade${produto.id}').prop('disabled', true);
+                                            $('#quantidade${produto.id}').val(null);
+                                            $('#quantidade${produto.id}').removeClass('valid');
+                                            $('.quantidade${produto.id}').removeClass('active')
+                                        }"/>
                                     <label for="check${produto.id}">${produto.nome}</label>
                                 </p>             
                             </div>

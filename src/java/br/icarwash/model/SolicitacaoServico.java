@@ -13,6 +13,10 @@ public class SolicitacaoServico {
         this.servico = servico;
     }
 
+    public SolicitacaoServico(Solicitacao solicitacao) {
+        this.solicitacao = solicitacao;
+    }
+
     public Servico getServico() {
         return servico;
     }

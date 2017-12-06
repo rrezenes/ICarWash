@@ -59,36 +59,6 @@ public class Solicitacao {
         this.servicos = builder.servicos;
     }
 
-    public SolicitacaoState validarStatus(String status) throws UnsupportedOperationException, SQLException {
-        SolicitacaoState solicitacaoState;
-        switch (status) {
-            case "Em Analise":
-                solicitacaoState = new EmAnalise();
-                break;
-            case "Agendado":
-                solicitacaoState = new Agendado();
-                break;
-            case "Em Processo":
-                solicitacaoState = new EmProcesso();
-                break;
-            case "Finalizado":
-                solicitacaoState = new Finalizado();
-                break;
-            case "Avaliado":
-                solicitacaoState = new Avaliado();
-                break;
-            case "Concluido":
-                solicitacaoState = new Concluido();
-                break;
-            case "Cancelado":
-                solicitacaoState = new Cancelado();
-                break;
-            default:
-                throw new UnsupportedOperationException("Solicita\u00e7\u00e3o sem Status");
-        }
-        return solicitacaoState;
-    }
-
     public static class SolicitacaoBuilder {
 
         private int id;
@@ -435,4 +405,33 @@ public class Solicitacao {
         return sortedMap;
     }
 
+    public SolicitacaoState validarStatus(String status) throws UnsupportedOperationException, SQLException {
+        SolicitacaoState solicitacaoState;
+        switch (status) {
+            case "Em Analise":
+                solicitacaoState = new EmAnalise();
+                break;
+            case "Agendado":
+                solicitacaoState = new Agendado();
+                break;
+            case "Em Processo":
+                solicitacaoState = new EmProcesso();
+                break;
+            case "Finalizado":
+                solicitacaoState = new Finalizado();
+                break;
+            case "Avaliado":
+                solicitacaoState = new Avaliado();
+                break;
+            case "Concluido":
+                solicitacaoState = new Concluido();
+                break;
+            case "Cancelado":
+                solicitacaoState = new Cancelado();
+                break;
+            default:
+                throw new UnsupportedOperationException("Solicitação sem Status");
+        }
+        return solicitacaoState;
+    }
 }

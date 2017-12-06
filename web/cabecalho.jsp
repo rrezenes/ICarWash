@@ -36,7 +36,7 @@
                             <a href="usuario"><span class="white-text email"><%= usuario.getEmail()%></span></a>
                         </div></li>
 
-                    <li><a>Painel</a></li>
+                    <li><a href="dashboard">Painel</a></li>
                     <li class="no-padding">
                         <%-- /\ /\ NÃO VARIA /\ /\--%>
 
@@ -75,7 +75,7 @@
                                 <a class="collapsible-header waves-effect waves-teal">Relatórios<i class="material-icons">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="ListarProdutosHoje">Produtos para hoje</a></li>
+                                        <li><a href="produtos-de-hoje">Produtos para hoje</a></li>
                                     </ul>
                                 </div>
                             </li>

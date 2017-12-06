@@ -10,7 +10,7 @@
 
 
 
-<script src="js/Chart.bundle.js"></script>
+<!--<script src="js/Chart.bundle.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/carregar-chart-data.js"></script>
 <script src="js/carregar-pie.js"></script>
@@ -40,7 +40,7 @@
             }
         });
     };
-</script>
+</script>-->
 
 
 <%@include file="rodape.jsp"%>

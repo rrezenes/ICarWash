@@ -15,6 +15,10 @@ public class ServicoProduto {
         this.quantidade = quantidade;
     }
 
+    public ServicoProduto(Servico servico) {
+        this.servico = servico;
+    }
+
     public Servico getServico() {
         return servico;
     }

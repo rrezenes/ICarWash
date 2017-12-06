@@ -30,7 +30,7 @@ public class SolicitacaoServicoDAO {
         }
     }
     
-        public ArrayList<SolicitacaoServico> selecionaProdutosPorIdSolicitacao(SolicitacaoServico solicitacaoServico) {
+        public ArrayList<SolicitacaoServico> selecionaServicosPorIdSolicitacao(SolicitacaoServico solicitacaoServico) {
 
         ArrayList<SolicitacaoServico> solicitacaoServicos = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class SolicitacaoServicoDAO {
             while (rs.next()) {
 
                 Servico servico = new Servico.ServicoBuilder()
-                        .withId(rs.getInt("id_produto"))
+                        .withId(rs.getInt("id_servico"))
                         .build();
 
                 solicitacaoServico.setServico(servico);

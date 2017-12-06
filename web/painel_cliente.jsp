@@ -4,13 +4,37 @@
 <%@include file="cabecalho.jsp"%>
 
 <div class="row">
-    <p class="titulo-controle">ICarWash</p>
+    <p class="titulo-controle">Media de Litros Economizados</p>
     <div class="divider"></div>
 </div>
 
+<div class="row">
+    <div class="col s12 m7">
+        <div class="card medium">
+            <div class="card-image">
+                <img  src="http://www.geo.edu.al/newweb/images/uji.jpg">
+                <span class="card-title" >Economia de Água</span>
+            </div>
+            <div class="card-content">
+                <c:choose>
+                    <c:when  test="${qtdTotalDeAguaEconomizado > 0}">
+                        <p>Olá ${nome}, o planeta agradece, com sua ajuda já conseguimos economizar em média ${qtdTotalDeAguaEconomizado} litros de água.</p>
+                    </c:when>
+                    <c:otherwise>
+                        <p>Olá $nome, nos ajude a tornar o planeta um local melhor, a cada solicitção conseguimos em média economizar 300 litros de água.</p>
+                    </c:otherwise>
+                </c:choose>
+
+            </div>
+            <div class="card-action">
+                <a href="solicitar-servico">Solicitar Serviço</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-<script src="js/Chart.bundle.js"></script>
+<!--<script src="js/Chart.bundle.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/carregar-chart-data.js"></script>
 <script src="js/carregar-pie.js"></script>
@@ -40,7 +64,7 @@
             }
         });
     };
-</script>
+</script>-->
 
 
 <%@include file="rodape.jsp"%>
