@@ -29,8 +29,8 @@ public class SolicitacaoServicoDAO {
             throw new RuntimeException(e);
         }
     }
-    
-        public ArrayList<SolicitacaoServico> selecionaServicosPorIdSolicitacao(SolicitacaoServico solicitacaoServico) {
+
+    public ArrayList<SolicitacaoServico> selecionaServicosPorIdSolicitacao(SolicitacaoServico solicitacaoServico) {
 
         ArrayList<SolicitacaoServico> solicitacaoServicos = new ArrayList<>();
 
@@ -40,14 +40,14 @@ public class SolicitacaoServicoDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-
+                SolicitacaoServico soliServ = new SolicitacaoServico(solicitacaoServico.getSolicitacao());
                 Servico servico = new Servico.ServicoBuilder()
                         .withId(rs.getInt("id_servico"))
                         .build();
 
-                solicitacaoServico.setServico(servico);
-                
-                solicitacaoServicos.add(solicitacaoServico);
+                soliServ.setServico(servico);
+
+                solicitacaoServicos.add(soliServ);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

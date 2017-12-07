@@ -1,5 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@page  contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="cabecalho.jsp"%>
 
@@ -10,29 +11,43 @@
     <p class="titulo-controle">Produtos para hoje</p>
     <div class="divider"></div>
 </div>
-<!--<table class="table table-hover centered striped responsive-table">
-    <thead>
-        <tr>
-            <th>Solicitação</th>
-            <th>Cliente</th>
-            <th>Cidade</th>
-            <th>Bairro</th>
-            <th>Veículo</th>
-            <th>Data</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th colspan=2></th>
-        </tr>
-    </thead>
-    <tbody>  -->
 
-<c:forEach var="solicitacao" items="${solicitacoes}">
-    <c:forEach var="servicos" items="${solicitacao.servicos}">
-        <c:forEach var="produto" items="${servicos.produtos}">
-            <p>${produto.nome}</p> 
-        </c:forEach>  
+<div class="row">
+    <div class="col s12">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Produtos Para Hoje</h4></li>
+
+            <c:forEach var="produtoQuantidade" items="${quantidadeDeProdutosTotal}">
+                <c:if test="${produtoQuantidade.value > 0}">
+                    <li class="collection-item"><div>${produtoQuantidade.key} <a href="#!" class="secondary-content">${produtoQuantidade.value}</a></div></li>
+                        </c:if>
+                    </c:forEach> 
+        </ul> 
+    </div>
+</div>
+
+<div class="row">
+    <c:forEach var="solicitacao" items="${solicitacoes}"> 
+        <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="HH:mm"/>
+
+        <div class="col s12 m6">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Solicitação #${solicitacao.id} - ${dataSolicitacao}</span>
+                    <c:forEach var="servico" items="${solicitacao.servicos}">
+                        <br>
+                        <p>${fn:toUpperCase(servico.nome)}</p> 
+                        <div class="divider"></div>
+                        <c:forEach var="produto" items="${servico.produtos}">
+                            <p>${produto.key.nome} <a class="secondary-content">${produto.value}</a></p> 
+                            </c:forEach>  
+                        </c:forEach>  
+
+                </div>
+            </div>
+        </div>
     </c:forEach>  
-</c:forEach>   
+</div> 
 <%--            <fmt:formatDate value="${solicitacao.dataSolicitacao.time}" var="dataSolicitacao" type="date" pattern="dd/MM/yyyy HH:mm" />
             <tr>
                 <td>#${solicitacao.id}</td>

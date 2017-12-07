@@ -64,6 +64,7 @@ public class ControleStatusSolicitacao extends HttpServlet {
                 .withNotaAgilidade(BigDecimal.valueOf(Double.parseDouble(request.getParameter("agilidade"))))
                 .build();
         avaliacao.calcularMedia();
+        
         solicitacao.setAvaliacao(avaliacao);
         solicitacao.avaliarSolicitacao();
         new EmailStatusSolicitacaoLavador(solicitacao).start();

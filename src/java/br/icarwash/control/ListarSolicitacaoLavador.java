@@ -4,6 +4,7 @@ import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
+import br.icarwash.dao.ModeloDAO;
 import br.icarwash.dao.SolicitacaoDAO;
 import br.icarwash.model.Lavador;
 import br.icarwash.model.Solicitacao;
@@ -42,6 +43,7 @@ public class ListarSolicitacaoLavador extends HttpServlet {
 
         EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
+        ModeloDAO modeloDAO = new ModeloDAO(conexao);
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
 
         solicitacoes.forEach(solicitacao -> {
@@ -49,8 +51,8 @@ public class ListarSolicitacaoLavador extends HttpServlet {
                 solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao()));
             }
             solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco()));
-            System.out.println(solicitacao.getEndereco().getBairro());
             solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
+            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo()));
         });
 
         request.setAttribute("ocupado", lavador.isOcupado());

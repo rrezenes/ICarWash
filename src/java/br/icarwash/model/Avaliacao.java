@@ -11,8 +11,7 @@ public class Avaliacao {
     private BigDecimal notaAgilidade;
     private BigDecimal notaMedia;
 
-    public Avaliacao(int id) {
-        this.id = id;
+    public Avaliacao() {
     }
 
     public Avaliacao(AvaliacaoBuilder builder) {

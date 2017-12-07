@@ -1,7 +1,7 @@
 package br.icarwash.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Servico {
 
@@ -10,7 +10,7 @@ public class Servico {
     private String descricao;
     private BigDecimal valor;
     private boolean ativo;
-    private ArrayList<Produto> produtos;
+    private HashMap<Produto, Integer> produtos;
 
     public Servico() {
     }
@@ -31,7 +31,7 @@ public class Servico {
         private String descricao;
         private BigDecimal valor;
         private boolean ativo;
-        private ArrayList<Produto> produtos;
+        private HashMap<Produto, Integer> produtos;
 
         public ServicoBuilder from(Servico servico) {
             this.id = servico.id;
@@ -67,7 +67,7 @@ public class Servico {
             return this;
         }
 
-        public ServicoBuilder withProdutos(ArrayList<Produto> produtos) {
+        public ServicoBuilder withProdutos(HashMap<Produto, Integer> produtos) {
             this.produtos = produtos;
             return this;
         }
@@ -117,11 +117,11 @@ public class Servico {
         this.ativo = ativo;
     }
 
-    public ArrayList<Produto> getProdutos() {
+    public HashMap<Produto, Integer> getProdutos() {
         return produtos;
     }
 
-    public void setProdutos(ArrayList<Produto> produtos) {
+    public void setProdutos(HashMap<Produto, Integer> produtos) {
         this.produtos = produtos;
     }
 

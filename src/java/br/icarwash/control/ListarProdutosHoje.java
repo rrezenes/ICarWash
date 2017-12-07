@@ -18,6 +18,8 @@ import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +37,6 @@ public class ListarProdutosHoje extends HttpServlet {
         Connection conexao = (Connection) request.getAttribute("conexao");
 
         HttpSession session = ((HttpServletRequest) request).getSession(true);
-
         Usuario usuario = (Usuario) session.getAttribute("user");
 
         Lavador lavador = new LavadorBuilder()
@@ -54,6 +55,13 @@ public class ListarProdutosHoje extends HttpServlet {
         SolicitacaoServicoDAO solicitacaoServicoDAO = new SolicitacaoServicoDAO(conexao);
         ServicoDAO servicoDAO = new ServicoDAO(conexao);
 
+        HashMap<String, Integer> quantidadeDeProdutosTotal = new HashMap<>();
+
+        ArrayList<Produto> products = new ProdutoDAO(conexao).listar();
+        for (Produto product : products) {
+            quantidadeDeProdutosTotal.put(product.getNome(), 0);
+        }
+
         for (Solicitacao solicitacao : solicitacoes) {
             solicitacaoServico = new SolicitacaoServico(solicitacao);
 
@@ -67,15 +75,25 @@ public class ListarProdutosHoje extends HttpServlet {
             ProdutoDAO produtoDAO = new ProdutoDAO(conexao);
             ServicoProduto servicoProduto;
 
+            Integer aux = 0;
             for (Servico servico : servicos) {
                 servicoProduto = new ServicoProduto(servico);
 
                 ArrayList<ServicoProduto> servicoProdutos = new ServicoProdutoDAO(conexao).selecionaProdutosPorIdServico(servicoProduto);
 
-                ArrayList<Produto> produtos = new ArrayList<>();
-                servicoProdutos.forEach(sp -> {
-                    produtos.add(produtoDAO.localizarPorId(sp.getProduto()));
-                });
+                HashMap<Produto, Integer> produtos = new HashMap<>();
+                Produto produto;
+                for (ServicoProduto sp : servicoProdutos) {
+                    produto = produtoDAO.localizarPorId(sp.getProduto());
+                    produtos.put(produto, sp.getQuantidade());
+                    for (Map.Entry<String, Integer> entry : quantidadeDeProdutosTotal.entrySet()) {
+                        if (entry.getKey().equals(produto.getNome())) {
+                            quantidadeDeProdutosTotal.get(produto.getNome());
+                            aux += sp.getQuantidade();
+                            quantidadeDeProdutosTotal.replace(produto.getNome(), aux);
+                        }
+                    }
+                }
 
                 servico.setProdutos(produtos);
             }
@@ -83,6 +101,7 @@ public class ListarProdutosHoje extends HttpServlet {
             solicitacao.setServicos(servicos);
         }
 
+        request.setAttribute("quantidadeDeProdutosTotal", quantidadeDeProdutosTotal);
         request.setAttribute("solicitacoes", solicitacoes);
         RequestDispatcher rd = request.getRequestDispatcher("/produtos_hoje_lavador.jsp");
         rd.forward(request, response);

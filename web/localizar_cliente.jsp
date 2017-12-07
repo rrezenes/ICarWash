@@ -158,7 +158,7 @@
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-                <input class="form-control btn btn-primary" type="submit">
+                <input class="form-control btn btn-primary" type="submit" value="Enviar">
             </div>
         </form>
     </div>
@@ -182,7 +182,7 @@
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-                <input class="form-control btn btn-primary" type="submit">
+                <input class="form-control btn btn-primary" type="submit" value="Enviar">
             </div>
         </form>
     </div>

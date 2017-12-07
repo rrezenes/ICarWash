@@ -4,8 +4,12 @@ import br.icarwash.dao.AvaliacaoDAO;
 import br.icarwash.dao.ClienteDAO;
 import br.icarwash.dao.ModeloDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
+import br.icarwash.model.Avaliacao.AvaliacaoBuilder;
 import br.icarwash.model.Cliente;
 import br.icarwash.model.Cliente.ClienteBuilder;
+import br.icarwash.model.Modelo;
+import br.icarwash.model.Modelo.ModeloBuilder;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import br.icarwash.model.Usuario;
@@ -48,12 +52,17 @@ public class ListarSolicitacaoCliente extends HttpServlet {
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         ModeloDAO modeloDAO = new ModeloDAO(conexao);
 
-        solicitacoes.forEach(solicitacao -> {
-            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo()));
+        Modelo modelo;
+        Avaliacao avaliacao;
+        for (Solicitacao solicitacao : solicitacoes) {
+            modelo = modeloDAO.localizarPorId(solicitacao.getModelo());
+            solicitacao.setModelo(modelo);
+
             if (solicitacao.getAvaliacao().getId() != 0) {
-                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao()));
+                avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao());
+                solicitacao.setAvaliacao(avaliacao);
             }
-        });
+        }
 
         request.setAttribute("solicitacoes", solicitacoes);
 

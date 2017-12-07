@@ -21,6 +21,9 @@ public class Modelo {
         }
     }
 
+    public Modelo() {
+    }
+
     public Modelo(ModeloBuilder builder) {
         this.id = builder.id;
         this.marca = builder.marca;

@@ -1,6 +1,7 @@
 package br.icarwash.dao;
 
 import br.icarwash.model.Produto;
+import br.icarwash.model.Produto.ProdutoBuilder;
 import br.icarwash.model.ServicoProduto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -61,22 +62,23 @@ public class ServicoProdutoDAO {
     public ArrayList<ServicoProduto> selecionaProdutosPorIdServico(ServicoProduto servicoProduto) {
 
         ArrayList<ServicoProduto> servicosProdutos = new ArrayList<>();
-
+        Produto produto;
+        
         try {
             PreparedStatement pstmt = conexao.prepareStatement(SELECT_PRODUTO_BY_ID_SERVICO);
             pstmt.setInt(1, servicoProduto.getServico().getId());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-
-                Produto produto = new Produto.ProdutoBuilder()
+                ServicoProduto servProd = new ServicoProduto(servicoProduto.getServico());
+                produto = new ProdutoBuilder()
                         .withId(rs.getInt("id_produto"))
                         .build();
 
-                servicoProduto.setProduto(produto);
-                servicoProduto.setQuantidade(rs.getInt("quantidade"));
-                
-                servicosProdutos.add(servicoProduto);
+                servProd.setProduto(produto);
+                servProd.setQuantidade(rs.getInt("quantidade"));
+
+                servicosProdutos.add(servProd);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
