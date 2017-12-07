@@ -71,12 +71,12 @@ $(document).ready(function () {
                 maxlength: "Por favor, entre com o nome apenas!",
                 required: "Por favor, digite o nome aqui!",
                 minlength: "Por favor, digite um nome de no mínimo 3 dígitos!",
-                letterAndNumbersOnly: "Por favor, utilize apenas letras e números!"
+                letterAndNumbersOnly: "Por favor, utilize apenas letras e numeros!"
             },
             email: {
-                remote: "E-mail já está em uso!",
-                required: "Por favor, coloque um e-mail válido!",
-                email: "Por favor, coloque um e-mail válido!"
+                remote: "E-mail ja esta em uso!",
+                required: "Por favor, coloque um e-mail valido!",
+                email: "Por favor, coloque um e-mail valido!"
             },
             senha: {
                 required: "Por favor, coloque sua senha!",
@@ -92,11 +92,11 @@ $(document).ready(function () {
             },
             dataNascimento: {
                 required: "Por favor, seleciona uma data de nascimento!",
-                regex: "Data inválida!"
+                regex: "Data invalida!"
             },
             cpf: {
-                remote: "Cpf já está em uso!",
-                cpf: "CPF inválido!",
+                remote: "Cpf ja esta em uso!",
+                cpf: "CPF invalido!",
                 required: "Por favor, digite seu CPF aqui!"
             },
             cep: {
@@ -114,24 +114,24 @@ $(document).ready(function () {
                 required: "Por favor, digite sua bairro aqui!"
             },
             endereco: {
-                required: "Por favor, digite seu endereço aqui!"
+                required: "Por favor, digite seu endereco aqui!"
             },
             numero: {
-                required: "Por favor, digite seu número aqui!"
+                required: "Por favor, digite seu numero aqui!"
             },
             descricao: {
-                required: "Campo obrigarório preencher!",
-                maxlength: "Utilize no máximo 150 caracteres!",
+                required: "Campo obrigatorio preencher!",
+                maxlength: "Utilize no maximo 150 caracteres!",
                 minlength: "Utilize no mínimo 3 caracteres!",
-                letterAndNumbersOnly: "Por favor, utilize apenas letras e números!"
+                letterAndNumbersOnly: "Por favor, utilize apenas letras e numeros!"
             },
             valor: {
-                maxlength: "Utilize no máximo 6 caracteres!",
-                required: "Campo obrigarório preencher!",
+                maxlength: "Utilize no maximo 6 caracteres!",
+                required: "Campo obrigatorio preencher!",
                 number: "Apenas valores reais, utilize ponto para separar reais dos centavos!"
             },
             produtos: {
-                required: "Campo obrigarório preencher!"
+                required: "Campo obrigatorio preencher!"
             }
         },
         errorElement: "em",

@@ -50,7 +50,6 @@ public class ControleSolicitacao extends HttpServlet {
             dataHoraSolicitacao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dataSolicitacao + " " + request.getParameter("selectHora")));
 
             Endereco endereco;
-
             if (Boolean.parseBoolean(request.getParameter("cadastraEndereco"))) {
                 endereco = new EnderecoBuilder()
                         .withCep(request.getParameter("cep"))
@@ -63,6 +62,8 @@ public class ControleSolicitacao extends HttpServlet {
                         .build();
 
                 endereco = new EnderecoDAO(conexao).cadastrar(endereco);
+                ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
+                new ClienteEnderecoDAO(conexao).cadastraClienteEndereco(clienteEndereco);
 
             } else {
                 int idEndereco = Integer.parseInt(request.getParameter("endereco"));
@@ -71,6 +72,8 @@ public class ControleSolicitacao extends HttpServlet {
                         .build();
                 endereco = new EnderecoDAO(conexao).localizarPorId(endereco);
             }
+            
+            
 
             Modelo modelo = new ModeloBuilder()
                     .withId(Integer.parseInt(request.getParameter("modelo")))

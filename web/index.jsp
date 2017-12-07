@@ -1,3 +1,9 @@
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:if test="${!empty invalido}">
+    <script>Materialize.toast('Login ou senha invalido', 6000, 'rounded');</script>        
+</c:if>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -47,9 +53,9 @@
                                     <input class='validate' type='password' name='senha' id="password" />
                                     <label for='password'>Entre com a sua senha</label>
                                 </div>
-                                <label style='float: right;'>
-                                    <a class='blue-text' href='#!'><b>Esqueceu sua senha?</b></a>
-                                </label>
+                                <!--                                <label style='float: right;'>
+                                                                    <a class='blue-text' href='#!'><b>Esqueceu sua senha?</b></a>
+                                                                </label>-->
                             </div>
                             <br />
                             <center>
