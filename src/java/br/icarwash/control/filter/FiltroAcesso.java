@@ -23,7 +23,16 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "FiltroAcesso", urlPatterns = {"/dashboard"})
+@WebFilter(filterName = "FiltroAcesso", urlPatterns = {
+    "/Controle", "/dashboard", "/AprovarSolicitacao", "/CancelarSolicitacao",
+    "/ProcessarSolicitacao", "/FinalizarSolicitacao", "/AvaliarSolicitacao",
+    "/AlterarEndereco", "/AdicionarEndereco", "/ExcluirEndereco",
+    "/confirmar-pedido", "/ControleSolicitacao", "/usuario",
+    "/produtos-de-hoje", "/ListarSolicitacaoLavador", "/solicitacoes-lavador",
+    "/ListarSolicitacaoCliente", "/solicitacoes-cliente", "/ListarSolicitacaoEmAnalise",
+    "/solicitacao-em-analise", "/ListarSolicitacaoHojeLavador", "/solicitacoes-hoje",
+    "/via-boleto", "/SolicitarServico", "/solicitar-servico"
+})
 public class FiltroAcesso implements Filter {
 
     private static final boolean debug = true;

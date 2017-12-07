@@ -19,7 +19,7 @@
 
             <c:forEach var="produtoQuantidade" items="${quantidadeDeProdutosTotal}">
                 <c:if test="${produtoQuantidade.value > 0}">
-                    <li class="collection-item"><div>${produtoQuantidade.key} <a href="#!" class="secondary-content">${produtoQuantidade.value}</a></div></li>
+                    <li class="collection-item"><div>${produtoQuantidade.key}<a href="#!" class="secondary-content">${produtoQuantidade.value}</a></div></li>
                         </c:if>
                     </c:forEach> 
         </ul> 
@@ -39,7 +39,7 @@
                         <p>${fn:toUpperCase(servico.nome)}</p> 
                         <div class="divider"></div>
                         <c:forEach var="produto" items="${servico.produtos}">
-                            <p>${produto.key.nome} <a class="secondary-content">${produto.value}</a></p> 
+                            <p class="${produto.key.nome}">${produto.key.nome} <a class="secondary-content quantidade">${produto.value}</a></p> 
                             </c:forEach>  
                         </c:forEach>  
 

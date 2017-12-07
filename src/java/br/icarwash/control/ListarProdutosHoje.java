@@ -55,13 +55,6 @@ public class ListarProdutosHoje extends HttpServlet {
         SolicitacaoServicoDAO solicitacaoServicoDAO = new SolicitacaoServicoDAO(conexao);
         ServicoDAO servicoDAO = new ServicoDAO(conexao);
 
-        HashMap<String, Integer> quantidadeDeProdutosTotal = new HashMap<>();
-
-        ArrayList<Produto> products = new ProdutoDAO(conexao).listar();
-        for (Produto product : products) {
-            quantidadeDeProdutosTotal.put(product.getNome(), 0);
-        }
-
         for (Solicitacao solicitacao : solicitacoes) {
             solicitacaoServico = new SolicitacaoServico(solicitacao);
 
@@ -74,8 +67,6 @@ public class ListarProdutosHoje extends HttpServlet {
 
             ProdutoDAO produtoDAO = new ProdutoDAO(conexao);
             ServicoProduto servicoProduto;
-
-            Integer aux = 0;
             for (Servico servico : servicos) {
                 servicoProduto = new ServicoProduto(servico);
 
@@ -83,16 +74,10 @@ public class ListarProdutosHoje extends HttpServlet {
 
                 HashMap<Produto, Integer> produtos = new HashMap<>();
                 Produto produto;
+                Integer aux = 0;
                 for (ServicoProduto sp : servicoProdutos) {
                     produto = produtoDAO.localizarPorId(sp.getProduto());
                     produtos.put(produto, sp.getQuantidade());
-                    for (Map.Entry<String, Integer> entry : quantidadeDeProdutosTotal.entrySet()) {
-                        if (entry.getKey().equals(produto.getNome())) {
-                            quantidadeDeProdutosTotal.get(produto.getNome());
-                            aux += sp.getQuantidade();
-                            quantidadeDeProdutosTotal.replace(produto.getNome(), aux);
-                        }
-                    }
                 }
 
                 servico.setProdutos(produtos);
@@ -101,7 +86,6 @@ public class ListarProdutosHoje extends HttpServlet {
             solicitacao.setServicos(servicos);
         }
 
-        request.setAttribute("quantidadeDeProdutosTotal", quantidadeDeProdutosTotal);
         request.setAttribute("solicitacoes", solicitacoes);
         RequestDispatcher rd = request.getRequestDispatcher("/produtos_hoje_lavador.jsp");
         rd.forward(request, response);

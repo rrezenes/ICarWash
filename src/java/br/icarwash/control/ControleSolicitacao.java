@@ -8,9 +8,7 @@ import br.icarwash.model.Endereco.EnderecoBuilder;
 import br.icarwash.model.Modelo.ModeloBuilder;
 import br.icarwash.model.Servico.ServicoBuilder;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
-import br.icarwash.util.boleto.GerarBoleto;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -19,12 +17,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import org.jrimum.bopepo.Boleto;
-import org.jrimum.bopepo.view.BoletoViewer;
 
 @WebServlet(name = "ControleSolicitacao", urlPatterns = "/ControleSolicitacao")
 public class ControleSolicitacao extends HttpServlet {
@@ -47,7 +42,6 @@ public class ControleSolicitacao extends HttpServlet {
 
             ClienteDAO clienteDAO = new ClienteDAO(conexao);
             cliente = clienteDAO.localizarPorIdUsuario(cliente);
-            cliente = clienteDAO.localizarPorId(cliente);
 
             /*PEGA OS PARAMETROS DA VIEW*/
             String[] IdServicosSolicitados = request.getParameterValues("servico");

@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.time.DateUtils;
 
-@WebServlet(name = "ControleDashboard", urlPatterns = {"/Dashboard", "/dashboard"})
+@WebServlet(name = "ControleDashboard", urlPatterns = {"/dashboard"})
 public class ControleDashboard extends HttpServlet {
 
     @Override
