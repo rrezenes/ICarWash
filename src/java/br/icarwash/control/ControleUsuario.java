@@ -79,7 +79,7 @@ public class ControleUsuario extends HttpServlet {
                 break;
             }
             default: {
-                RequestDispatcher rd = request.getRequestDispatcher("/painel_admin.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/dashboard");
                 rd.forward(request, response);
                 break;
             }

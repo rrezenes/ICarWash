@@ -12,7 +12,7 @@
     <div class="divider"></div>
 </div>
 
-<div class="row">
+<%--<div class="row">
     <div class="col s12">
         <ul class="collection with-header">
             <li class="collection-header"><h4>Produtos Para Hoje</h4></li>
@@ -24,7 +24,7 @@
                     </c:forEach> 
         </ul> 
     </div>
-</div>
+</div>--%>
 
 <div class="row">
     <c:forEach var="solicitacao" items="${solicitacoes}"> 

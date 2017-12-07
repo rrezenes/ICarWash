@@ -24,6 +24,9 @@ public class ControleEndereco extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("user");
+
         String URI = ((HttpServletRequest) request).getRequestURI();
 
         if (URI.endsWith("/AlterarEndereco")) {
@@ -36,8 +39,11 @@ public class ControleEndereco extends HttpServlet {
             excluirEndereco(request, response);
 
         }
-
-        response.sendRedirect(request.getContextPath() + "/usuario");
+        if (usuario.getNivel() == 3) {
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/usuario");
+        }
     }
 
     protected void alterarEndereco(HttpServletRequest request, HttpServletResponse response)
@@ -110,7 +116,7 @@ public class ControleEndereco extends HttpServlet {
 
         ClienteEndereco clienteEndereco = new ClienteEndereco(cliente, endereco);
         new ClienteEnderecoDAO(conexao).excluirClienteEndereco(clienteEndereco);
-        
+
         new EnderecoDAO(conexao).excluir(endereco);
 
         request.setAttribute("excluido", "ok");

@@ -21,7 +21,7 @@
                         <p>Olá ${nome}, o planeta agradece, com sua ajuda já conseguimos economizar em média ${qtdTotalDeAguaEconomizado} litros de água.</p>
                     </c:when>
                     <c:otherwise>
-                        <p>Olá $nome, nos ajude a tornar o planeta um local melhor, a cada solicitção conseguimos em média economizar 300 litros de água.</p>
+                        <p>Olá ${nome}, nos ajude a tornar o planeta um local melhor, a cada solicitção conseguimos em média economizar 300 litros de água.</p>
                     </c:otherwise>
                 </c:choose>
 

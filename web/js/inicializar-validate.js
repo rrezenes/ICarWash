@@ -6,7 +6,7 @@ $(document).ready(function () {
                 maxlength: 50,
                 required: true,
                 minlength: 3,
-                letterAndNumbersOnly: true
+                lettersonly: true
             },
             email: {
                 remote: 'CheckUsuarioEmail',

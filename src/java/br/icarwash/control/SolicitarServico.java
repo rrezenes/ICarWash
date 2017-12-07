@@ -5,8 +5,10 @@ import br.icarwash.dao.ClienteEnderecoDAO;
 import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.ServicoDAO;
 import br.icarwash.model.Cliente;
+import br.icarwash.model.Cliente.ClienteBuilder;
 import br.icarwash.model.ClienteEndereco;
 import br.icarwash.model.Endereco;
+import br.icarwash.model.Servico;
 import br.icarwash.model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
@@ -30,7 +32,7 @@ public class SolicitarServico extends HttpServlet {
         HttpSession session = ((HttpServletRequest) request).getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("user");
 
-        Cliente cliente = new Cliente.ClienteBuilder()
+        Cliente cliente = new ClienteBuilder()
                 .withUsuario(usuario)
                 .build();
 
@@ -40,11 +42,15 @@ public class SolicitarServico extends HttpServlet {
 
         ArrayList<Endereco> enderecos = new ArrayList<>();
 
+        Endereco endereco;
         for (ClienteEndereco clienteEndereco : clienteEnderecos) {
-            enderecos.add(new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco()));
+            endereco = new EnderecoDAO(conexao).localizarPorId(clienteEndereco.getEndereco());
+            enderecos.add(endereco);
         }
 
-        request.setAttribute("servicos", new ServicoDAO(conexao).listar());
+        ArrayList<Servico> servicos = new ServicoDAO(conexao).listar();
+
+        request.setAttribute("servicos", servicos);
         request.setAttribute("enderecos", enderecos);
         request.setAttribute("taxaMedio", 1.05);
         request.setAttribute("taxaGrande", 1.10);

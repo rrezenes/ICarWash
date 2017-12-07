@@ -145,6 +145,7 @@
 <script src="js/jquery.validate.js"></script>
 <script src="js/validar-data-de-nascimento.js"></script>
 <script src="js/validar-cpf.js"></script>
+<script src="js/validar-apenas-letras.js"></script>
 <script src="js/validar-cep.js"></script>
 <script src="js/inicializar-modal.js"></script>
 <script src="js/inicializar-mascara.js"></script>

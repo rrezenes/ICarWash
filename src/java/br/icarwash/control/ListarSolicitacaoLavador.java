@@ -6,7 +6,11 @@ import br.icarwash.dao.EnderecoDAO;
 import br.icarwash.dao.LavadorDAO;
 import br.icarwash.dao.ModeloDAO;
 import br.icarwash.dao.SolicitacaoDAO;
+import br.icarwash.model.Avaliacao;
+import br.icarwash.model.Cliente;
+import br.icarwash.model.Endereco;
 import br.icarwash.model.Lavador;
+import br.icarwash.model.Modelo;
 import br.icarwash.model.Solicitacao;
 import br.icarwash.model.Solicitacao.SolicitacaoBuilder;
 import br.icarwash.model.Usuario;
@@ -41,19 +45,30 @@ public class ListarSolicitacaoLavador extends HttpServlet {
 
         ArrayList<Solicitacao> solicitacoes = new SolicitacaoDAO(conexao).listarSolicitacaoDoLavador(solicitacaoWithLavador);
 
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
         EnderecoDAO enderecoDAO = new EnderecoDAO(conexao);
         ClienteDAO clienteDAO = new ClienteDAO(conexao);
         ModeloDAO modeloDAO = new ModeloDAO(conexao);
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(conexao);
 
-        solicitacoes.forEach(solicitacao -> {
+        Endereco endereco;
+        Cliente cliente;
+        Modelo modelo;
+        Avaliacao avaliacao;
+        
+        for (Solicitacao solicitacao : solicitacoes) {
             if (solicitacao.getAvaliacao().getId() != 0) {
-                solicitacao.setAvaliacao(avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao()));
+                avaliacao = avaliacaoDAO.localizarAvaliacaoPorId(solicitacao.getAvaliacao());
+                solicitacao.setAvaliacao(avaliacao);
             }
-            solicitacao.setEndereco(enderecoDAO.localizarPorId(solicitacao.getEndereco()));
-            solicitacao.setCliente(clienteDAO.localizarPorId(solicitacao.getCliente()));
-            solicitacao.setModelo(modeloDAO.localizarPorId(solicitacao.getModelo()));
-        });
+            endereco = enderecoDAO.localizarPorId(solicitacao.getEndereco());
+            solicitacao.setEndereco(endereco);
+            
+            cliente = clienteDAO.localizarPorId(solicitacao.getCliente());
+            solicitacao.setCliente(cliente);
+            
+            modelo = modeloDAO.localizarPorId(solicitacao.getModelo());
+            solicitacao.setModelo(modelo);
+        }
 
         request.setAttribute("ocupado", lavador.isOcupado());
         request.setAttribute("solicitacoes", solicitacoes);

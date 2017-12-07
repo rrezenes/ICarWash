@@ -110,10 +110,18 @@ public class ControleStatusSolicitacao extends HttpServlet {
 
         Usuario usuario = (Usuario) ((HttpServletRequest) request).getSession(true).getAttribute("user");
 
-        if (usuario.getNivel() == 1) {
-            URIRetorno = "ListarSolicitacaoCliente?x";
-        } else if (usuario.getNivel() == 3) {
-            URIRetorno = "Controle?action=ListaCommand&listar=solicitacao";
+        switch (usuario.getNivel()) {
+            case 1:
+                URIRetorno = "ListarSolicitacaoCliente?x";
+                break;
+            case 2:
+                URIRetorno = "ListarSolicitacaoLavador";
+                break;
+            case 3:
+                URIRetorno = "Controle?action=ListaCommand&listar=solicitacao";
+                break;
+            default:
+                break;
         }
         return URIRetorno;
     }
@@ -143,7 +151,10 @@ public class ControleStatusSolicitacao extends HttpServlet {
         solicitacao = new SolicitacaoDAO(conexao).localizarPorId(solicitacao);
 
         Cliente cliente = new ClienteDAO(conexao).localizarPorId(solicitacao.getCliente());
-        cliente.setUsuario(new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario()));
+        
+        Usuario usuario = new UsuarioDAO(conexao).localizarUsuarioPorID(cliente.getUsuario());
+        
+        cliente.setUsuario(usuario);
 
         solicitacao.setCliente(cliente);
 
